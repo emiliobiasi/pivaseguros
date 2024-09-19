@@ -31,18 +31,18 @@ export function LoginFormCard() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-background">
-      <Card className="w-full max-w-md shadow-lg">
-        <CardHeader className="space-y-2 text-center">
+    <div className="flex items-center justify-center min-h-screen bg-background p-4">
+      <Card className="w-full max-w-lg sm:max-w-md shadow-lg lg:px-10">
+        <CardHeader className="space-y-4 text-center">
           <div className="flex justify-center items-center">
             <img
-              className="w-48 lg:w-64 h-auto my-8"
+              className="w-32 sm:w-48 lg:w-64 h-auto my-4  sm:my-8"
               src={pivaLogo}
               alt="Logo"
             />
           </div>
 
-          <CardTitle className="text-2xl font-bold">
+          <CardTitle className="text-xl sm:text-2xl font-bold">
             Bem Vindo de Volta
           </CardTitle>
           <CardDescription>
@@ -53,7 +53,7 @@ export function LoginFormCard() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <div className="relative">
+              <div className="relative pb-2">
                 <Input
                   id="email"
                   type="email"
