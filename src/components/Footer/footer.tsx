@@ -1,47 +1,75 @@
 import React from "react";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { FaFacebookF, FaInstagram, FaPhone, FaMapMarkerAlt, FaEnvelope, FaWhatsapp } from "react-icons/fa";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="p-4">
-      <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
-        <p className="text-sm text-gray-500">
-          © Copyright 2021 - Piva Corretora de Seguros - Todos os direitos
-          reservados
-        </p>
-        <div className="flex space-x-4 mt-2 sm:mt-0">
-          <a
-            href="https://web.facebook.com/pivaseguros/?_rdc=1&_rdr"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Facebook"
-          >
-            <svg
-              className="w-6 h-6 text-green-600"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
+    <>
+      {/* Rodapé */}
+      <footer className="p-6" style={{ backgroundColor: '#f1efef' }}>
+        <div className="container mx-auto h-50 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+          
+          {/* Seção de Direitos Reservados */}
+          <div className="text-center md:text-left">
+            <p className="text-sm text-gray-500">
+              © Copyright 2024 - Piva Corretora de Seguros - Todos os direitos
+              reservados
+            </p>
+          </div>
+
+          {/* Seção de Contatos */}
+          <div className="flex flex-col items-center md:items-start space-y-2">
+            <div className="flex items-center">
+              <FaPhone className="mr-2 text-green-600" />
+              <span className="text-sm text-gray-500">11 4587-5550</span>
+            </div>
+            <div className="flex items-center">
+              <FaMapMarkerAlt className="mr-2 text-green-600" />
+              <span className="text-sm text-gray-500">Rua Itália, 111 - Jd. Bonfiglioli - Jundiaí/SP</span>
+            </div>
+            <div className="flex items-center">
+              <FaEnvelope className="mr-2 text-green-600" />
+              <span className="text-sm text-gray-500">contato@pivaseguros.com.br</span>
+            </div>
+          </div>
+
+          {/* Seção de Redes Sociais */}
+          <div className="flex justify-center md:justify-end space-x-4">
+            <a
+              href="https://web.facebook.com/pivaseguros/?_rdc=1&_rdr"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+              className="transform hover:scale-110 transition-transform duration-300"
             >
-              <path d="M22.676 0H1.324C.593 0 0 .593 0 1.324v21.351C0 23.406.593 24 1.324 24h11.493v-9.293H9.691v-3.622h3.126V8.413c0-3.1 1.894-4.788 4.659-4.788 1.325 0 2.465.099 2.797.143v3.24h-1.92c-1.504 0-1.795.715-1.795 1.762v2.31h3.586l-.467 3.622h-3.12V24h6.116c.73 0 1.324-.593 1.324-1.324V1.324C24 .593 23.406 0 22.676 0z" />
-            </svg>
-          </a>
-          <a
-            href="https://www.instagram.com/pivacorretoradeseguros/"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Instagram"
-          >
-            <svg
-              className="w-6 h-6 text-green-600"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
+              <FaFacebookF className="w-6 h-6 text-green-500 hover:text-green-300" />
+            </a>
+            <a
+              href="https://www.instagram.com/pivacorretoradeseguros/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="transform hover:scale-110 transition-transform duration-300"
             >
-              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.96.24 2.415.512a4.92 4.92 0 011.758 1.758c.272.454.458 1.244.512 2.415.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.24 1.96-.512 2.415a4.92 4.92 0 01-1.758 1.758c-.454.272-1.244.458-2.415.512-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.96-.24-2.415-.512a4.92 4.92 0 01-1.758-1.758c-.272-.454-.458-1.244-.512-2.415-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.054-1.17.24-1.96.512-2.415a4.92 4.92 0 011.758-1.758c.454-.272 1.244-.458 2.415-.512 1.266-.058 1.646-.07 4.85-.07m0-2.163C8.756 0 8.346.012 7.054.07 5.786.126 4.717.313 3.81.661 2.89.997 2.074 1.612 1.43 2.43c-.728.87-1.26 1.987-1.548 3.132-.345.91-.532 1.98-.588 3.247C.012 8.346 0 8.756 0 12s.012 3.654.07 4.946c.056 1.267.243 2.337.588 3.247.288 1.145.82 2.262 1.548 3.132.644.818 1.46 1.433 2.38 1.769.907.348 1.975.535 3.244.591 1.292.057 1.702.07 4.946.07s3.654-.012 4.946-.07c1.267-.056 2.337-.243 3.244-.591.92-.336 1.736-.951 2.38-1.769.728-.87 1.26-1.987 1.548-3.132.345-.91.532-1.98.588-3.247C23.988 15.654 24 15.244 24 12s-.012-3.654-.07-4.946c-.056-1.267-.243-2.337-.588-3.247-.288-1.145-.82-2.262-1.548-3.132-.644-.818-1.46-1.433-2.38-1.769-.907-.348-1.975-.535-3.244-.591C15.654.012 15.244 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a3.999 3.999 0 110-7.998 3.999 3.999 0 010 7.998zm7.8-11.142a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z" />
-            </svg>
-          </a>
+              <FaInstagram className="w-6 h-6 text-green-500 hover:text-green-300" />
+            </a>
+          </div>
         </div>
-      </div>
-    </footer>
+      </footer>
+
+      {/* Ícone fixo do WhatsApp */}
+      {/* <a
+        href="https://api.whatsapp.com/send?phone=551145875550&text=Ola%20Seja%20bem%20vindo%20a%20Piva%20Seguros"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="WhatsApp"
+        className="fixed lg:bottom-20 lg:right-20 bg-green-600 text-white p-3 rounded-full shadow-lg hover:bg-green-500 transition duration-300"
+      >
+        <FaWhatsapp className="w-8 h-8" />
+      </a> */}
+
+      
+    </>
   );
 };
 
