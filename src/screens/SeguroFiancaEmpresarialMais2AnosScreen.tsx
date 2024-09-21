@@ -1,4 +1,4 @@
-const SeguroFiancaEmpresarialMais2AnosForms = () => {
+const SeguroFiancaEmpresarialMais2AnosScreen = () => {
   return (
     <div className="bg-neutral-100">
       Seguro Fianca Empresarial Mais 2 Anos Forms
@@ -6,4 +6,4 @@ const SeguroFiancaEmpresarialMais2AnosForms = () => {
   );
 };
 
-export default SeguroFiancaEmpresarialMais2AnosForms;
+export default SeguroFiancaEmpresarialMais2AnosScreen

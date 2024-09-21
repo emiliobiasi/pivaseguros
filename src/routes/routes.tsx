@@ -5,10 +5,11 @@ import Login from "@/screens/Login";
 import PrivateRoute from "@/contexts/auth/PrivateRoute";
 import { AuthProvider } from "@/contexts/auth/AuthContext";
 import FormsLayout from "@/screens/FormsLayout";
-import SeguroIncendioForms from "@/screens/SeguroIncendioForms";
-import SeguroFiancaEmpresarialMais2AnosForms from "@/screens/SeguroFiancaEmpresarialMais2AnosForms";
-import SeguroFiancaEmpresarialMenos2AnosForms from "@/screens/SeguroFiancaEmpresarialMenos2AnosForms";
-import SeguroFiancaResidencialForms from "@/screens/SeguroFiancaResidencialForms";
+import SeguroIncendioScreen from "@/screens/SeguroIncendioScreen";
+import SeguroFiancaEmpresarialMais2AnosScreen from "@/screens/SeguroFiancaEmpresarialMais2AnosScreen";
+import SeguroFiancaEmpresarialMenos2AnosScreen from "@/screens/SeguroFiancaEmpresarialMenos2AnosScreen";
+import SeguroFiancaResidencialScreen from "@/screens/SeguroFiancaResidencialScreen";
+
 
 const RoutesComponent = () => {
   return (
@@ -17,18 +18,18 @@ const RoutesComponent = () => {
         <Routes>
           <Route path="/entrar" element={<Login />} />
           <Route path="/formulario" element={<FormsLayout />}>
-            <Route path="seguro-incendio" element={<SeguroIncendioForms />} />
+            <Route path="seguro-incendio" element={<SeguroIncendioScreen />} />
             <Route
               path="seguro-fianca-empresarial-mais-2-anos"
-              element={<SeguroFiancaEmpresarialMais2AnosForms />}
+              element={<SeguroFiancaEmpresarialMais2AnosScreen />}
             />
             <Route
               path="seguro-fianca-empresarial-menos-2-anos"
-              element={<SeguroFiancaEmpresarialMenos2AnosForms />}
+              element={<SeguroFiancaEmpresarialMenos2AnosScreen />}
             />
             <Route
               path="seguro-fianca-residencial"
-              element={<SeguroFiancaResidencialForms />}
+              element={<SeguroFiancaResidencialScreen />}
             />
           </Route>
           <Route
