@@ -29,15 +29,19 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogHeader,
   DialogTitle,
-} from "@radix-ui/react-dialog";
-import { DialogHeader } from "../ui/dialog";
+} from "@/components/ui/dialog";
 import pivaLogo from "@/assets/logo.png";
+import { useNavigate } from "react-router-dom";
+// import CurrencyInput from "react-currency-input-field";
 
 export function SeguroIncendioForms() {
   const [currentTab, setCurrentTab] = useState("personal");
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState<SeguroIncendio>({
     id: "",
@@ -131,7 +135,7 @@ export function SeguroIncendioForms() {
 
   const RequiredAsterisk = () => <span className="text-red-500">*</span>;
   return (
-    <>
+    <div className="mb-40">
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
           <CardTitle>Seguro Incêndio</CardTitle>
@@ -405,6 +409,7 @@ export function SeguroIncendioForms() {
                     </Select>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    
                     <div className="space-y-2">
                       <Label htmlFor="incendio">Incêndio</Label>
                       <Input
@@ -631,7 +636,11 @@ export function SeguroIncendioForms() {
               </Button>
             )}
             {currentTab !== "payment" ? (
-              <Button type="button" onClick={handleNext} className="ml-auto">
+              <Button
+                type="button"
+                onClick={handleNext}
+                className="ml-auto bg-[#00612B] text-white shadow hover:bg-[#02693E] focus-visible:ring-[#02693E] hover:bg-green-500"
+              >
                 Próximo <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             ) : (
@@ -646,6 +655,7 @@ export function SeguroIncendioForms() {
           </CardFooter>
         </form>
       </Card>
+
       {/* Dialog para o envio com sucesso */}
       <Dialog open={isSuccessModalOpen} onOpenChange={setIsSuccessModalOpen}>
         <DialogContent className="sm:max-w-md">
@@ -656,8 +666,8 @@ export function SeguroIncendioForms() {
             </DialogTitle>
           </DialogHeader>
           <div className="flex justify-center my-4">
-            <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center">
-              <img src={pivaLogo} alt="Piva" className="w-16 h-16" />
+            <div className="w-24 h-24 flex items-center justify-center my-5">
+              <img src={pivaLogo} alt="Piva" className="w-24 h-24 " />
             </div>
           </div>
           <DialogDescription>
@@ -665,13 +675,16 @@ export function SeguroIncendioForms() {
             contato em breve.
           </DialogDescription>
           <Button
-            onClick={() => setIsSuccessModalOpen(false)}
+            onClick={() => {
+              setIsSuccessModalOpen(false);
+              navigate("/formulario");
+            }}
             className="w-full mt-4"
           >
             Fechar
           </Button>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 }

@@ -3,8 +3,8 @@ import { SeguroIncendioForms } from "@/components/SeguroIncendioForms/seguro-inc
 const SeguroIncendioScreen = () => {
   return (
     <>
-      <div className="bg-neutral-100">Seguro Incendio Forms</div>
-      <SeguroIncendioForms />
+      {/* <div className="bg-neutral-00">Seguro Incendio Forms</div> */}
+      <SeguroIncendioForms/>
     </>
   );
 };
