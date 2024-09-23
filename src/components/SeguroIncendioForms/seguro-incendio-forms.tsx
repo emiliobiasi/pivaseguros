@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,7 +19,13 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowLeft, ArrowRight, CheckCircle, Send } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle,
+  Send,
+  Loader2,
+} from "lucide-react";
 import { SeguroIncendio } from "@/types/SeguroIncendio";
 import { formatCPF } from "@/utils/regex/regexCPF";
 import { formatCEP } from "@/utils/regex/regexCEP";
@@ -39,9 +45,12 @@ import { useNavigate } from "react-router-dom";
 export function SeguroIncendioForms() {
   const [currentTab, setCurrentTab] = useState("personal");
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
+  const formRef = useRef<HTMLFormElement>(null);
 
   const [formData, setFormData] = useState<SeguroIncendio>({
     id: "",
@@ -125,41 +134,77 @@ export function SeguroIncendioForms() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Enviando formulário:", formData);
+    setIsLoading(true); // Inicia o carregamento
     try {
       await createSeguroIncendio(formData);
+      formRef.current?.reset();
       setIsSuccessModalOpen(true); // Mostra o modal ao enviar com sucesso
     } catch (error) {
       console.error("Erro ao enviar o formulário:", error);
+      setErrorMessage(
+        "Ocorreu um erro ao enviar o formulário. Tente novamente."
+      );
+    } finally {
+      setIsLoading(false); // Finaliza o carregamento
     }
   };
 
   const RequiredAsterisk = () => <span className="text-red-500">*</span>;
   return (
-    <div className="mb-40">
-      <Card className="w-full max-w-4xl mx-auto">
-        <CardHeader>
+    <div className="mb-40 flex justify-center">
+      <Card className="w-full max-w-4xl md:mx-10 sm:mx-10">
+        <CardHeader className="mb-5">
           <CardTitle>Seguro Incêndio</CardTitle>
           <CardDescription>
-            Preencha o formulário para efetuar o Seguro Incêndio
+            Para concluir a efetivação do Seguro Incêndio, solicitamos o
+            preenchimento dados à seguir:
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent>
             <Tabs value={currentTab} onValueChange={setCurrentTab}>
-              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
-                <TabsTrigger value="personal" className="text-xs sm:text-sm">
+              <TabsList className="bg-white grid w-full grid-cols-2 sm:grid-cols-4 gap-2 mb-14">
+                <TabsTrigger
+                  value="personal"
+                  className="text-xs sm:text-sm bg-gray-200 p-2 rounded-lg focus:bg-white focus:outline-none"
+                >
                   Dados Pessoais
                 </TabsTrigger>
-                <TabsTrigger value="address" className="text-xs sm:text-sm">
+                <TabsTrigger
+                  value="address"
+                  className="text-xs sm:text-sm bg-gray-200 p-2 rounded-lg focus:bg-white focus:outline-none"
+                >
                   Endereço
                 </TabsTrigger>
-                <TabsTrigger value="property" className="text-xs sm:text-sm">
+                <TabsTrigger
+                  value="property"
+                  className="text-xs sm:text-sm bg-gray-200 p-2 rounded-lg focus:bg-white focus:outline-none"
+                >
                   Imóvel
                 </TabsTrigger>
-                <TabsTrigger value="payment" className="text-xs sm:text-sm">
+                <TabsTrigger
+                  value="payment"
+                  className="text-xs sm:text-sm bg-gray-200 p-2 rounded-lg focus:bg-white focus:outline-none"
+                >
                   Plano
                 </TabsTrigger>
               </TabsList>
+
+              {/* <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 gap-2 mb-16">
+                <TabsTrigger value="personal" className="text-xs sm:text-sm ">
+                  Dados Pessoais
+                </TabsTrigger>
+                <TabsTrigger value="address" className="text-xs sm:text-sm ">
+                  Endereço
+                </TabsTrigger>
+                <TabsTrigger value="property" className="text-xs sm:text-sm ">
+                  Imóvel
+                </TabsTrigger>
+                <TabsTrigger value="payment" className="text-xs sm:text-sm ">
+                  Plano
+                </TabsTrigger>
+              </TabsList> */}
+
               <TabsContent value="personal">
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -409,7 +454,6 @@ export function SeguroIncendioForms() {
                     </Select>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    
                     <div className="space-y-2">
                       <Label htmlFor="incendio">Incêndio</Label>
                       <Input
@@ -528,6 +572,7 @@ export function SeguroIncendioForms() {
                         onChange={handleInputChange}
                         required
                         placeholder="Digite o valor do seguro"
+                        disabled={isLoading}
                       />
                     </div>
                     <div className="space-y-2">
@@ -596,6 +641,7 @@ export function SeguroIncendioForms() {
                         value={formData.cpf_locador_opcional || ""}
                         onChange={handleInputChange}
                         placeholder="Digite o CPF do locador (opcional)"
+                        disabled={isLoading}
                       />
                     </div>
                     <div className="space-y-2">
@@ -606,10 +652,11 @@ export function SeguroIncendioForms() {
                         value={formData.nome_locador || ""}
                         onChange={handleInputChange}
                         placeholder="Digite o nome do locador"
+                        disabled={isLoading}
                       />
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 mt-4">
                     <Checkbox
                       id="terms"
                       checked={agreedToTerms}
@@ -629,6 +676,13 @@ export function SeguroIncendioForms() {
               </TabsContent>
             </Tabs>
           </CardContent>
+
+          {errorMessage && (
+            <div className="text-red-500 text-center my-5 px-4">
+              {errorMessage}
+            </div>
+          )}
+
           <CardFooter className="flex justify-between">
             {currentTab !== "personal" && (
               <Button type="button" variant="outline" onClick={handlePrevious}>
@@ -646,10 +700,19 @@ export function SeguroIncendioForms() {
             ) : (
               <Button
                 type="submit"
-                disabled={!agreedToTerms}
+                disabled={!agreedToTerms || isLoading}
                 className="ml-auto bg-green-700 hover:bg-green-600"
               >
-                Enviar <Send className="ml-2 h-4 w-4" />
+                {isLoading ? (
+                  <>
+                    Enviando...
+                    <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+                  </>
+                ) : (
+                  <>
+                    Enviar <Send className="ml-2 h-4 w-4" />
+                  </>
+                )}
               </Button>
             )}
           </CardFooter>
@@ -679,7 +742,7 @@ export function SeguroIncendioForms() {
               setIsSuccessModalOpen(false);
               navigate("/formulario");
             }}
-            className="w-full mt-4"
+            className="w-full mt-4 bg-green-700 hover:bg-green-600"
           >
             Fechar
           </Button>
