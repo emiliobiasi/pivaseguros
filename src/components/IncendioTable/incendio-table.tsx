@@ -57,8 +57,11 @@ export function IncendioTable({ data }: TableContentProps) {
   };
 
   return (
-    <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-      <div className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
+    <div
+      className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 h-screen flex flex-col "
+      style={{ height: "calc(100vh - 100px)" }}
+    >
+      <div className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg flex-grow overflow-y-auto">
         <div className="overflow-x-auto">
           <Table>
             <TableHeader className="bg-gray-50 dark:bg-gray-700">
@@ -74,7 +77,7 @@ export function IncendioTable({ data }: TableContentProps) {
                   Nome do Locatário
                 </TableHead>
                 <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
-                  Data de Nascimento
+                  Hora
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -132,9 +135,8 @@ export function IncendioTable({ data }: TableContentProps) {
                     {seguro.nome_locatario}
                   </TableCell>
                   <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
-                    {new Date(
-                      seguro.data_nascimento_locatario
-                    ).toLocaleDateString()}
+                    {new Date(seguro.created).toLocaleDateString()} -{" "}
+                    {new Date(seguro.created).toLocaleTimeString()}
                   </TableCell>
                 </TableRow>
               ))}

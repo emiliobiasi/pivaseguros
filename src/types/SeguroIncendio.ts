@@ -42,4 +42,5 @@ export type SeguroIncendio = {
   inclusao_clausula_beneficiaria: "SIM" | "NÃO";
   cpf_locador_opcional?: string;
   nome_locador?: string;
+  created: Date;
 };

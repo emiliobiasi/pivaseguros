@@ -1,5 +1,6 @@
 import { Flame, Building, Home, ExternalLink, X } from "lucide-react";
 import { useNavigate } from "react-router-dom"; // Importe o useNavigate
+import logo from "@/assets/logo.png";
 
 type SideBarProps = {
   sidebarOpen: boolean;
@@ -15,7 +16,7 @@ export function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
       <aside className="hidden md:flex flex-col w-56 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 min-h-screen">
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
           <span className="text-xl font-bold text-gray-800 dark:text-white">
-            Piva Seguros
+            <img src={logo} alt="Logo" />
           </span>
         </div>
         <SidebarContent navigate={navigate} />
