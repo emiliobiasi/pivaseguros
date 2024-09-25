@@ -9,7 +9,9 @@ import SeguroIncendioScreen from "@/screens/SeguroIncendioScreen";
 import SeguroFiancaEmpresarialMais2AnosScreen from "@/screens/SeguroFiancaEmpresarialMais2AnosScreen";
 import SeguroFiancaEmpresarialMenos2AnosScreen from "@/screens/SeguroFiancaEmpresarialMenos2AnosScreen";
 import SeguroFiancaResidencialScreen from "@/screens/SeguroFiancaResidencialScreen";
-
+import { SideBarLayout } from "@/screens/SideBarLayout";
+import { DashboardIncendio } from "@/screens/DashboardIncendio";
+import { DashboardFiancaResidencial } from "@/screens/DashboardFiancaResidencial";
 
 const RoutesComponent = () => {
   return (
@@ -30,6 +32,13 @@ const RoutesComponent = () => {
             <Route
               path="seguro-fianca-residencial"
               element={<SeguroFiancaResidencialScreen />}
+            />
+          </Route>
+          <Route path="/" element={<SideBarLayout />}>
+            <Route path="dashboard-incendio" element={<DashboardIncendio />} />
+            <Route
+              path="dashboard-fianca-residencial"
+              element={<DashboardFiancaResidencial />}
             />
           </Route>
           <Route

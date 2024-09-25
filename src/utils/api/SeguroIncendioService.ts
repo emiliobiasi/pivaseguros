@@ -28,13 +28,10 @@ export async function fetchSeguroIncendioList(): Promise<SeguroIncendio[]> {
         sort: "-created",
       });
     console.log("Lista de Seguros Incêndio:", records);
-
-    // Subscrição para mudanças em tempo real na coleção 'seguro_incendio'
     pb.collection("seguro_incendio").subscribe("*", function (e) {
       console.log("Mudança detectada:", e.action);
       console.log("Dados alterados:", e.record);
     });
-
     return records;
   } catch (error) {
     const err = error as ClientResponseError;
