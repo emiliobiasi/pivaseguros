@@ -19,20 +19,33 @@ export async function createSeguroIncendio(
   }
 }
 
-// Função para buscar a lista de seguros de incêndio e se inscrever para atualizações em tempo real
-export async function fetchSeguroIncendioList(): Promise<SeguroIncendio[]> {
+// Função para buscar a lista de seguros de incêndio com paginação
+export async function fetchSeguroIncendioList(
+  page: number,
+  limit: number
+): Promise<{
+  items: SeguroIncendio[];
+  totalItems: number;
+  totalPages: number;
+}> {
   try {
-    const records = await pb
+    const response = await pb
       .collection("seguro_incendio")
-      .getFullList<SeguroIncendio>({
+      .getList<SeguroIncendio>(page, limit, {
         sort: "-created",
       });
-    console.log("Lista de Seguros Incêndio:", records);
+
+    console.log("Lista de Seguros Incêndio:", response.items);
     pb.collection("seguro_incendio").subscribe("*", function (e) {
       console.log("Mudança detectada:", e.action);
       console.log("Dados alterados:", e.record);
     });
-    return records;
+
+    return {
+      items: response.items,
+      totalItems: response.totalItems,
+      totalPages: response.totalPages,
+    };
   } catch (error) {
     const err = error as ClientResponseError;
     console.error("Erro ao buscar a lista de Seguros Incêndio:", err);

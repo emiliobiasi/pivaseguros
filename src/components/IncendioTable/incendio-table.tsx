@@ -18,6 +18,8 @@ import {
   Clock,
   CheckCircle,
   Loader2,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
 import { SeguroIncendio } from "@/types/SeguroIncendio";
 import { SeguroIncendioModal } from "../SeguroIncendioModal/seguro-incendio-modal";
@@ -40,8 +42,11 @@ export function IncendioTable({ data }: TableContentProps) {
   const [selectedSeguro, setSelectedSeguro] = useState<SeguroIncendio | null>(
     null
   );
-  const [isLoading, setIsLoading] = useState(true); // Estado de loading para a tabela
-  const [loadingAction, setLoadingAction] = useState<string | null>(null); // Estado de loading para ações específicas
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadingAction, setLoadingAction] = useState<string | null>(null);
+
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [sortBy, setSortBy] = useState<"acao" | "hora" | null>(null);
 
   // Função para ordenar automaticamente os pendentes acima dos finalizados
   const ordenarPendentesPrimeiro = (seguros: SeguroIncendio[]) => {
@@ -52,7 +57,34 @@ export function IncendioTable({ data }: TableContentProps) {
     });
   };
 
-  // Simulação de um tempo de carregamento para efeito de exemplo
+  // Ordenação por ação
+  const sortByAcao = () => {
+    const newSortOrder = sortOrder === "asc" ? "desc" : "asc";
+    const sortedSeguros = [...seguros].sort((a, b) => {
+      if (newSortOrder === "asc") {
+        return a.acao.localeCompare(b.acao);
+      } else {
+        return b.acao.localeCompare(a.acao);
+      }
+    });
+    setSeguros(sortedSeguros);
+    setSortBy("acao");
+    setSortOrder(newSortOrder);
+  };
+
+  // Ordenação por hora
+  const sortByHora = () => {
+    const newSortOrder = sortOrder === "asc" ? "desc" : "asc";
+    const sortedSeguros = [...seguros].sort((a, b) => {
+      const dateA = new Date(a.created).getTime();
+      const dateB = new Date(b.created).getTime();
+      return newSortOrder === "asc" ? dateA - dateB : dateB - dateA;
+    });
+    setSeguros(sortedSeguros);
+    setSortBy("hora");
+    setSortOrder(newSortOrder);
+  };
+
   useEffect(() => {
     setIsLoading(true);
     const timer = setTimeout(() => {
@@ -62,7 +94,6 @@ export function IncendioTable({ data }: TableContentProps) {
     return () => clearTimeout(timer);
   }, [data]);
 
-  // Função para lidar com a mudança de ação com loading e toaster
   const handleAcaoChange = async (
     id: string,
     novaAcao: "PENDENTE" | "FINALIZADO"
@@ -80,7 +111,7 @@ export function IncendioTable({ data }: TableContentProps) {
         const updatedSeguros = prevSeguros.map((seguro) =>
           seguro.id === id ? { ...seguro, acao: updatedRecord.acao } : seguro
         );
-        return ordenarPendentesPrimeiro(updatedSeguros); // Ordena automaticamente
+        return ordenarPendentesPrimeiro(updatedSeguros);
       });
 
       toast.success(`O status da ação foi atualizado para ${novaAcao}`, {
@@ -107,9 +138,9 @@ export function IncendioTable({ data }: TableContentProps) {
   return (
     <div
       className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 h-screen flex flex-col "
-      style={{ height: "calc(100vh - 100px)" }}
+      style={{ height: "calc(100vh - 15.625rem)" }}
     >
-      <Toaster /> {/* Componente do Toaster */}
+      <Toaster />
       <div className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg flex-grow overflow-y-auto">
         <div className="overflow-x-auto">
           {isLoading ? (
@@ -162,8 +193,17 @@ export function IncendioTable({ data }: TableContentProps) {
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
                     ID
                   </TableHead>
-                  <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
+                  <TableHead
+                    className="px-3 py-2 lg:px-6 lg:py-3 cursor-pointer"
+                    onClick={sortByAcao}
+                  >
                     Ação
+                    {sortBy === "acao" &&
+                      (sortOrder === "asc" ? (
+                        <ChevronUp className="inline ml-1" />
+                      ) : (
+                        <ChevronDown className="inline ml-1" />
+                      ))}
                   </TableHead>
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
                     Nome da Imobiliária
@@ -171,8 +211,17 @@ export function IncendioTable({ data }: TableContentProps) {
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
                     Nome do Locatário
                   </TableHead>
-                  <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
+                  <TableHead
+                    className="px-3 py-2 lg:px-6 lg:py-3 cursor-pointer"
+                    onClick={sortByHora}
+                  >
                     Hora
+                    {sortBy === "hora" &&
+                      (sortOrder === "asc" ? (
+                        <ChevronUp className="inline ml-1" />
+                      ) : (
+                        <ChevronDown className="inline ml-1" />
+                      ))}
                   </TableHead>
                 </TableRow>
               </TableHeader>
@@ -249,7 +298,6 @@ export function IncendioTable({ data }: TableContentProps) {
           )}
         </div>
       </div>
-      {/* Modal - renderizado condicionalmente */}
       {selectedSeguro && (
         <SeguroIncendioModal
           seguro={selectedSeguro}
