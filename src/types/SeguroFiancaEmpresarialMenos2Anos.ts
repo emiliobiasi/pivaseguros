@@ -127,4 +127,5 @@ export type SeguroFiancaEmpresarialMenos2Anos = {
     | "ABERTURA DE MATRIZ"
     | "TROCA LOCAL DE SEDE"
     | "REDUÇÃO DE CUSTOS";
+  created: Date;
 };

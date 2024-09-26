@@ -40,6 +40,56 @@ export async function fetchSeguroIncendioList(): Promise<SeguroIncendio[]> {
   }
 }
 
+// Função para atualizar o campo "acao" para "PENDENTE"
+export async function updateSeguroIncendioToPending(
+  id: string
+): Promise<SeguroIncendio> {
+  try {
+    const updatedRecord = await pb
+      .collection("seguro_incendio")
+      .update<SeguroIncendio>(id, {
+        acao: "PENDENTE",
+      });
+    console.log(
+      `Seguro Incêndio ${id} atualizado para PENDENTE:`,
+      updatedRecord
+    );
+    return updatedRecord;
+  } catch (error) {
+    const err = error as PocketBaseError;
+    console.error(
+      `Erro ao atualizar o Seguro Incêndio ${id} para PENDENTE:`,
+      err
+    );
+    throw new Error("Erro ao atualizar o Seguro Incêndio para PENDENTE");
+  }
+}
+
+// Função para atualizar o campo "acao" para "FINALIZADO"
+export async function updateSeguroIncendioToFinalized(
+  id: string
+): Promise<SeguroIncendio> {
+  try {
+    const updatedRecord = await pb
+      .collection("seguro_incendio")
+      .update<SeguroIncendio>(id, {
+        acao: "FINALIZADO",
+      });
+    console.log(
+      `Seguro Incêndio ${id} atualizado para FINALIZADO:`,
+      updatedRecord
+    );
+    return updatedRecord;
+  } catch (error) {
+    const err = error as PocketBaseError;
+    console.error(
+      `Erro ao atualizar o Seguro Incêndio ${id} para FINALIZADO:`,
+      err
+    );
+    throw new Error("Erro ao atualizar o Seguro Incêndio para FINALIZADO");
+  }
+}
+
 // Função para cancelar as assinaturas em caso de necessidade
 export function unsubscribeSeguroIncendio() {
   pb.collection("seguro_incendio").unsubscribe("*");

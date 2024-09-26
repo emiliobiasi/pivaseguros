@@ -33,4 +33,5 @@ export type SeguroFiancaResidencial = {
   pintura_interna: "SIM" | "NÃO";
   pintura_externa: "SIM" | "NÃO";
   observacao?: string;
+  created: Date;
 };
