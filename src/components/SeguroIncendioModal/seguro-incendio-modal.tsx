@@ -43,9 +43,9 @@ export function SeguroIncendioModal({
           </button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Informações da Imobiliária */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">
+          {/* Primeira Coluna */}
+          <div className="space-y-4 bg-gray-100 p-4 rounded-lg">
+            <h3 className="text-lg font-semibold text-[#025d37]">
               Informações da Imobiliária
             </h3>
             <p>
@@ -54,11 +54,10 @@ export function SeguroIncendioModal({
             <p>
               <strong>E-mail da Imobiliária:</strong> {seguro.email_imobiliaria}
             </p>
-          </div>
 
-          {/* Informações do Proponente */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Informações do Proponente</h3>
+            <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+              Informações do Proponente
+            </h3>
             <p>
               <strong>Nome do Proponente:</strong> {seguro.nome_locatario}
             </p>
@@ -75,26 +74,27 @@ export function SeguroIncendioModal({
             <p>
               <strong>Sexo:</strong> {seguro.sexo_locatario}
             </p>
+
+            {seguro.nome_locador && (
+              <>
+                <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+                  Informações do Locador
+                </h3>
+                <p>
+                  <strong>Nome do Locador:</strong> {seguro.nome_locador}
+                </p>
+                {seguro.cpf_locador_opcional && (
+                  <p>
+                    <strong>CPF do Locador:</strong> {seguro.cpf_locador_opcional}
+                  </p>
+                )}
+              </>
+            )}
           </div>
 
-          {/* Informações do Locador */}
-          {seguro.nome_locador && (
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Informações do Locador</h3>
-              <p>
-                <strong>Nome do Locador:</strong> {seguro.nome_locador}
-              </p>
-              {seguro.cpf_locador_opcional && (
-                <p>
-                  <strong>CPF do Locador:</strong> {seguro.cpf_locador_opcional}
-                </p>
-              )}
-            </div>
-          )}
-
-          {/* Endereço */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Endereço</h3>
+          {/* Segunda Coluna */}
+          <div className="space-y-4 bg-gray-100 p-4 rounded-lg">
+            <h3 className="text-lg font-semibold text-[#025d37]">Endereço</h3>
             <p>
               <strong>CEP:</strong> {seguro.cep}
             </p>
@@ -116,19 +116,18 @@ export function SeguroIncendioModal({
             <p>
               <strong>Estado:</strong> {seguro.estado}
             </p>
-          </div>
 
-          {/* Informações do Imóvel */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Informações do Imóvel</h3>
+            <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+              Informações do Imóvel
+            </h3>
             <p>
               <strong>Tipo do Imóvel:</strong> {seguro.tipo_imovel}
             </p>
           </div>
 
-          {/* Coberturas */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Coberturas</h3>
+          {/* Terceira Coluna */}
+          <div className="space-y-4 bg-gray-100 p-4 rounded-lg">
+            <h3 className="text-lg font-semibold text-[#025d37]">Coberturas</h3>
             {seguro.incendio && (
               <p>
                 <strong>Incêndio:</strong> R$ {seguro.incendio.toFixed(2)}
@@ -141,50 +140,43 @@ export function SeguroIncendioModal({
             )}
             {seguro.danos_eletricos && (
               <p>
-                <strong>Danos Elétricos:</strong> R${" "}
-                {seguro.danos_eletricos.toFixed(2)}
+                <strong>Danos Elétricos:</strong> R$ {seguro.danos_eletricos.toFixed(2)}
               </p>
             )}
             {seguro.impacto_veiculos && (
               <p>
-                <strong>Impacto de Veículos:</strong> R${" "}
-                {seguro.impacto_veiculos.toFixed(2)}
+                <strong>Impacto de Veículos:</strong> R$ {seguro.impacto_veiculos.toFixed(2)}
               </p>
             )}
             {seguro.perda_aluguel && (
               <p>
-                <strong>Perda de Aluguel:</strong> R${" "}
-                {seguro.perda_aluguel.toFixed(2)}
+                <strong>Perda de Aluguel:</strong> R$ {seguro.perda_aluguel.toFixed(2)}
               </p>
             )}
             {seguro.responsabilidade_civil && (
               <p>
-                <strong>Responsabilidade Civil:</strong> R${" "}
-                {seguro.responsabilidade_civil.toFixed(2)}
+                <strong>Responsabilidade Civil:</strong> R$ {seguro.responsabilidade_civil.toFixed(2)}
               </p>
             )}
-          </div>
 
-          {/* Informações do Seguro */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Informações do Seguro</h3>
+            <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+              Informações do Seguro
+            </h3>
             <p>
               <strong>Plano Escolhido:</strong> {seguro.plano_escolhido}
             </p>
             <p>
-              <strong>Valor do Seguro:</strong> R${" "}
-              {seguro.valor_seguro.toFixed(2)}
+              <strong>Valor do Seguro:</strong> R$ {seguro.valor_seguro.toFixed(2)}
             </p>
             <p>
               <strong>Forma de Pagamento:</strong> {seguro.forma_pagamento}
             </p>
             <p>
               <strong>Incluir Cláusula Beneficiária:</strong>{" "}
-              {seguro.inclusao_clausula_beneficiaria}
+              {seguro.inclusao_clausula_beneficiaria ? "Sim" : "Não"}
             </p>
           </div>
         </div>
-
         <div className="mt-6">
           <Button
             onClick={onClose}

@@ -1,6 +1,6 @@
 import pb, { PocketBaseError } from "@/utils/backend/pb";
 import { SeguroIncendio } from "@/types/SeguroIncendio";
-import { ClientResponseError } from "pocketbase";
+import { ClientResponseError, RecordSubscription } from "pocketbase";
 
 // Função para criar um seguro de incêndio e monitorar as mudanças em tempo real com campo "id_numero" incremental
 export async function createSeguroIncendio(
@@ -126,8 +126,15 @@ export async function updateSeguroIncendioToFinalized(
   }
 }
 
-// Função para cancelar as assinaturas em caso de necessidade
-export function unsubscribeSeguroIncendio() {
+// Função para iniciar a subscription em tempo real
+export function subscribeToSeguroIncendioUpdates(
+  onRecordChange: (data: RecordSubscription<SeguroIncendio>) => void
+) {
+  pb.collection("seguro_incendio").subscribe("*", onRecordChange);
+}
+
+// Função para cancelar a subscription
+export function unsubscribeFromSeguroIncendioUpdates() {
   pb.collection("seguro_incendio").unsubscribe("*");
   console.log("Subscrição cancelada.");
 }

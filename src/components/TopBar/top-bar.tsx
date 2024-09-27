@@ -2,12 +2,14 @@ import { Menu, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
 type TopBarProps = {
+  title: string;
   toggleSidebar: () => void;
   searchTerm: string;
   setSearchTerm: (value: string) => void;
 };
 
 export function TopBar({
+  title,
   toggleSidebar,
   searchTerm,
   setSearchTerm,
@@ -24,7 +26,7 @@ export function TopBar({
               <Menu className="h-6 w-6" />
             </button>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-              Incêndio
+              {title}
             </h1>
           </div>
           <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
@@ -32,12 +34,12 @@ export function TopBar({
               <Input
                 type="search"
                 placeholder="Buscar por ID, imobiliária, proponente ou hora..."
-                className="pl-10 pr-4 w-full"
+                className="pl-10 pr-4 w-full focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-green-500 transition duration-150 ease-in-out"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
               <Search
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 "
                 size={20}
               />
             </div>

@@ -1,10 +1,16 @@
 import { IncendioTable } from "@/components/IncendioTable/incendio-table";
 import { SeguroIncendio } from "@/types/SeguroIncendio";
-import { useEffect, useState } from "react";
-import { fetchSeguroIncendioList } from "@/utils/api/SeguroIncendioService";
+import { useEffect, useState, useRef, useCallback } from "react";
+import {
+  fetchSeguroIncendioList,
+  subscribeToSeguroIncendioUpdates,
+  unsubscribeFromSeguroIncendioUpdates,
+} from "@/utils/api/SeguroIncendioService";
 import { Slider } from "@/components/ui/slider"; // Import Slider from shadcn ui
 import { TopBar } from "@/components/TopBar/top-bar";
 import { Button } from "@/components/ui/button";
+import { RecordSubscription } from "pocketbase";
+import { toast } from "sonner";
 
 export function DashboardIncendio() {
   const [data, setData] = useState<SeguroIncendio[]>([]);
@@ -14,6 +20,16 @@ export function DashboardIncendio() {
   const [searchTerm, setSearchTerm] = useState(""); // Control search term
   const [filter, setFilter] = useState<"PENDENTE" | "FINALIZADO" | "">(""); // Controla o filtro de ação
 
+  const filterRef = useRef(filter);
+  const searchTermRef = useRef(searchTerm);
+
+  // Atualiza os refs quando filter ou searchTerm mudam
+  useEffect(() => {
+    filterRef.current = filter;
+    searchTermRef.current = searchTerm;
+  }, [filter, searchTerm]);
+
+  // Fetch data when page, limit, searchTerm, or filter changes
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -31,6 +47,77 @@ export function DashboardIncendio() {
     };
     fetchData();
   }, [page, limit, searchTerm, filter]); // Recarrega os dados ao alterar a página, limite, termo de busca ou filtro
+
+  // Função para manipular eventos de mudança
+  const handleSeguroIncendioChange = useCallback(
+    (e: RecordSubscription<SeguroIncendio>) => {
+      const { action, record } = e;
+
+      const currentFilter = filterRef.current;
+      const currentSearchTerm = searchTermRef.current;
+
+      // Verifica se o registro corresponde aos filtros atuais
+      const matchesFilter =
+        (currentFilter === "" || record.acao === currentFilter) &&
+        (currentSearchTerm === "" ||
+          record.nome_locatario
+            .toLowerCase()
+            .includes(currentSearchTerm.toLowerCase()) ||
+          record.nome_imobiliaria
+            .toLowerCase()
+            .includes(currentSearchTerm.toLowerCase()) ||
+          record.id_numero.toString().includes(currentSearchTerm));
+
+      setData((prevData) => {
+        switch (action) {
+          case "create":
+            if (matchesFilter) {
+              // Evita duplicatas
+              if (!prevData.find((r) => r.id === record.id)) {
+                // Exibe a notificação de Toast
+                toast.success("Nova imobiliária adicionada!", {
+                  duration: 3000,
+                });
+
+                return [record, ...prevData];
+              }
+            }
+            return prevData;
+          case "update":
+            if (matchesFilter) {
+              const index = prevData.findIndex((r) => r.id === record.id);
+              if (index > -1) {
+                const newData = [...prevData];
+                newData[index] = record;
+                return newData;
+              } else {
+                return [record, ...prevData];
+              }
+            } else {
+              // Remove o registro se não corresponder ao filtro
+              return prevData.filter((r) => r.id !== record.id);
+            }
+          case "delete":
+            // Remove o registro da lista
+            return prevData.filter((r) => r.id !== record.id);
+          default:
+            console.warn(`Ação desconhecida: ${action}`);
+            return prevData;
+        }
+      });
+    },
+    []
+  );
+
+  // Inicia a subscription quando o componente monta
+  useEffect(() => {
+    subscribeToSeguroIncendioUpdates(handleSeguroIncendioChange);
+
+    // Cancela a subscription quando o componente desmonta
+    return () => {
+      unsubscribeFromSeguroIncendioUpdates();
+    };
+  }, [handleSeguroIncendioChange]);
 
   // Functions to navigate between pages
   const handleNextPage = () => {
@@ -56,6 +143,7 @@ export function DashboardIncendio() {
   return (
     <div>
       <TopBar
+        title="Seguros de Incêndio"
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm} // Passa a função para atualizar o termo de busca
         toggleSidebar={() => {}} // Não é necessário para esta tela
