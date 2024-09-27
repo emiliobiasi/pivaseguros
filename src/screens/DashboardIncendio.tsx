@@ -3,12 +3,13 @@ import { TopBar } from "@/components/TopBar/top-bar";
 import { SeguroIncendio } from "@/types/SeguroIncendio";
 import { useEffect, useState } from "react";
 import { fetchSeguroIncendioList } from "@/utils/api/SeguroIncendioService";
+import { Slider } from "@/components/ui/slider"; // Import the Slider component from shadcn ui
 
 export function DashboardIncendio() {
   const [data, setData] = useState<SeguroIncendio[]>([]);
-  const [page, setPage] = useState(1); // Controla a página atual
-  const [totalPages, setTotalPages] = useState(0); // Armazena o número total de páginas
-  const [limit, setLimit] = useState(10); // Limite de itens por página, começa com 10
+  const [page, setPage] = useState(1); // Controls the current page
+  const [totalPages, setTotalPages] = useState(0); // Stores the total number of pages
+  const [limit, setLimit] = useState(10); // Items per page limit, starts at 10
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -26,11 +27,11 @@ export function DashboardIncendio() {
       }
     };
     fetchData();
-  }, [page, limit]); // Recarrega os dados ao alterar a página ou limite
+  }, [page, limit]); // Reload data when page or limit changes
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
-  // Funções para navegar entre páginas
+  // Functions to navigate between pages
   const handleNextPage = () => {
     if (page < totalPages) setPage(page + 1);
   };
@@ -39,10 +40,10 @@ export function DashboardIncendio() {
     if (page > 1) setPage(page - 1);
   };
 
-  // Função para alterar o limite de itens por página
-  const handleLimitChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setLimit(Number(event.target.value)); // Atualiza o limite com a escolha do usuário
-    setPage(1); // Reinicia para a primeira página
+  // Function to change the items per page limit using the slider
+  const handleSliderChange = (value: number[]) => {
+    setLimit(value[0]); // Update the limit with the user's choice
+    setPage(1); // Reset to the first page
   };
 
   return (
@@ -53,28 +54,31 @@ export function DashboardIncendio() {
         setSearchTerm={setSearchTerm}
       />
 
-      {/* Seleção do Limite de Itens por Página */}
-      <div className="flex justify-end p-4">
-        <label htmlFor="limit" className="mr-2 text-gray-700">
-          Itens por página:
-        </label>
-        <select
-          id="limit"
-          value={limit}
-          onChange={handleLimitChange}
-          className="border border-gray-300 rounded-md p-2 text-gray-700"
-        >
-          <option value={5}>5</option>
-          <option value={10}>10</option>
-          <option value={15}>15</option>
-          <option value={20}>20</option>
-        </select>
+      {/* Items per Page Slider Selection */}
+      <div className="flex justify-center p-4">
+        <div className="flex items-center space-x-4">
+          <label htmlFor="limit" className="text-gray-700">
+            Itens por página:
+          </label>
+          <div className="flex items-center space-x-2">
+            <Slider
+              id="limit"
+              max={20}
+              min={5}
+              step={5}
+              value={[limit]}
+              onValueChange={handleSliderChange}
+              className="w-80" // Adjust the width of the slider
+            />
+            <span className="text-gray-800 font-medium">{limit}</span>
+          </div>
+        </div>
       </div>
 
-      {/* Componente de Tabela */}
+      {/* Table Component */}
       <IncendioTable data={data} />
 
-      {/* Controles de Paginação */}
+      {/* Pagination Controls */}
       <div className="flex justify-center mt-6 space-x-4">
         <button
           onClick={handlePreviousPage}
@@ -82,7 +86,7 @@ export function DashboardIncendio() {
           className={`px-4 py-2 border rounded-md ${
             page === 1
               ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-              : "bg-blue-500 text-white hover:bg-blue-600"
+              : "bg-green-600 text-white hover:bg-green-700"
           } transition ease-in-out duration-150`}
         >
           Página Anterior
@@ -101,7 +105,7 @@ export function DashboardIncendio() {
           className={`px-4 py-2 border rounded-md ${
             page === totalPages
               ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-              : "bg-blue-500 text-white hover:bg-blue-600"
+              : "bg-green-500 text-white hover:bg-green-600"
           } transition ease-in-out duration-150`}
         >
           Próxima Página
