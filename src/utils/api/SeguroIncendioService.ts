@@ -2,14 +2,30 @@ import pb, { PocketBaseError } from "@/utils/backend/pb";
 import { SeguroIncendio } from "@/types/SeguroIncendio";
 import { ClientResponseError } from "pocketbase";
 
-// Função para criar um seguro de incêndio e monitorar as mudanças em tempo real
+// Função para criar um seguro de incêndio e monitorar as mudanças em tempo real com campo "id_numero" incremental
 export async function createSeguroIncendio(
   data: SeguroIncendio
 ): Promise<SeguroIncendio> {
   try {
+    // Buscar o seguro existente com o maior valor de "id_numero"
+    const lastRecord = await pb
+      .collection("seguro_incendio")
+      .getFirstListItem<SeguroIncendio>("", {
+        sort: "-id_numero", // Ordena em ordem decrescente pelo campo "id_numero"
+        limit: 1,
+      });
+
+    // Determinar o próximo valor para "id_numero"
+    const nextIdNumero = lastRecord ? (lastRecord.id_numero || 0) + 1 : 1;
+
+    // Cria o novo seguro com o campo "id_numero" incrementado
     const record = await pb
       .collection("seguro_incendio")
-      .create<SeguroIncendio>(data);
+      .create<SeguroIncendio>({
+        ...data,
+        id_numero: nextIdNumero, // Adiciona o campo "id_numero" ao novo registro
+      });
+
     console.log("Seguro Incêndio criado com sucesso:", record);
     return record;
   } catch (error) {
@@ -19,27 +35,34 @@ export async function createSeguroIncendio(
   }
 }
 
-// Função para buscar a lista de seguros de incêndio com paginação
+// Função para buscar a lista de seguros de incêndio com paginação e busca
 export async function fetchSeguroIncendioList(
   page: number,
-  limit: number
+  limit: number,
+  searchTerm: string = "",
+  filter: "PENDENTE" | "FINALIZADO" | "" = ""
 ): Promise<{
   items: SeguroIncendio[];
   totalItems: number;
   totalPages: number;
 }> {
   try {
+    const actionFilter = filter ? `acao = "${filter}"` : "";
+    const searchFilter = searchTerm
+      ? `(nome_locatario ~ "${searchTerm}" || nome_imobiliaria ~ "${searchTerm}" || id_numero ~ "${searchTerm}")`
+      : "";
+
+    // Concatena os filtros de busca e ação, se houver
+    const combinedFilter = [actionFilter, searchFilter]
+      .filter(Boolean)
+      .join(" && ");
+
     const response = await pb
       .collection("seguro_incendio")
       .getList<SeguroIncendio>(page, limit, {
         sort: "-created",
+        filter: combinedFilter, // Aplica o filtro combinado de ação e termo de busca
       });
-
-    console.log("Lista de Seguros Incêndio:", response.items);
-    pb.collection("seguro_incendio").subscribe("*", function (e) {
-      console.log("Mudança detectada:", e.action);
-      console.log("Dados alterados:", e.record);
-    });
 
     return {
       items: response.items,

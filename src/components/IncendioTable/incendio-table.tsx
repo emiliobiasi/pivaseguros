@@ -236,7 +236,7 @@ export function IncendioTable({ data }: TableContentProps) {
                     }
                   >
                     <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
-                      {seguro.id}
+                      {seguro.id_numero}
                     </TableCell>
                     <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
                       {loadingAction === seguro.id ? (

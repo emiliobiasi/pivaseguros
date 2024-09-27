@@ -1,5 +1,6 @@
 export type SeguroIncendio = {
   id: string;
+  id_numero: number;
   acao: "PENDENTE" | "FINALIZADO";
   nome_imobiliaria: string;
   email_imobiliaria: string;

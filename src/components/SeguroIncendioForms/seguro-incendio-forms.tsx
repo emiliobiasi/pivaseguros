@@ -54,6 +54,7 @@ export function SeguroIncendioForms() {
 
   const [formData, setFormData] = useState<SeguroIncendio>({
     id: "",
+    id_numero: 0,
     acao: "PENDENTE",
     nome_imobiliaria: "",
     email_imobiliaria: "",
@@ -74,6 +75,7 @@ export function SeguroIncendioForms() {
     valor_seguro: 0,
     forma_pagamento: "1X FATURA MENSAL - SEM ENTRADA",
     inclusao_clausula_beneficiaria: "SIM",
+    created: new Date(),
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
