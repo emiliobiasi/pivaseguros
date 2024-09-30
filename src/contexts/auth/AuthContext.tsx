@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       await pb.collection("users").authWithPassword(email, password);
       setIsAuthenticated(true);
-      navigate("/inicio");
+      navigate("/dashboard-incendio");
     } catch (err) {
       pb.handleError(err as PocketBaseError);
       throw err;
@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         },
       });
       setIsAuthenticated(true);
-      navigate("/home");
+      navigate("/dashboard-incendio");
     } catch (err) {
       pb.handleError(err as PocketBaseError);
       throw err;
@@ -84,7 +84,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const logout = () => {
     pb.logout();
     setIsAuthenticated(false);
-    navigate("/login");
+    navigate("/entrar");
   };
 
   return (

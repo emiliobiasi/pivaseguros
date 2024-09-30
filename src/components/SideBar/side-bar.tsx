@@ -1,6 +1,7 @@
-import { Flame, Building, Home, ExternalLink, X } from "lucide-react";
+import { Flame, Building, Home, ExternalLink, X, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom"; // Importe o useNavigate
 import logo from "@/assets/logo.png";
+import { useAuth } from "@/contexts/auth/useAuth";
 
 type SideBarProps = {
   sidebarOpen: boolean;
@@ -54,8 +55,14 @@ type SidebarContentProps = {
 };
 
 function SidebarContent({ navigate }: SidebarContentProps) {
+  const { logout } = useAuth(); // Acesse a função logout do contexto de autenticação
+
+  const handleLogout = () => {
+    logout(); // Chame o logout ao clicar no botão
+  };
+
   return (
-    <nav className="flex-grow">
+    <nav className="flex flex-col flex-grow justify-between">
       <ul className="space-y-2 py-4">
         <li>
           <button
@@ -96,6 +103,16 @@ function SidebarContent({ navigate }: SidebarContentProps) {
           </a>
         </li>
       </ul>
+
+      <div className="border-t border-gray-200 dark:border-gray-700">
+        <button
+          onClick={handleLogout}
+          className="flex items-center w-full px-4 py-2 text-left text-gray-700 dark:text-gray-200 hover:bg-red-500 hover:text-white dark:hover:bg-red-600"
+        >
+          <LogOut className="h-5 w-5 mr-3" />
+          <span>Sair</span>
+        </button>
+      </div>
     </nav>
   );
 }

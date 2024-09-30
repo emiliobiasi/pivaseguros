@@ -1,6 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import About from "@/screens/About";
-import Home from "@/screens/Home";
 import Login from "@/screens/Login";
 import PrivateRoute from "@/contexts/auth/PrivateRoute";
 import { AuthProvider } from "@/contexts/auth/AuthContext";
@@ -34,29 +32,31 @@ const RoutesComponent = () => {
               element={<SeguroFiancaResidencialScreen />}
             />
           </Route>
-          <Route path="/" element={<SideBarLayout />}>
-            <Route path="dashboard-incendio" element={<DashboardIncendio />} />
+          <Route
+            path="/"
+            element={
+              <PrivateRoute>
+                <SideBarLayout />
+              </PrivateRoute>
+            }
+          >
+            <Route
+              path="dashboard-incendio"
+              element={
+                <PrivateRoute>
+                  <DashboardIncendio />
+                </PrivateRoute>
+              }
+            />
             <Route
               path="dashboard-fianca-residencial"
-              element={<DashboardFiancaResidencial />}
+              element={
+                <PrivateRoute>
+                  <DashboardFiancaResidencial />
+                </PrivateRoute>
+              }
             />
           </Route>
-          <Route
-            path="/sobre"
-            element={
-              <PrivateRoute>
-                <About />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/inicio"
-            element={
-              <PrivateRoute>
-                <Home />
-              </PrivateRoute>
-            }
-          />
         </Routes>
       </AuthProvider>
     </Router>
