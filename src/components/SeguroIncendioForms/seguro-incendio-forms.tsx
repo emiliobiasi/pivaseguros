@@ -192,21 +192,6 @@ export function SeguroIncendioForms() {
                 </TabsTrigger>
               </TabsList>
 
-              {/* <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 gap-2 mb-16">
-                <TabsTrigger value="personal" className="text-xs sm:text-sm ">
-                  Dados Pessoais
-                </TabsTrigger>
-                <TabsTrigger value="address" className="text-xs sm:text-sm ">
-                  Endereço
-                </TabsTrigger>
-                <TabsTrigger value="property" className="text-xs sm:text-sm ">
-                  Imóvel
-                </TabsTrigger>
-                <TabsTrigger value="payment" className="text-xs sm:text-sm ">
-                  Plano
-                </TabsTrigger>
-              </TabsList> */}
-
               <TabsContent value="personal">
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -370,7 +355,7 @@ export function SeguroIncendioForms() {
                         id="numero_endereco"
                         name="numero_endereco"
                         type="text"
-                        value={formData.numero_endereco}
+                        value={formData.numero_endereco || ""} 
                         onChange={handleInputChange}
                         required
                         placeholder="Digite o número"
@@ -570,7 +555,7 @@ export function SeguroIncendioForms() {
                         id="valor_seguro"
                         name="valor_seguro"
                         type="number"
-                        value={formData.valor_seguro}
+                        value={formData.valor_seguro || ""}
                         onChange={handleInputChange}
                         required
                         placeholder="Digite o valor do seguro"
@@ -593,18 +578,38 @@ export function SeguroIncendioForms() {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="1X FATURA MENSAL - SEM ENTRADA">
-                            1x Fatura Mensal - Sem Entrada
+                            1X FATURA MENSAL - SEM ENTRADA
                           </SelectItem>
                           <SelectItem value="2X FATURA MENSAL - SEM ENTRADA">
-                            2x Fatura Mensal - Sem Entrada
+                            2X FATURA MENSAL - SEM ENTRADA
                           </SelectItem>
                           <SelectItem value="3X FATURA MENSAL - SEM ENTRADA">
-                            3x Fatura Mensal - Sem Entrada
+                            3X FATURA MENSAL - SEM ENTRADA
                           </SelectItem>
-                          <SelectItem value="4X FATURA MENSAL - Sem Entrada">
-                            4x Fatura Mensal - Sem Entrada
+                          <SelectItem value="4X FATURA MENSAL - SEM ENTRADA">
+                            4X FATURA MENSAL - SEM ENTRADA
                           </SelectItem>
-                          {/* Outros valores */}
+                          <SelectItem value="5X FATURA MENSAL - SEM ENTRADA">
+                            5X FATURA MENSAL - SEM ENTRADA
+                          </SelectItem>
+                          <SelectItem value="6X FATURA MENSAL - SEM ENTRADA">
+                            6X FATURA MENSAL - SEM ENTRADA
+                          </SelectItem>
+                          <SelectItem value="7X FATURA MENSAL - SEM ENTRADA">
+                            7X FATURA MENSAL - SEM ENTRADA
+                          </SelectItem>
+                          <SelectItem value="8X FATURA MENSAL - SEM ENTRADA">
+                            8X FATURA MENSAL - SEM ENTRADA
+                          </SelectItem>
+                          <SelectItem value="9X FATURA MENSAL - SEM ENTRADA">
+                            9X FATURA MENSAL - SEM ENTRADA
+                          </SelectItem>
+                          <SelectItem value="10X FATURA MENSAL - SEM ENTRADA">
+                            10X FATURA MENSAL - SEM ENTRADA
+                          </SelectItem>
+                          <SelectItem value="11X FATURA MENSAL - SEM ENTRADA">
+                            11X FATURA MENSAL - SEM ENTRADA
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>

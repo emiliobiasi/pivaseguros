@@ -2,6 +2,7 @@ import { SeguroIncendio } from "@/types/SeguroIncendio";
 import { XCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { formatValor } from "@/utils/regex/regexValor";
 
 type SeguroIncendioModalProps = {
   seguro: SeguroIncendio;
@@ -85,7 +86,8 @@ export function SeguroIncendioModal({
                 </p>
                 {seguro.cpf_locador_opcional && (
                   <p>
-                    <strong>CPF do Locador:</strong> {seguro.cpf_locador_opcional}
+                    <strong>CPF do Locador:</strong>{" "}
+                    {seguro.cpf_locador_opcional}
                   </p>
                 )}
               </>
@@ -128,36 +130,43 @@ export function SeguroIncendioModal({
           {/* Terceira Coluna */}
           <div className="space-y-4 bg-gray-100 p-4 rounded-lg">
             <h3 className="text-lg font-semibold text-[#025d37]">Coberturas</h3>
-            {seguro.incendio && (
+            {seguro.incendio !== undefined && seguro.incendio > 0 && (
               <p>
-                <strong>Incêndio:</strong> R$ {seguro.incendio.toFixed(2)}
+                <strong>Incêndio:</strong> R$ {formatValor(seguro.incendio.toFixed(2))}
               </p>
             )}
-            {seguro.vendaval && (
+            {seguro.vendaval !== undefined && seguro.vendaval > 0 && (
               <p>
-                <strong>Vendaval:</strong> R$ {seguro.vendaval.toFixed(2)}
+                <strong>Vendaval:</strong> R$ {formatValor(seguro.vendaval.toFixed(2))}
               </p>
             )}
-            {seguro.danos_eletricos && (
+            {seguro.danos_eletricos !== undefined &&
+              seguro.danos_eletricos > 0 && (
+                <p>
+                  <strong>Danos Elétricos:</strong> R${" "}
+                  {formatValor(seguro.danos_eletricos.toFixed(2))}
+                </p>
+              )}
+            {seguro.impacto_veiculos !== undefined &&
+              seguro.impacto_veiculos > 0 && (
+                <p>
+                  <strong>Impacto de Veículos:</strong> R${" "}
+                  {formatValor(seguro.impacto_veiculos.toFixed(2))}
+                </p>
+              )}
+            {seguro.perda_aluguel !== undefined && seguro.perda_aluguel > 0 && (
               <p>
-                <strong>Danos Elétricos:</strong> R$ {seguro.danos_eletricos.toFixed(2)}
+                <strong>Perda de Aluguel:</strong> R${" "}
+                {formatValor(seguro.perda_aluguel.toFixed(2))}
               </p>
             )}
-            {seguro.impacto_veiculos && (
-              <p>
-                <strong>Impacto de Veículos:</strong> R$ {seguro.impacto_veiculos.toFixed(2)}
-              </p>
-            )}
-            {seguro.perda_aluguel && (
-              <p>
-                <strong>Perda de Aluguel:</strong> R$ {seguro.perda_aluguel.toFixed(2)}
-              </p>
-            )}
-            {seguro.responsabilidade_civil && (
-              <p>
-                <strong>Responsabilidade Civil:</strong> R$ {seguro.responsabilidade_civil.toFixed(2)}
-              </p>
-            )}
+            {seguro.responsabilidade_civil !== undefined &&
+              seguro.responsabilidade_civil > 0 && (
+                <p>
+                  <strong>Responsabilidade Civil:</strong> R${" "}
+                  {formatValor(seguro.responsabilidade_civil.toFixed(2))}
+                </p>
+              )}
 
             <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
               Informações do Seguro
@@ -166,7 +175,8 @@ export function SeguroIncendioModal({
               <strong>Plano Escolhido:</strong> {seguro.plano_escolhido}
             </p>
             <p>
-              <strong>Valor do Seguro:</strong> R$ {seguro.valor_seguro.toFixed(2)}
+              <strong>Valor do Seguro:</strong> R${" "}
+              {formatValor(seguro.valor_seguro.toFixed(2))}
             </p>
             <p>
               <strong>Forma de Pagamento:</strong> {seguro.forma_pagamento}
