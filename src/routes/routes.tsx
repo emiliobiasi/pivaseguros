@@ -10,6 +10,7 @@ import SeguroFiancaResidencialScreen from "@/screens/SeguroFiancaResidencialScre
 import { SideBarLayout } from "@/screens/SideBarLayout";
 import { DashboardIncendio } from "@/screens/DashboardIncendio";
 import { DashboardFiancaResidencial } from "@/screens/DashboardFiancaResidencial";
+import Home from "@/screens/Home";
 
 const RoutesComponent = () => {
   return (
@@ -40,6 +41,14 @@ const RoutesComponent = () => {
               </PrivateRoute>
             }
           >
+            <Route
+              path="inicio"
+              element={
+                <PrivateRoute>
+                  <Home />
+                </PrivateRoute>
+              }
+            />
             <Route
               path="dashboard-incendio"
               element={

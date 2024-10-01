@@ -1,5 +1,13 @@
-import { Flame, Building, Home, ExternalLink, X, LogOut } from "lucide-react";
-import { useNavigate } from "react-router-dom"; // Importe o useNavigate
+import {
+  Flame,
+  Building,
+  Home,
+  ExternalLink,
+  X,
+  LogOut,
+  Menu,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/contexts/auth/useAuth";
 
@@ -9,21 +17,35 @@ type SideBarProps = {
 };
 
 export function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
-  const navigate = useNavigate(); // useNavigate hook para navegação programática
+  const navigate = useNavigate();
 
   return (
     <div>
-      {/* Sidebar for larger screens */}
+      {/* Botão de hambúrguer para telas menores */}
+      <div className="md:hidden flex items-center justify-between h-16 px-4 bg-white dark:bg-gray-800 shadow">
+        <button
+          onClick={toggleSidebar}
+          className="text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300"
+        >
+          <Menu className="h-6 w-6" />
+        </button>
+        {/* Removemos a imagem do logo aqui para que não apareça em telas menores */}
+      </div>
+
+      {/* Sidebar para telas maiores */}
       <aside className="hidden md:flex flex-col w-56 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 min-h-screen">
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-          <span className="text-xl font-bold text-gray-800 dark:text-white">
+          <span
+            className="text-xl font-bold text-gray-800 dark:text-white"
+            onClick={() => navigate("/inicio")}
+          >
             <img src={logo} alt="Logo" />
           </span>
         </div>
         <SidebarContent navigate={navigate} />
       </aside>
 
-      {/* Mobile sidebar */}
+      {/* Sidebar móvel */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-40 md:hidden">
           <div
