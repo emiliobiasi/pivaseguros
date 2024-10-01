@@ -146,7 +146,6 @@ export function DashboardIncendio() {
         title="Seguros de Incêndio"
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm} // Passa a função para atualizar o termo de busca
-        toggleSidebar={() => {}} // Não é necessário para esta tela
       />
 
       <div>
