@@ -15,6 +15,9 @@ export function FormsHeader() {
       case "seguro-incendio":
         navigate("/formulario/seguro-incendio");
         break;
+      case "seguro-incendio-comercial":
+        navigate("/formulario/seguro-incendio-comercial");
+        break;
       case "seguro-fianca-residencial":
         navigate("/formulario/seguro-fianca-residencial");
         break;
@@ -64,6 +67,12 @@ export function FormsHeader() {
                     className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700"
                   >
                     Seguro Incêndio
+                  </SelectItem>
+                  <SelectItem
+                    value="seguro-incendio-comercial"
+                    className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700"
+                  >
+                    Seguro Incêndio Comercial
                   </SelectItem>
                   <SelectItem
                     value="seguro-fianca-residencial"

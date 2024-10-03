@@ -7,7 +7,7 @@ import {
   LogOut,
   Menu,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/contexts/auth/useAuth";
 
@@ -36,13 +36,13 @@ export function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
       <aside className="hidden md:flex flex-col w-56 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 min-h-screen">
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
           <span
-            className="text-xl font-bold text-gray-800 dark:text-white"
+            className="text-xl font-bold text-gray-800 dark:text-white cursor-pointer"
             onClick={() => navigate("/inicio")}
           >
             <img src={logo} alt="Logo" />
           </span>
         </div>
-        <SidebarContent navigate={navigate} />
+        <SidebarContent />
       </aside>
 
       {/* Sidebar móvel */}
@@ -64,7 +64,7 @@ export function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                 <X className="h-6 w-6" />
               </button>
             </div>
-            <SidebarContent navigate={navigate} />
+            <SidebarContent />
           </div>
         </div>
       )}
@@ -72,47 +72,79 @@ export function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
   );
 }
 
-type SidebarContentProps = {
-  navigate: ReturnType<typeof useNavigate>; // Define o tipo de navigate
-};
-
-function SidebarContent({ navigate }: SidebarContentProps) {
-  const { logout } = useAuth(); // Acesse a função logout do contexto de autenticação
+function SidebarContent() {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = () => {
-    logout(); // Chame o logout ao clicar no botão
+    logout();
   };
 
   return (
     <nav className="flex flex-col flex-grow justify-between">
       <ul className="space-y-2 py-4">
+        {/* Início */}
+        <li>
+          <button
+            onClick={() => navigate("/inicio")}
+            className={`flex items-center w-full px-4 py-2 text-left ${
+              location.pathname === "/inicio"
+                ? "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white"
+                : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+            }`}
+          >
+            <Home className="h-5 w-5 mr-3" />
+            <span>Início</span>
+          </button>
+        </li>
+
+        {/* Incêndio */}
         <li>
           <button
             onClick={() => navigate("/dashboard-incendio")}
-            className="flex items-center w-full px-4 py-2 text-left text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+            className={`flex items-center w-full px-4 py-2 text-left ${
+              location.pathname === "/dashboard-incendio"
+                ? "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white"
+                : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+            }`}
           >
             <Flame className="h-5 w-5 mr-3" />
             <span>Incêndio</span>
           </button>
         </li>
+
+        {/* Incêndio Comercial*/}
         <li>
           <button
-            onClick={() => navigate("/dashboard-fianca-residencial")}
-            className="flex items-center w-full px-4 py-2 text-left text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+            onClick={() => navigate("/dashboard-incendio-comercial")}
+            className={`flex items-center w-full px-4 py-2 text-left ${
+              location.pathname === "/dashboard-incendio-comercial"
+                ? "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white"
+                : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+            }`}
           >
-            <Building className="h-5 w-5 mr-3" />
-            <span>Fiança Empresarial</span>
+            <Flame className="h-5 w-5 mr-3" />
+            <span>Incêndio Comercial</span>
           </button>
         </li>
+
+        {/* Fiança Residencial */}
         <li>
           <button
             onClick={() => navigate("/dashboard-fianca-residencial")}
-            className="flex items-center w-full px-4 py-2 text-left text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+            className={`flex items-center w-full px-4 py-2 text-left ${
+              location.pathname === "/dashboard-fianca-residencial"
+                ? "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white"
+                : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+            }`}
           >
-            <Home className="h-5 w-5 mr-3" />
+            <Building className="h-5 w-5 mr-3" />
             <span>Fiança Residencial</span>
           </button>
         </li>
+
+        {/* Fazer orçamento */}
         <li>
           <a
             href="https://piva-orcamentos-01.vercel.app/"
@@ -126,12 +158,13 @@ function SidebarContent({ navigate }: SidebarContentProps) {
         </li>
       </ul>
 
+      {/* Botão de Logout */}
       <div className="border-t border-gray-200 dark:border-gray-700">
         <button
           onClick={handleLogout}
           className="flex items-center w-full px-4 py-2 text-left text-gray-700 dark:text-gray-200 hover:bg-red-500 hover:text-white dark:hover:bg-red-600"
         >
-          <LogOut className="h-5 w-5 mr-3" />
+          <LogOut className="h-9 w-5 mr-3" />
           <span>Sair</span>
         </button>
       </div>

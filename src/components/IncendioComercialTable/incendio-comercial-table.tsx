@@ -21,25 +21,25 @@ import {
   ChevronUp,
   ChevronDown,
 } from "lucide-react";
-import { SeguroIncendio } from "@/types/SeguroIncendio";
-import { SeguroIncendioModal } from "../SeguroIncendioModal/seguro-incendio-modal";
+import { SeguroIncendioComercial } from "@/types/SeguroIncendioComercial";
+import { SeguroIncendioComercialModal } from "../SeguroIncendioComercialModal/seguro-incendio-comercial-modal";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-  updateSeguroIncendioToPending,
-  updateSeguroIncendioToFinalized,
-} from "@/utils/api/SeguroIncendioService";
+  updateSeguroIncendioComercialToPending,
+  updateSeguroIncendioComercialToFinalized,
+} from "@/utils/api/SeguroIncendioComercialService";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 
 // Props para o componente TableContent
 type TableContentProps = {
-  data: SeguroIncendio[];
+  data: SeguroIncendioComercial[];
 };
 
-export function IncendioTable({ data }: TableContentProps) {
-  const [seguros, setSeguros] = useState<SeguroIncendio[]>([]);
+export function IncendioComercialTable({ data }: TableContentProps) {
+  const [seguros, setSeguros] = useState<SeguroIncendioComercial[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedSeguro, setSelectedSeguro] = useState<SeguroIncendio | null>(
+  const [selectedSeguro, setSelectedSeguro] = useState<SeguroIncendioComercial | null>(
     null
   );
   const [isLoading, setIsLoading] = useState(true);
@@ -49,7 +49,7 @@ export function IncendioTable({ data }: TableContentProps) {
   const [sortBy, setSortBy] = useState<"acao" | "hora" | null>(null);
 
   // Função para ordenar automaticamente os pendentes acima dos finalizados
-  const ordenarPendentesPrimeiro = (seguros: SeguroIncendio[]) => {
+  const ordenarPendentesPrimeiro = (seguros: SeguroIncendioComercial[]) => {
     return seguros.sort((a, b) => {
       if (a.acao === "PENDENTE" && b.acao === "FINALIZADO") return -1;
       if (a.acao === "FINALIZADO" && b.acao === "PENDENTE") return 1;
@@ -100,11 +100,11 @@ export function IncendioTable({ data }: TableContentProps) {
   ) => {
     try {
       setLoadingAction(id);
-      let updatedRecord: SeguroIncendio;
+      let updatedRecord: SeguroIncendioComercial;
       if (novaAcao === "PENDENTE") {
-        updatedRecord = await updateSeguroIncendioToPending(id);
+        updatedRecord = await updateSeguroIncendioComercialToPending(id);
       } else {
-        updatedRecord = await updateSeguroIncendioToFinalized(id);
+        updatedRecord = await updateSeguroIncendioComercialToFinalized(id);
       }
 
       setSeguros((prevSeguros) => {
@@ -125,7 +125,7 @@ export function IncendioTable({ data }: TableContentProps) {
     }
   };
 
-  const openUserModal = (seguro: SeguroIncendio) => {
+  const openUserModal = (seguro: SeguroIncendioComercial) => {
     setSelectedSeguro(seguro);
     setIsModalOpen(true);
   };
@@ -298,8 +298,9 @@ export function IncendioTable({ data }: TableContentProps) {
           )}
         </div>
       </div>
+      
       {selectedSeguro && (
-        <SeguroIncendioModal
+        <SeguroIncendioComercialModal
           seguro={selectedSeguro}
           isOpen={isModalOpen}
           onClose={closeModal}

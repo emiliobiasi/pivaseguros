@@ -9,8 +9,10 @@ import SeguroFiancaEmpresarialMenos2AnosScreen from "@/screens/SeguroFiancaEmpre
 import SeguroFiancaResidencialScreen from "@/screens/SeguroFiancaResidencialScreen";
 import { SideBarLayout } from "@/screens/SideBarLayout";
 import { DashboardIncendio } from "@/screens/DashboardIncendio";
+import { DashboardIncendioComercial } from "@/screens/DashboardIncendioComercial";
 import { DashboardFiancaResidencial } from "@/screens/DashboardFiancaResidencial";
 import Home from "@/screens/Home";
+import SeguroIncendioComercialScreen from "@/screens/SeguroIncendioComercialScreen";
 
 const RoutesComponent = () => {
   return (
@@ -20,6 +22,7 @@ const RoutesComponent = () => {
           <Route path="/entrar" element={<Login />} />
           <Route path="/formulario" element={<FormsLayout />}>
             <Route path="seguro-incendio" element={<SeguroIncendioScreen />} />
+            <Route path="seguro-incendio-comercial" element={<SeguroIncendioComercialScreen />} />
             <Route
               path="seguro-fianca-empresarial-mais-2-anos"
               element={<SeguroFiancaEmpresarialMais2AnosScreen />}
@@ -54,6 +57,14 @@ const RoutesComponent = () => {
               element={
                 <PrivateRoute>
                   <DashboardIncendio />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="dashboard-incendio-comercial"
+              element={
+                <PrivateRoute>
+                  <DashboardIncendioComercial />
                 </PrivateRoute>
               }
             />

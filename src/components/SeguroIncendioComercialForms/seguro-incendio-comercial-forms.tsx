@@ -27,10 +27,10 @@ import {
   Send,
   Loader2,
 } from "lucide-react";
-import { SeguroIncendio } from "@/types/SeguroIncendio";
+import { SeguroIncendioComercial } from "@/types/SeguroIncendioComercial";
 import { formatCPF } from "@/utils/regex/regexCPF";
 import { formatCEP } from "@/utils/regex/regexCEP";
-import { createSeguroIncendio } from "@/utils/api/SeguroIncendioService";
+import { createSeguroIncendioComercial } from "@/utils/api/SeguroIncendioComercialService";
 import {
   Dialog,
   DialogContent,
@@ -40,9 +40,8 @@ import {
 } from "@/components/ui/dialog";
 import pivaLogo from "@/assets/logo.png";
 import { buscaEnderecoPorCEP, EnderecoViaCep } from "@/utils/api/Cep";
-// Importações adicionais que possam estar no seu código original
 
-export function SeguroIncendioForms() {
+export function SeguroIncendioComercialForms() {
   const [currentTab, setCurrentTab] = useState("personal");
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -52,7 +51,7 @@ export function SeguroIncendioForms() {
   const navigate = useNavigate();
   const formRef = useRef<HTMLFormElement>(null);
 
-  const [formData, setFormData] = useState<SeguroIncendio>({
+  const [formData, setFormData] = useState<SeguroIncendioComercial>({
     id: "",
     id_numero: 0,
     acao: "PENDENTE",
@@ -71,12 +70,12 @@ export function SeguroIncendioForms() {
     cidade: "",
     estado: "",
     tipo_imovel: "CASA",
+    atividade: "",
     plano_escolhido: "PLANO PADRÃO GRATUITO",
     valor_seguro: 0,
     forma_pagamento: "1X FATURA MENSAL - SEM ENTRADA",
     inclusao_clausula_beneficiaria: "SIM",
     created: new Date(),
-    // Outros campos que possam estar na sua interface SeguroIncendio
   });
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,6 +84,10 @@ export function SeguroIncendioForms() {
 
     if (name === "cpf_locatario" || name === "cpf_locador_opcional") {
       formattedValue = formatCPF(value);
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: formattedValue,
+      }));
     } else if (name === "cep") {
       formattedValue = formatCEP(value);
 
@@ -93,12 +96,10 @@ export function SeguroIncendioForms() {
       if (cepNumeros.length === 8) {
         try {
           setIsLoading(true);
-          setErrorMessage(""); // Limpa mensagens de erro anteriores
+          setErrorMessage("");
 
-          // Chame a função importada para buscar o endereço
           const data: EnderecoViaCep = await buscaEnderecoPorCEP(cepNumeros);
 
-          // Atualize os campos de endereço com os dados retornados
           setFormData((prevState) => ({
             ...prevState,
             endereco: data.logradouro || "",
@@ -106,7 +107,7 @@ export function SeguroIncendioForms() {
             cidade: data.localidade || "",
             estado: data.uf || "",
             complemento: data.complemento || "",
-            [name]: formattedValue, // Atualiza o campo CEP também
+            [name]: formattedValue,
           }));
         } catch (error: unknown) {
           console.error("Erro ao buscar o CEP:", error);
@@ -116,7 +117,6 @@ export function SeguroIncendioForms() {
               : "Erro ao buscar o CEP. Tente novamente."
           );
 
-          // Limpa os campos de endereço em caso de erro
           setFormData((prevState) => ({
             ...prevState,
             endereco: "",
@@ -130,7 +130,6 @@ export function SeguroIncendioForms() {
           setIsLoading(false);
         }
       } else {
-        // Se o CEP tiver menos de 8 dígitos, limpe os campos de endereço
         setFormData((prevState) => ({
           ...prevState,
           endereco: "",
@@ -152,14 +151,11 @@ export function SeguroIncendioForms() {
         "valor_seguro",
       ].includes(name)
     ) {
-      // Se você tiver funções de formatação para valores monetários, você pode descomentar e usar aqui
-      // formattedValue = formatValor(value);
       setFormData((prevState) => ({
         ...prevState,
         [name]: formattedValue,
       }));
     } else {
-      // Atualize o estado geral do formulário
       setFormData((prevState) => ({
         ...prevState,
         [name]: formattedValue,
@@ -168,7 +164,7 @@ export function SeguroIncendioForms() {
   };
 
   const handleSelectChange = (
-    name: keyof SeguroIncendio,
+    name: keyof SeguroIncendioComercial,
     value: string | number | Date
   ) => {
     setFormData((prevState) => ({
@@ -198,7 +194,7 @@ export function SeguroIncendioForms() {
     console.log("Enviando formulário:", formData);
     setIsLoading(true); // Inicia o carregamento
     try {
-      await createSeguroIncendio(formData);
+      await createSeguroIncendioComercial(formData);
       formRef.current?.reset();
       setIsSuccessModalOpen(true); // Mostra o modal ao enviar com sucesso
     } catch (error) {
@@ -217,10 +213,10 @@ export function SeguroIncendioForms() {
     <div className="mb-40 flex justify-center">
       <Card className="w-full max-w-4xl md:mx-10 sm:mx-10">
         <CardHeader className="mb-5">
-          <CardTitle>Seguro Incêndio</CardTitle>
+          <CardTitle>Seguro Incêndio Comercial</CardTitle>
           <CardDescription>
-            Para concluir a efetivação do Seguro Incêndio, solicitamos o
-            preenchimento dos dados a seguir:
+            Para concluir a efetivação do Seguro Incêndio Comercial, solicitamos
+            o preenchimento dos dados a seguir:
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit} ref={formRef}>
@@ -593,6 +589,22 @@ export function SeguroIncendioForms() {
               <TabsContent value="payment">
                 <div className="grid gap-4 py-4">
                   <div className="space-y-2">
+                    <Label htmlFor="atividade">
+                      Atividade da Empresa
+                      <RequiredAsterisk />
+                    </Label>
+                    <Input
+                      id="atividade"
+                      name="atividade"
+                      type="text"
+                      value={formData.atividade || ""}
+                      onChange={handleInputChange}
+                      required
+                      placeholder="Digite a atividade da empresa"
+                      disabled={isLoading}
+                    />
+                  </div>
+                  <div className="space-y-2">
                     <Label htmlFor="plano_escolhido">
                       Plano Escolhido <RequiredAsterisk />
                     </Label>
@@ -684,6 +696,7 @@ export function SeguroIncendioForms() {
                           <SelectItem value="11X FATURA MENSAL - SEM ENTRADA">
                             11X FATURA MENSAL - SEM ENTRADA
                           </SelectItem>
+                          {/* Adicione as demais opções aqui */}
                         </SelectContent>
                       </Select>
                     </div>
@@ -726,7 +739,9 @@ export function SeguroIncendioForms() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="nome_locador">Nome do Locador</Label>
+                      <Label htmlFor="nome_locador">
+                        Nome do Locador (Opcional)
+                      </Label>
                       <Input
                         id="nome_locador"
                         name="nome_locador"
