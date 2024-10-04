@@ -1,15 +1,8 @@
-import {
-  Flame,
-  Building,
-  Home,
-  ExternalLink,
-  X,
-  LogOut,
-  Menu,
-} from "lucide-react";
+import { Flame, Home, ExternalLink, X, LogOut, Menu } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/contexts/auth/useAuth";
+import { HomeIcon } from "@radix-ui/react-icons";
 
 type SideBarProps = {
   sidebarOpen: boolean;
@@ -90,7 +83,7 @@ function SidebarContent() {
             onClick={() => navigate("/inicio")}
             className={`flex items-center w-full px-4 py-2 text-left ${
               location.pathname === "/inicio"
-                ? "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white"
+                ? "bg-gray-200 dark:bg-gray-700 text-green-700 dark:text-white"
                 : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
             }`}
           >
@@ -105,7 +98,7 @@ function SidebarContent() {
             onClick={() => navigate("/dashboard-incendio")}
             className={`flex items-center w-full px-4 py-2 text-left ${
               location.pathname === "/dashboard-incendio"
-                ? "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white"
+                ? "bg-gray-200 dark:bg-gray-700 text-green-700 dark:text-white"
                 : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
             }`}
           >
@@ -120,7 +113,7 @@ function SidebarContent() {
             onClick={() => navigate("/dashboard-incendio-comercial")}
             className={`flex items-center w-full px-4 py-2 text-left ${
               location.pathname === "/dashboard-incendio-comercial"
-                ? "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white"
+                ? "bg-gray-200 dark:bg-gray-700 text-green-700 dark:text-white"
                 : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
             }`}
           >
@@ -135,11 +128,11 @@ function SidebarContent() {
             onClick={() => navigate("/dashboard-fianca-residencial")}
             className={`flex items-center w-full px-4 py-2 text-left ${
               location.pathname === "/dashboard-fianca-residencial"
-                ? "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white"
+                ? "bg-gray-200 dark:bg-gray-700 text-green-700 dark:text-white"
                 : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
             }`}
           >
-            <Building className="h-5 w-5 mr-3" />
+            <HomeIcon className="h-5 w-5 mr-3" />
             <span>Fiança Residencial</span>
           </button>
         </li>
