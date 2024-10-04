@@ -186,7 +186,7 @@ export function DashboardIncendioComercial() {
           </div>
 
           {/* Items per Page Slider Selection */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 cursor-pointer">
             <label htmlFor="limit" className="text-gray-700">
               Itens por página:
             </label>
