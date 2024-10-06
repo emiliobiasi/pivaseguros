@@ -39,8 +39,7 @@ export function FormsHeader() {
           <div className="container text-white px-10 md:px-6 md:pl-20">
             <div>
               <h1 className="text-3x1 font-bold tracking-tighter sm:text-4xl md:text-5xl max-w-xl">
-                Seja bem vindo ao Departamento de Soluções para Locação da Piva
-                Seguros
+                Bem vindo ao departamento de soluções para locação
               </h1>
             </div>
             <p className="mt-4 max-w-[700px] md:text-xl">
@@ -98,8 +97,6 @@ export function FormsHeader() {
           </div>
         </section>
       </main>
-
-      
     </div>
   );
 }

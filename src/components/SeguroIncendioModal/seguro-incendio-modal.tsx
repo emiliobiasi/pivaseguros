@@ -132,12 +132,14 @@ export function SeguroIncendioModal({
             <h3 className="text-lg font-semibold text-[#025d37]">Coberturas</h3>
             {seguro.incendio !== undefined && seguro.incendio > 0 && (
               <p>
-                <strong>Incêndio:</strong> R$ {formatValor(seguro.incendio.toFixed(2))}
+                <strong>Incêndio:</strong> R${" "}
+                {formatValor(seguro.incendio.toFixed(2))}
               </p>
             )}
             {seguro.vendaval !== undefined && seguro.vendaval > 0 && (
               <p>
-                <strong>Vendaval:</strong> R$ {formatValor(seguro.vendaval.toFixed(2))}
+                <strong>Vendaval:</strong> R${" "}
+                {formatValor(seguro.vendaval.toFixed(2))}
               </p>
             )}
             {seguro.danos_eletricos !== undefined &&
@@ -185,6 +187,26 @@ export function SeguroIncendioModal({
               <strong>Incluir Cláusula Beneficiária:</strong>{" "}
               {seguro.inclusao_clausula_beneficiaria ? "Sim" : "Não"}
             </p>
+
+
+            {(seguro.cpf_locador_opcional || seguro.nome_locador) && (
+              <>
+                <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+                  Locador (opcional)
+                </h3>
+                {seguro.cpf_locador_opcional && (
+                  <p>
+                    <strong>CPF do Locador:</strong>{" "}
+                    {seguro.cpf_locador_opcional}
+                  </p>
+                )}
+                {seguro.nome_locador && (
+                  <p>
+                    <strong>Nome do Locador:</strong> {seguro.nome_locador}
+                  </p>
+                )}
+              </>
+            )}
           </div>
         </div>
         <div className="mt-6">

@@ -40,6 +40,8 @@ import {
 } from "@/components/ui/dialog";
 import pivaLogo from "@/assets/logo.png";
 import { buscaEnderecoPorCEP, EnderecoViaCep } from "@/utils/api/Cep";
+// import classNames from 'classnames';
+
 // Importações adicionais que possam estar no seu código original
 
 export function SeguroIncendioForms() {
@@ -85,6 +87,10 @@ export function SeguroIncendioForms() {
 
     if (name === "cpf_locatario" || name === "cpf_locador_opcional") {
       formattedValue = formatCPF(value);
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: formattedValue,
+      }));
     } else if (name === "cep") {
       formattedValue = formatCEP(value);
 
@@ -95,10 +101,10 @@ export function SeguroIncendioForms() {
           setIsLoading(true);
           setErrorMessage(""); // Limpa mensagens de erro anteriores
 
-          // Chame a função importada para buscar o endereço
+          // Chama a função importada para buscar o endereço
           const data: EnderecoViaCep = await buscaEnderecoPorCEP(cepNumeros);
 
-          // Atualize os campos de endereço com os dados retornados
+          // Atualiza os campos de endereço com os dados retornados
           setFormData((prevState) => ({
             ...prevState,
             endereco: data.logradouro || "",
@@ -130,7 +136,7 @@ export function SeguroIncendioForms() {
           setIsLoading(false);
         }
       } else {
-        // Se o CEP tiver menos de 8 dígitos, limpe os campos de endereço
+        // Se o CEP tiver menos de 8 dígitos, limpa os campos de endereço
         setFormData((prevState) => ({
           ...prevState,
           endereco: "",
@@ -159,7 +165,7 @@ export function SeguroIncendioForms() {
         [name]: formattedValue,
       }));
     } else {
-      // Atualize o estado geral do formulário
+      // Atualiza o estado geral do formulário
       setFormData((prevState) => ({
         ...prevState,
         [name]: formattedValue,
@@ -229,25 +235,53 @@ export function SeguroIncendioForms() {
               <TabsList className="bg-white grid w-full grid-cols-2 sm:grid-cols-4 gap-2 mb-14">
                 <TabsTrigger
                   value="personal"
-                  className="text-xs sm:text-sm bg-gray-200 p-2 rounded-lg focus:bg-white focus:outline-none"
+                  className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
+                    currentTab === "personal" ? "" : "bg-gray-200"
+                  }`}
+                  style={{
+                    backgroundColor:
+                      currentTab === "personal" ? "#16a34a" : undefined,
+                    color: currentTab === "personal" ? "white" : undefined,
+                  }}
                 >
                   Dados Pessoais
                 </TabsTrigger>
                 <TabsTrigger
                   value="address"
-                  className="text-xs sm:text-sm bg-gray-200 p-2 rounded-lg focus:bg-white focus:outline-none"
+                  className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
+                    currentTab === "address" ? "" : "bg-gray-200"
+                  }`}
+                  style={{
+                    backgroundColor:
+                      currentTab === "address" ? "#16a34a" : undefined,
+                    color: currentTab === "address" ? "white" : undefined,
+                  }}
                 >
                   Endereço
                 </TabsTrigger>
                 <TabsTrigger
                   value="property"
-                  className="text-xs sm:text-sm bg-gray-200 p-2 rounded-lg focus:bg-white focus:outline-none"
+                  className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
+                    currentTab === "property" ? "" : "bg-gray-200"
+                  }`}
+                  style={{
+                    backgroundColor:
+                      currentTab === "property" ? "#16a34a" : undefined,
+                    color: currentTab === "property" ? "white" : undefined,
+                  }}
                 >
                   Imóvel
                 </TabsTrigger>
                 <TabsTrigger
                   value="payment"
-                  className="text-xs sm:text-sm bg-gray-200 p-2 rounded-lg focus:bg-white focus:outline-none"
+                  className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
+                    currentTab === "payment" ? "" : "bg-gray-200"
+                  }`}
+                  style={{
+                    backgroundColor:
+                      currentTab === "payment" ? "#16a34a" : undefined,
+                    color: currentTab === "payment" ? "white" : undefined,
+                  }}
                 >
                   Plano
                 </TabsTrigger>

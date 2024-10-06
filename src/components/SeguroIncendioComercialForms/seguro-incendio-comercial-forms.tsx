@@ -225,25 +225,53 @@ export function SeguroIncendioComercialForms() {
               <TabsList className="bg-white grid w-full grid-cols-2 sm:grid-cols-4 gap-2 mb-14">
                 <TabsTrigger
                   value="personal"
-                  className="text-xs sm:text-sm bg-gray-200 p-2 rounded-lg focus:bg-white focus:outline-none"
+                  className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
+                    currentTab === "personal" ? "" : "bg-gray-200"
+                  }`}
+                  style={{
+                    backgroundColor:
+                      currentTab === "personal" ? "#16a34a" : undefined,
+                    color: currentTab === "personal" ? "white" : undefined,
+                  }}
                 >
                   Dados Pessoais
                 </TabsTrigger>
                 <TabsTrigger
                   value="address"
-                  className="text-xs sm:text-sm bg-gray-200 p-2 rounded-lg focus:bg-white focus:outline-none"
+                  className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
+                    currentTab === "address" ? "" : "bg-gray-200"
+                  }`}
+                  style={{
+                    backgroundColor:
+                      currentTab === "address" ? "#16a34a" : undefined,
+                    color: currentTab === "address" ? "white" : undefined,
+                  }}
                 >
                   Endereço
                 </TabsTrigger>
                 <TabsTrigger
                   value="property"
-                  className="text-xs sm:text-sm bg-gray-200 p-2 rounded-lg focus:bg-white focus:outline-none"
+                  className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
+                    currentTab === "property" ? "" : "bg-gray-200"
+                  }`}
+                  style={{
+                    backgroundColor:
+                      currentTab === "property" ? "#16a34a" : undefined,
+                    color: currentTab === "property" ? "white" : undefined,
+                  }}
                 >
                   Imóvel
                 </TabsTrigger>
                 <TabsTrigger
                   value="payment"
-                  className="text-xs sm:text-sm bg-gray-200 p-2 rounded-lg focus:bg-white focus:outline-none"
+                  className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
+                    currentTab === "payment" ? "" : "bg-gray-200"
+                  }`}
+                  style={{
+                    backgroundColor:
+                      currentTab === "payment" ? "#16a34a" : undefined,
+                    color: currentTab === "payment" ? "white" : undefined,
+                  }}
                 >
                   Plano
                 </TabsTrigger>
