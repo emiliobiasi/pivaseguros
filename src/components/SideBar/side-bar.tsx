@@ -1,4 +1,13 @@
-import { Flame, Home, ExternalLink, X, LogOut, Menu } from "lucide-react";
+import {
+  Flame,
+  Home,
+  ExternalLink,
+  X,
+  LogOut,
+  Menu,
+  // Building2,
+  Building,
+} from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/contexts/auth/useAuth";
@@ -136,6 +145,38 @@ function SidebarContent() {
             <span>Fiança Residencial</span>
           </button>
         </li>
+
+        {/* FIANÇA EMPRESARIAL MAIS 2 ANOS */}
+        <li>
+          <button
+            onClick={() =>
+              navigate("/dashboard-fianca-empresarial-mais-2-anos")
+            }
+            className={`flex items-center w-full px-4 py-2 text-left ${
+              location.pathname === "/dashboard-fianca-empresarial-mais-2-anos"
+                ? "bg-gray-200 dark:bg-gray-700 text-green-700 dark:text-white"
+                : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+            }`}
+          >
+            <Building className="h-5 w-5 mr-3" />
+            <span>Fiança CNPJ Acima de 2 Anos</span>
+          </button>
+        </li>
+
+        {/* FIANÇA EMPRESARIAL MENOS 2 ANOS */}
+        {/* <li>
+          <button
+            onClick={() => navigate("/dashboard-fianca-residencial")}
+            className={`flex items-center w-full px-4 py-2 text-left ${
+              location.pathname === "/dashboard-fianca-residencial"
+                ? "bg-gray-200 dark:bg-gray-700 text-green-700 dark:text-white"
+                : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+            }`}
+          >
+            <Building2 className="h-5 w-5 mr-3" />
+            <span>Fiança CNPJ Menos de 2 Anos</span>
+          </button>
+        </li> */}
 
         {/* Fazer orçamento */}
         <li>

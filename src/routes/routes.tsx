@@ -12,6 +12,7 @@ import { SideBarLayout } from "@/screens/SideBarLayout";
 import { DashboardIncendio } from "@/screens/DashboardIncendio";
 import { DashboardIncendioComercial } from "@/screens/DashboardIncendioComercial";
 import { DashboardFiancaResidencial } from "@/screens/DashboardFiancaResidencial";
+import { DashboardFiancaEmpresarialMais2Anos } from "@/screens/DashboardFiancaEmpresarialMais2Anos";
 import Home from "@/screens/Home";
 import SeguroIncendioComercialScreen from "@/screens/SeguroIncendioComercialScreen";
 
@@ -78,6 +79,14 @@ const RoutesComponent = () => {
               element={
                 <PrivateRoute>
                   <DashboardFiancaResidencial />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="dashboard-fianca-empresarial-mais-2-anos"
+              element={
+                <PrivateRoute>
+                  <DashboardFiancaEmpresarialMais2Anos />
                 </PrivateRoute>
               }
             />
