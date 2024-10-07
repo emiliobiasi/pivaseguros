@@ -14,8 +14,6 @@ export type SeguroFiancaEmpresarialMais2Anos = {
   cpf_socio_1?: string;
   nome_socio_2?: string;
   cpf_socio_2?: string;
-  nome_socio_3?: string;
-  cpf_socio_3?: string;
 
   cep: string;
   endereco: string;
