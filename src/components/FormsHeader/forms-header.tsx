@@ -21,6 +21,9 @@ export function FormsHeader() {
       case "seguro-fianca-residencial":
         navigate("/formulario/seguro-fianca-residencial");
         break;
+      case "seguro-fianca":
+        navigate("/formulario/seguro-fianca");
+        break;
       case "seguro-fianca-empresarial-mais-2-anos":
         navigate("/formulario/seguro-fianca-empresarial-mais-2-anos");
         break;
@@ -61,35 +64,46 @@ export function FormsHeader() {
                   <SelectValue placeholder="Opções" />
                 </SelectTrigger>
                 <SelectContent className="w-full max-w-xl bg-white rounded-lg shadow-lg">
-                  <SelectItem
-                    value="seguro-incendio"
-                    className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700"
-                  >
-                    Seguro Incêndio
-                  </SelectItem>
-                  <SelectItem
-                    value="seguro-incendio-comercial"
-                    className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700"
-                  >
-                    Seguro Incêndio Comercial
-                  </SelectItem>
+                  {/* ANALISES */}
                   <SelectItem
                     value="seguro-fianca-residencial"
                     className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700"
                   >
-                    Seguro Fiança: Finalidade Residencial
+                    Análise Fiança Residencial
                   </SelectItem>
                   <SelectItem
                     value="seguro-fianca-empresarial-mais-2-anos"
                     className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700 whitespace-normal"
                   >
-                    Seguro Fiança: Finalidade Empresarial (ACIMA DE 2 ANOS)
+                    Análise Fiança Pessoa Jurídica Comercial (CNPJ ACIMA DE 2
+                    ANOS)
                   </SelectItem>
                   <SelectItem
                     value="seguro-fianca-empresarial-menos-2-anos"
                     className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700 whitespace-normal"
                   >
-                    Seguro Fiança: Finalidade Empresarial (MENOS DE 2 ANOS)
+                    Análise Fiança Pessoa Física Comercial (CNPJ MENOS DE 2
+                    ANOS)
+                  </SelectItem>
+
+                  {/* EFETIVAÇÕES */}
+                  <SelectItem
+                    value="seguro-incendio"
+                    className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700"
+                  >
+                    Efetivação de Seguro Incêndio Residencial
+                  </SelectItem>
+                  <SelectItem
+                    value="seguro-incendio-comercial"
+                    className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700"
+                  >
+                    Efetivação de Seguro Incêndio Comercial
+                  </SelectItem>
+                  <SelectItem
+                    value="seguro-fianca"
+                    className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700"
+                  >
+                    Efetivação de Seguro Fiança
                   </SelectItem>
                 </SelectContent>
               </Select>

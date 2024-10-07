@@ -7,6 +7,7 @@ import SeguroIncendioScreen from "@/screens/SeguroIncendioScreen";
 import SeguroFiancaEmpresarialMais2AnosScreen from "@/screens/SeguroFiancaEmpresarialMais2AnosScreen";
 import SeguroFiancaEmpresarialMenos2AnosScreen from "@/screens/SeguroFiancaEmpresarialMenos2AnosScreen";
 import SeguroFiancaResidencialScreen from "@/screens/SeguroFiancaResidencialScreen";
+import SeguroFiancaScreen from "@/screens/SeguroFiancaScreen";
 import { SideBarLayout } from "@/screens/SideBarLayout";
 import { DashboardIncendio } from "@/screens/DashboardIncendio";
 import { DashboardIncendioComercial } from "@/screens/DashboardIncendioComercial";
@@ -34,6 +35,10 @@ const RoutesComponent = () => {
             <Route
               path="seguro-fianca-residencial"
               element={<SeguroFiancaResidencialScreen />}
+            />
+            <Route
+              path="seguro-fianca"
+              element={<SeguroFiancaScreen />}
             />
           </Route>
           <Route

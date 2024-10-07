@@ -1,7 +1,9 @@
+import { SeguroFiancaEmpresarialMais2AnosForms } from "@/components/SeguroFiancaEmpresarialMais2AnosForms/seguro-fianca-empresaria-mais-2-anos-forms";
+
 const SeguroFiancaEmpresarialMais2AnosScreen = () => {
   return (
-    <div className="bg-neutral-100">
-      Seguro Fianca Empresarial Mais 2 Anos Forms
+    <div>
+      <SeguroFiancaEmpresarialMais2AnosForms />
     </div>
   );
 };

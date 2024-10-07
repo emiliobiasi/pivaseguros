@@ -225,7 +225,7 @@ export function SeguroIncendioForms() {
         <CardHeader className="mb-5">
           <CardTitle>Seguro Incêndio</CardTitle>
           <CardDescription>
-            Para concluir a efetivação do Seguro Incêndio, solicitamos o
+            Para concluir a efetivação do Seguro Incêndio Residencial, solicitamos o
             preenchimento dos dados a seguir:
           </CardDescription>
         </CardHeader>
