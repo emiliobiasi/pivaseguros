@@ -21,8 +21,8 @@ export function FormsHeader() {
       case "seguro-fianca-residencial":
         navigate("/formulario/seguro-fianca-residencial");
         break;
-      case "seguro-fianca":
-        navigate("/formulario/seguro-fianca");
+      case "efetivacao-seguro-fianca":
+        navigate("/formulario/efetivacao-seguro-fianca");
         break;
       case "seguro-fianca-empresarial-mais-2-anos":
         navigate("/formulario/seguro-fianca-empresarial-mais-2-anos");
@@ -38,16 +38,12 @@ export function FormsHeader() {
   return (
     <div className="flex flex-col">
       <main className="flex-1">
-        <section className="lg:pb-50 lg:pt-10 lg:px-40 py-12 md:py-20 bg-green-700">
-          <div className="container text-white px-10 md:px-6 md:pl-20">
-            <div>
-              <h1 className="text-3x1 font-bold tracking-tighter sm:text-4xl md:text-5xl max-w-xl">
-                Bem vindo ao departamento de soluções para locação
-              </h1>
-            </div>
-            <p className="mt-4 max-w-[700px] md:text-xl">
-              Selecione qual formulário deseja preencher.
-            </p>
+        <section className="py-12 md:py-20 bg-green-700">
+          <div className="container mx-auto text-white px-6 text-center">
+            <h1 className="font- font-bold tracking-tighter w-full text-4xl">
+              Bem vindo ao departamento de soluções para locação
+            </h1>
+
           </div>
         </section>
 
@@ -100,7 +96,7 @@ export function FormsHeader() {
                     Efetivação de Seguro Incêndio Comercial
                   </SelectItem>
                   <SelectItem
-                    value="seguro-fianca"
+                    value="efetivacao-seguro-fianca"
                     className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700"
                   >
                     Efetivação de Seguro Fiança
