@@ -76,7 +76,6 @@ export type SeguroFiancaEmpresarialMenos2Anos = {
   total_rendimentos_mensais_conjuge?: number;
   alocacao_pretendida_constituida: "SIM" | "NÃO";
   cnpj_pessoa_fisica_nao_residencial?: string;
-  ramo_atividade?: "COMÉRCIO" | "SERVIÇOS" | "INDUSTRIA";
   cnae_empresa?: string;
   franquia?: "SIM" | "NÃO";
   nome_franqueadora?: string;
@@ -123,9 +122,10 @@ export type SeguroFiancaEmpresarialMenos2Anos = {
   luz_imovel_alugado?: number;
   gas_canalizado_imovel_alugado?: number;
   motivo_locacao?:
-    | "ABERTURA DE FILIAL"
-    | "ABERTURA DE MATRIZ"
-    | "TROCA LOCAL DE SEDE"
-    | "REDUÇÃO DE CUSTOS";
+  | "ABERTURA DE FILIAL"
+  | "ABERTURA DE MATRIZ"
+  | "TROCA LOCAL DE SEDE"
+  | "REDUÇÃO DE CUSTOS";
+  cpf_morador: string;
   created: Date;
 };
