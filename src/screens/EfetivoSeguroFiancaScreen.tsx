@@ -1,7 +1,9 @@
+import { EfetivacaoSeguroFiancaForms } from "@/components/EfetivacaoSeguroFiancaForms/efetivacao-seguro-fianca-forms"
+
 const EfetivacaoSeguroFiancaScreen = () => {
   return (
     <>
-    <h1>EFETIVACAO SEGURO FIANCA FORMS</h1>
+    <EfetivacaoSeguroFiancaForms />
     </>
   );
 };
