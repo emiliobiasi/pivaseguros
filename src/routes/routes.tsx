@@ -15,6 +15,8 @@ import { DashboardFiancaResidencial } from "@/screens/DashboardFiancaResidencial
 import { DashboardFiancaEmpresarialMais2Anos } from "@/screens/DashboardFiancaEmpresarialMais2Anos";
 import Home from "@/screens/Home";
 import SeguroIncendioComercialScreen from "@/screens/SeguroIncendioComercialScreen";
+import TituloCapitalizacaoScreen from "@/screens/TituloCapitalizacaoScreen";
+import { DashboardTituloCapitalizacao } from "@/screens/DashboardTituloCapitalizacao";
 
 const RoutesComponent = () => {
   return (
@@ -24,7 +26,10 @@ const RoutesComponent = () => {
           <Route path="/entrar" element={<Login />} />
           <Route path="/formulario" element={<FormsLayout />}>
             <Route path="seguro-incendio" element={<SeguroIncendioScreen />} />
-            <Route path="seguro-incendio-comercial" element={<SeguroIncendioComercialScreen />} />
+            <Route
+              path="seguro-incendio-comercial"
+              element={<SeguroIncendioComercialScreen />}
+            />
             <Route
               path="seguro-fianca-empresarial-mais-2-anos"
               element={<SeguroFiancaEmpresarialMais2AnosScreen />}
@@ -40,6 +45,10 @@ const RoutesComponent = () => {
             <Route
               path="efetivacao-seguro-fianca"
               element={<EfetivacaoSeguroFiancaScreen />}
+            />
+            <Route
+              path="titulo-capitalizacao"
+              element={<TituloCapitalizacaoScreen />}
             />
           </Route>
           <Route
@@ -87,6 +96,14 @@ const RoutesComponent = () => {
               element={
                 <PrivateRoute>
                   <DashboardFiancaEmpresarialMais2Anos />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="dashboard-titulo-capitalizacao"
+              element={
+                <PrivateRoute>
+                  <DashboardTituloCapitalizacao />
                 </PrivateRoute>
               }
             />

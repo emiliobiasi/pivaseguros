@@ -30,6 +30,9 @@ export function FormsHeader() {
       case "seguro-fianca-empresarial-menos-2-anos":
         navigate("/formulario/seguro-fianca-empresarial-menos-2-anos");
         break;
+      case "titulo-capitalizacao":
+        navigate("/formulario/titulo-capitalizacao");
+        break;
       default:
         break;
     }
@@ -82,6 +85,8 @@ export function FormsHeader() {
                     ANOS)
                   </SelectItem>
 
+
+                  {/* Efetivação de Título de Capitalização */}
                   {/* EFETIVAÇÕES */}
                   <SelectItem
                     value="seguro-incendio"
@@ -100,6 +105,12 @@ export function FormsHeader() {
                     className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700"
                   >
                     Efetivação de Seguro Fiança
+                  </SelectItem>
+                  <SelectItem
+                    value="titulo-capitalizacao"
+                    className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700"
+                  >
+                    Efetivação de Título de Capitalização
                   </SelectItem>
                 </SelectContent>
               </Select>
