@@ -9,7 +9,7 @@ export async function createEfetivacaoSeguroFianca(
   try {
     // Buscar o seguro existente com o maior valor de "id_numero"
     const lastRecord = await pb
-      .collection("efetivacao_seguro_fianca")
+      .collection("efetivacao_seguro_fianca_tb")
       .getFirstListItem<EfetivacaoSeguroFianca>("", {
         sort: "-id_numero", // Ordena em ordem decrescente pelo campo "id_numero"
         limit: 1,
@@ -20,7 +20,7 @@ export async function createEfetivacaoSeguroFianca(
 
     // Cria o novo seguro com o campo "id_numero" incrementado
     const record = await pb
-      .collection("efetivacao_seguro_fianca")
+      .collection("efetivacao_seguro_fianca_tb")
       .create<EfetivacaoSeguroFianca>({
         ...data,
         id_numero: nextIdNumero, // Adiciona o campo "id_numero" ao novo registro
@@ -58,7 +58,7 @@ export async function fetchEfetivacaoSeguroFiancaList(
       .join(" && ");
 
     const response = await pb
-      .collection("efetivacao_seguro_fianca")
+      .collection("efetivacao_seguro_fianca_tb")
       .getList<EfetivacaoSeguroFianca>(page, limit, {
         sort: "-created",
         filter: combinedFilter, // Aplica o filtro combinado de ação e termo de busca
@@ -85,7 +85,7 @@ export async function updateEfetivacaoSeguroFiancaToPending(
 ): Promise<EfetivacaoSeguroFianca> {
   try {
     const updatedRecord = await pb
-      .collection("efetivacao_seguro_fianca")
+      .collection("efetivacao_seguro_fianca_tb")
       .update<EfetivacaoSeguroFianca>(id, {
         acao: "PENDENTE",
       });
@@ -112,7 +112,7 @@ export async function updateEfetivacaoSeguroFiancaToFinalized(
 ): Promise<EfetivacaoSeguroFianca> {
   try {
     const updatedRecord = await pb
-      .collection("efetivacao_seguro_fianca")
+      .collection("efetivacao_seguro_fianca_tb")
       .update<EfetivacaoSeguroFianca>(id, {
         acao: "FINALIZADO",
       });
@@ -137,11 +137,11 @@ export async function updateEfetivacaoSeguroFiancaToFinalized(
 export function subscribeToEfetivacaoSeguroFiancaUpdates(
   onRecordChange: (data: RecordSubscription<EfetivacaoSeguroFianca>) => void
 ) {
-  pb.collection("efetivacao_seguro_fianca").subscribe("*", onRecordChange);
+  pb.collection("efetivacao_seguro_fianca_tb").subscribe("*", onRecordChange);
 }
 
 // Função para cancelar a subscription
 export function unsubscribeFromEfetivacaoSeguroFiancaUpdates() {
-  pb.collection("efetivacao_seguro_fianca").unsubscribe("*");
+  pb.collection("efetivacao_seguro_fianca_tb").unsubscribe("*");
   console.log("Subscrição cancelada.");
 }

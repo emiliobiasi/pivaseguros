@@ -54,40 +54,62 @@ export function EfetivacaoSeguroFiancaForms() {
   const navigate = useNavigate();
   const formRef = useRef<HTMLFormElement>(null);
 
-  const [formData, setFormData] = useState<EfetivacaoSeguroFianca>({
-    id: "",
-    id_numero: 0,
-    acao: "PENDENTE",
-    nome_imobiliaria: "",
-    telefone_imobiliaria: "",
-    nome_proprietario: "",
-    profissao_proprietario: "",
-    data_nascimento_proprietario: new Date(),
-    rg_proprietario: "",
-    estado_civil_proprietario: "SOLTEIRO",
-    reside_brasil: "SIM",
-    email_proprietario: "",
-    finalidade: "RESIDENCIAL",
-    cep: "",
-    endereco: "",
-    numero: 0,
-    bairro: "",
-    cidade: "",
-    estado: "",
-    tipo_residencia: "CASA",
-    inicio_contrato: new Date(),
-    termino_contrato: new Date(),
-    pintura_interna: "SIM",
-    pintura_externa: "SIM",
-    danos_imovel: "SIM",
-    multa_rescisao: "SIM",
-    fatura_mensal: 0,
-    valor_parcela: 0,
-    seguradora: "",
-    indice_reajuste: "",
-    created: new Date(),
-    updated: new Date(),
-  });
+  // Updated formData initialization with all fields, including optional ones
+const [formData, setFormData] = useState<EfetivacaoSeguroFianca>({
+  id: "",
+  id_numero: 0,
+  acao: "PENDENTE",
+  nome_imobiliaria: "",
+  telefone_imobiliaria: "",
+  nome_inquilino_1: "",
+  cpf_inquilino_1: "",
+  telefone_inquilino_1: "",
+  email_inquilino_1: "",
+  nome_inquilino_2: "",
+  cpf_inquilino_2: "",
+  telefone_inquilino_2: "",
+  email_inquilino_2: "",
+  nome_proprietario: "",
+  profissao_proprietario: "",
+  cpf_proprietario: "",
+  cnpj_proprietario: "",
+  data_nascimento_proprietario: new Date(),
+  rg_proprietario: "",
+  estado_civil_proprietario: "SOLTEIRO",
+  reside_brasil: "SIM",
+  email_proprietario: "",
+  telefone_proprietario: "",
+  finalidade: "RESIDENCIAL",
+  cep: "",
+  endereco: "",
+  numero: 0,
+  bairro: "",
+  complemento: "",
+  cidade: "",
+  estado: "",
+  tipo_residencia: "CASA",
+  tipo_residencia_outros: "",
+  inicio_contrato: new Date(),
+  termino_contrato: new Date(),
+  aluguel: 0,
+  condominio: 0,
+  iptu: 0,
+  agua: 0,
+  luz: 0,
+  gas: 0,
+  pintura_interna: "SIM",
+  pintura_externa: "SIM",
+  danos_imovel: "SIM",
+  multa_rescisao: "SIM",
+  fatura_mensal: 0,
+  valor_parcela: 0,
+  seguradora: "",
+  indice_reajuste: "",
+  vencimento_aluguel: new Date(),
+  created: new Date(),
+  updated: new Date(),
+});
+
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -369,7 +391,7 @@ export function EfetivacaoSeguroFiancaForms() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email_inquilino_1">
-                        Email do inquilino (1) <RequiredAsterisk />
+                        Email do inquilino (1)
                       </Label>
                       <Input
                         id="email_inquilino_1"
@@ -377,7 +399,6 @@ export function EfetivacaoSeguroFiancaForms() {
                         type="email"
                         value={formData.email_inquilino_1}
                         onChange={handleInputChange}
-                        required
                         placeholder="Digite o email do outro inquilino"
                       />
                     </div>
