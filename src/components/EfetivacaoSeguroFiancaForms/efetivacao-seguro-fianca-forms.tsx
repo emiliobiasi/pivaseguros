@@ -276,7 +276,7 @@ const [formData, setFormData] = useState<EfetivacaoSeguroFianca>({
                     color: currentTab === "personal" ? "white" : undefined,
                   }}
                 >
-                  Dados
+                  Dados do Pretendente
                 </TabsTrigger>
                 <TabsTrigger
                   value="address"
@@ -289,7 +289,7 @@ const [formData, setFormData] = useState<EfetivacaoSeguroFianca>({
                     color: currentTab === "address" ? "white" : undefined,
                   }}
                 >
-                  Endereço
+                  Dados da Locação
                 </TabsTrigger>
                 <TabsTrigger
                   value="property"
@@ -302,7 +302,7 @@ const [formData, setFormData] = useState<EfetivacaoSeguroFianca>({
                     color: currentTab === "property" ? "white" : undefined,
                   }}
                 >
-                  Imóvel
+                  Coberturas
                 </TabsTrigger>
                 <TabsTrigger
                   value="payment"
@@ -315,7 +315,7 @@ const [formData, setFormData] = useState<EfetivacaoSeguroFianca>({
                     color: currentTab === "payment" ? "white" : undefined,
                   }}
                 >
-                  Plano
+                  Forma de Pagamento
                 </TabsTrigger>
               </TabsList>
 

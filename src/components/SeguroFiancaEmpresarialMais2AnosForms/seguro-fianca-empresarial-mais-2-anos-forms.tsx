@@ -75,6 +75,11 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
     valor_aluguel: 0,
     nome_locador_imobiliaria: "",
     telefone: "",
+    aluguel: 0,
+    danos_imovel: "SIM",
+    multa_rescisao: "SIM",
+    pintura_interna: "SIM",
+    pintura_externa: "SIM",
     created: new Date(),
     updated: new Date(),
   });
@@ -171,7 +176,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
   };
 
   const handleNext = () => {
-    const tabs = ["personal", "address", "payment"];
+    const tabs = ["personal", "address", "payment", "coberturas"];
     const currentIndex = tabs.indexOf(currentTab);
     if (currentIndex < tabs.length - 1) {
       setCurrentTab(tabs[currentIndex + 1]);
@@ -179,7 +184,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
   };
 
   const handlePrevious = () => {
-    const tabs = ["personal", "address", "payment"];
+    const tabs = ["personal", "address", "payment", "coberturas"];
     const currentIndex = tabs.indexOf(currentTab);
     if (currentIndex > 0) {
       setCurrentTab(tabs[currentIndex - 1]);
@@ -234,7 +239,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                     color: currentTab === "personal" ? "white" : undefined,
                   }}
                 >
-                  Dados da Empresa
+                  Dados do Pretendente
                 </TabsTrigger>
 
                 <TabsTrigger
@@ -248,7 +253,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                     color: currentTab === "address" ? "white" : undefined,
                   }}
                 >
-                  Endereço da Empresa
+                  Dados do Pretendente
                 </TabsTrigger>
 
                 <TabsTrigger
@@ -262,11 +267,128 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                     color: currentTab === "payment" ? "white" : undefined,
                   }}
                 >
-                  Locação
+                  Dados da Locação
+                </TabsTrigger>
+                <TabsTrigger
+                  value="coberturas"
+                  className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
+                    currentTab === "coberturas" ? "" : "bg-gray-200"
+                  }`}
+                  style={{
+                    backgroundColor:
+                      currentTab === "coberturas" ? "#16a34a" : undefined,
+                    color: currentTab === "coberturas" ? "white" : undefined,
+                  }}
+                >
+                  Coberturas
                 </TabsTrigger>
               </TabsList>
 
               <TabsContent value="personal">
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="danos_imovel">
+                        Motivo da Locação <RequiredAsterisk />
+                      </Label>
+                      <Select
+                        value={formData.motivo_locacao}
+                        onValueChange={(value) =>
+                          handleSelectChange("motivo_locacao", value)
+                        }
+                        required
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Motivo da Locação" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="ABERTURA DE FILIAL">
+                            ABERTURA DE FILIAL
+                          </SelectItem>
+                          <SelectItem value="TROCA DO LOCAL">
+                            TROCA DO LOCAL
+                          </SelectItem>
+                          <SelectItem value="DE SEDE">DE SEDE</SelectItem>
+                          <SelectItem value="LOCAÇÃO PARA MORADIA">
+                            LOCAÇÃO PARA MORADIA
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="tipo_imovel">
+                        Tipo do Imóvel <RequiredAsterisk />
+                      </Label>
+                      <Select
+                        value={formData.tipo_imovel}
+                        onValueChange={(value) =>
+                          handleSelectChange("tipo_imovel", value)
+                        }
+                        required
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Tipo do Imóvel" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="PRÓPRIO">PRÓPRIO</SelectItem>
+                          <SelectItem value="ALUGADO">ALUGADO</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="valor_aluguel">
+                        Valor do Aluguel <RequiredAsterisk />
+                      </Label>
+                      <Input
+                        id="valor_aluguel"
+                        name="valor_aluguel"
+                        type="number"
+                        value={formData.valor_aluguel || ""}
+                        onChange={handleInputChange}
+                        required
+                        placeholder="Digite o valor do alguel"
+                        disabled={isLoading}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="nome_locador_imobiliaria">
+                        Nome do Locador ou Imobiliária <RequiredAsterisk />
+                      </Label>
+                      <Input
+                        id="nome_locador_imobiliaria"
+                        name="nome_locador_imobiliaria"
+                        type="text"
+                        value={formData.nome_locador_imobiliaria || ""}
+                        onChange={handleInputChange}
+                        placeholder="Digite o nome do locador ou imobiliária"
+                        disabled={isLoading}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="telefone">
+                        Telefone do Locador ou da Imobiliária{" "}
+                        <RequiredAsterisk />
+                      </Label>
+                      <Input
+                        id="telefone"
+                        name="telefone"
+                        type="tel"
+                        value={formData.telefone}
+                        onChange={handleInputChange}
+                        required
+                        placeholder="Digite o telefone do locador ou imobiliária"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="address">
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
@@ -440,7 +562,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                 </div>
               </TabsContent>
 
-              <TabsContent value="address">
+              <TabsContent value="payment">
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                     <div className="space-y-2">
@@ -551,70 +673,18 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                 </div>
               </TabsContent>
 
-              <TabsContent value="payment">
+              <TabsContent value="coberturas">
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="danos_imovel">
-                        Motivo da Locação <RequiredAsterisk />
-                      </Label>
-                      <Select
-                        value={formData.motivo_locacao}
-                        onValueChange={(value) =>
-                          handleSelectChange("motivo_locacao", value)
-                        }
-                        required
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Motivo da Locação" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="ABERTURA DE FILIAL">
-                            ABERTURA DE FILIAL
-                          </SelectItem>
-                          <SelectItem value="TROCA DO LOCAL">
-                            TROCA DO LOCAL
-                          </SelectItem>
-                          <SelectItem value="DE SEDE">DE SEDE</SelectItem>
-                          <SelectItem value="LOCAÇÃO PARA MORADIA">
-                            LOCAÇÃO PARA MORADIA
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="tipo_imovel">
-                        Tipo do Imóvel <RequiredAsterisk />
-                      </Label>
-                      <Select
-                        value={formData.tipo_imovel}
-                        onValueChange={(value) =>
-                          handleSelectChange("tipo_imovel", value)
-                        }
-                        required
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Tipo do Imóvel" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="PRÓPRIO">PRÓPRIO</SelectItem>
-                          <SelectItem value="ALUGADO">ALUGADO</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="valor_aluguel">
-                        Valor do Aluguel <RequiredAsterisk />
+                      <Label htmlFor="aluguel">
+                        Aluguel <RequiredAsterisk />
                       </Label>
                       <Input
-                        id="valor_aluguel"
-                        name="valor_aluguel"
+                        id="aluguel"
+                        name="aluguel"
                         type="number"
-                        value={formData.valor_aluguel || ""}
+                        value={formData.aluguel || ""}
                         onChange={handleInputChange}
                         required
                         placeholder="Digite o valor do alguel"
@@ -622,33 +692,165 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="nome_locador_imobiliaria">
-                        Nome do Locador ou Imobiliária <RequiredAsterisk />
-                      </Label>
+                      <Label htmlFor="energia">Energia</Label>
                       <Input
-                        id="nome_locador_imobiliaria"
-                        name="nome_locador_imobiliaria"
-                        type="text"
-                        value={formData.nome_locador_imobiliaria || ""}
+                        id="energia"
+                        name="energia"
+                        type="number"
+                        value={formData.energia || ""}
                         onChange={handleInputChange}
-                        placeholder="Digite o nome do locador ou imobiliária"
+                        placeholder="Digite o valor da conta de energia"
                         disabled={isLoading}
-                        required
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="telefone">
-                        Telefone do Locador ou da Imobiliária{" "}
-                        <RequiredAsterisk />
-                      </Label>
+                      <Label htmlFor="agua">Água</Label>
                       <Input
-                        id="telefone"
-                        name="telefone"
-                        type="tel"
-                        value={formData.telefone}
+                        id="agua"
+                        name="agua"
+                        type="number"
+                        value={formData.agua || ""}
                         onChange={handleInputChange}
+                        placeholder="Digite o valor da conta de água"
+                        disabled={isLoading}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="gas">Gás</Label>
+                      <Input
+                        id="gas"
+                        name="gas"
+                        type="number"
+                        value={formData.gas || ""}
+                        onChange={handleInputChange}
+                        placeholder="Digite o valor da conta de gás"
+                        disabled={isLoading}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="condominio">Condomínio</Label>
+                      <Input
+                        id="condominio"
+                        name="condominio"
+                        type="number"
+                        value={formData.condominio || ""}
+                        onChange={handleInputChange}
+                        placeholder="Digite o valor do condomínio"
+                        disabled={isLoading}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="iptu">IPTU </Label>
+                      <Input
+                        id="iptu"
+                        name="iptu"
+                        type="number"
+                        value={formData.iptu || ""}
+                        onChange={handleInputChange}
+                        placeholder="Digite o valor do IPTU"
+                        disabled={isLoading}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="danos_imovel">
+                        Danos ao imóvel <RequiredAsterisk />
+                      </Label>
+                      <Select
+                        value={formData.danos_imovel}
+                        onValueChange={(value) =>
+                          handleSelectChange("danos_imovel", value)
+                        }
                         required
-                        placeholder="Digite o telefone do locador ou imobiliária"
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Danos ao imóvel" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="SIM">SIM</SelectItem>
+                          <SelectItem value="NÃO">NÃO</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="multa_rescisao">
+                        Multa por Recisão <RequiredAsterisk />
+                      </Label>
+                      <Select
+                        value={formData.multa_rescisao}
+                        onValueChange={(value) =>
+                          handleSelectChange("multa_rescisao", value)
+                        }
+                        required
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Multa por Recisão" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="SIM">SIM</SelectItem>
+                          <SelectItem value="NÃO">NÃO</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="pintura_interna">
+                        Pintura Interna <RequiredAsterisk />
+                      </Label>
+                      <Select
+                        value={formData.pintura_interna}
+                        onValueChange={(value) =>
+                          handleSelectChange("pintura_interna", value)
+                        }
+                        required
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Pintura Interna" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="SIM">SIM</SelectItem>
+                          <SelectItem value="NÃO">NÃO</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="pintura_externa">
+                        Pintura Externa <RequiredAsterisk />
+                      </Label>
+                      <Select
+                        value={formData.pintura_externa}
+                        onValueChange={(value) =>
+                          handleSelectChange("pintura_externa", value)
+                        }
+                        required
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Pintura Externa" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="SIM">SIM</SelectItem>
+                          <SelectItem value="NÃO">NÃO</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="observacao">Observação </Label>
+                      <Input
+                        id="observacao"
+                        name="observacao"
+                        type="text"
+                        value={formData.observacao || ""}
+                        onChange={handleInputChange}
+                        placeholder="Digite sua observação"
+                        disabled={isLoading}
                       />
                     </div>
                   </div>
@@ -686,7 +888,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                 <ArrowLeft className="mr-2 h-4 w-4" /> Anterior
               </Button>
             )}
-            {currentTab !== "payment" ? (
+            {currentTab !== "coberturas" ? (
               <Button
                 type="button"
                 onClick={handleNext}

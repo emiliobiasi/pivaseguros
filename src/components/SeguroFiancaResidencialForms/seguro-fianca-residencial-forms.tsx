@@ -238,7 +238,7 @@ export function SeguroFiancaResidencialForms() {
                     color: currentTab === "personal" ? "white" : undefined,
                   }}
                 >
-                  Dados
+                  Dados do Pretendente
                 </TabsTrigger>
 
                 <TabsTrigger
@@ -252,7 +252,7 @@ export function SeguroFiancaResidencialForms() {
                     color: currentTab === "address" ? "white" : undefined,
                   }}
                 >
-                  Endereço
+                  Dados da Locação
                 </TabsTrigger>
 
                 <TabsTrigger
@@ -266,7 +266,7 @@ export function SeguroFiancaResidencialForms() {
                     color: currentTab === "payment" ? "white" : undefined,
                   }}
                 >
-                  Imóvel
+                  Coberturas
                 </TabsTrigger>
               </TabsList>
 
@@ -741,7 +741,7 @@ export function SeguroFiancaResidencialForms() {
 
                     <div className="space-y-2">
                       <Label htmlFor="multa_recisao">
-                        Multa por Recisão <RequiredAsterisk />
+                        Multa por Rescisão <RequiredAsterisk />
                       </Label>
                       <Select
                         value={formData.multa_recisao}

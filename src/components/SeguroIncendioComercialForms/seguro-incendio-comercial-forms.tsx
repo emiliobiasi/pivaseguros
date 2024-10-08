@@ -1,3 +1,4 @@
+import { SeguroIncendioComercial } from "@/types/SeguroIncendioComercial";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -27,7 +28,6 @@ import {
   Send,
   Loader2,
 } from "lucide-react";
-import { SeguroIncendioComercial } from "@/types/SeguroIncendioComercial";
 import { formatCPF } from "@/utils/regex/regexCPF";
 import { formatCEP } from "@/utils/regex/regexCEP";
 import { createSeguroIncendioComercial } from "@/utils/api/SeguroIncendioComercialService";
@@ -234,7 +234,7 @@ export function SeguroIncendioComercialForms() {
                     color: currentTab === "personal" ? "white" : undefined,
                   }}
                 >
-                  Dados Pessoais
+                  Dados do Locatário
                 </TabsTrigger>
                 <TabsTrigger
                   value="address"
@@ -247,7 +247,7 @@ export function SeguroIncendioComercialForms() {
                     color: currentTab === "address" ? "white" : undefined,
                   }}
                 >
-                  Endereço
+                  Dados da Locação
                 </TabsTrigger>
                 <TabsTrigger
                   value="property"
@@ -260,7 +260,7 @@ export function SeguroIncendioComercialForms() {
                     color: currentTab === "property" ? "white" : undefined,
                   }}
                 >
-                  Imóvel
+                  Coberturas
                 </TabsTrigger>
                 <TabsTrigger
                   value="payment"
@@ -273,7 +273,7 @@ export function SeguroIncendioComercialForms() {
                     color: currentTab === "payment" ? "white" : undefined,
                   }}
                 >
-                  Plano
+                  Forma de Pagamento
                 </TabsTrigger>
               </TabsList>
 

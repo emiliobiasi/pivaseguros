@@ -36,6 +36,17 @@ export type SeguroFiancaEmpresarialMais2Anos = {
   valor_aluguel: number;
   nome_locador_imobiliaria: string;
   telefone: string;
+  aluguel: number;
+  agua?: number;
+  energia?: number;
+  gas?: number;
+  condominio?: number;
+  iptu?: number;
+  danos_imovel: "SIM" | "NÃO";
+  multa_rescisao: "SIM" | "NÃO";
+  pintura_interna: "SIM" | "NÃO";
+  pintura_externa: "SIM" | "NÃO";
+  observacao?: string;
   created: Date;
   updated: Date;
 };

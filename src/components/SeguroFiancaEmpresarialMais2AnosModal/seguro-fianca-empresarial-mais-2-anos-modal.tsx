@@ -67,12 +67,13 @@ export function SeguroFiancaEmpresarialMais2AnosModal({
             <p>
               <strong>Atividade Econômica:</strong> {seguro.atividade_economica}
             </p>
-            {seguro.capital_social !== undefined && seguro.capital_social > 0 && (
-              <p>
-                <strong>Capital Social:</strong> R${" "}
-                {formatValor(seguro.capital_social.toFixed(2))}
-              </p>
-            )}
+            {seguro.capital_social !== undefined &&
+              seguro.capital_social > 0 && (
+                <p>
+                  <strong>Capital Social:</strong> R${" "}
+                  {formatValor(seguro.capital_social.toFixed(2))}
+                </p>
+              )}
             {seguro.faturamento_mensal !== undefined &&
               seguro.faturamento_mensal > 0 && (
                 <p>
@@ -143,11 +144,9 @@ export function SeguroFiancaEmpresarialMais2AnosModal({
             <p>
               <strong>Estado:</strong> {seguro.estado}
             </p>
-          </div>
 
-          {/* Terceira Coluna */}
-          <div className="space-y-4 bg-gray-100 p-4 rounded-lg">
-            <h3 className="text-lg font-semibold text-[#025d37]">
+            {/* Informações da Locação */}
+            <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
               Informações da Locação
             </h3>
             <p>
@@ -168,7 +167,78 @@ export function SeguroFiancaEmpresarialMais2AnosModal({
               <strong>Telefone:</strong> {seguro.telefone}
             </p>
           </div>
+
+          {/* Terceira Coluna */}
+          <div className="space-y-4 bg-gray-100 p-4 rounded-lg">
+            {/* Valores e Contas */}
+            <h3 className="text-lg font-semibold text-[#025d37]">
+              Valores e Contas
+            </h3>
+            {seguro.valor_aluguel !== undefined && (
+              <p>
+                <strong>Valor do Aluguel:</strong> R${" "}
+                {formatValor(seguro.valor_aluguel.toFixed(2))}
+              </p>
+            )}
+            {seguro.agua !== undefined && seguro.agua > 0 && (
+              <p>
+                <strong>Valor da Conta de Água:</strong> R${" "}
+                {formatValor(seguro.agua.toFixed(2))}
+              </p>
+            )}
+            {seguro.energia !== undefined && seguro.energia > 0 && (
+              <p>
+                <strong>Valor da Conta de Energia:</strong> R${" "}
+                {formatValor(seguro.energia.toFixed(2))}
+              </p>
+            )}
+            {seguro.gas !== undefined && seguro.gas > 0 && (
+              <p>
+                <strong>Valor da Conta de Gás:</strong> R${" "}
+                {formatValor(seguro.gas.toFixed(2))}
+              </p>
+            )}
+            {seguro.condominio !== undefined && seguro.condominio > 0 && (
+              <p>
+                <strong>Valor do Condomínio:</strong> R${" "}
+                {formatValor(seguro.condominio.toFixed(2))}
+              </p>
+            )}
+            {seguro.iptu !== undefined && seguro.iptu > 0 && (
+              <p>
+                <strong>Valor do IPTU:</strong> R${" "}
+                {formatValor(seguro.iptu.toFixed(2))}
+              </p>
+            )}
+
+            {/* Coberturas */}
+            <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+              Coberturas
+            </h3>
+            <p>
+              <strong>Danos ao Imóvel:</strong> {seguro.danos_imovel}
+            </p>
+            <p>
+              <strong>Multa Rescisória:</strong> {seguro.multa_rescisao}
+            </p>
+            <p>
+              <strong>Pintura Interna:</strong> {seguro.pintura_interna}
+            </p>
+            <p>
+              <strong>Pintura Externa:</strong> {seguro.pintura_externa}
+            </p>
+
+            {seguro.observacao && (
+              <div>
+                <h3 className="text-lg font-semibold text-[#025d37]">
+                  Observações
+                </h3>
+                <p className="mt-2">{seguro.observacao}</p>
+              </div>
+            )}
+          </div>
         </div>
+
         <div className="mt-6">
           <Button
             onClick={onClose}
