@@ -43,9 +43,12 @@ const Footer: React.FC = () => {
             </div>
             <div className="flex items-center">
               <FaEnvelope className="mr-2 text-green-600" />
-              <span className="text-sm text-gray-500">
-                contato@pivaseguros.com.br
-              </span>
+              <a
+                href="mailto:solucoes@pivaseguros.com.br"
+                className="text-sm text-gray-500"
+              >
+                solucoes@pivaseguros.com.br
+              </a>
             </div>
           </div>
 

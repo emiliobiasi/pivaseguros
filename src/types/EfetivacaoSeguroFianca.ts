@@ -47,7 +47,6 @@ export type EfetivacaoSeguroFianca = {
   pintura_externa: "SIM" | "NÃO";
   danos_imovel: "SIM" | "NÃO";
   multa_rescisao: "SIM" | "NÃO";
-  fatura_mensal: number;
   valor_parcela: number;
   seguradora: string;
   indice_reajuste: string;

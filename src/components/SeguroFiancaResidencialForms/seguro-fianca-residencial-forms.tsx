@@ -1,3 +1,4 @@
+import { SeguroFiancaResidencial } from "@/types/SeguroFiancaResidencial";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -27,7 +28,6 @@ import {
   Send,
   Loader2,
 } from "lucide-react";
-import { SeguroFiancaResidencial } from "@/types/SeguroFiancaResidencial";
 import { formatCPF } from "@/utils/regex/regexCPF";
 import { formatCEP } from "@/utils/regex/regexCEP";
 import { formatTelefone } from "@/utils/regex/regexTelefone";
@@ -59,6 +59,7 @@ export function SeguroFiancaResidencialForms() {
     acao: "PENDENTE",
     nome_imobiliaria_corretor: "",
     cpf_residente: "",
+    cpf_conjuge: "",
     nome_residente: "",
     telefone: "",
     email: "",
@@ -86,7 +87,7 @@ export function SeguroFiancaResidencialForms() {
     const { name, value } = e.target;
     let formattedValue = value;
 
-    if (name === "telefone") {
+    if (name === "telefone" || name === "telefone_conjuge") {
       formattedValue = formatTelefone(value);
     } else if (name === "cpf_residente" || name === "cpf_conjuge") {
       formattedValue = formatCPF(value);
@@ -219,8 +220,8 @@ export function SeguroFiancaResidencialForms() {
         <CardHeader className="mb-5">
           <CardTitle>Seguro Fiança: Finalidade Residencial</CardTitle>
           <CardDescription>
-            Para concluir a análise do Seguro Fiança Residencial, solicitamos
-            o preenchimento dos dados a seguir:
+            Para concluir a análise do Seguro Fiança Residencial, solicitamos o
+            preenchimento dos dados a seguir:
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit} ref={formRef}>
@@ -485,7 +486,7 @@ export function SeguroFiancaResidencialForms() {
 
                     <div className="space-y-2">
                       <Label htmlFor="cpf_conjuge">
-                        CPF do Conjuge (opcional)
+                        CPF do Cônjuge <RequiredAsterisk />
                       </Label>
                       <Input
                         id="cpf_conjuge"
@@ -493,6 +494,7 @@ export function SeguroFiancaResidencialForms() {
                         value={formData.cpf_conjuge}
                         onChange={handleInputChange}
                         placeholder="Digite o CPF do conjuge"
+                        required
                       />
                     </div>
 
@@ -519,6 +521,37 @@ export function SeguroFiancaResidencialForms() {
                         value={formData.renda_mensal_conjuge_opcional}
                         onChange={handleInputChange}
                         placeholder="Digite a renda mensal do cônjuge"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="telefone_conjuge">
+                        Telefone do Cônjuge (opcional)
+                        {/* <RequiredAsterisk /> */}
+                      </Label>
+                      <Input
+                        id="telefone_conjuge"
+                        name="telefone_conjuge"
+                        type="telefone_conjuge"
+                        value={formData.telefone_conjuge}
+                        onChange={handleInputChange}
+                        // required
+                        placeholder="Digite o telefone"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="email_conjuge">
+                        Email do Cônjuge (opcional)
+                        {/* <RequiredAsterisk /> */}
+                      </Label>
+                      <Input
+                        id="email_conjuge"
+                        name="email_conjuge"
+                        type="email"
+                        value={formData.email_conjuge}
+                        onChange={handleInputChange}
+                        // required
+                        placeholder="Digite o email do cônjuge"
                       />
                     </div>
                   </div>
@@ -591,17 +624,17 @@ export function SeguroFiancaResidencialForms() {
                         disabled={isLoading}
                       />
                     </div>
-                    {/* <div className="space-y-2">
-                      <Label htmlFor="complemento">Complemento</Label>
+                    <div className="space-y-2">
+                      <Label htmlFor="complemento_locacao">Complemento</Label>
                       <Input
-                        id="complemento"
-                        name="complemento"
-                        value={formData.complemento || ""}
+                        id="complemento_locacao"
+                        name="complemento_locacao"
+                        value={formData.complemento_locacao || ""}
                         onChange={handleInputChange}
-                        placeholder="Digite o complemento (opcional)"
+                        placeholder="Digite o complemento"
                         disabled={isLoading}
                       />
-                    </div> */}
+                    </div>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
@@ -803,21 +836,30 @@ export function SeguroFiancaResidencialForms() {
                         </SelectContent>
                       </Select>
                     </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="observacao">Observação </Label>
-                      <Input
-                        id="observacao"
-                        name="observacao"
-                        type="text"
-                        value={formData.observacao || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite sua observação"
-                        disabled={isLoading}
-                      />
-                    </div>
+                  </div>
+                  <div className="space-y-2 mb-4 mt-1">
+                    <h2>
+                      {" "}
+                      <RequiredAsterisk /> A Pintura somente será indenizada se
+                      o Laudo de Vistoria Inicial informar especificamente que o
+                      imóvel foi entregue com Pintura NOVA.
+                    </h2>
                   </div>
 
+                  <div className="space-y-2">
+                    <Label htmlFor="observacao">Observação </Label>
+                    <Input
+                      id="observacao"
+                      name="observacao"
+                      type="text"
+                      value={formData.observacao || ""}
+                      onChange={handleInputChange}
+                      placeholder="Digite sua observação"
+                      disabled={isLoading}
+                    />
+                  </div>
+
+                  {/* CHECKBOX */}
                   <div className="flex items-center space-x-2 mt-4">
                     <Checkbox
                       id="terms"

@@ -223,10 +223,10 @@ export function SeguroIncendioForms() {
     <div className="mb-40 flex justify-center">
       <Card className="w-full max-w-4xl md:mx-10 sm:mx-10">
         <CardHeader className="mb-5">
-          <CardTitle>Seguro Incêndio</CardTitle>
+          <CardTitle>Seguro Incêndio Residencial</CardTitle>
           <CardDescription>
-            Para concluir a efetivação do Seguro Incêndio Residencial, solicitamos o
-            preenchimento dos dados a seguir:
+            Para concluir a efetivação do Seguro Incêndio Residencial,
+            solicitamos o preenchimento dos dados a seguir:
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit} ref={formRef}>
@@ -653,22 +653,8 @@ export function SeguroIncendioForms() {
                       </SelectContent>
                     </Select>
                   </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="valor_seguro">
-                        Valor do Seguro <RequiredAsterisk />
-                      </Label>
-                      <Input
-                        id="valor_seguro"
-                        name="valor_seguro"
-                        type="number"
-                        value={formData.valor_seguro || ""}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="Digite o valor do seguro"
-                        disabled={isLoading}
-                      />
-                    </div>
                     <div className="space-y-2">
                       <Label htmlFor="forma_pagamento">
                         Forma de Pagamento <RequiredAsterisk />
@@ -721,7 +707,24 @@ export function SeguroIncendioForms() {
                         </SelectContent>
                       </Select>
                     </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="valor_seguro">
+                        Valor da Parcela do Seguro <RequiredAsterisk />
+                      </Label>
+                      <Input
+                        id="valor_seguro"
+                        name="valor_seguro"
+                        type="number"
+                        value={formData.valor_seguro || ""}
+                        onChange={handleInputChange}
+                        required
+                        placeholder="Digite o valor da parcela do seguro"
+                        disabled={isLoading}
+                      />
+                    </div>
                   </div>
+
                   <div className="space-y-2">
                     <Label htmlFor="inclusao_clausula_beneficiaria">
                       Inclusão de Cláusula Beneficiária <RequiredAsterisk />

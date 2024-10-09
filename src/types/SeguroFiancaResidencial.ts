@@ -14,9 +14,11 @@ export type SeguroFiancaResidencial = {
   responder_financeiramente: "SIM" | "NÃO";
   estado_civil_residente: "SOLTEIRO" | "CASADO" | "VIÚVO" | "DIVORCIADO";
   nome_conjuge?: string;
-  cpf_conjuge?: string;
+  cpf_conjuge: string;
   renda_composta_conjuge: "SIM" | "NÃO";
   profissao_conjuge_opcional?: string;
+  telefone_conjuge?: string;
+  email_conjuge?: string;
   renda_mensal_conjuge_opcional?: string;
   cep_locacao: string;
   endereco_locacao: string;
@@ -24,6 +26,7 @@ export type SeguroFiancaResidencial = {
   bairro_locacao: string;
   cidade_locacao: string;
   estado_locacao: string;
+  complemento_locacao?: string;
   valor_aluguel: number;
   valor_conta_agua?: number;
   valor_conta_energia?: number;

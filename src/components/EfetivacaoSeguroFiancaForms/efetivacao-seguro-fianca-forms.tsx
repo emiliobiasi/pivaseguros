@@ -84,7 +84,6 @@ export function EfetivacaoSeguroFiancaForms() {
     pintura_externa: "SIM",
     danos_imovel: "SIM",
     multa_rescisao: "SIM",
-    fatura_mensal: 0,
     valor_parcela: 0,
     seguradora: "",
     indice_reajuste: "",
@@ -977,7 +976,7 @@ export function EfetivacaoSeguroFiancaForms() {
               <TabsContent value="payment">
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="space-y-2">
+                    {/* <div className="space-y-2">
                       <Label htmlFor="fatura_mensal">
                         Fatura Mensal <RequiredAsterisk />
                       </Label>
@@ -991,7 +990,7 @@ export function EfetivacaoSeguroFiancaForms() {
                         placeholder="Digite o valor da fatura mensal"
                         disabled={isLoading}
                       />
-                    </div>
+                    </div> */}
                     <div className="space-y-2">
                       <Label htmlFor="valor_parcela">
                         Valor da Parcela <RequiredAsterisk />

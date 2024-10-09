@@ -659,22 +659,8 @@ export function SeguroIncendioComercialForms() {
                       </SelectContent>
                     </Select>
                   </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="valor_seguro">
-                        Valor do Seguro <RequiredAsterisk />
-                      </Label>
-                      <Input
-                        id="valor_seguro"
-                        name="valor_seguro"
-                        type="number"
-                        value={formData.valor_seguro || ""}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="Digite o valor do seguro"
-                        disabled={isLoading}
-                      />
-                    </div>
                     <div className="space-y-2">
                       <Label htmlFor="forma_pagamento">
                         Forma de Pagamento <RequiredAsterisk />
@@ -728,7 +714,24 @@ export function SeguroIncendioComercialForms() {
                         </SelectContent>
                       </Select>
                     </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="valor_seguro">
+                        Valor da Parcela do Seguro <RequiredAsterisk />
+                      </Label>
+                      <Input
+                        id="valor_seguro"
+                        name="valor_seguro"
+                        type="number"
+                        value={formData.valor_seguro || ""}
+                        onChange={handleInputChange}
+                        required
+                        placeholder="Digite o valor da parcela do seguro"
+                        disabled={isLoading}
+                      />
+                    </div>
                   </div>
+
                   <div className="space-y-2">
                     <Label htmlFor="inclusao_clausula_beneficiaria">
                       Inclusão de Cláusula Beneficiária <RequiredAsterisk />
@@ -752,6 +755,7 @@ export function SeguroIncendioComercialForms() {
                       </SelectContent>
                     </Select>
                   </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="cpf_locador_opcional">

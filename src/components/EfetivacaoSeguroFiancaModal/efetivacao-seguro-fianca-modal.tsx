@@ -135,10 +135,7 @@ export function EfetivacaoSeguroFiancaModal({
               <strong>Término do Contrato:</strong>{" "}
               {new Date(efetivacao.termino_contrato).toLocaleDateString()}
             </p>
-            <p>
-              <strong>Fatura Mensal:</strong> R${" "}
-              {formatValor(efetivacao.fatura_mensal.toFixed(2))}
-            </p>
+            
             <p>
               <strong>Valor da Parcela:</strong> R${" "}
               {formatValor(efetivacao.valor_parcela.toFixed(2))}

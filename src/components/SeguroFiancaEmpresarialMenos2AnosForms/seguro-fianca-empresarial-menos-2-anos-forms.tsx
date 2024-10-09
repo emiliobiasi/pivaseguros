@@ -594,6 +594,22 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         placeholder="Digite o órgão emissor do RG"
                       />
                     </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="email">
+                        Email <RequiredAsterisk />
+                      </Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        required
+                        placeholder="Digite o email"
+                      />
+                    </div>
+
                     <div className="space-y-2">
                       <Label htmlFor="estado_civil_locatario">
                         Estado Civil <RequiredAsterisk />
@@ -616,20 +632,34 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         </SelectContent>
                       </Select>
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email">
-                        Email <RequiredAsterisk />
-                      </Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="Digite o email"
-                      />
-                    </div>
+
+                    {formData.estado_civil_locatario === "CASADO" && (
+                      <>
+                        <div className="space-y-2">
+                          <Label htmlFor="nome_conjuge">Nome do Cônjuge</Label>{" "}
+                          <RequiredAsterisk />
+                          <Input
+                            id="nome_conjuge"
+                            name="nome_conjuge"
+                            value={formData.nome_conjuge || ""}
+                            onChange={handleInputChange}
+                            placeholder="Digite o nome do cônjuge"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="cpf_conjuge">CPF do Cônjuge</Label>{" "}
+                          <RequiredAsterisk />
+                          <Input
+                            id="cpf_conjuge"
+                            name="cpf_conjuge"
+                            value={formData.cpf_conjuge || ""}
+                            onChange={handleInputChange}
+                            placeholder="Digite o CPF do cônjuge"
+                            maxLength={14}
+                          />
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </TabsContent>
@@ -637,50 +667,10 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
               {/* Dados do Cônjuge */}
               <TabsContent value="dadosConjuge">
                 <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="nome_conjuge">Nome do Cônjuge</Label>
-                      <Input
-                        id="nome_conjuge"
-                        name="nome_conjuge"
-                        value={formData.nome_conjuge || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite o nome do cônjuge"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="cpf_conjuge">CPF do Cônjuge</Label>
-                      <Input
-                        id="cpf_conjuge"
-                        name="cpf_conjuge"
-                        value={formData.cpf_conjuge || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite o CPF do cônjuge"
-                        maxLength={14}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="sexo_pretendente_conjuge">
-                        Sexo do Cônjuge
-                      </Label>
-                      <Select
-                        value={formData.sexo_pretendente_conjuge || ""}
-                        onValueChange={(value) =>
-                          handleSelectChange("sexo_pretendente_conjuge", value)
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione o sexo do cônjuge" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="MASCULINO">Masculino</SelectItem>
-                          <SelectItem value="FEMININO">Feminino</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="composicao_renda_conjuge">
-                        Composição de Renda
+                        Cônjuge Vai Compor a Renda?
                       </Label>
                       <Select
                         value={formData.composicao_renda_conjuge || ""}
@@ -697,207 +687,240 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         </SelectContent>
                       </Select>
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="data_expedicao_rg_conjuge">
-                        Data de Expedição do RG
-                      </Label>
-                      <Input
-                        id="data_expedicao_rg_conjuge"
-                        name="data_expedicao_rg_conjuge"
-                        type="date"
-                        value={
-                          formData.data_expedicao_rg_conjuge instanceof Date
-                            ? formData.data_expedicao_rg_conjuge
-                                .toISOString()
-                                .split("T")[0]
-                            : formData.data_expedicao_rg_conjuge
-                        }
-                        onChange={handleInputChange}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="data_nascimento_conjuge">
-                        Data de Nascimento
-                      </Label>
-                      <Input
-                        id="data_nascimento_conjuge"
-                        name="data_nascimento_conjuge"
-                        type="date"
-                        value={
-                          formData.data_nascimento_conjuge instanceof Date
-                            ? formData.data_nascimento_conjuge
-                                .toISOString()
-                                .split("T")[0]
-                            : formData.data_nascimento_conjuge
-                        }
-                        onChange={handleInputChange}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="orgao_emissor_conjuge">
-                        Órgão Emissor do RG
-                      </Label>
-                      <Input
-                        id="orgao_emissor_conjuge"
-                        name="orgao_emissor_conjuge"
-                        value={formData.orgao_emissor_conjuge || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite o órgão emissor do RG"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="quadro_societario">
-                        Quadro Societário
-                      </Label>
-                      <Select
-                        value={formData.quadro_societario || ""}
-                        onValueChange={(value) =>
-                          handleSelectChange("quadro_societario", value)
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Quadro Societário" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="SIM">Sim</SelectItem>
-                          <SelectItem value="NÃO">Não</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    {/* Added fields */}
-                    <div className="space-y-2">
-                      <Label htmlFor="vinculo_empregaticio_conjuge">
-                        Vínculo Empregatício do Cônjuge
-                      </Label>
-                      <Select
-                        value={formData.vinculo_empregaticio_conjuge || ""}
-                        onValueChange={(value) =>
-                          handleSelectChange(
-                            "vinculo_empregaticio_conjuge",
-                            value
-                          )
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Vínculo Empregatício" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="AUTÔNOMO">Autônomo</SelectItem>
-                          <SelectItem value="EMPRESÁRIO">Empresário</SelectItem>
-                          <SelectItem value="ESTUDANTE">Estudante</SelectItem>
-                          <SelectItem value="FUNCIONÁRIO PÚBLICO">
-                            Funcionário Público
-                          </SelectItem>
-                          <SelectItem value="FUNCIONÁRIO COM REGISTRO CLT">
-                            Funcionário com Registro CLT
-                          </SelectItem>
-                          <SelectItem value="PROFISSIONAL LIBERAL">
-                            Profissional Liberal
-                          </SelectItem>
-                          <SelectItem value="APOSENTADO">Aposentado</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="profissao_conjuge">
-                        Profissão do Cônjuge
-                      </Label>
-                      <Input
-                        id="profissao_conjuge"
-                        name="profissao_conjuge"
-                        value={formData.profissao_conjuge || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite a profissão do cônjuge"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="nome_empresa_trabalho_conjuge">
-                        Nome da Empresa do Cônjuge
-                      </Label>
-                      <Input
-                        id="nome_empresa_trabalho_conjuge"
-                        name="nome_empresa_trabalho_conjuge"
-                        value={formData.nome_empresa_trabalho_conjuge || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite o nome da empresa"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="data_emissao_conjuge">
-                        Data de Emissão
-                      </Label>
-                      <Input
-                        id="data_emissao_conjuge"
-                        name="data_emissao_conjuge"
-                        type="date"
-                        value={
-                          formData.data_emissao_conjuge instanceof Date
-                            ? formData.data_emissao_conjuge
-                                .toISOString()
-                                .split("T")[0]
-                            : formData.data_emissao_conjuge
-                        }
-                        onChange={handleInputChange}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="fone_conjuge">Telefone do Cônjuge</Label>
-                      <Input
-                        id="fone_conjuge"
-                        name="fone_conjuge"
-                        value={formData.fone_conjuge || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite o telefone"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="ramal_conjuge">Ramal do Cônjuge</Label>
-                      <Input
-                        id="ramal_conjuge"
-                        name="ramal_conjuge"
-                        value={formData.ramal_conjuge || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite o ramal"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="salario_conjuge">
-                        Salário do Cônjuge
-                      </Label>
-                      <Input
-                        id="salario_conjuge"
-                        name="salario_conjuge"
-                        value={formData.salario_conjuge || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite o salário"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="outros_rendimentos_conjuge">
-                        Outros Rendimentos do Cônjuge
-                      </Label>
-                      <Input
-                        id="outros_rendimentos_conjuge"
-                        name="outros_rendimentos_conjuge"
-                        value={formData.outros_rendimentos_conjuge || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite outros rendimentos"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="total_rendimentos_mensais_conjuge">
-                        Total de Rendimentos Mensais do Cônjuge
-                      </Label>
-                      <Input
-                        id="total_rendimentos_mensais_conjuge"
-                        name="total_rendimentos_mensais_conjuge"
-                        value={formData.total_rendimentos_mensais_conjuge || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite o total de rendimentos mensais"
-                      />
-                    </div>
                   </div>
+
+                  {formData.composicao_renda_conjuge === "SIM" && (
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="sexo_pretendente_conjuge">
+                          Sexo do Cônjuge
+                        </Label>
+                        <Select
+                          value={formData.sexo_pretendente_conjuge || ""}
+                          onValueChange={(value) =>
+                            handleSelectChange(
+                              "sexo_pretendente_conjuge",
+                              value
+                            )
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione o sexo do cônjuge" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="MASCULINO">Masculino</SelectItem>
+                            <SelectItem value="FEMININO">Feminino</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="data_expedicao_rg_conjuge">
+                          Data de Expedição do RG
+                        </Label>
+                        <Input
+                          id="data_expedicao_rg_conjuge"
+                          name="data_expedicao_rg_conjuge"
+                          type="date"
+                          value={
+                            formData.data_expedicao_rg_conjuge instanceof Date
+                              ? formData.data_expedicao_rg_conjuge
+                                  .toISOString()
+                                  .split("T")[0]
+                              : formData.data_expedicao_rg_conjuge
+                          }
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="data_nascimento_conjuge">
+                          Data de Nascimento
+                        </Label>
+                        <Input
+                          id="data_nascimento_conjuge"
+                          name="data_nascimento_conjuge"
+                          type="date"
+                          value={
+                            formData.data_nascimento_conjuge instanceof Date
+                              ? formData.data_nascimento_conjuge
+                                  .toISOString()
+                                  .split("T")[0]
+                              : formData.data_nascimento_conjuge
+                          }
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="orgao_emissor_conjuge">
+                          Órgão Emissor do RG
+                        </Label>
+                        <Input
+                          id="orgao_emissor_conjuge"
+                          name="orgao_emissor_conjuge"
+                          value={formData.orgao_emissor_conjuge || ""}
+                          onChange={handleInputChange}
+                          placeholder="Digite o órgão emissor do RG"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="quadro_societario">
+                          Quadro Societário
+                        </Label>
+                        <Select
+                          value={formData.quadro_societario || ""}
+                          onValueChange={(value) =>
+                            handleSelectChange("quadro_societario", value)
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Quadro Societário" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="SIM">Sim</SelectItem>
+                            <SelectItem value="NÃO">Não</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="vinculo_empregaticio_conjuge">
+                          Vínculo Empregatício do Cônjuge
+                        </Label>
+                        <Select
+                          value={formData.vinculo_empregaticio_conjuge || ""}
+                          onValueChange={(value) =>
+                            handleSelectChange(
+                              "vinculo_empregaticio_conjuge",
+                              value
+                            )
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Vínculo Empregatício" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="AUTÔNOMO">Autônomo</SelectItem>
+                            <SelectItem value="EMPRESÁRIO">
+                              Empresário
+                            </SelectItem>
+                            <SelectItem value="ESTUDANTE">Estudante</SelectItem>
+                            <SelectItem value="FUNCIONÁRIO PÚBLICO">
+                              Funcionário Público
+                            </SelectItem>
+                            <SelectItem value="FUNCIONÁRIO COM REGISTRO CLT">
+                              Funcionário com Registro CLT
+                            </SelectItem>
+                            <SelectItem value="PROFISSIONAL LIBERAL">
+                              Profissional Liberal
+                            </SelectItem>
+                            <SelectItem value="APOSENTADO">
+                              Aposentado
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="profissao_conjuge">
+                          Profissão do Cônjuge
+                        </Label>
+                        <Input
+                          id="profissao_conjuge"
+                          name="profissao_conjuge"
+                          value={formData.profissao_conjuge || ""}
+                          onChange={handleInputChange}
+                          placeholder="Digite a profissão do cônjuge"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="nome_empresa_trabalho_conjuge">
+                          Nome da Empresa do Cônjuge
+                        </Label>
+                        <Input
+                          id="nome_empresa_trabalho_conjuge"
+                          name="nome_empresa_trabalho_conjuge"
+                          value={formData.nome_empresa_trabalho_conjuge || ""}
+                          onChange={handleInputChange}
+                          placeholder="Digite o nome da empresa"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="data_emissao_conjuge">
+                          Data de Emissão
+                        </Label>
+                        <Input
+                          id="data_emissao_conjuge"
+                          name="data_emissao_conjuge"
+                          type="date"
+                          value={
+                            formData.data_emissao_conjuge instanceof Date
+                              ? formData.data_emissao_conjuge
+                                  .toISOString()
+                                  .split("T")[0]
+                              : formData.data_emissao_conjuge
+                          }
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="fone_conjuge">
+                          Telefone do Cônjuge
+                        </Label>
+                        <Input
+                          id="fone_conjuge"
+                          name="fone_conjuge"
+                          value={formData.fone_conjuge || ""}
+                          onChange={handleInputChange}
+                          placeholder="Digite o telefone"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="ramal_conjuge">Ramal do Cônjuge</Label>
+                        <Input
+                          id="ramal_conjuge"
+                          name="ramal_conjuge"
+                          value={formData.ramal_conjuge || ""}
+                          onChange={handleInputChange}
+                          placeholder="Digite o ramal"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="salario_conjuge">
+                          Salário do Cônjuge
+                        </Label>
+                        <Input
+                          id="salario_conjuge"
+                          name="salario_conjuge"
+                          value={formData.salario_conjuge || ""}
+                          onChange={handleInputChange}
+                          placeholder="Digite o salário"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="outros_rendimentos_conjuge">
+                          Outros Rendimentos do Cônjuge
+                        </Label>
+                        <Input
+                          id="outros_rendimentos_conjuge"
+                          name="outros_rendimentos_conjuge"
+                          value={formData.outros_rendimentos_conjuge || ""}
+                          onChange={handleInputChange}
+                          placeholder="Digite outros rendimentos"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="total_rendimentos_mensais_conjuge">
+                          Total de Rendimentos Mensais do Cônjuge
+                        </Label>
+                        <Input
+                          id="total_rendimentos_mensais_conjuge"
+                          name="total_rendimentos_mensais_conjuge"
+                          value={
+                            formData.total_rendimentos_mensais_conjuge || ""
+                          }
+                          onChange={handleInputChange}
+                          placeholder="Digite o total de rendimentos mensais"
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
               </TabsContent>
 
@@ -1293,7 +1316,8 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="alocacao_pretendida_constituida">
-                        Alocação Pretendida Constituída? <RequiredAsterisk />
+                        A locação pretendida é para empresa já constituída?
+                        <RequiredAsterisk />
                       </Label>
                       <Select
                         value={formData.alocacao_pretendida_constituida}
@@ -1317,7 +1341,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
 
                     <div className="space-y-2">
                       <Label htmlFor="cnpj_pessoa_fisica_nao_residencial">
-                        CNPJ (Pessoa Física Não Residencial)
+                        Informar CNPJ (Pessoa Física Não Residencial)
                       </Label>
                       <Input
                         id="cnpj_pessoa_fisica_nao_residencial"
@@ -1331,7 +1355,9 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="cnae_empresa">CNAE da Empresa</Label>
+                      <Label htmlFor="cnae_empresa">
+                        Qual será a atividade da empresa (CNAE)?
+                      </Label>
                       <Input
                         id="cnae_empresa"
                         name="cnae_empresa"
@@ -1379,7 +1405,8 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
 
                     <div className="space-y-2">
                       <Label htmlFor="principais_produtos_servicos">
-                        Principais Produtos/Serviços
+                        Quais serão os principais produtos/serviços fabricados,
+                        revendidos ou prestados?
                       </Label>
                       <Input
                         id="principais_produtos_servicos"
@@ -1392,7 +1419,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
 
                     <div className="space-y-2">
                       <Label htmlFor="xp_ramo_pretendido">
-                        Experiência no Ramo Pretendido
+                        Qual a experiência no ramo pretendido?
                       </Label>
                       <Input
                         id="xp_ramo_pretendido"
@@ -1491,7 +1518,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                             name="tipo_qtd_parcela_a_1"
                             value={formData.tipo_qtd_parcela_a_1 || ""}
                             onChange={handleInputChange}
-                            placeholder="Descreva o ônus"	
+                            placeholder="Descreva o ônus"
                           />
                         </div>
                         <div className="space-y-2">
@@ -1506,7 +1533,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                             placeholder="Descreva o ônus"
                           />
                         </div>
-                        
+
                         <div className="space-y-2">
                           <Label htmlFor="tipo_qtd_parcela_a_2">
                             Tipo e Quantidade de Parcelas A2
@@ -1532,7 +1559,9 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                           />
                         </div>
 
-                        <div className="space-y-2">
+
+                        {/* A3 ATÉ B3 */}
+                        {/* <div className="space-y-2">
                           <Label htmlFor="tipo_qtd_parcela_a_3">
                             Tipo e Quantidade de Parcelas A3
                           </Label>
@@ -1556,7 +1585,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                             placeholder="Descreva o ônus"
                           />
                         </div>
-                        
+
                         <div className="space-y-2">
                           <Label htmlFor="tipo_qtd_parcela_b_1">
                             Tipo e Quantidade de Parcelas B1
@@ -1566,7 +1595,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                             name="tipo_qtd_parcela_b_1"
                             value={formData.tipo_qtd_parcela_b_1 || ""}
                             onChange={handleInputChange}
-                            placeholder="Descreva o ônus"	
+                            placeholder="Descreva o ônus"
                           />
                         </div>
                         <div className="space-y-2">
@@ -1581,7 +1610,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                             placeholder="Descreva o ônus"
                           />
                         </div>
-                        
+
                         <div className="space-y-2">
                           <Label htmlFor="tipo_qtd_parcela_b_2">
                             Tipo e Quantidade de Parcelas B2
@@ -1589,7 +1618,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                           <Input
                             id="tipo_qtd_parcela_b_2"
                             name="tipo_qtd_parcela_b_2"
-                            value={formData.tipo_qtd_parcela_b_2|| ""}
+                            value={formData.tipo_qtd_parcela_b_2 || ""}
                             onChange={handleInputChange}
                             placeholder="Descreva o ônus"
                           />
@@ -1630,8 +1659,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                             onChange={handleInputChange}
                             placeholder="Descreva o ônus"
                           />
-                        </div>
-
+                        </div> */}
                       </div>
                     </>
                   )}
@@ -1962,7 +1990,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="aluguel_imovel_alugado">
-                        Aluguel do Imóvel
+                        Valor do Aluguel do Imóvel
                       </Label>
                       <Input
                         id="aluguel_imovel_alugado"
@@ -1988,7 +2016,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="iptu_imovel_alugado">
-                        IPTU do Imóvel
+                        Valor do IPTU do Imóvel
                       </Label>
                       <Input
                         id="iptu_imovel_alugado"
@@ -2000,7 +2028,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="agua_imovel_alugado">
-                        Água do Imóvel
+                        Valor da Água do Imóvel
                       </Label>
                       <Input
                         id="agua_imovel_alugado"
@@ -2011,7 +2039,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="luz_imovel_alugado">Luz do Imóvel</Label>
+                      <Label htmlFor="luz_imovel_alugado">Valor da Luz do Imóvel</Label>
                       <Input
                         id="luz_imovel_alugado"
                         name="luz_imovel_alugado"
@@ -2022,7 +2050,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="gas_canalizado_imovel_alugado">
-                        Gás Canalizado do Imóvel
+                       Valor do Gás Canalizado do Imóvel
                       </Label>
                       <Input
                         id="gas_canalizado_imovel_alugado"
