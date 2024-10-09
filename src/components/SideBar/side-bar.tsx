@@ -5,9 +5,10 @@ import {
   X,
   LogOut,
   Menu,
-  // Building2,
+  Building2,
   Building,
   CaptionsIcon,
+  Coins,
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/logo.png";
@@ -113,7 +114,7 @@ function SidebarContent() {
             }`}
           >
             <Flame className="h-5 w-5 mr-3" />
-            <span>Incêndio</span>
+            <span>Incêndio Residencial</span>
           </button>
         </li>
 
@@ -165,11 +166,11 @@ function SidebarContent() {
         </li>
 
         {/* FIANÇA EMPRESARIAL MENOS 2 ANOS */}
-        {/* <li>
+        <li>
           <button
-            onClick={() => navigate("/dashboard-fianca-residencial")}
+            onClick={() => navigate("/dashboard-fianca-empresarial-menos-2-anos")}
             className={`flex items-center w-full px-4 py-2 text-left ${
-              location.pathname === "/dashboard-fianca-residencial"
+              location.pathname === "/dashboard-fianca-empresarial-menos-2-anos"
                 ? "bg-gray-200 dark:bg-gray-700 text-green-700 dark:text-white"
                 : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
             }`}
@@ -177,9 +178,8 @@ function SidebarContent() {
             <Building2 className="h-5 w-5 mr-3" />
             <span>Fiança CNPJ Menos de 2 Anos</span>
           </button>
-        </li> */}
+        </li>
 
-        {/* Fazer orçamento */}
 
         {/* TT CAPITALIZACAO */}
         <li>
@@ -193,6 +193,21 @@ function SidebarContent() {
           >
             <CaptionsIcon className="h-5 w-5 mr-3" />
             <span>Título de Capitalziacao</span>
+          </button>
+        </li>
+
+        {/* EFETIVACAO SEGURO FIANCA */}
+        <li>
+          <button
+            onClick={() => navigate("/dashboard-efetivacao-seguro-fianca")}
+            className={`flex items-center w-full px-4 py-2 text-left ${
+              location.pathname === "/dashboard-efetivacao-seguro-fianca"
+                ? "bg-gray-200 dark:bg-gray-700 text-green-700 dark:text-white"
+                : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+            }`}
+          >
+            <Coins className="h-5 w-5 mr-3" />
+            <span>Efetivação Seguro Fiança</span>
           </button>
         </li>
 

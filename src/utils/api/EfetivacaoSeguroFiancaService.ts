@@ -2,40 +2,51 @@ import pb, { PocketBaseError } from "@/utils/backend/pb";
 import { EfetivacaoSeguroFianca } from "@/types/EfetivacaoSeguroFianca";
 import { ClientResponseError, RecordSubscription } from "pocketbase";
 
-// Função para criar um seguro de incêndio e monitorar as mudanças em tempo real com campo "id_numero" incremental
 export async function createEfetivacaoSeguroFianca(
   data: EfetivacaoSeguroFianca
 ): Promise<EfetivacaoSeguroFianca> {
   try {
-    // Buscar o seguro existente com o maior valor de "id_numero"
-    const lastRecord = await pb
-      .collection("efetivacao_seguro_fianca_tb")
-      .getFirstListItem<EfetivacaoSeguroFianca>("", {
-        sort: "-id_numero", // Ordena em ordem decrescente pelo campo "id_numero"
-        limit: 1,
-      });
+    // Inicializa lastRecord como nulo
+    let lastRecord: EfetivacaoSeguroFianca | null = null;
 
-    // Determinar o próximo valor para "id_numero"
+    try {
+      // Tenta obter o último registro com base em "id_numero"
+      lastRecord = await pb
+        .collection("efetivacao_seguro_fianca_tb")
+        .getFirstListItem<EfetivacaoSeguroFianca>("", {
+          sort: "-id_numero",
+        });
+    } catch (error) {
+      const err = error as ClientResponseError;
+      if (err.status === 404) {
+        // Nenhum registro encontrado, continua com lastRecord como nulo
+        console.log("Nenhum registro encontrado. Iniciando id_numero em 1.");
+      } else {
+        // Re-lança outros erros
+        throw err;
+      }
+    }
+
+    // Determina o próximo valor para "id_numero"
     const nextIdNumero = lastRecord ? (lastRecord.id_numero || 0) + 1 : 1;
 
-    // Cria o novo seguro com o campo "id_numero" incrementado
+    // Cria o novo registro com o campo "id_numero" incrementado
     const record = await pb
       .collection("efetivacao_seguro_fianca_tb")
       .create<EfetivacaoSeguroFianca>({
         ...data,
-        id_numero: nextIdNumero, // Adiciona o campo "id_numero" ao novo registro
+        id_numero: nextIdNumero,
       });
 
-    console.log("Efetivação do Seguro Fiança criado com sucesso:", record);
+    console.log("Efetivação Seguro Fiança criado com sucesso:", record);
     return record;
   } catch (error) {
     const err = error as PocketBaseError;
-    console.error("Erro ao criar o Efetivação do Seguro Fiança:", err);
-    throw new Error("Erro ao criar o Efetivação do Seguro Fiança");
+    console.error("Erro ao criar o Efetivação Seguro Fiança:", err);
+    throw new Error("Erro ao criar o Efetivação Seguro Fiança");
   }
 }
 
-// Função para buscar a lista de seguros de incêndio com paginação e busca
 export async function fetchEfetivacaoSeguroFiancaList(
   page: number,
   limit: number,
@@ -52,7 +63,6 @@ export async function fetchEfetivacaoSeguroFiancaList(
       ? `(nome_proprietario ~ "${searchTerm}" || nome_imobiliaria ~ "${searchTerm}" || id_numero ~ "${searchTerm}")`
       : "";
 
-    // Concatena os filtros de busca e ação, se houver
     const combinedFilter = [actionFilter, searchFilter]
       .filter(Boolean)
       .join(" && ");
@@ -61,7 +71,7 @@ export async function fetchEfetivacaoSeguroFiancaList(
       .collection("efetivacao_seguro_fianca_tb")
       .getList<EfetivacaoSeguroFianca>(page, limit, {
         sort: "-created",
-        filter: combinedFilter, // Aplica o filtro combinado de ação e termo de busca
+        filter: combinedFilter,
       });
 
     return {
@@ -79,7 +89,6 @@ export async function fetchEfetivacaoSeguroFiancaList(
   }
 }
 
-// Função para atualizar o campo "acao" para "PENDENTE"
 export async function updateEfetivacaoSeguroFiancaToPending(
   id: string
 ): Promise<EfetivacaoSeguroFianca> {
@@ -106,7 +115,6 @@ export async function updateEfetivacaoSeguroFiancaToPending(
   }
 }
 
-// Função para atualizar o campo "acao" para "FINALIZADO"
 export async function updateEfetivacaoSeguroFiancaToFinalized(
   id: string
 ): Promise<EfetivacaoSeguroFianca> {
@@ -133,7 +141,6 @@ export async function updateEfetivacaoSeguroFiancaToFinalized(
   }
 }
 
-// Função para iniciar a subscription em tempo real
 export function subscribeToEfetivacaoSeguroFiancaUpdates(
   onRecordChange: (data: RecordSubscription<EfetivacaoSeguroFianca>) => void
 ) {

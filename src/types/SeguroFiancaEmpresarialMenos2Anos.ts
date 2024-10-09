@@ -1,5 +1,6 @@
 export type SeguroFiancaEmpresarialMenos2Anos = {
   id: string;
+  id_numero: number;
   acao: "PENDENTE" | "FINALIZADO";
   nome_pretendente: string;
   sexo_pretendente: "MASCULINO" | "FEMININO";
@@ -21,28 +22,30 @@ export type SeguroFiancaEmpresarialMenos2Anos = {
   fone_residencial?: string;
   fone_celular?: string;
   cep?: string;
-  endereco_bairro?: string;
+  endereco?: string;
   bairro?: string;
   cidade?: string;
   estado?: string;
-  tipo_residencia?:
+  numero?: string;
+  complemento?: string;
+  tipo_residencia:
     | "MENOS DE 1 ANO"
     | "1 A 2 ANOS"
     | "3 A 4 ANOS"
     | "5 A 6 ANOS"
     | "7 A 9 ANOS"
     | "ACIMA DE 10 ANOS";
-  condicao_imovel?:
+  condicao_imovel:
     | "ALUGADO (EM NOME DO PRETENDENTE)"
     | "ALUGADO (NOME DOS OUTROS)"
     | "PRÓPRIO"
     | "FINANCIADO (EM NOME PRÓPRIO)"
     | "FINANCIADO (NOME DE OUTROS)";
-  arca_com_aluguel?: "SIM" | "NÃO";
+  arca_com_aluguel: "SIM" | "NÃO";
   valor_aluguel_atual?: number;
   nome_locator_proprietario_imobiliaria?: string;
   telefone_contato?: string;
-  vinculo_empregaticio?:
+  vinculo_empregaticio:
     | "AUTÔNOMO"
     | "EMPRESÁRIO"
     | "ESTUDANTE"
@@ -50,7 +53,7 @@ export type SeguroFiancaEmpresarialMenos2Anos = {
     | "FUNCIONÁRIO COM REGISTRO CLT"
     | "PROFISSIONAL LIBERAL"
     | "APOSENTADO";
-  profissao?: string;
+  profissao: string;
   nome_empresa_trabalho?: string;
   data_emissao?: Date;
   fone?: string;
@@ -77,14 +80,14 @@ export type SeguroFiancaEmpresarialMenos2Anos = {
   alocacao_pretendida_constituida: "SIM" | "NÃO";
   cnpj_pessoa_fisica_nao_residencial?: string;
   cnae_empresa?: string;
-  franquia?: "SIM" | "NÃO";
+  franquia: "SIM" | "NÃO";
   nome_franqueadora?: string;
   principais_produtos_servicos?: string;
   xp_ramo_pretendido?: string;
   cpf_socio_1?: string;
   cpf_socio_2?: string;
   cpf_socio_3?: string;
-  onus?: "SIM" | "NÃO";
+  onus: "SIM" | "NÃO";
   detalhamento_onus?: string;
   tipo_qtd_parcela_a_1?: number;
   tipo_qtd_parcela_a_2?: number;
@@ -95,7 +98,10 @@ export type SeguroFiancaEmpresarialMenos2Anos = {
   tipo_qtd_parcela_b_1?: number;
   tipo_qtd_parcela_b_2?: number;
   tipo_qtd_parcela_b_3?: number;
-  investimento_abertura?: "SIM" | "NÃO";
+  valor_parcela_b_1?: number;
+  valor_parcela_b_2?: number;
+  valor_parcela_b_3?: number;
+  investimento_abertura: "SIM" | "NÃO";
   compra_produto_cap_inicial?: number;
   obras_reformas_cap_inicial?: number;
   maquinas_cap_inicial?: number;
@@ -111,17 +117,19 @@ export type SeguroFiancaEmpresarialMenos2Anos = {
   financiamento_vendas_cap_giro?: number;
   impostos_taxas_cap_giro?: number;
   cep_imovel_alugado?: string;
-  endereco_bairro_imovel_alugado?: string;
+  endereco_imovel_alugado?: string;
   bairro_imovel_alugado?: string;
   cidade_imovel_alugado?: string;
   estado_imovel_alugado?: string;
+  numero_imovel_alugado?: string;
+  complemento_imovel_alugado?: string;
   aluguel_imovel_alugado?: number;
   desp_ordinarias_cond_imovel_alugado?: number;
   iptu_imovel_alugado?: number;
   agua_imovel_alugado?: number;
   luz_imovel_alugado?: number;
   gas_canalizado_imovel_alugado?: number;
-  motivo_locacao?:
+  motivo_locacao:
   | "ABERTURA DE FILIAL"
   | "ABERTURA DE MATRIZ"
   | "TROCA LOCAL DE SEDE"
