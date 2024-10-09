@@ -34,7 +34,7 @@ export function EfetivacaoSeguroFiancaModal({
       >
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Detalhes de {efetivacao.nome_proprietario}
+            Detalhes de {efetivacao.nome_imobiliaria}
           </h2>
           <button
             onClick={onClose}

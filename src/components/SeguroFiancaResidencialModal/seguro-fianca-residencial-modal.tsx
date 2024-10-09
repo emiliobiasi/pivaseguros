@@ -34,7 +34,7 @@ export function SeguroFiancaResidencialModal({
       >
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Detalhes de {seguro.nome_residente}
+            Detalhes de {seguro.nome_imobiliaria_corretor}
           </h2>
           <button
             onClick={onClose}
