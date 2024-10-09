@@ -628,7 +628,7 @@ export function SeguroIncendioForms() {
                 <div className="grid gap-4 py-4">
                   <div className="space-y-2">
                     <Label htmlFor="plano_escolhido">
-                      Plano Escolhido <RequiredAsterisk />
+                      ASSISTÊNCIA <RequiredAsterisk />
                     </Label>
                     <Select
                       value={formData.plano_escolhido}
@@ -644,11 +644,11 @@ export function SeguroIncendioForms() {
                         <SelectItem value="PLANO PADRÃO GRATUITO">
                           Plano Padrão Gratuito
                         </SelectItem>
-                        <SelectItem value="PLANO INTERMEDIÁRIO (CUSTO DE R$30)">
-                          Plano Intermediário (Custo de R$30)
+                        <SelectItem value="PLANO INTERMEDIÁRIO">
+                          Plano Intermediário
                         </SelectItem>
-                        <SelectItem value="PLANO DE REDE REFERENCIADA (CUSTO DE R$125)">
-                          Plano de Rede Referenciada (Custo de R$125)
+                        <SelectItem value="PLANO DE REDE REFERENCIADA">
+                          Plano de Rede Referenciada
                         </SelectItem>
                       </SelectContent>
                     </Select>

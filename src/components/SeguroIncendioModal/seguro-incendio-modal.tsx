@@ -174,7 +174,7 @@ export function SeguroIncendioModal({
               Informações do Seguro
             </h3>
             <p>
-              <strong>Plano Escolhido:</strong> {seguro.plano_escolhido}
+              <strong>ASSISTÊNCIA</strong> {seguro.plano_escolhido}
             </p>
             <p>
               <strong>Valor do Seguro:</strong> R${" "}

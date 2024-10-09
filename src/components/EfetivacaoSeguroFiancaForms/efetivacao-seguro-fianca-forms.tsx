@@ -87,6 +87,7 @@ export function EfetivacaoSeguroFiancaForms() {
     valor_parcela: 0,
     seguradora: "",
     indice_reajuste: "",
+    vencimento_aluguel: 0,
     created: new Date(),
   });
 
@@ -1042,21 +1043,16 @@ export function EfetivacaoSeguroFiancaForms() {
 
                     <div className="space-y-2">
                       <Label htmlFor="vencimento_aluguel">
-                        Vencimento do Aluguel
+                        Dia do Vencimento do Aluguel <RequiredAsterisk />
                       </Label>
                       <Input
                         id="vencimento_aluguel"
                         name="vencimento_aluguel"
-                        type="date"
-                        value={
-                          formData.vencimento_aluguel instanceof Date
-                            ? formData.vencimento_aluguel
-                                .toISOString()
-                                .split("T")[0]
-                            : formData.vencimento_aluguel
-                        }
+                        type="number"
+                        value={formData.vencimento_aluguel || ""}
                         onChange={handleInputChange}
-                        placeholder="Selecione o início do contrato"
+                        placeholder="Dia do vencimento do aluguel"
+                        required
                       />
                     </div>
                   </div>

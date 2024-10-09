@@ -27,6 +27,15 @@ export type SeguroFiancaEmpresarialMais2Anos = {
   cidade: string;
   estado: string;
 
+  cep_empresa: string
+  endereco_empresa: string
+  bairro_empresa: string
+  numero_endereco_empresa: number
+  cidade_empresa: string
+  estado_empresa: string
+  complemento_empresa?: string;
+
+
   motivo_locacao:
     | "ABERTURA DE FILIAL"
     | "TROCA DO LOCAL"

@@ -25,8 +25,8 @@ export type SeguroIncendio = {
   responsabilidade_civil?: number;
   plano_escolhido:
     | "PLANO PADRÃO GRATUITO"
-    | "PLANO INTERMEDIÁRIO (CUSTO DE R$30)"
-    | "PLANO DE REDE REFERENCIADA (CUSTO DE R$125)";
+    | "PLANO INTERMEDIÁRIO"
+    | "PLANO DE REDE REFERENCIADA";
   valor_seguro: number;
   forma_pagamento:
     | "1X FATURA MENSAL - SEM ENTRADA"

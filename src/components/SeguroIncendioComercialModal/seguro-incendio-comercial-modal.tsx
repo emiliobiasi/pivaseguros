@@ -102,12 +102,12 @@ export function SeguroIncendioComercialModal({
               <strong>Estado:</strong> {seguro.estado}
             </p>
 
-            <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+            {/* <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
               Informações do Imóvel
             </h3>
             <p>
               <strong>Tipo do Imóvel:</strong> {seguro.tipo_imovel}
-            </p>
+            </p> */}
           </div>
 
           {/* Terceira Coluna */}
@@ -160,7 +160,7 @@ export function SeguroIncendioComercialModal({
               <strong>Atividade da Empresa:</strong> {seguro.atividade}
             </p>
             <p>
-              <strong>Plano Escolhido:</strong> {seguro.plano_escolhido}
+              <strong>ASSISTÊNCIA:</strong> {seguro.plano_escolhido}
             </p>
             <p>
               <strong>Valor do Seguro:</strong> R${" "}

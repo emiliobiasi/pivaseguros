@@ -135,7 +135,7 @@ export function EfetivacaoSeguroFiancaModal({
               <strong>Término do Contrato:</strong>{" "}
               {new Date(efetivacao.termino_contrato).toLocaleDateString()}
             </p>
-            
+
             <p>
               <strong>Valor da Parcela:</strong> R${" "}
               {formatValor(efetivacao.valor_parcela.toFixed(2))}
@@ -146,12 +146,9 @@ export function EfetivacaoSeguroFiancaModal({
             <p>
               <strong>Índice de Reajuste:</strong> {efetivacao.indice_reajuste}
             </p>
-            {efetivacao.vencimento_aluguel && (
-              <p>
-                <strong>Vencimento do Aluguel:</strong>{" "}
-                {new Date(efetivacao.vencimento_aluguel).toLocaleDateString()}
-              </p>
-            )}
+            <p>
+              <strong>Dia do Vencimento do Aluguel:</strong> {efetivacao.vencimento_aluguel}
+            </p>
           </div>
 
           {/* Segunda Coluna */}

@@ -50,6 +50,6 @@ export type EfetivacaoSeguroFianca = {
   valor_parcela: number;
   seguradora: string;
   indice_reajuste: string;
-  vencimento_aluguel?: Date;
+  vencimento_aluguel: number;
   created: Date;
 };

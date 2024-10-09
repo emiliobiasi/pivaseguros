@@ -118,32 +118,63 @@ export function SeguroFiancaEmpresarialMais2AnosModal({
 
           {/* Segunda Coluna */}
           <div className="space-y-4 bg-gray-100 p-4 rounded-lg">
-            <h3 className="text-lg font-semibold text-[#025d37]">
-              Endereço da Empresa
-            </h3>
-            <p>
-              <strong>CEP:</strong> {seguro.cep}
-            </p>
-            <p>
-              <strong>Endereço:</strong> {seguro.endereco}
-            </p>
-            <p>
-              <strong>Número:</strong> {seguro.numero_endereco}
-            </p>
-            {seguro.complemento && (
+          <>
+              <h3 className="text-lg font-semibold text-[#025d37]">
+                Endereço da Sede
+              </h3>
               <p>
-                <strong>Complemento:</strong> {seguro.complemento}
+                <strong>CEP:</strong> {seguro.cep_empresa}
               </p>
-            )}
-            <p>
-              <strong>Bairro:</strong> {seguro.bairro}
-            </p>
-            <p>
-              <strong>Cidade:</strong> {seguro.cidade}
-            </p>
-            <p>
-              <strong>Estado:</strong> {seguro.estado}
-            </p>
+              <p>
+                <strong>Endereço:</strong> {seguro.endereco_empresa}
+              </p>
+              <p>
+                <strong>Número:</strong> {seguro.numero_endereco_empresa}
+              </p>
+              {seguro.complemento && (
+                <p>
+                  <strong>Complemento:</strong> {seguro.complemento_empresa}
+                </p>
+              )}
+              <p>
+                <strong>Bairro:</strong> {seguro.bairro_empresa}
+              </p>
+              <p>
+                <strong>Cidade:</strong> {seguro.cidade_empresa}
+              </p>
+              <p>
+                <strong>Estado:</strong> {seguro.estado_empresa}
+              </p>
+            </>
+            
+            <>
+              <h3 className="text-lg font-semibold text-[#025d37]">
+                Endereço da Locação
+              </h3>
+              <p>
+                <strong>CEP:</strong> {seguro.cep}
+              </p>
+              <p>
+                <strong>Endereço:</strong> {seguro.endereco}
+              </p>
+              <p>
+                <strong>Número:</strong> {seguro.numero_endereco}
+              </p>
+              {seguro.complemento && (
+                <p>
+                  <strong>Complemento:</strong> {seguro.complemento}
+                </p>
+              )}
+              <p>
+                <strong>Bairro:</strong> {seguro.bairro}
+              </p>
+              <p>
+                <strong>Cidade:</strong> {seguro.cidade}
+              </p>
+              <p>
+                <strong>Estado:</strong> {seguro.estado}
+              </p>
+            </>
 
             {/* Informações da Locação */}
             <h3 className="text-lg font-semibold mt-6 text-[#025d37]">

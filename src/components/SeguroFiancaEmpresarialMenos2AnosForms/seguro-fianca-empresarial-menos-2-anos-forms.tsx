@@ -1339,24 +1339,27 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       </Select>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="cnpj_pessoa_fisica_nao_residencial">
-                        Informar CNPJ (Pessoa Física Não Residencial)
-                      </Label>
-                      <Input
-                        id="cnpj_pessoa_fisica_nao_residencial"
-                        name="cnpj_pessoa_fisica_nao_residencial"
-                        value={
-                          formData.cnpj_pessoa_fisica_nao_residencial || ""
-                        }
-                        onChange={handleInputChange}
-                        placeholder="Digite o CNPJ"
-                      />
-                    </div>
+                    {formData.alocacao_pretendida_constituida === "SIM" && (
+                      <div className="space-y-2">
+                        <Label htmlFor="cnpj_pessoa_fisica_nao_residencial">
+                          Informar CNPJ <RequiredAsterisk />
+                        </Label>
+                        <Input
+                          id="cnpj_pessoa_fisica_nao_residencial"
+                          name="cnpj_pessoa_fisica_nao_residencial"
+                          value={
+                            formData.cnpj_pessoa_fisica_nao_residencial || ""
+                          }
+                          onChange={handleInputChange}
+                          placeholder="Digite o CNPJ"
+                        />
+                      </div>
+                    )}
 
                     <div className="space-y-2">
                       <Label htmlFor="cnae_empresa">
-                        Qual será a atividade da empresa (CNAE)?
+                        Qual será a atividade da empresa (CNAE)?{" "}
+                        <RequiredAsterisk />
                       </Label>
                       <Input
                         id="cnae_empresa"
@@ -1406,7 +1409,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                     <div className="space-y-2">
                       <Label htmlFor="principais_produtos_servicos">
                         Quais serão os principais produtos/serviços fabricados,
-                        revendidos ou prestados?
+                        revendidos ou prestados? <RequiredAsterisk />
                       </Label>
                       <Input
                         id="principais_produtos_servicos"
@@ -1414,12 +1417,14 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         value={formData.principais_produtos_servicos || ""}
                         onChange={handleInputChange}
                         placeholder="Digite os principais produtos/serviços"
+                        required
                       />
                     </div>
 
                     <div className="space-y-2">
                       <Label htmlFor="xp_ramo_pretendido">
-                        Qual a experiência no ramo pretendido?
+                        Qual a experiência no ramo pretendido?{" "}
+                        <RequiredAsterisk />
                       </Label>
                       <Input
                         id="xp_ramo_pretendido"
@@ -1427,6 +1432,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         value={formData.xp_ramo_pretendido || ""}
                         onChange={handleInputChange}
                         placeholder="Descreva a experiência"
+                        required
                       />
                     </div>
 
@@ -1474,7 +1480,8 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                 <div className="grid gap-4 py-4">
                   <div className="space-y-2">
                     <Label htmlFor="onus">
-                      Possui Ônus? <RequiredAsterisk />
+                      Possui financiamentos e ou empréstimos?{" "}
+                      <RequiredAsterisk />
                     </Label>
                     <Select
                       value={formData.onus}
@@ -1497,14 +1504,14 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                     <>
                       <div className="space-y-2">
                         <Label htmlFor="detalhamento_onus">
-                          Detalhamento do Ônus
+                          Detalhamento do financiamento/empréstimo
                         </Label>
                         <Input
                           id="detalhamento_onus"
                           name="detalhamento_onus"
                           value={formData.detalhamento_onus || ""}
                           onChange={handleInputChange}
-                          placeholder="Descreva o ônus"
+                          placeholder="Detalhamento do financiamento/empréstimo"
                         />
                       </div>
 
@@ -1518,7 +1525,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                             name="tipo_qtd_parcela_a_1"
                             value={formData.tipo_qtd_parcela_a_1 || ""}
                             onChange={handleInputChange}
-                            placeholder="Descreva o ônus"
+                            placeholder="Detalhamento do financiamento/empréstimo"
                           />
                         </div>
                         <div className="space-y-2">
@@ -1530,7 +1537,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                             name="valor_parcela_a_1"
                             value={formData.valor_parcela_a_1 || ""}
                             onChange={handleInputChange}
-                            placeholder="Descreva o ônus"
+                            placeholder="Detalhamento do financiamento/empréstimo"
                           />
                         </div>
 
@@ -1543,7 +1550,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                             name="tipo_qtd_parcela_a_2"
                             value={formData.tipo_qtd_parcela_a_2 || ""}
                             onChange={handleInputChange}
-                            placeholder="Descreva o ônus"
+                            placeholder="Detalhamento do financiamento/empréstimo"
                           />
                         </div>
                         <div className="space-y-2">
@@ -1555,10 +1562,9 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                             name="valor_parcela_a_2"
                             value={formData.valor_parcela_a_2 || ""}
                             onChange={handleInputChange}
-                            placeholder="Descreva o ônus"
+                            placeholder="Detalhamento do financiamento/empréstimo"
                           />
                         </div>
-
 
                         {/* A3 ATÉ B3 */}
                         {/* <div className="space-y-2">
@@ -1570,7 +1576,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                             name="tipo_qtd_parcela_a_3"
                             value={formData.tipo_qtd_parcela_a_3 || ""}
                             onChange={handleInputChange}
-                            placeholder="Descreva o ônus"
+                            placeholder="Detalhamento do financiamento/empréstimo"
                           />
                         </div>
                         <div className="space-y-2">
@@ -1990,7 +1996,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="aluguel_imovel_alugado">
-                        Valor do Aluguel do Imóvel
+                        Valor do Aluguel
                       </Label>
                       <Input
                         id="aluguel_imovel_alugado"
@@ -2002,7 +2008,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="desp_ordinarias_cond_imovel_alugado">
-                        Despesas Ordinárias de Condomínio
+                        Valor do Condomínio
                       </Label>
                       <Input
                         id="desp_ordinarias_cond_imovel_alugado"
@@ -2016,7 +2022,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="iptu_imovel_alugado">
-                        Valor do IPTU do Imóvel
+                        Valor do IPTU mensal
                       </Label>
                       <Input
                         id="iptu_imovel_alugado"
@@ -2027,9 +2033,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="agua_imovel_alugado">
-                        Valor da Água do Imóvel
-                      </Label>
+                      <Label htmlFor="agua_imovel_alugado">Valor da Água</Label>
                       <Input
                         id="agua_imovel_alugado"
                         name="agua_imovel_alugado"
@@ -2039,7 +2043,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="luz_imovel_alugado">Valor da Luz do Imóvel</Label>
+                      <Label htmlFor="luz_imovel_alugado">Valor da Luz</Label>
                       <Input
                         id="luz_imovel_alugado"
                         name="luz_imovel_alugado"
@@ -2050,14 +2054,14 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="gas_canalizado_imovel_alugado">
-                       Valor do Gás Canalizado do Imóvel
+                        Valor do Gás
                       </Label>
                       <Input
                         id="gas_canalizado_imovel_alugado"
                         name="gas_canalizado_imovel_alugado"
                         value={formData.gas_canalizado_imovel_alugado || ""}
                         onChange={handleInputChange}
-                        placeholder="Digite o valor do gás canalizado"
+                        placeholder="Digite o valor do gás"
                       />
                     </div>
                     <div className="space-y-2">

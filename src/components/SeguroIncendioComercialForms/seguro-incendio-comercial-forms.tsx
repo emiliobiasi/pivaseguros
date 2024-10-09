@@ -69,7 +69,7 @@ export function SeguroIncendioComercialForms() {
     complemento: "",
     cidade: "",
     estado: "",
-    tipo_imovel: "CASA",
+    // tipo_imovel: "CASA",
     atividade: "",
     plano_escolhido: "PLANO PADRÃO GRATUITO",
     valor_seguro: 0,
@@ -516,7 +516,7 @@ export function SeguroIncendioComercialForms() {
 
               <TabsContent value="property">
                 <div className="grid gap-4 py-4">
-                  <div className="space-y-2">
+                  {/* <div className="space-y-2">
                     <Label htmlFor="tipo_imovel">
                       Tipo do Imóvel <RequiredAsterisk />
                     </Label>
@@ -535,8 +535,25 @@ export function SeguroIncendioComercialForms() {
                         <SelectItem value="APARTAMENTO">Apartamento</SelectItem>
                       </SelectContent>
                     </Select>
-                  </div>
+                  </div> */}
                   {/* Campos adicionais do imóvel */}
+
+                  <div className="space-y-2">
+                    <Label htmlFor="atividade">
+                      Atividade da Empresa <RequiredAsterisk />
+                    </Label>
+                    <Input
+                      id="atividade"
+                      name="atividade"
+                      type="text"
+                      value={formData.atividade || ""}
+                      onChange={handleInputChange}
+                      required
+                      placeholder="Digite a atividade da empresa"
+                      disabled={isLoading}
+                    />
+                  </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="incendio">Incêndio</Label>
@@ -617,24 +634,8 @@ export function SeguroIncendioComercialForms() {
               <TabsContent value="payment">
                 <div className="grid gap-4 py-4">
                   <div className="space-y-2">
-                    <Label htmlFor="atividade">
-                      Atividade da Empresa
-                      <RequiredAsterisk />
-                    </Label>
-                    <Input
-                      id="atividade"
-                      name="atividade"
-                      type="text"
-                      value={formData.atividade || ""}
-                      onChange={handleInputChange}
-                      required
-                      placeholder="Digite a atividade da empresa"
-                      disabled={isLoading}
-                    />
-                  </div>
-                  <div className="space-y-2">
                     <Label htmlFor="plano_escolhido">
-                      Plano Escolhido <RequiredAsterisk />
+                      ASSISTÊNCIA <RequiredAsterisk />
                     </Label>
                     <Select
                       value={formData.plano_escolhido}
@@ -650,11 +651,11 @@ export function SeguroIncendioComercialForms() {
                         <SelectItem value="PLANO PADRÃO GRATUITO">
                           Plano Padrão Gratuito
                         </SelectItem>
-                        <SelectItem value="PLANO INTERMEDIÁRIO (CUSTO DE R$30)">
-                          Plano Intermediário (Custo de R$30)
+                        <SelectItem value="PLANO INTERMEDIÁRIO ">
+                          Plano Intermediário 
                         </SelectItem>
-                        <SelectItem value="PLANO DE REDE REFERENCIADA (CUSTO DE R$125)">
-                          Plano de Rede Referenciada (Custo de R$125)
+                        <SelectItem value="PLANO DE REDE REFERENCIADA">
+                          Plano de Rede Referenciada
                         </SelectItem>
                       </SelectContent>
                     </Select>
