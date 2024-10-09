@@ -21,7 +21,10 @@ const Home = () => {
   const hourDeg = (hours % 12) * 30 + minutes * 0.5; // Movimento suave
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-[#008834] to-green-500 p-4">
+    <div
+      className="flex flex-col justify-center items-center bg-gradient-to-br from-[#008834] to-green-500 p-4"
+      style={{ minHeight: "100%" }}
+    >
       {/* Saudação de boas-vindas */}
       <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-8 drop-shadow-lg text-center">
         Bem-vindo de volta!
@@ -29,8 +32,8 @@ const Home = () => {
 
       {/* Relógio */}
       <div className="relative bg-gray-900 bg-opacity-50 text-white rounded-[40px] shadow-2xl p-6 flex flex-col items-center w-full max-w-md">
-        {/* Efeito de brilho ao redor do relógio */}
         <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-[#008834] rounded-[40px] blur-2xl opacity-60 animate-pulse"></div>
+        {/* Efeito de brilho ao redor do relógio */}
 
         {/* Relógio Analógico 3D */}
         <div

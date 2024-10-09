@@ -12,21 +12,26 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import pivaLogo from "@/assets/logo.png";
+import { Loader2 } from "lucide-react";
 
 export function LoginFormCard() {
   const { loginWithEmail } = useAuth(); // Chama o hook de autenticação
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false); // Estado de loading
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       setError(null);
+      setLoading(true); // Inicia o loading
       await loginWithEmail(email, password);
     } catch (error) {
       console.error("Erro de login", error);
       setError("Falha ao logar. Por favor verifique suas credenciais.");
+    } finally {
+      setLoading(false); // Encerra o loading
     }
   };
 
@@ -62,6 +67,7 @@ export function LoginFormCard() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  disabled={loading} // Desabilita durante o loading
                 />
                 <MailIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               </div>
@@ -77,6 +83,7 @@ export function LoginFormCard() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  disabled={loading} // Desabilita durante o loading
                 />
                 <LockIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               </div>
@@ -86,10 +93,15 @@ export function LoginFormCard() {
           <CardFooter className="flex justify-end">
             <Button
               type="submit"
-              className="w-full text-white mt-4 py-2 px-3 rounded"
+              className="w-full text-white mt-4 py-2 px-3 rounded flex items-center justify-center"
               variant="piva"
+              disabled={loading} // Desabilita o botão durante o loading
             >
-              Entrar
+              {loading ? (
+                <Loader2 className="animate-spin h-5 w-5" /> // Ícone de loading
+              ) : (
+                "Entrar"
+              )}
             </Button>
           </CardFooter>
         </form>

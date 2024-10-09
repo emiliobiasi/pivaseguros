@@ -70,7 +70,7 @@ export async function fetchSeguroFiancaEmpresarialMenos2AnosList(
   try {
     const actionFilter = filter ? `acao = "${filter}"` : "";
     const searchFilter = searchTerm
-      ? `(nome_pretendente ~ "${searchTerm}" || nome_franqueadora ~ "${searchTerm}" || id_numero ~ "${searchTerm}")`
+      ? `(nome_pretendente ~ "${searchTerm}" || motivo_locacao ~ "${searchTerm}" || id_numero ~ "${searchTerm}")`
       : "";
 
     // Concatena os filtros de busca e ação, se houver

@@ -1,30 +1,24 @@
-// ************************************************************
-// DESCOMENTAR TODOS OS IMPORTS E COMPONENTES PARA FUNCIONAR
-// ************************************************************
-
-
-/* eslint-disable @typescript-eslint/no-unused-vars */ // TIRAR ISSOOOOOOO
-import { SeguroFiancaEmpresarialMais2Anos } from "@/types/SeguroFiancaEmpresarialMais2Anos";
+import { SeguroFiancaEmpresarialMenos2Anos } from "@/types/SeguroFiancaEmpresarialMenos2Anos";
 import { useEffect, useState, useRef, useCallback } from "react";
 import {
-  fetchSeguroFiancaEmpresarialMais2AnosList,
-  subscribeToSeguroFiancaEmpresarialMais2AnosUpdates,
-  unsubscribeFromSeguroFiancaEmpresarialMais2AnosUpdates,
-} from "@/utils/api/SeguroFiancaEmpresarialMais2AnosService";
-// import { Slider } from "@/components/ui/slider"; 
+  fetchSeguroFiancaEmpresarialMenos2AnosList,
+  subscribeToSeguroFiancaEmpresarialMenos2AnosUpdates,
+  unsubscribeFromSeguroFiancaEmpresarialMenos2AnosUpdates,
+} from "@/utils/api/SeguroFiancaEmpresarialMenos2AnosService";
+import { Slider } from "@/components/ui/slider";
 import { TopBar } from "@/components/TopBar/top-bar";
-// import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { RecordSubscription } from "pocketbase";
 import { toast } from "sonner";
-// import { FiancaEmpresarialMais2AnosTable } from "@/components/FiancaEmpresarialMais2AnosTable/fianca-empresarial-mais-2-anos-table";
+import { FiancaEmpresarialMenos2AnosTable } from "@/components/FiancaEmpresarialMenos2AnosTable/fianca-empresarial-menos-2-anos-table";
 
 export function DashboardFiancaEmpresarialMenos2Anos() {
-  const [data, setData] = useState<SeguroFiancaEmpresarialMais2Anos[]>([]);
-  const [page, setPage] = useState(1); 
-  const [totalPages, setTotalPages] = useState(0); 
-  const [limit, setLimit] = useState(10); 
-  const [searchTerm, setSearchTerm] = useState(""); 
-  const [filter, setFilter] = useState<"PENDENTE" | "FINALIZADO" | "">(""); 
+  const [data, setData] = useState<SeguroFiancaEmpresarialMenos2Anos[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [limit, setLimit] = useState(10);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filter, setFilter] = useState<"PENDENTE" | "FINALIZADO" | "">("");
 
   const filterRef = useRef(filter);
   const searchTermRef = useRef(searchTerm);
@@ -37,12 +31,13 @@ export function DashboardFiancaEmpresarialMenos2Anos() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { items, totalPages } = await fetchSeguroFiancaEmpresarialMais2AnosList(
-          page,
-          limit,
-          searchTerm,
-          filter 
-        );
+        const { items, totalPages } =
+          await fetchSeguroFiancaEmpresarialMenos2AnosList(
+            page,
+            limit,
+            searchTerm,
+            filter
+          );
         setData(items);
         setTotalPages(totalPages);
       } catch (error) {
@@ -50,10 +45,10 @@ export function DashboardFiancaEmpresarialMenos2Anos() {
       }
     };
     fetchData();
-  }, [page, limit, searchTerm, filter]); 
+  }, [page, limit, searchTerm, filter]);
 
-  const handleSeguroFiancaEmpresarialMais2AnosChange = useCallback(
-    (e: RecordSubscription<SeguroFiancaEmpresarialMais2Anos>) => {
+  const handleSeguroFiancaEmpresarialMenos2AnosChange = useCallback(
+    (e: RecordSubscription<SeguroFiancaEmpresarialMenos2Anos>) => {
       const { action, record } = e;
 
       const currentFilter = filterRef.current;
@@ -62,10 +57,10 @@ export function DashboardFiancaEmpresarialMenos2Anos() {
       const matchesFilter =
         (currentFilter === "" || record.acao === currentFilter) &&
         (currentSearchTerm === "" ||
-          record.nome_empresa
+          record.nome_pretendente
             .toLowerCase()
             .includes(currentSearchTerm.toLowerCase()) ||
-          record.email_empresa
+          record.motivo_locacao
             .toLowerCase()
             .includes(currentSearchTerm.toLowerCase()) ||
           record.id_numero.toString().includes(currentSearchTerm));
@@ -108,14 +103,14 @@ export function DashboardFiancaEmpresarialMenos2Anos() {
   );
 
   useEffect(() => {
-    subscribeToSeguroFiancaEmpresarialMais2AnosUpdates(
-      handleSeguroFiancaEmpresarialMais2AnosChange
+    subscribeToSeguroFiancaEmpresarialMenos2AnosUpdates(
+      handleSeguroFiancaEmpresarialMenos2AnosChange
     );
 
     return () => {
-      unsubscribeFromSeguroFiancaEmpresarialMais2AnosUpdates();
+      unsubscribeFromSeguroFiancaEmpresarialMenos2AnosUpdates();
     };
-  }, [handleSeguroFiancaEmpresarialMais2AnosChange]);
+  }, [handleSeguroFiancaEmpresarialMenos2AnosChange]);
 
   const handleNextPage = () => {
     if (page < totalPages) setPage(page + 1);
@@ -127,7 +122,7 @@ export function DashboardFiancaEmpresarialMenos2Anos() {
 
   const handleSliderChange = (value: number[]) => {
     setLimit(value[0]);
-    setPage(1); 
+    setPage(1);
   };
 
   const handleFilterChange = (newFilter: "PENDENTE" | "FINALIZADO" | "") => {
@@ -143,7 +138,7 @@ export function DashboardFiancaEmpresarialMenos2Anos() {
         setSearchTerm={setSearchTerm}
       />
 
-      {/* <div>
+      <div>
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between">
           <div className="flex space-x-4">
             <Button
@@ -197,7 +192,7 @@ export function DashboardFiancaEmpresarialMenos2Anos() {
           </div>
         </div>
 
-        <FiancaEmpresarialMais2AnosTable data={data} />
+        <FiancaEmpresarialMenos2AnosTable data={data} />
 
         <div className="flex justify-center mt-6 space-x-4">
           <Button
@@ -233,8 +228,7 @@ export function DashboardFiancaEmpresarialMenos2Anos() {
             Próxima Página
           </Button>
         </div>
-      </div> */}
-
+      </div>
     </div>
   );
 }
