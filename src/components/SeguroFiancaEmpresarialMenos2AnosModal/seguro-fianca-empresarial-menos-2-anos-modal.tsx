@@ -120,13 +120,17 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                 {seguro.data_expedicao_rg_conjuge && (
                   <p>
                     <strong>Data de Expedição do RG do Cônjuge:</strong>{" "}
-                    {new Date(seguro.data_expedicao_rg_conjuge).toLocaleDateString()}
+                    {new Date(
+                      seguro.data_expedicao_rg_conjuge
+                    ).toLocaleDateString()}
                   </p>
                 )}
                 {seguro.data_nascimento_conjuge && (
                   <p>
                     <strong>Data de Nascimento do Cônjuge:</strong>{" "}
-                    {new Date(seguro.data_nascimento_conjuge).toLocaleDateString()}
+                    {new Date(
+                      seguro.data_nascimento_conjuge
+                    ).toLocaleDateString()}
                   </p>
                 )}
                 {seguro.orgao_emissor_conjuge && (
@@ -148,7 +152,8 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
             </p>
             {seguro.cnpj_pessoa_fisica_nao_residencial && (
               <p>
-                <strong>CNPJ:</strong> {seguro.cnpj_pessoa_fisica_nao_residencial}
+                <strong>CNPJ:</strong>{" "}
+                {seguro.cnpj_pessoa_fisica_nao_residencial}
               </p>
             )}
             {seguro.cnae_empresa && (
@@ -161,7 +166,8 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
             </p>
             {seguro.nome_franqueadora && (
               <p>
-                <strong>Nome da Franqueadora:</strong> {seguro.nome_franqueadora}
+                <strong>Nome da Franqueadora:</strong>{" "}
+                {seguro.nome_franqueadora}
               </p>
             )}
             {seguro.principais_produtos_servicos && (
@@ -177,7 +183,9 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
               </p>
             )}
             {/* Sócios */}
-            {(seguro.cpf_socio_1 || seguro.cpf_socio_2 || seguro.cpf_socio_3) && (
+            {(seguro.cpf_socio_1 ||
+              seguro.cpf_socio_2 ||
+              seguro.cpf_socio_3) && (
               <>
                 <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
                   Sócios
@@ -279,7 +287,8 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
               Informações Profissionais
             </h3>
             <p>
-              <strong>Vínculo Empregatício:</strong> {seguro.vinculo_empregaticio}
+              <strong>Vínculo Empregatício:</strong>{" "}
+              {seguro.vinculo_empregaticio}
             </p>
             <p>
               <strong>Profissão:</strong> {seguro.profissao}
@@ -305,22 +314,37 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                 <strong>Ramal:</strong> {seguro.ramal}
               </p>
             )}
-            {seguro.salario !== undefined && (
+
+            {seguro.salario !== undefined && seguro.salario !== 0 ? (
               <p>
                 <strong>Salário:</strong> R${" "}
                 {formatValor(seguro.salario.toFixed(2))}
               </p>
+            ) : (
+              <p>
+                <strong>Salário:</strong> Não Informado
+              </p>
             )}
-            {seguro.outros_rendimentos !== undefined && (
+            {seguro.outros_rendimentos !== undefined &&
+            seguro.outros_rendimentos !== 0 ? (
               <p>
                 <strong>Outros Rendimentos:</strong> R${" "}
                 {formatValor(seguro.outros_rendimentos.toFixed(2))}
               </p>
+            ) : (
+              <p>
+                <strong>Outros Rendimentos:</strong> Não Informado
+              </p>
             )}
-            {seguro.total_rendimentos_mensais !== undefined && (
+            {seguro.total_rendimentos_mensais !== undefined &&
+            seguro.total_rendimentos_mensais !== 0 ? (
               <p>
                 <strong>Total de Rendimentos Mensais:</strong> R${" "}
                 {formatValor(seguro.total_rendimentos_mensais.toFixed(2))}
+              </p>
+            ) : (
+              <p>
+                <strong>Total de Rendimentos Mensais:</strong> Não Informado
               </p>
             )}
 
@@ -361,10 +385,14 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                     <strong>Ramal:</strong> {seguro.ramal_conjuge}
                   </p>
                 )}
-                {seguro.salario_conjuge !== undefined && (
+                {seguro.salario_conjuge !== undefined && seguro.salario_conjuge !== 0 ? (
                   <p>
                     <strong>Salário:</strong> R${" "}
                     {formatValor(seguro.salario_conjuge.toFixed(2))}
+                  </p>
+                ) : (
+                  <p>
+                    <strong>Salário:</strong> Não Informado
                   </p>
                 )}
                 {seguro.outros_rendimentos_conjuge !== undefined && (
@@ -386,6 +414,7 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
           </div>
 
           {/* Terceira Coluna */}
+
           <div className="space-y-4 bg-gray-100 p-4 rounded-lg">
             {/* Investimento Inicial */}
             <h3 className="text-lg font-semibold text-[#025d37]">
@@ -395,94 +424,102 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
               <strong>Investimento para Abertura:</strong>{" "}
               {seguro.investimento_abertura}
             </p>
-            {seguro.compra_produto_cap_inicial !== undefined && (
-              <p>
-                <strong>Compra de Produto (Capital Inicial):</strong> R${" "}
-                {formatValor(seguro.compra_produto_cap_inicial.toFixed(2))}
-              </p>
-            )}
-            {seguro.obras_reformas_cap_inicial !== undefined && (
-              <p>
-                <strong>Obras e Reformas (Capital Inicial):</strong> R${" "}
-                {formatValor(seguro.obras_reformas_cap_inicial.toFixed(2))}
-              </p>
-            )}
-            {seguro.maquinas_cap_inicial !== undefined && (
-              <p>
-                <strong>Máquinas (Capital Inicial):</strong> R${" "}
-                {formatValor(seguro.maquinas_cap_inicial.toFixed(2))}
-              </p>
-            )}
-            {seguro.despesas_legais_cap_inicial !== undefined && (
-              <p>
-                <strong>Despesas Legais (Capital Inicial):</strong> R${" "}
-                {formatValor(seguro.despesas_legais_cap_inicial.toFixed(2))}
-              </p>
-            )}
-            {seguro.moveis_cap_inicial !== undefined && (
-              <p>
-                <strong>Móveis (Capital Inicial):</strong> R${" "}
-                {formatValor(seguro.moveis_cap_inicial.toFixed(2))}
-              </p>
-            )}
-            {seguro.cursos_cap_inicial !== undefined && (
-              <p>
-                <strong>Cursos (Capital Inicial):</strong> R${" "}
-                {formatValor(seguro.cursos_cap_inicial.toFixed(2))}
-              </p>
-            )}
-            {seguro.estoques_cap_inicial !== undefined && (
-              <p>
-                <strong>Estoques (Capital Inicial):</strong> R${" "}
-                {formatValor(seguro.estoques_cap_inicial.toFixed(2))}
-              </p>
-            )}
-            {seguro.divulgacao_cap_inicial !== undefined && (
-              <p>
-                <strong>Divulgação (Capital Inicial):</strong> R${" "}
-                {formatValor(seguro.divulgacao_cap_inicial.toFixed(2))}
-              </p>
-            )}
 
-            {/* Capital de Giro */}
-            <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
-              Capital de Giro
-            </h3>
-            {seguro.reposicao_material_cap_giro !== undefined && (
-              <p>
-                <strong>Reposição de Material:</strong> R${" "}
-                {formatValor(seguro.reposicao_material_cap_giro.toFixed(2))}
-              </p>
-            )}
-            {seguro.consumo_cap_giro !== undefined && (
-              <p>
-                <strong>Consumo:</strong> R${" "}
-                {formatValor(seguro.consumo_cap_giro.toFixed(2))}
-              </p>
-            )}
-            {seguro.reposicao_estoque_cap_giro !== undefined && (
-              <p>
-                <strong>Reposição de Estoque:</strong> R${" "}
-                {formatValor(seguro.reposicao_estoque_cap_giro.toFixed(2))}
-              </p>
-            )}
-            {seguro.folha_pagamento_cap_giro !== undefined && (
-              <p>
-                <strong>Folha de Pagamento:</strong> R${" "}
-                {formatValor(seguro.folha_pagamento_cap_giro.toFixed(2))}
-              </p>
-            )}
-            {seguro.financiamento_vendas_cap_giro !== undefined && (
-              <p>
-                <strong>Financiamento de Vendas:</strong> R${" "}
-                {formatValor(seguro.financiamento_vendas_cap_giro.toFixed(2))}
-              </p>
-            )}
-            {seguro.impostos_taxas_cap_giro !== undefined && (
-              <p>
-                <strong>Impostos e Taxas:</strong> R${" "}
-                {formatValor(seguro.impostos_taxas_cap_giro.toFixed(2))}
-              </p>
+            {seguro.investimento_abertura === "SIM" && (
+              <>
+                {/* ******************* */}
+                {seguro.compra_produto_cap_inicial !== undefined && (
+                  <p>
+                    <strong>Compra de Produto (Capital Inicial):</strong> R${" "}
+                    {formatValor(seguro.compra_produto_cap_inicial.toFixed(2))}
+                  </p>
+                )}
+                {seguro.obras_reformas_cap_inicial !== undefined && (
+                  <p>
+                    <strong>Obras e Reformas (Capital Inicial):</strong> R${" "}
+                    {formatValor(seguro.obras_reformas_cap_inicial.toFixed(2))}
+                  </p>
+                )}
+                {seguro.maquinas_cap_inicial !== undefined && (
+                  <p>
+                    <strong>Máquinas (Capital Inicial):</strong> R${" "}
+                    {formatValor(seguro.maquinas_cap_inicial.toFixed(2))}
+                  </p>
+                )}
+                {seguro.despesas_legais_cap_inicial !== undefined && (
+                  <p>
+                    <strong>Despesas Legais (Capital Inicial):</strong> R${" "}
+                    {formatValor(seguro.despesas_legais_cap_inicial.toFixed(2))}
+                  </p>
+                )}
+                {seguro.moveis_cap_inicial !== undefined && (
+                  <p>
+                    <strong>Móveis (Capital Inicial):</strong> R${" "}
+                    {formatValor(seguro.moveis_cap_inicial.toFixed(2))}
+                  </p>
+                )}
+                {seguro.cursos_cap_inicial !== undefined && (
+                  <p>
+                    <strong>Cursos (Capital Inicial):</strong> R${" "}
+                    {formatValor(seguro.cursos_cap_inicial.toFixed(2))}
+                  </p>
+                )}
+                {seguro.estoques_cap_inicial !== undefined && (
+                  <p>
+                    <strong>Estoques (Capital Inicial):</strong> R${" "}
+                    {formatValor(seguro.estoques_cap_inicial.toFixed(2))}
+                  </p>
+                )}
+                {seguro.divulgacao_cap_inicial !== undefined && (
+                  <p>
+                    <strong>Divulgação (Capital Inicial):</strong> R${" "}
+                    {formatValor(seguro.divulgacao_cap_inicial.toFixed(2))}
+                  </p>
+                )}
+
+                {/* Capital de Giro */}
+                <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+                  Capital de Giro
+                </h3>
+                {seguro.reposicao_material_cap_giro !== undefined && (
+                  <p>
+                    <strong>Reposição de Material:</strong> R${" "}
+                    {formatValor(seguro.reposicao_material_cap_giro.toFixed(2))}
+                  </p>
+                )}
+                {seguro.consumo_cap_giro !== undefined && (
+                  <p>
+                    <strong>Consumo:</strong> R${" "}
+                    {formatValor(seguro.consumo_cap_giro.toFixed(2))}
+                  </p>
+                )}
+                {seguro.reposicao_estoque_cap_giro !== undefined && (
+                  <p>
+                    <strong>Reposição de Estoque:</strong> R${" "}
+                    {formatValor(seguro.reposicao_estoque_cap_giro.toFixed(2))}
+                  </p>
+                )}
+                {seguro.folha_pagamento_cap_giro !== undefined && (
+                  <p>
+                    <strong>Folha de Pagamento:</strong> R${" "}
+                    {formatValor(seguro.folha_pagamento_cap_giro.toFixed(2))}
+                  </p>
+                )}
+                {seguro.financiamento_vendas_cap_giro !== undefined && (
+                  <p>
+                    <strong>Financiamento de Vendas:</strong> R${" "}
+                    {formatValor(
+                      seguro.financiamento_vendas_cap_giro.toFixed(2)
+                    )}
+                  </p>
+                )}
+                {seguro.impostos_taxas_cap_giro !== undefined && (
+                  <p>
+                    <strong>Impostos e Taxas:</strong> R${" "}
+                    {formatValor(seguro.impostos_taxas_cap_giro.toFixed(2))}
+                  </p>
+                )}
+              </>
             )}
 
             {/* Endereço do Imóvel Alugado */}
@@ -506,7 +543,8 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
             )}
             {seguro.complemento_imovel_alugado && (
               <p>
-                <strong>Complemento:</strong> {seguro.complemento_imovel_alugado}
+                <strong>Complemento:</strong>{" "}
+                {seguro.complemento_imovel_alugado}
               </p>
             )}
             {seguro.bairro_imovel_alugado && (
@@ -583,91 +621,102 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
             <p>
               <strong>Possui Ônus:</strong> {seguro.onus}
             </p>
-            {seguro.detalhamento_onus && (
-              <p>
-                <strong>Detalhamento dos Ônus:</strong> {seguro.detalhamento_onus}
-              </p>
-            )}
-            {(seguro.tipo_qtd_parcela_a_1 || seguro.valor_parcela_a_1) && (
+
+            {seguro.onus === "SIM" && (
               <>
-                <h4 className="text-md font-semibold mt-4">Parcelas Tipo A</h4>
-                {seguro.tipo_qtd_parcela_a_1 && (
+                {seguro.detalhamento_onus && (
                   <p>
-                    <strong>Quantidade de Parcelas Tipo A1:</strong>{" "}
-                    {seguro.tipo_qtd_parcela_a_1}
+                    <strong>Detalhamento dos Ônus:</strong>{" "}
+                    {seguro.detalhamento_onus}
                   </p>
                 )}
-                {seguro.valor_parcela_a_1 !== undefined && (
-                  <p>
-                    <strong>Valor da Parcela A1:</strong> R${" "}
-                    {formatValor(seguro.valor_parcela_a_1.toFixed(2))}
-                  </p>
+
+                {(seguro.tipo_qtd_parcela_a_1 || seguro.valor_parcela_a_1) && (
+                  <>
+                    <h4 className="text-md font-semibold mt-4">
+                      Parcelas Tipo A
+                    </h4>
+                    {seguro.tipo_qtd_parcela_a_1 && (
+                      <p>
+                        <strong>Quantidade de Parcelas Tipo A1:</strong>{" "}
+                        {seguro.tipo_qtd_parcela_a_1}
+                      </p>
+                    )}
+                    {seguro.valor_parcela_a_1 !== undefined && (
+                      <p>
+                        <strong>Valor da Parcela A1:</strong> R${" "}
+                        {formatValor(seguro.valor_parcela_a_1.toFixed(2))}
+                      </p>
+                    )}
+                    {seguro.tipo_qtd_parcela_a_2 && (
+                      <p>
+                        <strong>Quantidade de Parcelas Tipo A2:</strong>{" "}
+                        {seguro.tipo_qtd_parcela_a_2}
+                      </p>
+                    )}
+                    {seguro.valor_parcela_a_2 !== undefined && (
+                      <p>
+                        <strong>Valor da Parcela A2:</strong> R${" "}
+                        {formatValor(seguro.valor_parcela_a_2.toFixed(2))}
+                      </p>
+                    )}
+                    {/* {seguro.tipo_qtd_parcela_a_3 && (
+                      <p>
+                        <strong>Quantidade de Parcelas Tipo A3:</strong>{" "}
+                        {seguro.tipo_qtd_parcela_a_3}
+                      </p>
+                    )}
+                    {seguro.valor_parcela_a_3 !== undefined && (
+                      <p>
+                        <strong>Valor da Parcela A3:</strong> R${" "}
+                        {formatValor(seguro.valor_parcela_a_3.toFixed(2))}
+                      </p>
+                    )} */}
+                  </>
                 )}
-                {seguro.tipo_qtd_parcela_a_2 && (
-                  <p>
-                    <strong>Quantidade de Parcelas Tipo A2:</strong>{" "}
-                    {seguro.tipo_qtd_parcela_a_2}
-                  </p>
-                )}
-                {seguro.valor_parcela_a_2 !== undefined && (
-                  <p>
-                    <strong>Valor da Parcela A2:</strong> R${" "}
-                    {formatValor(seguro.valor_parcela_a_2.toFixed(2))}
-                  </p>
-                )}
-                {seguro.tipo_qtd_parcela_a_3 && (
-                  <p>
-                    <strong>Quantidade de Parcelas Tipo A3:</strong>{" "}
-                    {seguro.tipo_qtd_parcela_a_3}
-                  </p>
-                )}
-                {seguro.valor_parcela_a_3 !== undefined && (
-                  <p>
-                    <strong>Valor da Parcela A3:</strong> R${" "}
-                    {formatValor(seguro.valor_parcela_a_3.toFixed(2))}
-                  </p>
-                )}
-              </>
-            )}
-            {(seguro.tipo_qtd_parcela_b_1 || seguro.valor_parcela_b_1) && (
-              <>
-                <h4 className="text-md font-semibold mt-4">Parcelas Tipo B</h4>
-                {seguro.tipo_qtd_parcela_b_1 && (
-                  <p>
-                    <strong>Quantidade de Parcelas Tipo B1:</strong>{" "}
-                    {seguro.tipo_qtd_parcela_b_1}
-                  </p>
-                )}
-                {seguro.valor_parcela_b_1 !== undefined && (
-                  <p>
-                    <strong>Valor da Parcela B1:</strong> R${" "}
-                    {formatValor(seguro.valor_parcela_b_1.toFixed(2))}
-                  </p>
-                )}
-                {seguro.tipo_qtd_parcela_b_2 && (
-                  <p>
-                    <strong>Quantidade de Parcelas Tipo B2:</strong>{" "}
-                    {seguro.tipo_qtd_parcela_b_2}
-                  </p>
-                )}
-                {seguro.valor_parcela_b_2 !== undefined && (
-                  <p>
-                    <strong>Valor da Parcela B2:</strong> R${" "}
-                    {formatValor(seguro.valor_parcela_b_2.toFixed(2))}
-                  </p>
-                )}
-                {seguro.tipo_qtd_parcela_b_3 && (
-                  <p>
-                    <strong>Quantidade de Parcelas Tipo B3:</strong>{" "}
-                    {seguro.tipo_qtd_parcela_b_3}
-                  </p>
-                )}
-                {seguro.valor_parcela_b_3 !== undefined && (
-                  <p>
-                    <strong>Valor da Parcela B3:</strong> R${" "}
-                    {formatValor(seguro.valor_parcela_b_3.toFixed(2))}
-                  </p>
-                )}
+                {/* {(seguro.tipo_qtd_parcela_b_1 || seguro.valor_parcela_b_1) && (
+                  <>
+                    <h4 className="text-md font-semibold mt-4">
+                      Parcelas Tipo B
+                    </h4>
+                    {seguro.tipo_qtd_parcela_b_1 && (
+                      <p>
+                        <strong>Quantidade de Parcelas Tipo B1:</strong>{" "}
+                        {seguro.tipo_qtd_parcela_b_1}
+                      </p>
+                    )}
+                    {seguro.valor_parcela_b_1 !== undefined && (
+                      <p>
+                        <strong>Valor da Parcela B1:</strong> R${" "}
+                        {formatValor(seguro.valor_parcela_b_1.toFixed(2))}
+                      </p>
+                    )}
+                    {seguro.tipo_qtd_parcela_b_2 && (
+                      <p>
+                        <strong>Quantidade de Parcelas Tipo B2:</strong>{" "}
+                        {seguro.tipo_qtd_parcela_b_2}
+                      </p>
+                    )}
+                    {seguro.valor_parcela_b_2 !== undefined && (
+                      <p>
+                        <strong>Valor da Parcela B2:</strong> R${" "}
+                        {formatValor(seguro.valor_parcela_b_2.toFixed(2))}
+                      </p>
+                    )}
+                    {seguro.tipo_qtd_parcela_b_3 && (
+                      <p>
+                        <strong>Quantidade de Parcelas Tipo B3:</strong>{" "}
+                        {seguro.tipo_qtd_parcela_b_3}
+                      </p>
+                    )}
+                    {seguro.valor_parcela_b_3 !== undefined && (
+                      <p>
+                        <strong>Valor da Parcela B3:</strong> R${" "}
+                        {formatValor(seguro.valor_parcela_b_3.toFixed(2))}
+                      </p>
+                    )}
+                  </>
+                )} */}
               </>
             )}
 
