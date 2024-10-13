@@ -3,6 +3,7 @@ export type SeguroFiancaResidencial = {
   id_numero: number;
   acao: "PENDENTE" | "FINALIZADO";
   nome_imobiliaria_corretor: string;
+
   cpf_residente: string;
   nome_residente: string;
   telefone: string;
@@ -10,12 +11,22 @@ export type SeguroFiancaResidencial = {
   profissao: string;
   renda_mensal?: number;
   data_nascimento: Date;
+  estado_civil_residente: "SOLTEIRO" | "CASADO" | "VIÚVO" | "DIVORCIADO";
+  
+  nome_residente_nao?: string;
+  cpf_residente_nao?: string;
+  data_nascimento_residente_nao: Date;
+  profissao_residente_nao?: string;
+  renda_mensal_residente_nao?: number;
+  
+  telefone_residente_nao?: string;
+  email_residente_nao?: string;
+
   residir_imovel: "SIM" | "NÃO";
   responder_financeiramente: "SIM" | "NÃO";
-  estado_civil_residente: "SOLTEIRO" | "CASADO" | "VIÚVO" | "DIVORCIADO";
   nome_conjuge?: string;
   cpf_conjuge: string;
-  renda_composta_conjuge: "SIM" | "NÃO";
+  renda_composta_conjuge: "SIM" | "NÃO" ;
   profissao_conjuge_opcional?: string;
   telefone_conjuge?: string;
   email_conjuge?: string;

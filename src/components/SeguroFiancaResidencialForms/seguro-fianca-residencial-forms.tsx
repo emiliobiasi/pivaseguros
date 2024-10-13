@@ -68,7 +68,7 @@ export function SeguroFiancaResidencialForms() {
     residir_imovel: "SIM",
     responder_financeiramente: "SIM",
     estado_civil_residente: "SOLTEIRO",
-    renda_composta_conjuge: "SIM",
+    renda_composta_conjuge: "NÃO",
     cep_locacao: "",
     endereco_locacao: "",
     bairro_locacao: "",
@@ -80,6 +80,7 @@ export function SeguroFiancaResidencialForms() {
     multa_recisao: "SIM",
     pintura_interna: "SIM",
     pintura_externa: "SIM",
+    data_nascimento_residente_nao: new Date(),
     created: new Date(),
   });
 
@@ -87,9 +88,17 @@ export function SeguroFiancaResidencialForms() {
     const { name, value } = e.target;
     let formattedValue = value;
 
-    if (name === "telefone" || name === "telefone_conjuge") {
+    if (
+      name === "telefone" ||
+      name === "telefone_conjuge" ||
+      name === "telefone_residente_nao"
+    ) {
       formattedValue = formatTelefone(value);
-    } else if (name === "cpf_residente" || name === "cpf_conjuge") {
+    } else if (
+      name === "cpf_residente" ||
+      name === "cpf_conjuge" ||
+      name === "cpf_residente_nao"
+    ) {
       formattedValue = formatCPF(value);
     } else if (name === "cep_locacao") {
       formattedValue = formatCEP(value);
@@ -320,11 +329,11 @@ export function SeguroFiancaResidencialForms() {
                     </div>
                   </div>
 
-                  {/* Informações Pessoais do Residente */}
+                  {/* Informações Pessoais do Pretendente */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="nome_residente">
-                        Nome do Residente <RequiredAsterisk />
+                        Nome do Pretendente <RequiredAsterisk />
                       </Label>
                       <Input
                         id="nome_residente"
@@ -332,12 +341,12 @@ export function SeguroFiancaResidencialForms() {
                         value={formData.nome_residente}
                         onChange={handleInputChange}
                         required
-                        placeholder="Digite o nome do residente"
+                        placeholder="Digite o nome do pretendente"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="cpf_locatario">
-                        CPF do Residente <RequiredAsterisk />
+                      <Label htmlFor="cpf_residente">
+                        CPF do Pretendente <RequiredAsterisk />
                       </Label>
                       <Input
                         id="cpf_residente"
@@ -345,12 +354,12 @@ export function SeguroFiancaResidencialForms() {
                         value={formData.cpf_residente}
                         onChange={handleInputChange}
                         required
-                        placeholder="Digite o CPF do residente"
+                        placeholder="Digite o CPF do pretendente"
                       />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="data_nascimento">
-                        Data de Nascimento <RequiredAsterisk />
+                        Data de Nascimento do Pretendente <RequiredAsterisk />
                       </Label>
                       <Input
                         id="data_nascimento"
@@ -369,6 +378,151 @@ export function SeguroFiancaResidencialForms() {
                       />
                     </div>
                     <div className="space-y-2">
+                      <Label htmlFor="estado_civil">
+                        Estado Civil do Pretendente <RequiredAsterisk />
+                      </Label>
+                      <Select
+                        value={formData.estado_civil_residente}
+                        onValueChange={(value) =>
+                          handleSelectChange("estado_civil_residente", value)
+                        }
+                        required
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione o estado civil do pretendente" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="SOLTEIRO">Solteiro</SelectItem>
+                          <SelectItem value="CASADO">Casado</SelectItem>
+                          <SelectItem value="VIÚVO">Viúvo</SelectItem>
+                          <SelectItem value="DIVORCIADO">Divorciado</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="profissao">
+                        Profissão do Pretendente
+                        <RequiredAsterisk />
+                      </Label>
+                      <Input
+                        id="profissao"
+                        name="profissao"
+                        value={formData.profissao}
+                        onChange={handleInputChange}
+                        required
+                        placeholder="Digite a profissão do pretendente"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="renda_mensal">
+                        Renda Mensal do Pretendente
+                      </Label>
+                      <Input
+                        id="renda_mensal"
+                        name="renda_mensal"
+                        type="number"
+                        value={formData.renda_mensal}
+                        onChange={handleInputChange}
+                        placeholder="Digite a renda mensal do pretendente"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Outras Informações */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="residir_imovel">
+                        Reside no Imóvel? <RequiredAsterisk />
+                      </Label>
+                      <Select
+                        value={formData.residir_imovel}
+                        onValueChange={(value) =>
+                          handleSelectChange("residir_imovel", value)
+                        }
+                        required
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Reside no imóvel?" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="SIM">SIM</SelectItem>
+                          <SelectItem value="NÃO">NÃO</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="responder_financeiramente">
+                        Responde Financeiramente? <RequiredAsterisk />
+                      </Label>
+                      <Select
+                        value={formData.responder_financeiramente}
+                        onValueChange={(value) =>
+                          handleSelectChange("responder_financeiramente", value)
+                        }
+                        required
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Responde Financeiramente?" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="SIM">SIM</SelectItem>
+                          <SelectItem value="NÃO">NÃO</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  {/* Informações Pessoais do Residente */}
+                  {formData.residir_imovel === "NÃO" && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="nome_residente_nao">
+                          Nome do Residente <RequiredAsterisk />
+                        </Label>
+                        <Input
+                          id="nome_residente_nao"
+                          name="nome_residente_nao"
+                          value={formData.nome_residente_nao}
+                          onChange={handleInputChange}
+                          required
+                          placeholder="Digite o nome do residente"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="cpf_residente_nao">
+                          CPF do Residente <RequiredAsterisk />
+                        </Label>
+                        <Input
+                          id="cpf_residente_nao"
+                          name="cpf_residente_nao"
+                          value={formData.cpf_residente_nao}
+                          onChange={handleInputChange}
+                          required
+                          placeholder="Digite o CPF do residente"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="data_nascimento_residente_nao">
+                          Data de Nascimento do Residente <RequiredAsterisk />
+                        </Label>
+                        <Input
+                          id="data_nascimento_residente_nao"
+                          name="data_nascimento_residente_nao"
+                          type="date"
+                          value={
+                            formData.data_nascimento_residente_nao instanceof
+                            Date
+                              ? formData.data_nascimento_residente_nao
+                                  .toISOString()
+                                  .split("T")[0]
+                              : formData.data_nascimento_residente_nao
+                          }
+                          onChange={handleInputChange}
+                          required
+                          placeholder="Selecione a data de nascimento"
+                        />
+                      </div>
+                      {/* <div className="space-y-2">
                       <Label htmlFor="estado_civil">
                         Estado Civil do Residente <RequiredAsterisk />
                       </Label>
@@ -389,77 +543,61 @@ export function SeguroFiancaResidencialForms() {
                           <SelectItem value="DIVORCIADO">Divorciado</SelectItem>
                         </SelectContent>
                       </Select>
+                    </div> */}
+                      <div className="space-y-2">
+                        <Label htmlFor="profissao_residente_nao">
+                          Profissão do Residente <RequiredAsterisk />
+                        </Label>
+                        <Input
+                          id="profissao_residente_nao"
+                          name="profissao_residente_nao"
+                          value={formData.profissao_residente_nao}
+                          onChange={handleInputChange}
+                          required
+                          placeholder="Digite a profissão do residente"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="renda_mensal_residente_nao">
+                          Renda Mensal do Residente <RequiredAsterisk />
+                        </Label>
+                        <Input
+                          id="renda_mensal_residente_nao"
+                          name="renda_mensal_residente_nao"
+                          type="number"
+                          value={formData.renda_mensal_residente_nao}
+                          onChange={handleInputChange}
+                          placeholder="Digite a renda mensal do residente"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="email_residente_nao">
+                          Email do Residente <RequiredAsterisk />
+                        </Label>
+                        <Input
+                          id="email_residente_nao"
+                          name="email_residente_nao"
+                          type="email"
+                          value={formData.email_residente_nao}
+                          onChange={handleInputChange}
+                          placeholder="Digite o email do residente"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="telefone_residente_nao">
+                          Telefone do Residente <RequiredAsterisk />
+                        </Label>
+                        <Input
+                          id="telefone_residente_nao"
+                          name="telefone_residente_nao"
+                          type="text"
+                          value={formData.telefone_residente_nao}
+                          onChange={handleInputChange}
+                          placeholder="Digite o telefone do residente"
+                        />
+                      </div>
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="profissao">
-                        Profissão
-                        <RequiredAsterisk />
-                      </Label>
-                      <Input
-                        id="profissao"
-                        name="profissao"
-                        value={formData.profissao}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="Digite a profissão"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="renda_mensal">Renda Mensal</Label>
-                      <Input
-                        id="renda_mensal"
-                        name="renda_mensal"
-                        type="number"
-                        value={formData.renda_mensal}
-                        onChange={handleInputChange}
-                        placeholder="Digite a renda mensal"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Outras Informações */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="residir_imovel">
-                        Reside no Imóvel <RequiredAsterisk />
-                      </Label>
-                      <Select
-                        value={formData.residir_imovel}
-                        onValueChange={(value) =>
-                          handleSelectChange("residir_imovel", value)
-                        }
-                        required
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Reside no imóvel?" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="SIM">SIM</SelectItem>
-                          <SelectItem value="NÃO">NÃO</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="responder_financeiramente">
-                        Responde Financeiramente <RequiredAsterisk />
-                      </Label>
-                      <Select
-                        value={formData.responder_financeiramente}
-                        onValueChange={(value) =>
-                          handleSelectChange("responder_financeiramente", value)
-                        }
-                        required
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Responde Financeiramente?" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="SIM">SIM</SelectItem>
-                          <SelectItem value="NÃO">NÃO</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
+                  )}
 
                   {/* Informações do Cônjuge */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
