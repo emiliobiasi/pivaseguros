@@ -33,12 +33,13 @@ export function DashboardFiancaEmpresarialMais2Anos() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { items, totalPages } = await fetchSeguroFiancaEmpresarialMais2AnosList(
-          page,
-          limit,
-          searchTerm,
-          filter // Passa o filtro de ação para o serviço
-        );
+        const { items, totalPages } =
+          await fetchSeguroFiancaEmpresarialMais2AnosList(
+            page,
+            limit,
+            searchTerm,
+            filter // Passa o filtro de ação para o serviço
+          );
         setData(items);
         setTotalPages(totalPages);
       } catch (error) {
@@ -60,7 +61,7 @@ export function DashboardFiancaEmpresarialMais2Anos() {
       const matchesFilter =
         (currentFilter === "" || record.acao === currentFilter) &&
         (currentSearchTerm === "" ||
-          record.nome_empresa
+          record.nome_imobiliaria
             .toLowerCase()
             .includes(currentSearchTerm.toLowerCase()) ||
           record.email_empresa
@@ -75,7 +76,7 @@ export function DashboardFiancaEmpresarialMais2Anos() {
               // Evita duplicatas
               if (!prevData.find((r) => r.id === record.id)) {
                 // Exibe a notificação de Toast
-                toast.success("Nova empresa adicionada!", {
+                toast.success("Nova imobiliária adicionada!", {
                   duration: 3000,
                 });
 

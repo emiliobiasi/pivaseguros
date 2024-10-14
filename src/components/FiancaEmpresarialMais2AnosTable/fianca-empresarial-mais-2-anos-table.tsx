@@ -37,11 +37,12 @@ type TableContentProps = {
 };
 
 export function FiancaEmpresarialMais2AnosTable({ data }: TableContentProps) {
-  const [seguros, setSeguros] = useState<SeguroFiancaEmpresarialMais2Anos[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedSeguro, setSelectedSeguro] = useState<SeguroFiancaEmpresarialMais2Anos | null>(
-    null
+  const [seguros, setSeguros] = useState<SeguroFiancaEmpresarialMais2Anos[]>(
+    []
   );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedSeguro, setSelectedSeguro] =
+    useState<SeguroFiancaEmpresarialMais2Anos | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingAction, setLoadingAction] = useState<string | null>(null);
 
@@ -49,7 +50,9 @@ export function FiancaEmpresarialMais2AnosTable({ data }: TableContentProps) {
   const [sortBy, setSortBy] = useState<"acao" | "hora" | null>(null);
 
   // Função para ordenar automaticamente os pendentes acima dos finalizados
-  const ordenarPendentesPrimeiro = (seguros: SeguroFiancaEmpresarialMais2Anos[]) => {
+  const ordenarPendentesPrimeiro = (
+    seguros: SeguroFiancaEmpresarialMais2Anos[]
+  ) => {
     return seguros.sort((a, b) => {
       if (a.acao === "PENDENTE" && b.acao === "FINALIZADO") return -1;
       if (a.acao === "FINALIZADO" && b.acao === "PENDENTE") return 1;
@@ -102,9 +105,13 @@ export function FiancaEmpresarialMais2AnosTable({ data }: TableContentProps) {
       setLoadingAction(id);
       let updatedRecord: SeguroFiancaEmpresarialMais2Anos;
       if (novaAcao === "PENDENTE") {
-        updatedRecord = await updateSeguroFiancaEmpresarialMais2AnosToPending(id);
+        updatedRecord = await updateSeguroFiancaEmpresarialMais2AnosToPending(
+          id
+        );
       } else {
-        updatedRecord = await updateSeguroFiancaEmpresarialMais2AnosToFinalized(id);
+        updatedRecord = await updateSeguroFiancaEmpresarialMais2AnosToFinalized(
+          id
+        );
       }
 
       setSeguros((prevSeguros) => {
@@ -157,7 +164,7 @@ export function FiancaEmpresarialMais2AnosTable({ data }: TableContentProps) {
                     Nome da Empresa
                   </TableHead>
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
-                    Email da Empresa
+                    Nome da Imobiliária
                   </TableHead>
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
                     Hora
@@ -209,7 +216,7 @@ export function FiancaEmpresarialMais2AnosTable({ data }: TableContentProps) {
                     Nome da Empresa
                   </TableHead>
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
-                    Email da Empresa
+                    Nome da Imobiliária
                   </TableHead>
                   <TableHead
                     className="px-3 py-2 lg:px-6 lg:py-3 cursor-pointer"
@@ -285,7 +292,7 @@ export function FiancaEmpresarialMais2AnosTable({ data }: TableContentProps) {
                       </button>
                     </TableCell>
                     <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
-                      {seguro.email_empresa}
+                      {seguro.nome_imobiliaria}
                     </TableCell>
                     <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
                       {new Date(seguro.created).toLocaleDateString()} -{" "}
@@ -298,7 +305,7 @@ export function FiancaEmpresarialMais2AnosTable({ data }: TableContentProps) {
           )}
         </div>
       </div>
-      
+
       {selectedSeguro && (
         <SeguroFiancaEmpresarialMais2AnosModal
           seguro={selectedSeguro}

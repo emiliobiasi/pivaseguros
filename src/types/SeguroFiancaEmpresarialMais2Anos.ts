@@ -4,7 +4,7 @@ export type SeguroFiancaEmpresarialMais2Anos = {
   acao: "PENDENTE" | "FINALIZADO";
 
 
-
+  nome_imobiliaria: string;
   opcao_tributaria: "LUCRO REAL" | "LUCRO" | "PRESUMIDO" | "SIMPLES NACIONAL";
   nome_empresa: string;
   cnpj: string;
@@ -42,9 +42,9 @@ export type SeguroFiancaEmpresarialMais2Anos = {
     | "DE SEDE"
     | "LOCAÇÃO PARA MORADIA";
   tipo_imovel: "PRÓPRIO" | "ALUGADO";
-  valor_aluguel: number;
-  nome_locador_imobiliaria: string;
-  telefone: string;
+  valor_aluguel?: number;
+  nome_locador_imobiliaria?: string;
+  telefone?: string;
   aluguel: number;
   agua?: number;
   energia?: number;

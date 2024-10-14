@@ -7,31 +7,44 @@ export async function createSeguroIncendio(
   data: SeguroIncendio
 ): Promise<SeguroIncendio> {
   try {
-    // Buscar o seguro existente com o maior valor de "id_numero"
-    const lastRecord = await pb
-      .collection("seguro_incendio")
-      .getFirstListItem<SeguroIncendio>("", {
-        sort: "-id_numero", // Ordena em ordem decrescente pelo campo "id_numero"
-        limit: 1,
-      });
+    // Inicializa lastRecord como nulo
+    let lastRecord: SeguroIncendio | null = null;
 
-    // Determinar o próximo valor para "id_numero"
+    try {
+      // Tenta obter o último registro com base em "id_numero"
+      lastRecord = await pb
+        .collection("seguro_incendio")
+        .getFirstListItem<SeguroIncendio>("", {
+          sort: "-id_numero",
+        });
+    } catch (error) {
+      const err = error as ClientResponseError;
+      if (err.status === 404) {
+        // Nenhum registro encontrado, continua com lastRecord como nulo
+        console.log("Nenhum registro encontrado. Iniciando id_numero em 1.");
+      } else {
+        // Re-lança outros erros
+        throw err;
+      }
+    }
+
+    // Determina o próximo valor para "id_numero"
     const nextIdNumero = lastRecord ? (lastRecord.id_numero || 0) + 1 : 1;
 
-    // Cria o novo seguro com o campo "id_numero" incrementado
+    // Cria o novo registro com o campo "id_numero" incrementado
     const record = await pb
       .collection("seguro_incendio")
       .create<SeguroIncendio>({
         ...data,
-        id_numero: nextIdNumero, // Adiciona o campo "id_numero" ao novo registro
+        id_numero: nextIdNumero,
       });
 
-    console.log("Seguro Incêndio criado com sucesso:", record);
+    console.log("Seguro de Incêndio criado com sucesso:", record);
     return record;
   } catch (error) {
     const err = error as PocketBaseError;
-    console.error("Erro ao criar o Seguro Incêndio:", err);
-    throw new Error("Erro ao criar o Seguro Incêndio");
+    console.error("Erro ao criar o Seguro de Incêndio:", err);
+    throw new Error("Erro ao criar o Seguro de Incêndio");
   }
 }
 

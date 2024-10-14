@@ -188,11 +188,10 @@ export function SeguroIncendioModal({
               {seguro.inclusao_clausula_beneficiaria ? "Sim" : "Não"}
             </p>
 
-
             {(seguro.cpf_locador_opcional || seguro.nome_locador) && (
               <>
                 <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
-                  Locador (opcional)
+                  Locador CPF (opcional)
                 </h3>
                 {seguro.cpf_locador_opcional && (
                   <p>
@@ -203,6 +202,24 @@ export function SeguroIncendioModal({
                 {seguro.nome_locador && (
                   <p>
                     <strong>Nome do Locador:</strong> {seguro.nome_locador}
+                  </p>
+                )}
+              </>
+            )}
+            {(seguro.cnpj_locador_opcional || seguro.nome_locador_cnpj) && (
+              <>
+                <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+                  Locador CNPJ (opcional)
+                </h3>
+                {seguro.cnpj_locador_opcional && (
+                  <p>
+                    <strong>CNPJ do Locador:</strong>{" "}
+                    {seguro.cnpj_locador_opcional}
+                  </p>
+                )}
+                {seguro.nome_locador_cnpj && (
+                  <p>
+                    <strong>Nome do Locador:</strong> {seguro.nome_locador_cnpj}
                   </p>
                 )}
               </>

@@ -78,14 +78,15 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
     estado_empresa: "",
     motivo_locacao: "ABERTURA DE FILIAL",
     tipo_imovel: "PRÓPRIO",
-    valor_aluguel: 0,
-    nome_locador_imobiliaria: "",
-    telefone: "",
+    // valor_aluguel: 0,
+    // nome_locador_imobiliaria: "",
+    // telefone: "",
     aluguel: 0,
     danos_imovel: "SIM",
     multa_rescisao: "SIM",
     pintura_interna: "SIM",
     pintura_externa: "SIM",
+    nome_imobiliaria: "",
     created: new Date(),
     updated: new Date(),
   });
@@ -240,6 +241,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
     const validateForm = () => {
       const errors: string[] = [];
       if (!formData.acao) errors.push("Ação");
+      if (!formData.nome_imobiliaria) errors.push("Nome da Imobiliária");
       if (!formData.opcao_tributaria) errors.push("Opção Tributária");
       if (!formData.nome_empresa) errors.push("Nome da Empresa");
       if (!formData.cnpj) errors.push("CNPJ");
@@ -260,12 +262,11 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
       if (!formData.estado) errors.push("Estado");
       if (!formData.motivo_locacao) errors.push("Motivo da Locação");
       if (!formData.tipo_imovel) errors.push("Tipo do Imóvel");
-      if (!formData.valor_aluguel) errors.push("Valor do Aluguel");
-      if (!formData.nome_locador_imobiliaria)
-        errors.push("Nome do Locador ou Imobiliária");
-      if (!formData.telefone) errors.push("Telefone do Locador ou Imobiliária");
+      // if (!formData.valor_aluguel) errors.push("Valor do Aluguel");
+      // if (!formData.nome_locador_imobiliaria)
+      //   errors.push("Nome do Locador ou Imobiliária");
+      // if (!formData.telefone) errors.push("Telefone do Locador ou Imobiliária");
       if (!formData.aluguel) errors.push("Aluguel");
-
 
       return errors;
     };
@@ -273,7 +274,9 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
     const validationErrors = validateForm();
     if (validationErrors.length > 0) {
       setErrorMessage(
-        `Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou os campos. Campos obrigatórios que faltam: ${validationErrors.join(", ")}`
+        `Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou os campos. Campos obrigatórios que faltam: ${validationErrors.join(
+          ", "
+        )}`
       );
       return;
     }
@@ -373,6 +376,20 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
 
               <TabsContent value="personal">
                 <div className="grid gap-4 py-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="nome_imobiliaria">
+                      Nome da Imobiliária <RequiredAsterisk />
+                    </Label>
+                    <Input
+                      id="nome_imobiliaria"
+                      name="nome_imobiliaria"
+                      value={formData.nome_imobiliaria}
+                      onChange={handleInputChange}
+                      type="text"
+                      required
+                      placeholder="Digite o nome da imobiliária"
+                    />
+                  </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="danos_imovel">
@@ -679,55 +696,56 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                     </div>
                   </div>
 
-                  {/* ENDERECO */}
-
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="valor_aluguel">
-                        Valor do Aluguel (do Imóvel Atual) <RequiredAsterisk />
-                      </Label>
-                      <Input
-                        id="valor_aluguel"
-                        name="valor_aluguel"
-                        type="number"
-                        value={formData.valor_aluguel || ""}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="Digite o valor do alguel"
-                        disabled={isLoading}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="nome_locador_imobiliaria">
-                        Nome do Locador ou Imobiliária <RequiredAsterisk />
-                      </Label>
-                      <Input
-                        id="nome_locador_imobiliaria"
-                        name="nome_locador_imobiliaria"
-                        type="text"
-                        value={formData.nome_locador_imobiliaria || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite o nome do locador ou imobiliária"
-                        disabled={isLoading}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="telefone">
-                        Telefone do Locador ou da Imobiliária{" "}
-                        <RequiredAsterisk />
-                      </Label>
-                      <Input
-                        id="telefone"
-                        name="telefone"
-                        type="tel"
-                        value={formData.telefone}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="Digite o telefone do locador ou imobiliária"
-                      />
-                    </div>
-                  </div>
+                  {/* ALGUEL */}
+                  {formData.tipo_imovel === "ALUGADO" && (
+                    <>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="valor_aluguel">
+                            Valor do Aluguel (do Imóvel Atual){" "}
+                            <RequiredAsterisk />
+                          </Label>
+                          <Input
+                            id="valor_aluguel"
+                            name="valor_aluguel"
+                            type="number"
+                            value={formData.valor_aluguel || ""}
+                            onChange={handleInputChange}
+                            placeholder="Digite o valor do alguel"
+                            disabled={isLoading}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="nome_locador_imobiliaria">
+                            Nome do Locador ou Imobiliária <RequiredAsterisk />
+                          </Label>
+                          <Input
+                            id="nome_locador_imobiliaria"
+                            name="nome_locador_imobiliaria"
+                            type="text"
+                            value={formData.nome_locador_imobiliaria || ""}
+                            onChange={handleInputChange}
+                            placeholder="Digite o nome do locador ou imobiliária"
+                            disabled={isLoading}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="telefone">
+                            Telefone do Locador ou da Imobiliária{" "}
+                            <RequiredAsterisk />
+                          </Label>
+                          <Input
+                            id="telefone"
+                            name="telefone"
+                            type="tel"
+                            value={formData.telefone}
+                            onChange={handleInputChange}
+                            placeholder="Digite o telefone do locador ou imobiliária"
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </TabsContent>
 

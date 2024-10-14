@@ -50,6 +50,9 @@ export function SeguroFiancaEmpresarialMais2AnosModal({
               Dados da Empresa
             </h3>
             <p>
+              <strong>Nome da Imobiliária:</strong> {seguro.nome_imobiliaria}
+            </p>
+            <p>
               <strong>Nome da Empresa:</strong> {seguro.nome_empresa}
             </p>
             <p>
@@ -118,7 +121,7 @@ export function SeguroFiancaEmpresarialMais2AnosModal({
 
           {/* Segunda Coluna */}
           <div className="space-y-4 bg-gray-100 p-4 rounded-lg">
-          <>
+            <>
               <h3 className="text-lg font-semibold text-[#025d37]">
                 Endereço da Sede
               </h3>
@@ -146,7 +149,7 @@ export function SeguroFiancaEmpresarialMais2AnosModal({
                 <strong>Estado:</strong> {seguro.estado_empresa}
               </p>
             </>
-            
+
             <>
               <h3 className="text-lg font-semibold text-[#025d37]">
                 Endereço da Locação
@@ -186,17 +189,22 @@ export function SeguroFiancaEmpresarialMais2AnosModal({
             <p>
               <strong>Tipo do Imóvel:</strong> {seguro.tipo_imovel}
             </p>
-            <p>
-              <strong>Valor do Aluguel:</strong> R${" "}
-              {formatValor(seguro.valor_aluguel.toFixed(2))}
-            </p>
-            <p>
-              <strong>Nome do Locador/Imobiliária:</strong>{" "}
-              {seguro.nome_locador_imobiliaria}
-            </p>
-            <p>
-              <strong>Telefone:</strong> {seguro.telefone}
-            </p>
+            {seguro.tipo_imovel === "ALUGADO" && (
+              <>
+                <p>
+                  <strong>Valor do Aluguel:</strong> R${" "}
+                  {seguro.valor_aluguel !== undefined &&
+                    formatValor(seguro.valor_aluguel.toFixed(2))}
+                </p>
+                <p>
+                  <strong>Nome do Locador/Imobiliária:</strong>{" "}
+                  {seguro.nome_locador_imobiliaria}
+                </p>
+                <p>
+                  <strong>Telefone:</strong> {seguro.telefone}
+                </p>
+              </>
+            )}
           </div>
 
           {/* Terceira Coluna */}

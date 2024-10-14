@@ -52,6 +52,9 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
               Dados do Pretendente
             </h3>
             <p>
+              <strong>Nome da Imobiliária:</strong> {seguro.nome_imobiliaria}
+            </p>
+            <p>
               <strong>Nome:</strong> {seguro.nome_pretendente}
             </p>
             <p>

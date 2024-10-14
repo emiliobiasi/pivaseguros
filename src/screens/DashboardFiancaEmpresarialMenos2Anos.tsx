@@ -60,7 +60,7 @@ export function DashboardFiancaEmpresarialMenos2Anos() {
           record.nome_pretendente
             .toLowerCase()
             .includes(currentSearchTerm.toLowerCase()) ||
-          record.motivo_locacao
+          record.nome_imobiliaria
             .toLowerCase()
             .includes(currentSearchTerm.toLowerCase()) ||
           record.id_numero.toString().includes(currentSearchTerm));
@@ -70,7 +70,7 @@ export function DashboardFiancaEmpresarialMenos2Anos() {
           case "create":
             if (matchesFilter) {
               if (!prevData.find((r) => r.id === record.id)) {
-                toast.success("Nova empresa adicionada!", {
+                toast.success("Nova imobiliária adicionada!", {
                   duration: 3000,
                 });
 

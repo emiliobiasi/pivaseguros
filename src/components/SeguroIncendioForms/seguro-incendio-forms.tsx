@@ -29,6 +29,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { formatCPF } from "@/utils/regex/regexCPF";
+import { formatCNPJ } from "@/utils/regex/regexCNPJ";
 import { formatCEP } from "@/utils/regex/regexCEP";
 import { createSeguroIncendio } from "@/utils/api/SeguroIncendioService";
 import {
@@ -40,9 +41,6 @@ import {
 } from "@/components/ui/dialog";
 import pivaLogo from "@/assets/logo.png";
 import { buscaEnderecoPorCEP, EnderecoViaCep } from "@/utils/api/Cep";
-// import classNames from 'classnames';
-
-// Importações adicionais que possam estar no seu código original
 
 export function SeguroIncendioForms() {
   const [currentTab, setCurrentTab] = useState("personal");
@@ -147,6 +145,13 @@ export function SeguroIncendioForms() {
           [name]: formattedValue,
         }));
       }
+    } else if (name === "cnpj_locador_opcional") {
+      formattedValue = formatCNPJ(value);
+      // Aqui você pode adicionar lógica específica para o CNPJ, se necessário
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: formattedValue,
+      }));
     } else if (
       [
         "incendio",
@@ -791,6 +796,7 @@ export function SeguroIncendioForms() {
                       </SelectContent>
                     </Select>
                   </div>
+                  {/* CPF */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="cpf_locador_opcional">
@@ -806,11 +812,42 @@ export function SeguroIncendioForms() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="nome_locador">Nome do Locador</Label>
+                      <Label htmlFor="nome_locador">
+                        Nome do Locador (CPF)
+                      </Label>
                       <Input
                         id="nome_locador"
                         name="nome_locador"
                         value={formData.nome_locador || ""}
+                        onChange={handleInputChange}
+                        placeholder="Digite o nome do locador"
+                        disabled={isLoading}
+                      />
+                    </div>
+                  </div>
+                  {/* CNPJ */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="cnpj_locador_opcional">
+                        CNPJ do Locador (Opcional)
+                      </Label>
+                      <Input
+                        id="cnpj_locador_opcional"
+                        name="cnpj_locador_opcional"
+                        value={formData.cnpj_locador_opcional || ""}
+                        onChange={handleInputChange}
+                        placeholder="Digite o CNPJ do locador (opcional)"
+                        disabled={isLoading}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="nome_locador_cnpj">
+                        Nome do Locador (CNPJ)
+                      </Label>
+                      <Input
+                        id="nome_locador_cnpj"
+                        name="nome_locador_cnpj"
+                        value={formData.nome_locador_cnpj || ""}
                         onChange={handleInputChange}
                         placeholder="Digite o nome do locador"
                         disabled={isLoading}

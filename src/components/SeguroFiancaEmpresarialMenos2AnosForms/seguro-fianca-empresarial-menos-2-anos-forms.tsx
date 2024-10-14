@@ -1,3 +1,4 @@
+import { SeguroFiancaEmpresarialMenos2Anos } from "@/types/SeguroFiancaEmpresarialMenos2Anos";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -27,7 +28,6 @@ import {
   Send,
   Loader2,
 } from "lucide-react";
-import { SeguroFiancaEmpresarialMenos2Anos } from "@/types/SeguroFiancaEmpresarialMenos2Anos";
 import { formatCPF } from "@/utils/regex/regexCPF";
 import { formatCNPJ } from "@/utils/regex/regexCNPJ";
 import { formatCEP } from "@/utils/regex/regexCEP";
@@ -58,6 +58,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
     id: "",
     id_numero: 0,
     acao: "PENDENTE",
+    nome_imobiliaria: "",
     nome_pretendente: "",
     sexo_pretendente: "MASCULINO",
     cpf: "",
@@ -343,6 +344,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
     // Função de validação
     const validateForm = () => {
       const errors: string[] = [];
+      if (!formData.nome_imobiliaria) errors.push("Nome da Imobiliária");
       if (!formData.nome_pretendente) errors.push("Nome do Pretendente");
       if (!formData.sexo_pretendente) errors.push("Sexo do Pretendente");
       if (!formData.cpf) errors.push("CPF");
@@ -373,7 +375,9 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
     const validationErrors = validateForm();
     if (validationErrors.length > 0) {
       setErrorMessage(
-        `Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou os campos. Campos obrigatórios que faltam: ${validationErrors.join(", ")}`
+        `Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou os campos. Campos obrigatórios que faltam: ${validationErrors.join(
+          ", "
+        )}`
       );
       return;
     }
@@ -526,6 +530,20 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
               {/* Dados do Pretendente */}
               <TabsContent value="dadosPretendente">
                 <div className="grid gap-4 py-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="nome_imobiliaria">
+                      Nome da Imobiliária <RequiredAsterisk />
+                    </Label>
+                    <Input
+                      id="nome_imobiliaria"
+                      name="nome_imobiliaria"
+                      value={formData.nome_imobiliaria}
+                      onChange={handleInputChange}
+                      type="text"
+                      required
+                      placeholder="Digite o nome da imobiliária"
+                    />
+                  </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="nome_pretendente">
@@ -536,6 +554,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         name="nome_pretendente"
                         value={formData.nome_pretendente}
                         onChange={handleInputChange}
+                        type="text"
                         required
                         placeholder="Digite o nome do pretendente"
                       />
@@ -1609,107 +1628,6 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                             placeholder="Detalhamento do financiamento/empréstimo"
                           />
                         </div>
-
-                        {/* A3 ATÉ B3 */}
-                        {/* <div className="space-y-2">
-                          <Label htmlFor="tipo_qtd_parcela_a_3">
-                            Tipo e Quantidade de Parcelas A3
-                          </Label>
-                          <Input
-                            id="tipo_qtd_parcela_a_3"
-                            name="tipo_qtd_parcela_a_3"
-                            value={formData.tipo_qtd_parcela_a_3 || ""}
-                            onChange={handleInputChange}
-                            placeholder="Detalhamento do financiamento/empréstimo"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="valor_parcela_a_3">
-                            Valor da Parcela A3
-                          </Label>
-                          <Input
-                            id="valor_parcela_a_3"
-                            name="valor_parcela_a_3"
-                            value={formData.valor_parcela_a_3 || ""}
-                            onChange={handleInputChange}
-                            placeholder="Descreva o ônus"
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="tipo_qtd_parcela_b_1">
-                            Tipo e Quantidade de Parcelas B1
-                          </Label>
-                          <Input
-                            id="tipo_qtd_parcela_b_1"
-                            name="tipo_qtd_parcela_b_1"
-                            value={formData.tipo_qtd_parcela_b_1 || ""}
-                            onChange={handleInputChange}
-                            placeholder="Descreva o ônus"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="valor_parcela_b_2">
-                            Valor da Parcela B1
-                          </Label>
-                          <Input
-                            id="valor_parcela_b_2"
-                            name="valor_parcela_b_2"
-                            value={formData.valor_parcela_b_2 || ""}
-                            onChange={handleInputChange}
-                            placeholder="Descreva o ônus"
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="tipo_qtd_parcela_b_2">
-                            Tipo e Quantidade de Parcelas B2
-                          </Label>
-                          <Input
-                            id="tipo_qtd_parcela_b_2"
-                            name="tipo_qtd_parcela_b_2"
-                            value={formData.tipo_qtd_parcela_b_2 || ""}
-                            onChange={handleInputChange}
-                            placeholder="Descreva o ônus"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="valor_parcela_b_2">
-                            Valor da Parcela B2
-                          </Label>
-                          <Input
-                            id="valor_parcela_b_2"
-                            name="valor_parcela_b_2"
-                            value={formData.valor_parcela_b_2 || ""}
-                            onChange={handleInputChange}
-                            placeholder="Descreva o ônus"
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="tipo_qtd_parcela_b_3">
-                            Tipo e Quantidade de Parcelas B3
-                          </Label>
-                          <Input
-                            id="tipo_qtd_parcela_b_3"
-                            name="tipo_qtd_parcela_b_3"
-                            value={formData.tipo_qtd_parcela_b_3 || ""}
-                            onChange={handleInputChange}
-                            placeholder="Descreva o ônus"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="valor_parcela_b_3">
-                            Valor da Parcela B3
-                          </Label>
-                          <Input
-                            id="valor_parcela_b_3"
-                            name="valor_parcela_b_3"
-                            value={formData.valor_parcela_b_3 || ""}
-                            onChange={handleInputChange}
-                            placeholder="Descreva o ônus"
-                          />
-                        </div> */}
                       </div>
                     </>
                   )}

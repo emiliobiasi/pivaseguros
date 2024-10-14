@@ -42,6 +42,8 @@ export type SeguroIncendio = {
     | "11X FATURA MENSAL - SEM ENTRADA";
   inclusao_clausula_beneficiaria: "SIM" | "NÃO";
   cpf_locador_opcional?: string;
+  cnpj_locador_opcional?: string;
   nome_locador?: string;
+  nome_locador_cnpj?: string;
   created: Date;
 };
