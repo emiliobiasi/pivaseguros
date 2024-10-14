@@ -11,6 +11,8 @@ import { TopBar } from "@/components/TopBar/top-bar";
 import { Button } from "@/components/ui/button";
 import { RecordSubscription } from "pocketbase";
 import { toast } from "sonner";
+import  notificacao_som  from '@/assets/notificacao_som.mp3';
+
 
 export function DashboardIncendio() {
   const [data, setData] = useState<SeguroIncendio[]>([]);
@@ -19,6 +21,8 @@ export function DashboardIncendio() {
   const [limit, setLimit] = useState(10); // Items per page limit, starts at 10
   const [searchTerm, setSearchTerm] = useState(""); // Control search term
   const [filter, setFilter] = useState<"PENDENTE" | "FINALIZADO" | "">(""); // Controla o filtro de ação
+
+  const sound = new Audio(notificacao_som);
 
   const filterRef = useRef(filter);
   const searchTermRef = useRef(searchTerm);
@@ -74,6 +78,7 @@ export function DashboardIncendio() {
             if (matchesFilter) {
               // Evita duplicatas
               if (!prevData.find((r) => r.id === record.id)) {
+                sound.play();
                 // Exibe a notificação de Toast
                 toast.success("Nova imobiliária adicionada!", {
                   duration: 3000,

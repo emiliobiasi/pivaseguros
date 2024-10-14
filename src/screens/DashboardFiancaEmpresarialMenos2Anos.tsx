@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { RecordSubscription } from "pocketbase";
 import { toast } from "sonner";
 import { FiancaEmpresarialMenos2AnosTable } from "@/components/FiancaEmpresarialMenos2AnosTable/fianca-empresarial-menos-2-anos-table";
+import  notificacao_som  from '@/assets/notificacao_som.mp3';
+
 
 export function DashboardFiancaEmpresarialMenos2Anos() {
   const [data, setData] = useState<SeguroFiancaEmpresarialMenos2Anos[]>([]);
@@ -22,6 +24,8 @@ export function DashboardFiancaEmpresarialMenos2Anos() {
 
   const filterRef = useRef(filter);
   const searchTermRef = useRef(searchTerm);
+
+  const sound = new Audio(notificacao_som);
 
   useEffect(() => {
     filterRef.current = filter;
@@ -70,6 +74,7 @@ export function DashboardFiancaEmpresarialMenos2Anos() {
           case "create":
             if (matchesFilter) {
               if (!prevData.find((r) => r.id === record.id)) {
+                sound.play();
                 toast.success("Nova imobiliária adicionada!", {
                   duration: 3000,
                 });

@@ -11,6 +11,7 @@ import { TopBar } from "@/components/TopBar/top-bar";
 import { Button } from "@/components/ui/button";
 import { RecordSubscription } from "pocketbase";
 import { toast } from "sonner";
+import  notificacao_som  from '@/assets/notificacao_som.mp3';
 
 export function DashboardEfetivacaoSeguroFianca() {
   const [data, setData] = useState<EfetivacaoSeguroFianca[]>([]);
@@ -22,6 +23,8 @@ export function DashboardEfetivacaoSeguroFianca() {
 
   const filterRef = useRef(filter);
   const searchTermRef = useRef(searchTerm);
+
+  const sound = new Audio(notificacao_som);
 
   useEffect(() => {
     filterRef.current = filter;
@@ -73,6 +76,7 @@ export function DashboardEfetivacaoSeguroFianca() {
               // Evita duplicatas
               if (!prevData.find((r) => r.id === record.id)) {
                 // Exibe a notificação de Toast
+                sound.play();
                 toast.success("Novo cliente adicionado!", {
                   duration: 3000,
                 });

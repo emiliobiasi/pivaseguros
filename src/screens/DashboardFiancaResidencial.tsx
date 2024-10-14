@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { RecordSubscription } from "pocketbase";
 import { toast } from "sonner";
 import { FiancaResidencialTable } from "@/components/FiancaResidencialTable/fianca-residencial-table";
+import  notificacao_som  from '@/assets/notificacao_som.mp3';
+
 
 export function DashboardFiancaResidencial() {
   const [data, setData] = useState<SeguroFiancaResidencial[]>([]);
@@ -22,6 +24,8 @@ export function DashboardFiancaResidencial() {
 
   const filterRef = useRef(filter);
   const searchTermRef = useRef(searchTerm);
+
+  const sound = new Audio(notificacao_som);
 
   // Atualiza os refs quando filter ou searchTerm mudam
   useEffect(() => {
@@ -74,6 +78,7 @@ export function DashboardFiancaResidencial() {
             if (matchesFilter) {
               // Evita duplicatas
               if (!prevData.find((r) => r.id === record.id)) {
+                sound.play();
                 // Exibe a notificação de Toast
                 toast.success("Nova imobiliária adicionada!", {
                   duration: 3000,

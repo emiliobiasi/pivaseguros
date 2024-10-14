@@ -11,6 +11,8 @@ import { TopBar } from "@/components/TopBar/top-bar";
 import { Button } from "@/components/ui/button";
 import { RecordSubscription } from "pocketbase";
 import { toast } from "sonner";
+import  notificacao_som  from '@/assets/notificacao_som.mp3';
+
 
 export function DashboardTituloCapitalizacao() {
   const [data, setData] = useState<TituloCapitalizacao[]>([]);
@@ -22,6 +24,8 @@ export function DashboardTituloCapitalizacao() {
 
   const filterRef = useRef(filter);
   const searchTermRef = useRef(searchTerm);
+
+  const sound = new Audio(notificacao_som);
 
   // Atualiza os refs quando filter ou searchTerm mudam
   useEffect(() => {
@@ -74,6 +78,7 @@ export function DashboardTituloCapitalizacao() {
             if (matchesFilter) {
               // Evita duplicatas
               if (!prevData.find((r) => r.id === record.id)) {
+                sound.play();
                 // Exibe a notificação de Toast
                 toast.success("Novo cliente adicionado!", {
                   duration: 3000,

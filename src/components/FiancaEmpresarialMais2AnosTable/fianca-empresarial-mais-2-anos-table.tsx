@@ -161,7 +161,7 @@ export function FiancaEmpresarialMais2AnosTable({ data }: TableContentProps) {
                     Ação
                   </TableHead>
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
-                    Nome da Empresa
+                    Nome da Imobiliária
                   </TableHead>
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
                     Nome da Imobiliária
@@ -213,10 +213,10 @@ export function FiancaEmpresarialMais2AnosTable({ data }: TableContentProps) {
                       ))}
                   </TableHead>
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
-                    Nome da Empresa
+                    Nome da Imobiliária
                   </TableHead>
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
-                    Nome da Imobiliária
+                    Nome da Empresa
                   </TableHead>
                   <TableHead
                     className="px-3 py-2 lg:px-6 lg:py-3 cursor-pointer"
@@ -288,11 +288,11 @@ export function FiancaEmpresarialMais2AnosTable({ data }: TableContentProps) {
                         onClick={() => openUserModal(seguro)}
                         className="text-blue-600 hover:text-blue-800"
                       >
-                        {seguro.nome_empresa}
+                        {seguro.nome_imobiliaria}
                       </button>
                     </TableCell>
                     <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
-                      {seguro.nome_imobiliaria}
+                      {seguro.nome_empresa}
                     </TableCell>
                     <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
                       {new Date(seguro.created).toLocaleDateString()} -{" "}
