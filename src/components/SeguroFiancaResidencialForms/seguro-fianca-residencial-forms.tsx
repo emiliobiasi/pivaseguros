@@ -205,19 +205,71 @@ export function SeguroFiancaResidencialForms() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Enviando formulário:", formData);
-    setIsLoading(true); // Inicia o carregamento
+
+    // Verifique se o handleSubmit está sendo acionado
+    console.log("handleSubmit acionado com dados:", formData);
+
+    // Função de validação
+    const validateForm = () => {
+      const errors: string[] = [];
+      if (!formData.nome_imobiliaria_corretor)
+        errors.push("Nome da Imobiliária/Corretor");
+      if (!formData.cpf_residente) errors.push("CPF do Residente");
+      if (!formData.cpf_conjuge) errors.push("CPF do Conjugê");
+      if (!formData.nome_residente) errors.push("Nome do Residente");
+      if (!formData.telefone) errors.push("Telefone");
+      if (!formData.email) errors.push("Email");
+      if (!formData.profissao) errors.push("Profissão");
+      if (!formData.data_nascimento) errors.push("Data de Nascimento");
+      if (!formData.residir_imovel) errors.push("Reside no Imóvel");
+      if (!formData.responder_financeiramente)
+        errors.push("Responde Financeiramente");
+      if (!formData.estado_civil_residente)
+        errors.push("Estado Civil do Residente");
+      if (!formData.renda_composta_conjuge)
+        errors.push("Renda Composta do Conjugê");
+      if (!formData.cep_locacao) errors.push("CEP");
+      if (!formData.endereco_locacao) errors.push("Endereço");
+      if (!formData.bairro_locacao) errors.push("Bairro");
+      if (!formData.cidade_locacao) errors.push("Cidade");
+      if (!formData.estado_locacao) errors.push("Estado");
+      if (!formData.numero_locacao) errors.push("Número");
+      if (!formData.valor_aluguel) errors.push("Valor do Aluguel");
+      if (!formData.danos_imovel) errors.push("Danos ao Imóvel");
+      if (!formData.multa_recisao) errors.push("Multa por Recisão");
+      if (!formData.pintura_interna) errors.push("Pintura Interna");
+      if (!formData.pintura_externa) errors.push("Pintura Externa");
+      if (!formData.data_nascimento_residente_nao)
+        errors.push("Data de Nascimento do Residente Não");
+
+      return errors;
+    };
+
+    const validationErrors = validateForm();
+    if (validationErrors.length > 0) {
+      setErrorMessage(
+        `Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou os campos. Campos obrigatórios que faltam: ${validationErrors.join(
+          ", "
+        )}`
+      );
+      return;
+    }
+
+    setIsLoading(true);
     try {
-      await createSeguroFiancaResidencial(formData);
+      await createSeguroFiancaResidencial(formData); // Certifique-se de que está chamando a função correta
+      console.log("Dados enviados para criação:", formData);
+
+      // Reseta o formulário e abre o modal de sucesso
       formRef.current?.reset();
-      setIsSuccessModalOpen(true); // Mostra o modal ao enviar com sucesso
+      setIsSuccessModalOpen(true);
     } catch (error) {
       console.error("Erro ao enviar o formulário:", error);
       setErrorMessage(
-        "Ocorreu um erro ao enviar o formulário. Tente novamente."
+        "Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou campos de email corretamente. Tente novamente."
       );
     } finally {
-      setIsLoading(false); // Finaliza o carregamento
+      setIsLoading(false);
     }
   };
 

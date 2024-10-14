@@ -211,10 +211,59 @@ export function EfetivacaoSeguroFiancaForms() {
     // Verifique se o handleSubmit está sendo acionado
     console.log("handleSubmit acionado com dados:", formData);
 
+    // Função de validação
+    const validateForm = () => {
+      const errors: string[] = [];
+      if (!formData.acao) errors.push("Ação");
+      if (!formData.nome_imobiliaria) errors.push("Nome da Imobiliária");
+      if (!formData.telefone_imobiliaria)
+        errors.push("Telefone da Imobiliária");
+      if (!formData.nome_proprietario) errors.push("Nome do Proprietário");
+      if (!formData.profissao_proprietario)
+        errors.push("Profissão do Proprietário");
+      if (!formData.data_nascimento_proprietario)
+        errors.push("Data de Nascimento do Proprietário");
+      if (!formData.rg_proprietario) errors.push("RG do Proprietário");
+      if (!formData.estado_civil_proprietario)
+        errors.push("Estado Civil do Proprietário");
+      if (!formData.reside_brasil) errors.push("Reside no Brasil");
+      if (!formData.email_proprietario) errors.push("Email do Proprietário");
+      if (!formData.telefone_proprietario)
+        errors.push("Telefone do Proprietário");
+      if (!formData.finalidade) errors.push("Finalidade");
+      if (!formData.cep) errors.push("CEP");
+      if (!formData.endereco) errors.push("Endereço");
+      if (!formData.numero) errors.push("Número");
+      if (!formData.bairro) errors.push("Bairro");
+      if (!formData.complemento) errors.push("Complemento");
+      if (!formData.cidade) errors.push("Cidade");
+      if (!formData.estado) errors.push("Estado");
+      if (!formData.tipo_residencia) errors.push("Tipo de Residência");
+      if (!formData.inicio_contrato) errors.push("Início do Contrato");
+      if (!formData.termino_contrato) errors.push("Término do Contrato");
+      if (!formData.pintura_interna) errors.push("Pintura Interna");
+      if (!formData.pintura_externa) errors.push("Pintura Externa");
+      if (!formData.danos_imovel) errors.push("Danos ao Imóvel");
+      if (!formData.multa_rescisao) errors.push("Multa por Rescisão");
+      if (!formData.valor_parcela) errors.push("Valor da Parcela");
+      if (!formData.seguradora) errors.push("Seguradora");
+      if (!formData.indice_reajuste) errors.push("Índice de Reajuste");
+      if (!formData.vencimento_aluguel) errors.push("Vencimento do Aluguel");
+      return errors;
+    };
+
+    const validationErrors = validateForm();
+    if (validationErrors.length > 0) {
+      setErrorMessage(
+        `Os seguintes campos são obrigatórios: ${validationErrors.join(", ")}`
+      );
+      return;
+    }
+
     setIsLoading(true);
     try {
       await createEfetivacaoSeguroFianca(formData); // Certifique-se de que está chamando a função correta
-      console.log("Dados enviados para a criação:", formData);
+      console.log("Dados enviados para criação:", formData);
 
       // Reseta o formulário e abre o modal de sucesso
       formRef.current?.reset();
@@ -222,7 +271,7 @@ export function EfetivacaoSeguroFiancaForms() {
     } catch (error) {
       console.error("Erro ao enviar o formulário:", error);
       setErrorMessage(
-        "Ocorreu um erro ao enviar o formulário. Tente novamente."
+        "Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios, e se digitou campos de email corretamente. Tente novamente."
       );
     } finally {
       setIsLoading(false);
@@ -466,7 +515,7 @@ export function EfetivacaoSeguroFiancaForms() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="cpf_proprietario">
-                        CPF do Proprietário
+                        CPF do Proprietário 
                       </Label>
                       <Input
                         id="cpf_proprietario"

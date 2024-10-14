@@ -202,16 +202,60 @@ export function TituloCapitalizacaoForms() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Enviando formulário:", formData);
+
+    // Verifique se o handleSubmit está sendo acionado
+    console.log("handleSubmit acionado com dados:", formData);
+
+    // Função de validação
+    const validateForm = () => {
+      const errors: string[] = [];
+      if (!formData.acao) errors.push("Ação");
+      if (!formData.nome) errors.push("Nome");
+      if (!formData.email) errors.push("Email");
+      if (!formData.telefone) errors.push("Telefone");
+      if (!formData.profissao) errors.push("Profissão");
+      if (!formData.valor_remuneracao) errors.push("Valor da Remuneração");
+      if (!formData.tipo_imovel) errors.push("Tipo do Imóvel");
+      if (!formData.cep) errors.push("CEP");
+      if (!formData.endereco) errors.push("Endereço");
+      if (!formData.bairro) errors.push("Bairro");
+      if (!formData.numero_endereco) errors.push("Número");
+      if (!formData.cidade) errors.push("Cidade");
+      if (!formData.estado) errors.push("Estado");
+      if (!formData.valor_aluguel_mensal)
+        errors.push("Valor do Aluguel Mensal");
+      if (!formData.valor_total_titulos) errors.push("Valor Total dos Títulos");
+      if (!formData.nome_proprietario) errors.push("Nome do Proprietário");
+      if (!formData.email_proprietario) errors.push("Email do Proprietário");
+      if (!formData.telefone_proprietario)
+        errors.push("Telefone do Proprietário");
+      if (!formData.imobiliaria) errors.push("Nome da Imobiliária");
+
+      return errors;
+    };
+
+    const validationErrors = validateForm();
+    if (validationErrors.length > 0) {
+      setErrorMessage(
+        `Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou os campos. Campos obrigatórios que faltam: ${validationErrors.join(
+          ", "
+        )}`
+      );
+      return;
+    }
+
     setIsLoading(true);
     try {
-      await createTituloCapitalizacao(formData);
+      await createTituloCapitalizacao(formData); // Certifique-se de que está chamando a função correta
+      console.log("Dados enviados para criação:", formData);
+
+      // Reseta o formulário e abre o modal de sucesso
       formRef.current?.reset();
       setIsSuccessModalOpen(true);
     } catch (error) {
       console.error("Erro ao enviar o formulário:", error);
       setErrorMessage(
-        "Ocorreu um erro ao enviar o formulário. Tente novamente."
+        "Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou campos de email corretamente. Tente novamente."
       );
     } finally {
       setIsLoading(false);
@@ -562,7 +606,9 @@ export function TituloCapitalizacaoForms() {
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="cpf_proprietario">CPF do Proprietário</Label>
+                      <Label htmlFor="cpf_proprietario">
+                        CPF do Proprietário
+                      </Label>
                       <Input
                         id="cpf_proprietario"
                         name="cpf_proprietario"

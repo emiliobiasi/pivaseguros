@@ -336,16 +336,60 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Enviando formulário:", formData);
+
+    // Verifique se o handleSubmit está sendo acionado
+    console.log("handleSubmit acionado com dados:", formData);
+
+    // Função de validação
+    const validateForm = () => {
+      const errors: string[] = [];
+      if (!formData.nome_pretendente) errors.push("Nome do Pretendente");
+      if (!formData.sexo_pretendente) errors.push("Sexo do Pretendente");
+      if (!formData.cpf) errors.push("CPF");
+      if (!formData.rg) errors.push("RG");
+      if (!formData.data_expedicao_rg) errors.push("Data de Expedição do RG");
+      if (!formData.data_nascimento) errors.push("Data de Nascimento");
+      if (!formData.orgao_emissor_rg) errors.push("Órgão Emissor do RG");
+      if (!formData.estado_civil_locatario)
+        errors.push("Estado Civil do Locatário");
+      if (!formData.email) errors.push("Email");
+      if (!formData.tipo_residencia) errors.push("Tipo de Residência");
+      if (!formData.condicao_imovel) errors.push("Condição do Imóvel");
+      if (!formData.arca_com_aluguel) errors.push("Arca com Aluguel");
+      if (!formData.vinculo_empregaticio) errors.push("Vínculo Empregatício");
+      if (!formData.profissao) errors.push("Profissão");
+      if (!formData.alocacao_pretendida_constituida)
+        errors.push("Alocação Pretendida Constituída");
+      if (!formData.franquia) errors.push("Franquia");
+      if (!formData.onus) errors.push("Ônus");
+      if (!formData.investimento_abertura)
+        errors.push("Investimento para Abertura");
+      if (!formData.motivo_locacao) errors.push("Motivo da Locação");
+      if (!formData.cpf_morador) errors.push("CPF do Morador");
+
+      return errors;
+    };
+
+    const validationErrors = validateForm();
+    if (validationErrors.length > 0) {
+      setErrorMessage(
+        `Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou os campos. Campos obrigatórios que faltam: ${validationErrors.join(", ")}`
+      );
+      return;
+    }
+
     setIsLoading(true);
     try {
-      await createSeguroFiancaEmpresarialMenos2Anos(formData);
+      await createSeguroFiancaEmpresarialMenos2Anos(formData); // Certifique-se de que está chamando a função correta
+      console.log("Dados enviados para criação:", formData);
+
+      // Reseta o formulário e abre o modal de sucesso
       formRef.current?.reset();
       setIsSuccessModalOpen(true);
     } catch (error) {
       console.error("Erro ao enviar o formulário:", error);
       setErrorMessage(
-        "Ocorreu um erro ao enviar o formulário. Tente novamente."
+        "Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou campos de email corretamente. Tente novamente."
       );
     } finally {
       setIsLoading(false);
@@ -670,7 +714,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                   <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="composicao_renda_conjuge">
-                        Cônjuge Vai Compor a Renda?
+                        Cônjuge Vai Compor a Renda? <RequiredAsterisk />
                       </Label>
                       <Select
                         value={formData.composicao_renda_conjuge || ""}

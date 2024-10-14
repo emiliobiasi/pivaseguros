@@ -201,19 +201,62 @@ export function SeguroIncendioForms() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Enviando formulário:", formData);
-    setIsLoading(true); // Inicia o carregamento
+
+    // Verifique se o handleSubmit está sendo acionado
+    console.log("handleSubmit acionado com dados:", formData);
+
+    // Função de validação
+    const validateForm = () => {
+      const errors: string[] = [];
+      if (!formData.nome_imobiliaria) errors.push("Nome da Imobiliária");
+      if (!formData.email_imobiliaria) errors.push("Email da Imobiliária");
+      if (!formData.nome_locatario) errors.push("Nome do Locatário");
+      if (!formData.cpf_locatario) errors.push("CPF do Locatário");
+      if (!formData.data_nascimento_locatario)
+        errors.push("Data de Nascimento");
+      if (!formData.estado_civil) errors.push("Estado Civil");
+      if (!formData.sexo_locatario) errors.push("Sexo do Locatário");
+      if (!formData.cep) errors.push("CEP");
+      if (!formData.endereco) errors.push("Endereço");
+      if (!formData.bairro) errors.push("Bairro");
+      if (!formData.numero_endereco) errors.push("Número");
+      if (!formData.cidade) errors.push("Cidade");
+      if (!formData.estado) errors.push("Estado");
+      if (!formData.tipo_imovel) errors.push("Tipo do Imóvel");
+      if (!formData.plano_escolhido) errors.push("Plano Escolhido");
+      if (!formData.valor_seguro) errors.push("Valor do Seguro");
+      if (!formData.forma_pagamento) errors.push("Forma de Pagamento");
+      if (!formData.inclusao_clausula_beneficiaria)
+        errors.push("Inclusão de Cláusula Beneficiária");
+
+      return errors;
+    };
+
+    const validationErrors = validateForm();
+    if (validationErrors.length > 0) {
+      setErrorMessage(
+        `Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou os campos. Campos obrigatórios que faltam: ${validationErrors.join(
+          ", "
+        )}`
+      );
+      return;
+    }
+
+    setIsLoading(true);
     try {
-      await createSeguroIncendio(formData);
+      await createSeguroIncendio(formData); // Certifique-se de que está chamando a função correta
+      console.log("Dados enviados para criação:", formData);
+
+      // Reseta o formulário e abre o modal de sucesso
       formRef.current?.reset();
-      setIsSuccessModalOpen(true); // Mostra o modal ao enviar com sucesso
+      setIsSuccessModalOpen(true);
     } catch (error) {
       console.error("Erro ao enviar o formulário:", error);
       setErrorMessage(
-        "Ocorreu um erro ao enviar o formulário. Tente novamente."
+        "Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou campos de email corretamente. Tente novamente."
       );
     } finally {
-      setIsLoading(false); // Finaliza o carregamento
+      setIsLoading(false);
     }
   };
 

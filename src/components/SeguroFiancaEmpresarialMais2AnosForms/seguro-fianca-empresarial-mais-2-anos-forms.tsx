@@ -232,19 +232,67 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Enviando formulário:", formData);
-    setIsLoading(true); // Inicia o carregamento
+
+    // Verifique se o handleSubmit está sendo acionado
+    console.log("handleSubmit acionado com dados:", formData);
+
+    // Função de validação
+    const validateForm = () => {
+      const errors: string[] = [];
+      if (!formData.acao) errors.push("Ação");
+      if (!formData.opcao_tributaria) errors.push("Opção Tributária");
+      if (!formData.nome_empresa) errors.push("Nome da Empresa");
+      if (!formData.cnpj) errors.push("CNPJ");
+      if (!formData.telefone_empresa) errors.push("Telefone");
+      if (!formData.email_empresa) errors.push("Email");
+      if (!formData.atividade_economica) errors.push("Atividade Econômica");
+      if (!formData.cep_empresa) errors.push("CEP da Empresa");
+      if (!formData.endereco_empresa) errors.push("Endereço da Empresa");
+      if (!formData.bairro_empresa) errors.push("Bairro da Empresa");
+      if (!formData.numero_endereco_empresa) errors.push("Número da Empresa");
+      if (!formData.cidade_empresa) errors.push("Cidade da Empresa");
+      if (!formData.estado_empresa) errors.push("Estado da Empresa");
+      if (!formData.cep) errors.push("CEP");
+      if (!formData.endereco) errors.push("Endereço");
+      if (!formData.bairro) errors.push("Bairro");
+      if (!formData.numero_endereco) errors.push("Número");
+      if (!formData.cidade) errors.push("Cidade");
+      if (!formData.estado) errors.push("Estado");
+      if (!formData.motivo_locacao) errors.push("Motivo da Locação");
+      if (!formData.tipo_imovel) errors.push("Tipo do Imóvel");
+      if (!formData.valor_aluguel) errors.push("Valor do Aluguel");
+      if (!formData.nome_locador_imobiliaria)
+        errors.push("Nome do Locador ou Imobiliária");
+      if (!formData.telefone) errors.push("Telefone do Locador ou Imobiliária");
+      if (!formData.aluguel) errors.push("Aluguel");
+
+
+      return errors;
+    };
+
+    const validationErrors = validateForm();
+    if (validationErrors.length > 0) {
+      setErrorMessage(
+        `Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou os campos. Campos obrigatórios que faltam: ${validationErrors.join(", ")}`
+      );
+      return;
+    }
+
+    setIsLoading(true);
     try {
-      await createSeguroFiancaEmpresarialMais2Anos(formData);
+      await createSeguroFiancaEmpresarialMais2Anos(formData); // Certifique-se de que está chamando a função correta
+      console.log("Dados enviados para criação:", formData);
+
+      // Reseta o formulário e abre o modal de sucesso
       formRef.current?.reset();
-      setIsSuccessModalOpen(true); // Mostra o modal ao enviar com sucesso
+      setIsSuccessModalOpen(true);
     } catch (error) {
       console.error("Erro ao enviar o formulário:", error);
       setErrorMessage(
-        "Ocorreu um erro ao enviar o formulário. Tente novamente."
+        "Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou campos de email corretamente. Tente novamente."
       );
     } finally {
-      setIsLoading(false); // Finaliza o carregamento
+      setIsLoading(false);
     }
   };
 
