@@ -650,117 +650,121 @@ export function SeguroFiancaResidencialForms() {
                   )}
 
                   {/* Informações do Cônjuge */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="renda_composta_conjuge">
-                        Cônjuge vai compor a renda? <RequiredAsterisk />
-                      </Label>
-                      <Select
-                        value={formData.renda_composta_conjuge}
-                        onValueChange={(value) =>
-                          handleSelectChange("renda_composta_conjuge", value)
-                        }
-                        required
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Renda Composta do Cônjuge?" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="SIM">SIM</SelectItem>
-                          <SelectItem value="NÃO">NÃO</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="nome_conjuge">
-                        Nome do Cônjuge <RequiredAsterisk />
-                      </Label>
-                      <Input
-                        id="nome_conjuge"
-                        name="nome_conjuge"
-                        value={formData.nome_conjuge}
-                        onChange={handleInputChange}
-                        placeholder="Digite o nome do conjuge"
-                        required
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="cpf_conjuge">
-                        CPF do Cônjuge <RequiredAsterisk />
-                      </Label>
-                      <Input
-                        id="cpf_conjuge"
-                        name="cpf_conjuge"
-                        value={formData.cpf_conjuge}
-                        onChange={handleInputChange}
-                        placeholder="Digite o CPF do conjuge"
-                        required
-                      />
-                    </div>
-
-                    {formData.renda_composta_conjuge === "SIM" && (
-                      <>
+                  {formData.estado_civil_residente === "CASADO" && (
+                    <>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div className="space-y-2">
-                          <Label htmlFor="profissao_conjuge_opcional">
-                            Profissão do Cônjuge <RequiredAsterisk />
+                          <Label htmlFor="renda_composta_conjuge">
+                            Cônjuge vai compor a renda? <RequiredAsterisk />
+                          </Label>
+                          <Select
+                            value={formData.renda_composta_conjuge}
+                            onValueChange={(value) =>
+                              handleSelectChange(
+                                "renda_composta_conjuge",
+                                value
+                              )
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Renda Composta do Cônjuge?" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="SIM">SIM</SelectItem>
+                              <SelectItem value="NÃO">NÃO</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="nome_conjuge">
+                            Nome do Cônjuge <RequiredAsterisk />
                           </Label>
                           <Input
-                            id="profissao_conjuge_opcional"
-                            name="profissao_conjuge_opcional"
-                            value={formData.profissao_conjuge_opcional}
+                            id="nome_conjuge"
+                            name="nome_conjuge"
+                            value={formData.nome_conjuge}
                             onChange={handleInputChange}
-                            placeholder="Digite a profissão do cônjuge"
+                            placeholder="Digite o nome do conjuge"
                           />
                         </div>
 
                         <div className="space-y-2">
-                          <Label htmlFor="renda_mensal_conjuge_opcional">
-                            Renda Mensal do Cônjuge <RequiredAsterisk />
+                          <Label htmlFor="cpf_conjuge">
+                            CPF do Cônjuge <RequiredAsterisk />
                           </Label>
                           <Input
-                            id="renda_mensal_conjuge_opcional"
-                            name="renda_mensal_conjuge_opcional"
-                            value={formData.renda_mensal_conjuge_opcional}
+                            id="cpf_conjuge"
+                            name="cpf_conjuge"
+                            value={formData.cpf_conjuge}
                             onChange={handleInputChange}
-                            placeholder="Digite a renda mensal do cônjuge"
+                            placeholder="Digite o CPF do conjuge"
                           />
                         </div>
 
-                        <div className="space-y-2">
-                          <Label htmlFor="telefone_conjuge">
-                            Telefone do Cônjuge
-                            <RequiredAsterisk />
-                          </Label>
-                          <Input
-                            id="telefone_conjuge"
-                            name="telefone_conjuge"
-                            type="telefone_conjuge"
-                            value={formData.telefone_conjuge}
-                            onChange={handleInputChange}
-                            // required
-                            placeholder="Digite o telefone"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="email_conjuge">
-                            Email do Cônjuge
-                            <RequiredAsterisk />
-                          </Label>
-                          <Input
-                            id="email_conjuge"
-                            name="email_conjuge"
-                            type="email"
-                            value={formData.email_conjuge}
-                            onChange={handleInputChange}
-                            // required
-                            placeholder="Digite o email do cônjuge"
-                          />
-                        </div>
-                      </>
-                    )}
-                  </div>
+                        {formData.renda_composta_conjuge === "SIM" && (
+                          <>
+                            <div className="space-y-2">
+                              <Label htmlFor="profissao_conjuge_opcional">
+                                Profissão do Cônjuge <RequiredAsterisk />
+                              </Label>
+                              <Input
+                                id="profissao_conjuge_opcional"
+                                name="profissao_conjuge_opcional"
+                                value={formData.profissao_conjuge_opcional}
+                                onChange={handleInputChange}
+                                placeholder="Digite a profissão do cônjuge"
+                              />
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor="renda_mensal_conjuge_opcional">
+                                Renda Mensal do Cônjuge <RequiredAsterisk />
+                              </Label>
+                              <Input
+                                id="renda_mensal_conjuge_opcional"
+                                name="renda_mensal_conjuge_opcional"
+                                value={formData.renda_mensal_conjuge_opcional}
+                                onChange={handleInputChange}
+                                placeholder="Digite a renda mensal do cônjuge"
+                              />
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor="telefone_conjuge">
+                                Telefone do Cônjuge
+                                <RequiredAsterisk />
+                              </Label>
+                              <Input
+                                id="telefone_conjuge"
+                                name="telefone_conjuge"
+                                type="telefone_conjuge"
+                                value={formData.telefone_conjuge}
+                                onChange={handleInputChange}
+                                // required
+                                placeholder="Digite o telefone"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor="email_conjuge">
+                                Email do Cônjuge
+                                <RequiredAsterisk />
+                              </Label>
+                              <Input
+                                id="email_conjuge"
+                                name="email_conjuge"
+                                type="email"
+                                value={formData.email_conjuge}
+                                onChange={handleInputChange}
+                                // required
+                                placeholder="Digite o email do cônjuge"
+                              />
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </>
+                  )}
                 </div>
               </TabsContent>
 

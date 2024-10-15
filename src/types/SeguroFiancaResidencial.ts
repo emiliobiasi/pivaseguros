@@ -24,9 +24,10 @@ export type SeguroFiancaResidencial = {
 
   residir_imovel: "SIM" | "NÃO";
   responder_financeiramente: "SIM" | "NÃO";
+
+  renda_composta_conjuge?: "SIM" | "NÃO" ;
   nome_conjuge?: string;
   cpf_conjuge: string;
-  renda_composta_conjuge: "SIM" | "NÃO" ;
   profissao_conjuge_opcional?: string;
   telefone_conjuge?: string;
   email_conjuge?: string;

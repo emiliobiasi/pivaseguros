@@ -121,50 +121,52 @@ export function SeguroFiancaResidencialModal({
             )}
 
             {/* Informações do Cônjuge, se disponível */}
-            <>
-              <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
-                Informações do Cônjuge
-              </h3>
-              <p>
-                <strong>Renda Composta com Cônjuge:</strong>{" "}
-                {seguro.renda_composta_conjuge}
-              </p>
-              <p>
-                <strong>Nome do Cônjuge:</strong> {seguro.nome_conjuge}
-              </p>
-              {seguro.cpf_conjuge && (
+            {seguro.estado_civil_residente === "CASADO" && (
+              <>
+                <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+                  Informações do Cônjuge
+                </h3>
                 <p>
-                  <strong>CPF do Cônjuge:</strong> {seguro.cpf_conjuge}
+                  <strong>Renda Composta com Cônjuge:</strong>{" "}
+                  {seguro.renda_composta_conjuge}
                 </p>
-              )}
-
-              {seguro.telefone_conjuge && (
                 <p>
-                  <strong>Telefone do Cônjuge:</strong>{" "}
-                  {seguro.telefone_conjuge}
+                  <strong>Nome do Cônjuge:</strong> {seguro.nome_conjuge}
                 </p>
-              )}
-              {seguro.email_conjuge && (
-                <p>
-                  <strong>Email do Cônjuge:</strong> {seguro.email_conjuge}
-                </p>
-              )}
-              {seguro.profissao_conjuge_opcional && (
-                <p>
-                  <strong>Profissão do Cônjuge:</strong>{" "}
-                  {seguro.profissao_conjuge_opcional}
-                </p>
-              )}
-              {seguro.renda_mensal_conjuge_opcional &&
-                Number(seguro.renda_mensal_conjuge_opcional) && (
+                {seguro.cpf_conjuge && (
                   <p>
-                    <strong>Renda Mensal do Cônjuge:</strong> R${" "}
-                    {formatValor(
-                      Number(seguro.renda_mensal_conjuge_opcional).toFixed(2)
-                    )}
+                    <strong>CPF do Cônjuge:</strong> {seguro.cpf_conjuge}
                   </p>
                 )}
-            </>
+
+                {seguro.telefone_conjuge && (
+                  <p>
+                    <strong>Telefone do Cônjuge:</strong>{" "}
+                    {seguro.telefone_conjuge}
+                  </p>
+                )}
+                {seguro.email_conjuge && (
+                  <p>
+                    <strong>Email do Cônjuge:</strong> {seguro.email_conjuge}
+                  </p>
+                )}
+                {seguro.profissao_conjuge_opcional && (
+                  <p>
+                    <strong>Profissão do Cônjuge:</strong>{" "}
+                    {seguro.profissao_conjuge_opcional}
+                  </p>
+                )}
+                {seguro.renda_mensal_conjuge_opcional &&
+                  Number(seguro.renda_mensal_conjuge_opcional) && (
+                    <p>
+                      <strong>Renda Mensal do Cônjuge:</strong> R${" "}
+                      {formatValor(
+                        Number(seguro.renda_mensal_conjuge_opcional).toFixed(2)
+                      )}
+                    </p>
+                  )}
+              </>
+            )}
           </div>
 
           {/* Segunda Coluna */}
