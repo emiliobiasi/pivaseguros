@@ -34,7 +34,7 @@ export function SeguroFiancaEmpresarialMais2AnosModal({
       >
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Detalhes de {seguro.nome_empresa}
+            Detalhes de {seguro.nome_imobiliaria}
           </h2>
           <button
             onClick={onClose}
@@ -192,7 +192,7 @@ export function SeguroFiancaEmpresarialMais2AnosModal({
             {seguro.tipo_imovel === "ALUGADO" && (
               <>
                 <p>
-                  <strong>Valor do Aluguel:</strong> R${" "}
+                  <strong>Valor do Aluguel (Imóvel Atual):</strong> R${" "}
                   {seguro.valor_aluguel !== undefined &&
                     formatValor(seguro.valor_aluguel.toFixed(2))}
                 </p>
@@ -211,12 +211,12 @@ export function SeguroFiancaEmpresarialMais2AnosModal({
           <div className="space-y-4 bg-gray-100 p-4 rounded-lg">
             {/* Valores e Contas */}
             <h3 className="text-lg font-semibold text-[#025d37]">
-              Valores e Contas
+              Coberturas e Valores das Contas
             </h3>
-            {seguro.valor_aluguel !== undefined && (
+            {seguro.aluguel !== undefined && (
               <p>
                 <strong>Valor do Aluguel:</strong> R${" "}
-                {formatValor(seguro.valor_aluguel.toFixed(2))}
+                {formatValor(seguro.aluguel.toFixed(2))}
               </p>
             )}
             {seguro.agua !== undefined && seguro.agua > 0 && (
@@ -251,9 +251,9 @@ export function SeguroFiancaEmpresarialMais2AnosModal({
             )}
 
             {/* Coberturas */}
-            <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+            {/* <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
               Coberturas
-            </h3>
+            </h3> */}
             <p>
               <strong>Danos ao Imóvel:</strong> {seguro.danos_imovel}
             </p>
