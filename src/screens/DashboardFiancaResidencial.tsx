@@ -11,8 +11,7 @@ import { Button } from "@/components/ui/button";
 import { RecordSubscription } from "pocketbase";
 import { toast } from "sonner";
 import { FiancaResidencialTable } from "@/components/FiancaResidencialTable/fianca-residencial-table";
-import  notificacao_som  from '@/assets/notificacao_som.mp3';
-
+import notificacao_som from "@/assets/notificacao_som.mp3";
 
 export function DashboardFiancaResidencial() {
   const [data, setData] = useState<SeguroFiancaResidencial[]>([]);

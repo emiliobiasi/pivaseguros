@@ -73,10 +73,10 @@ export function SeguroFiancaResidencialModal({
                 </p>
               )}
               <p>
-                <strong>Telefone:</strong> {seguro.telefone}
+                <strong>Telefone do Pretendente:</strong> {seguro.telefone}
               </p>
               <p>
-                <strong>Email:</strong> {seguro.email}
+                <strong>Email do Pretendente:</strong> {seguro.email}
               </p>
               <p>
                 <strong>Residirá no Imóvel?:</strong> {seguro.residir_imovel}

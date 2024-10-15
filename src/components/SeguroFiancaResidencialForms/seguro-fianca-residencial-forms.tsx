@@ -335,50 +335,18 @@ export function SeguroFiancaResidencialForms() {
               <TabsContent value="personal">
                 <div className="grid gap-4 py-4">
                   {/* Informações da Imobiliária/Corretor */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="nome_imobiliaria">
-                        Nome da Imobiliária/Corretor <RequiredAsterisk />
-                      </Label>
-                      <Input
-                        id="nome_imobiliaria_corretor"
-                        name="nome_imobiliaria_corretor"
-                        value={formData.nome_imobiliaria_corretor}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="Digite o nome da imobiliária ou corretor"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email_imobiliaria">
-                        Email
-                        <RequiredAsterisk />
-                      </Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="Digite o email da imobiliária"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="telefone">
-                        Telefone
-                        <RequiredAsterisk />
-                      </Label>
-                      <Input
-                        id="telefone"
-                        name="telefone"
-                        type="telefone"
-                        value={formData.telefone}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="Digite o telefone"
-                      />
-                    </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="nome_imobiliaria">
+                      Nome da Imobiliária/Corretor <RequiredAsterisk />
+                    </Label>
+                    <Input
+                      id="nome_imobiliaria_corretor"
+                      name="nome_imobiliaria_corretor"
+                      value={formData.nome_imobiliaria_corretor}
+                      onChange={handleInputChange}
+                      required
+                      placeholder="Digite o nome da imobiliária ou corretor"
+                    />
                   </div>
 
                   {/* Informações Pessoais do Pretendente */}
@@ -407,6 +375,36 @@ export function SeguroFiancaResidencialForms() {
                         onChange={handleInputChange}
                         required
                         placeholder="Digite o CPF do pretendente"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="email_imobiliaria">
+                        Email do Pretendente
+                        <RequiredAsterisk />
+                      </Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        required
+                        placeholder="Digite o email do pretendente"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="telefone">
+                        Telefone do Pretendente
+                        <RequiredAsterisk />
+                      </Label>
+                      <Input
+                        id="telefone"
+                        name="telefone"
+                        type="telefone"
+                        value={formData.telefone}
+                        onChange={handleInputChange}
+                        required
+                        placeholder="Digite o telefone do pretendente"
                       />
                     </div>
                     <div className="space-y-2">
