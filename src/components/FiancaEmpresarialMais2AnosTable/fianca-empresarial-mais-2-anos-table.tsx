@@ -164,7 +164,7 @@ export function FiancaEmpresarialMais2AnosTable({ data }: TableContentProps) {
                     Nome da Imobiliária
                   </TableHead>
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
-                    Nome da Imobiliária
+                    Nome da Empresa
                   </TableHead>
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
                     Hora

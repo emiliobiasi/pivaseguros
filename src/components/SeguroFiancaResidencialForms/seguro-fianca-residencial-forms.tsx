@@ -215,7 +215,6 @@ export function SeguroFiancaResidencialForms() {
       if (!formData.nome_imobiliaria_corretor)
         errors.push("Nome da Imobiliária/Corretor");
       if (!formData.cpf_residente) errors.push("CPF do Residente");
-      if (!formData.cpf_conjuge) errors.push("CPF do Conjugê");
       if (!formData.nome_residente) errors.push("Nome do Residente");
       if (!formData.telefone) errors.push("Telefone");
       if (!formData.email) errors.push("Email");

@@ -20,6 +20,14 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
+import { useEffect, useState } from "react";
+import { Notificacao } from "@/types/Notificacao";
+import {
+  fetchAllNotifications,
+  subscribeToNotificationsUpdates,
+  unsubscribeFromNotificationsUpdates,
+  deleteNotifications,
+} from "@/utils/api/NotificacoesService";
 
 type SideBarProps = {
   sidebarOpen: boolean;
@@ -39,11 +47,10 @@ export function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
         >
           <Menu className="h-6 w-6" />
         </button>
-        {/* Removemos a imagem do logo aqui para que não apareça em telas menores */}
       </div>
 
       {/* Sidebar para telas maiores */}
-      <aside className="hidden md:flex flex-col w-56 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 min-h-screen">
+      <aside className="hidden md:flex flex-col w-60 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 min-h-screen">
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
           <span
             className="text-xl font-bold text-gray-800 dark:text-white cursor-pointer"
@@ -86,6 +93,122 @@ function SidebarContent() {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [notifications, setNotifications] = useState<Notificacao[]>([]);
+  const [notificationsCount, setNotificationsCount] = useState({
+    form_seguro_incendio: 0,
+    form_seguro_incendio_comercial: 0,
+    form_seguro_fianca_residencial: 0,
+    form_seguro_fianca_empresarial_mais_2_anos: 0,
+    form_seguro_fianca_empresarial_menos_2_anos: 0,
+    form_efetivacao_seguro_fianca_tb: 0,
+    form_titulo_capitalizacao: 0,
+  });
+
+  useEffect(() => {
+    // Função para buscar as notificações inicialmente
+    async function fetchNotifications() {
+      const { items: notifications } = await fetchAllNotifications();
+      setNotifications(notifications); // Armazena as notificações
+
+      const counts = {
+        form_seguro_incendio: 0,
+        form_seguro_incendio_comercial: 0,
+        form_seguro_fianca_residencial: 0,
+        form_seguro_fianca_empresarial_mais_2_anos: 0,
+        form_seguro_fianca_empresarial_menos_2_anos: 0,
+        form_efetivacao_seguro_fianca_tb: 0,
+        form_titulo_capitalizacao: 0,
+      };
+
+      // Contar notificações por tipo de formulário
+      notifications.forEach((notification) => {
+        if (notification.form_seguro_incendio) counts.form_seguro_incendio++;
+        if (notification.form_seguro_incendio_comercial)
+          counts.form_seguro_incendio_comercial++;
+        if (notification.form_seguro_fianca_residencial)
+          counts.form_seguro_fianca_residencial++;
+        if (notification.form_seguro_fianca_empresarial_mais_2_anos)
+          counts.form_seguro_fianca_empresarial_mais_2_anos++;
+        if (notification.form_seguro_fianca_empresarial_menos_2_anos)
+          counts.form_seguro_fianca_empresarial_menos_2_anos++;
+        if (notification.form_efetivacao_seguro_fianca_tb)
+          counts.form_efetivacao_seguro_fianca_tb++;
+        if (notification.form_titulo_capitalizacao)
+          counts.form_titulo_capitalizacao++;
+      });
+
+      setNotificationsCount(counts);
+    }
+
+    // Chamando a função para buscar notificações inicialmente
+    fetchNotifications();
+
+    // Função para ouvir as mudanças em tempo real
+    subscribeToNotificationsUpdates((e) => {
+      console.log("Real-time event:", e);
+
+      // Atualiza as notificações com base nos eventos em tempo real
+      if (e.action === "create") {
+        setNotifications((prevNotifications) => [
+          ...prevNotifications,
+          e.record,
+        ]);
+
+        setNotificationsCount((prevCounts) => {
+          const newCounts = { ...prevCounts };
+          const notification = e.record as Notificacao;
+
+          if (notification.form_seguro_incendio)
+            newCounts.form_seguro_incendio++;
+          if (notification.form_seguro_incendio_comercial)
+            newCounts.form_seguro_incendio_comercial++;
+          if (notification.form_seguro_fianca_residencial)
+            newCounts.form_seguro_fianca_residencial++;
+          if (notification.form_seguro_fianca_empresarial_mais_2_anos)
+            newCounts.form_seguro_fianca_empresarial_mais_2_anos++;
+          if (notification.form_seguro_fianca_empresarial_menos_2_anos)
+            newCounts.form_seguro_fianca_empresarial_menos_2_anos++;
+          if (notification.form_efetivacao_seguro_fianca_tb)
+            newCounts.form_efetivacao_seguro_fianca_tb++;
+          if (notification.form_titulo_capitalizacao)
+            newCounts.form_titulo_capitalizacao++;
+
+          return newCounts;
+        });
+      } else if (e.action === "delete") {
+        setNotifications((prevNotifications) =>
+          prevNotifications.filter((n) => n.id !== e.record.id)
+        );
+      }
+    });
+
+    // Cleanup: cancelar a inscrição do real-time quando o componente desmontar
+    return () => {
+      unsubscribeFromNotificationsUpdates();
+    };
+  }, []);
+
+  // Função para deletar notificações de um tipo específico
+  const handledeleteNotifications = async (
+    formType: keyof typeof notificationsCount
+  ) => {
+    const notificationsToDelete = notifications.filter(
+      (notification) => notification[formType]
+    );
+
+    if (notificationsToDelete.length > 0) {
+      await deleteNotifications(notificationsToDelete); // Chama o serviço para deletar as notificações
+      setNotifications((prevNotifications) =>
+        prevNotifications.filter(
+          (notification) => !notificationsToDelete.includes(notification)
+        )
+      );
+      setNotificationsCount((prevCounts) => ({
+        ...prevCounts,
+        [formType]: 0, // Reseta o contador de notificações localmente
+      }));
+    }
+  };
 
   const handleLogout = () => {
     logout();
@@ -104,7 +227,7 @@ function SidebarContent() {
                 : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
             }`}
           >
-            <Home className="h-5 w-5 mr-3 " />
+            <Home className="h-5 w-5 mr-3" />
             <span>Início</span>
           </button>
         </li>
@@ -122,7 +245,10 @@ function SidebarContent() {
                   {/* Incêndio Residencial */}
                   <li>
                     <button
-                      onClick={() => navigate("/dashboard-incendio")}
+                      onClick={async () => {
+                        navigate("/dashboard-incendio");
+                        await handledeleteNotifications("form_seguro_incendio");
+                      }}
                       className={`flex items-center w-full px-4 py-2 text-left ${
                         location.pathname === "/dashboard-incendio"
                           ? "bg-gray-200 dark:bg-gray-700 text-green-700 dark:text-white"
@@ -131,13 +257,26 @@ function SidebarContent() {
                     >
                       <HomeIcon className="h-5 w-5 mr-3" />
                       <span>Incêndio Residencial</span>
+                      {notificationsCount.form_seguro_incendio > 0 && (
+                        <span
+                          className="ml-2 text-xs text-white bg-green-800 flex items-center justify-center rounded-full flex-shrink-0"
+                          style={{ width: "0.95rem", height: "0.95rem" }}
+                        >
+                          {notificationsCount.form_seguro_incendio}
+                        </span>
+                      )}
                     </button>
                   </li>
 
                   {/* Incêndio Comercial */}
                   <li>
                     <button
-                      onClick={() => navigate("/dashboard-incendio-comercial")}
+                      onClick={async () => {
+                        navigate("/dashboard-incendio-comercial");
+                        await handledeleteNotifications(
+                          "form_seguro_incendio_comercial"
+                        );
+                      }}
                       className={`flex items-center w-full px-4 py-2 text-left ${
                         location.pathname === "/dashboard-incendio-comercial"
                           ? "bg-gray-200 dark:bg-gray-700 text-green-700 dark:text-white"
@@ -146,6 +285,15 @@ function SidebarContent() {
                     >
                       <Building className="h-5 w-5 mr-3" />
                       <span>Incêndio Comercial</span>
+                      {notificationsCount.form_seguro_incendio_comercial >
+                        0 && (
+                        <span
+                          className="ml-2 text-xs text-white bg-green-800 flex items-center justify-center rounded-full flex-shrink-0"
+                          style={{ width: "0.95rem", height: "0.95rem" }}
+                        >
+                          {notificationsCount.form_seguro_incendio_comercial}
+                        </span>
+                      )}
                     </button>
                   </li>
                 </ul>
@@ -154,7 +302,7 @@ function SidebarContent() {
           </Accordion>
         </li>
 
-        {/* Dashboards Fiança */}
+        {/* Outros dashboards de Fiança */}
         <li>
           <Accordion type="single" collapsible>
             <AccordionItem value="fianca">
@@ -167,7 +315,12 @@ function SidebarContent() {
                   {/* Fiança Residencial */}
                   <li>
                     <button
-                      onClick={() => navigate("/dashboard-fianca-residencial")}
+                      onClick={async () => {
+                        navigate("/dashboard-fianca-residencial");
+                        await handledeleteNotifications(
+                          "form_seguro_fianca_residencial"
+                        );
+                      }}
                       className={`flex items-center w-full px-4 py-2 text-left ${
                         location.pathname === "/dashboard-fianca-residencial"
                           ? "bg-gray-200 dark:bg-gray-700 text-green-700 dark:text-white"
@@ -176,15 +329,27 @@ function SidebarContent() {
                     >
                       <HomeIcon className="h-5 w-5 mr-3" />
                       <span>Fiança Residencial</span>
+                      {notificationsCount.form_seguro_fianca_residencial >
+                        0 && (
+                        <span
+                          className="ml-2 text-xs text-white bg-green-800 flex items-center justify-center rounded-full flex-shrink-0"
+                          style={{ width: "0.95rem", height: "0.95rem" }}
+                        >
+                          {notificationsCount.form_seguro_fianca_residencial}
+                        </span>
+                      )}
                     </button>
                   </li>
 
                   {/* Fiança Empresarial Mais de 2 Anos */}
                   <li>
                     <button
-                      onClick={() =>
-                        navigate("/dashboard-fianca-empresarial-mais-2-anos")
-                      }
+                      onClick={async () => {
+                        navigate("/dashboard-fianca-empresarial-mais-2-anos");
+                        await handledeleteNotifications(
+                          "form_seguro_fianca_empresarial_mais_2_anos"
+                        );
+                      }}
                       className={`flex items-center w-full px-4 py-2 text-left ${
                         location.pathname ===
                         "/dashboard-fianca-empresarial-mais-2-anos"
@@ -194,15 +359,29 @@ function SidebarContent() {
                     >
                       <Building className="h-5 w-5 mr-3" />
                       <span>Fiança CNPJ Acima de 2 Anos</span>
+                      {notificationsCount.form_seguro_fianca_empresarial_mais_2_anos >
+                        0 && (
+                        <span
+                          className="ml-2 text-xs text-white bg-green-800 flex items-center justify-center rounded-full flex-shrink-0"
+                          style={{ width: "0.95rem", height: "0.95rem" }}
+                        >
+                          {
+                            notificationsCount.form_seguro_fianca_empresarial_mais_2_anos
+                          }
+                        </span>
+                      )}
                     </button>
                   </li>
 
                   {/* Fiança Empresarial Menos de 2 Anos */}
                   <li>
                     <button
-                      onClick={() =>
-                        navigate("/dashboard-fianca-empresarial-menos-2-anos")
-                      }
+                      onClick={async () => {
+                        navigate("/dashboard-fianca-empresarial-menos-2-anos");
+                        await handledeleteNotifications(
+                          "form_seguro_fianca_empresarial_menos_2_anos"
+                        );
+                      }}
                       className={`flex items-center w-full px-4 py-2 text-left ${
                         location.pathname ===
                         "/dashboard-fianca-empresarial-menos-2-anos"
@@ -212,15 +391,29 @@ function SidebarContent() {
                     >
                       <Building2 className="h-5 w-5 mr-3" />
                       <span>Fiança CNPJ Menos de 2 Anos</span>
+                      {notificationsCount.form_seguro_fianca_empresarial_menos_2_anos >
+                        0 && (
+                        <span
+                          className="ml-2 text-xs text-white bg-green-800 flex items-center justify-center rounded-full flex-shrink-0"
+                          style={{ width: "0.95rem", height: "0.95rem" }}
+                        >
+                          {
+                            notificationsCount.form_seguro_fianca_empresarial_menos_2_anos
+                          }
+                        </span>
+                      )}
                     </button>
                   </li>
 
-                  {/* EFETIVACAO SEGURO FIANCA */}
+                  {/* Efetivação Seguro Fiança */}
                   <li>
                     <button
-                      onClick={() =>
-                        navigate("/dashboard-efetivacao-seguro-fianca")
-                      }
+                      onClick={async () => {
+                        navigate("/dashboard-efetivacao-seguro-fianca");
+                        await handledeleteNotifications(
+                          "form_efetivacao_seguro_fianca_tb"
+                        );
+                      }}
                       className={`flex items-center w-full px-4 py-2 text-left ${
                         location.pathname ===
                         "/dashboard-efetivacao-seguro-fianca"
@@ -230,6 +423,15 @@ function SidebarContent() {
                     >
                       <Coins className="h-5 w-5 mr-3" />
                       <span>Efetivação Seguro Fiança</span>
+                      {notificationsCount.form_efetivacao_seguro_fianca_tb >
+                        0 && (
+                        <span
+                          className="ml-2 text-xs text-white bg-green-800 flex items-center justify-center rounded-full flex-shrink-0"
+                          style={{ width: "0.95rem", height: "0.95rem" }}
+                        >
+                          {notificationsCount.form_efetivacao_seguro_fianca_tb}
+                        </span>
+                      )}
                     </button>
                   </li>
                 </ul>
@@ -238,7 +440,7 @@ function SidebarContent() {
           </Accordion>
         </li>
 
-        {/* TT CAPITALIZACAO */}
+        {/* Título de Capitalização */}
         <li>
           <button
             onClick={() => navigate("/dashboard-titulo-capitalizacao")}
@@ -250,6 +452,14 @@ function SidebarContent() {
           >
             <CaptionsIcon className="h-5 w-5 mr-3" />
             <span>Título de Capitalização</span>
+            {notificationsCount.form_titulo_capitalizacao > 0 && (
+              <span
+                className="ml-2 text-xs text-white bg-green-800 flex items-center justify-center rounded-full flex-shrink-0"
+                style={{ width: "0.95rem", height: "0.95rem" }}
+              >
+                {notificationsCount.form_titulo_capitalizacao}
+              </span>
+            )}
           </button>
         </li>
 

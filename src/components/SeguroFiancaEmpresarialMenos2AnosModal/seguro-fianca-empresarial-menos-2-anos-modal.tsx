@@ -153,7 +153,8 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
               <strong>Alocação Pretendida Constituída:</strong>{" "}
               {seguro.alocacao_pretendida_constituida}
             </p>
-            {seguro.cnpj_pessoa_fisica_nao_residencial && (
+
+            {seguro.alocacao_pretendida_constituida === "SIM" && (
               <p>
                 <strong>CNPJ:</strong>{" "}
                 {seguro.cnpj_pessoa_fisica_nao_residencial}
@@ -388,7 +389,8 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                     <strong>Ramal:</strong> {seguro.ramal_conjuge}
                   </p>
                 )}
-                {seguro.salario_conjuge !== undefined && seguro.salario_conjuge !== 0 ? (
+                {seguro.salario_conjuge !== undefined &&
+                seguro.salario_conjuge !== 0 ? (
                   <p>
                     <strong>Salário:</strong> R${" "}
                     {formatValor(seguro.salario_conjuge.toFixed(2))}

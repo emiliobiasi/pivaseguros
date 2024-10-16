@@ -292,7 +292,7 @@ export function FiancaEmpresarialMenos2AnosTable({ data }: TableContentProps) {
                       </button>
                     </TableCell>
                     <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
-                      {seguro.motivo_locacao}
+                      {seguro.nome_pretendente}
                     </TableCell>
                     <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
                       {new Date(seguro.created).toLocaleDateString()} -{" "}

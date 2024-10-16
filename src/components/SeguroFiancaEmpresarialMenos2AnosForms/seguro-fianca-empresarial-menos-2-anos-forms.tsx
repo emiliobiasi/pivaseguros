@@ -360,6 +360,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
       if (!formData.arca_com_aluguel) errors.push("Arca com Aluguel");
       if (!formData.vinculo_empregaticio) errors.push("Vínculo Empregatício");
       if (!formData.profissao) errors.push("Profissão");
+      if (!formData.salario) errors.push("Salário");
       if (!formData.alocacao_pretendida_constituida)
         errors.push("Alocação Pretendida Constituída");
       if (!formData.franquia) errors.push("Franquia");
@@ -368,6 +369,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
         errors.push("Investimento para Abertura");
       if (!formData.motivo_locacao) errors.push("Motivo da Locação");
       if (!formData.cpf_morador) errors.push("CPF do Morador");
+      if (!formData.aluguel_imovel_alugado) errors.push("Valor do Aluguel");
 
       return errors;
     };
@@ -1336,13 +1338,16 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="salario">Salário</Label>
+                      <Label htmlFor="salario">
+                        Salário <RequiredAsterisk />
+                      </Label>
                       <Input
                         id="salario"
                         name="salario"
                         value={formData.salario || ""}
                         onChange={handleInputChange}
                         placeholder="Digite o salário"
+                        required
                       />
                     </div>
                     <div className="space-y-2">
@@ -1958,7 +1963,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="aluguel_imovel_alugado">
-                        Valor do Aluguel
+                        Valor do Aluguel <RequiredAsterisk />
                       </Label>
                       <Input
                         id="aluguel_imovel_alugado"
@@ -1966,6 +1971,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         value={formData.aluguel_imovel_alugado || ""}
                         onChange={handleInputChange}
                         placeholder="Digite o valor do aluguel"
+                        required
                       />
                     </div>
                     <div className="space-y-2">
