@@ -289,6 +289,13 @@ export function EfetivacaoSeguroFiancaForms() {
             Para concluir a efetivação do Seguro Fiança, solicitamos o
             preenchimento dos dados a seguir:
           </CardDescription>
+          <h3 className="" style={{ marginTop: "1.5rem " }}>
+            💡Os campos marcados com{" "}
+            <strong>
+              <RequiredAsterisk />
+            </strong>{" "}
+            são <strong>obrigatórios.</strong>
+          </h3>
         </CardHeader>
         <form onSubmit={handleSubmit} ref={formRef}>
           <CardContent>
@@ -515,7 +522,7 @@ export function EfetivacaoSeguroFiancaForms() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="cpf_proprietario">
-                        CPF do Proprietário 
+                        CPF do Proprietário
                       </Label>
                       <Input
                         id="cpf_proprietario"
