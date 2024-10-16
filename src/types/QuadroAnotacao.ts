@@ -5,7 +5,6 @@ export type QuadroAnotacao = {
   meta_mensal?: string
   mes_atual?: string
   acumulado_anual?: string
-  dados_linha?: string
   created: Date;
   updated: Date;
 };
