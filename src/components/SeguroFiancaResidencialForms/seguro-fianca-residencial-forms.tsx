@@ -226,7 +226,7 @@ export function SeguroFiancaResidencialForms() {
       if (!formData.estado_civil_residente)
         errors.push("Estado Civil do Residente");
       if (!formData.renda_composta_conjuge)
-        errors.push("Renda Composta do Conjugê");
+        errors.push("Renda Composta do Cônjuge");
       if (!formData.cep_locacao) errors.push("CEP");
       if (!formData.endereco_locacao) errors.push("Endereço");
       if (!formData.bairro_locacao) errors.push("Bairro");
