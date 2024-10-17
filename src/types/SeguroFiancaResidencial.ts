@@ -1,6 +1,7 @@
 export type SeguroFiancaResidencial = {
   id: string;
   id_numero: number;
+  status: "APROVADO" | "REPROVADO";
   acao: "PENDENTE" | "FINALIZADO";
   nome_imobiliaria_corretor: string;
 
@@ -12,20 +13,20 @@ export type SeguroFiancaResidencial = {
   renda_mensal?: number;
   data_nascimento: Date;
   estado_civil_residente: "SOLTEIRO" | "CASADO" | "VIÚVO" | "DIVORCIADO";
-  
+
   nome_residente_nao?: string;
   cpf_residente_nao?: string;
   data_nascimento_residente_nao: Date;
   profissao_residente_nao?: string;
   renda_mensal_residente_nao?: number;
-  
+
   telefone_residente_nao?: string;
   email_residente_nao?: string;
 
   residir_imovel: "SIM" | "NÃO";
   responder_financeiramente: "SIM" | "NÃO";
 
-  renda_composta_conjuge?: "SIM" | "NÃO" ;
+  renda_composta_conjuge?: "SIM" | "NÃO";
   nome_conjuge?: string;
   cpf_conjuge: string;
   profissao_conjuge_opcional?: string;

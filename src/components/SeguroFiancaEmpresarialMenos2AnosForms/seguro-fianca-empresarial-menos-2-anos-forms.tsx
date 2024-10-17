@@ -57,6 +57,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
   const [formData, setFormData] = useState<SeguroFiancaEmpresarialMenos2Anos>({
     id: "",
     id_numero: 0,
+    status: "REPROVADO",
     acao: "PENDENTE",
     nome_imobiliaria: "",
     nome_pretendente: "",
@@ -89,7 +90,6 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
     outros_rendimentos_conjuge: undefined,
     total_rendimentos_mensais_conjuge: undefined,
     created: new Date(),
-    // Optional fields can be left as undefined or default values
   });
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {

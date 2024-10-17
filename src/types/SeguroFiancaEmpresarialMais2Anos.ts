@@ -1,8 +1,8 @@
 export type SeguroFiancaEmpresarialMais2Anos = {
   id: string;
   id_numero: number;
+  status: "APROVADO" | "REPROVADO";
   acao: "PENDENTE" | "FINALIZADO";
-
 
   nome_imobiliaria: string;
   opcao_tributaria: "LUCRO REAL" | "LUCRO" | "PRESUMIDO" | "SIMPLES NACIONAL";
@@ -18,7 +18,6 @@ export type SeguroFiancaEmpresarialMais2Anos = {
   nome_socio_2?: string;
   cpf_socio_2?: string;
 
-
   cep: string;
   endereco: string;
   bairro: string;
@@ -27,14 +26,13 @@ export type SeguroFiancaEmpresarialMais2Anos = {
   cidade: string;
   estado: string;
 
-  cep_empresa: string
-  endereco_empresa: string
-  bairro_empresa: string
-  numero_endereco_empresa: number
-  cidade_empresa: string
-  estado_empresa: string
+  cep_empresa: string;
+  endereco_empresa: string;
+  bairro_empresa: string;
+  numero_endereco_empresa: number;
+  cidade_empresa: string;
+  estado_empresa: string;
   complemento_empresa?: string;
-
 
   motivo_locacao:
     | "ABERTURA DE FILIAL"

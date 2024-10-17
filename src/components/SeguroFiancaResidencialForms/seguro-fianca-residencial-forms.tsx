@@ -56,6 +56,7 @@ export function SeguroFiancaResidencialForms() {
   const [formData, setFormData] = useState<SeguroFiancaResidencial>({
     id: "",
     id_numero: 0,
+    status: "REPROVADO",
     acao: "PENDENTE",
     nome_imobiliaria_corretor: "",
     cpf_residente: "",

@@ -57,6 +57,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
   const [formData, setFormData] = useState<SeguroFiancaEmpresarialMais2Anos>({
     id: "",
     id_numero: 0,
+    status: "REPROVADO",
     acao: "PENDENTE",
     opcao_tributaria: "LUCRO REAL",
     nome_empresa: "",
