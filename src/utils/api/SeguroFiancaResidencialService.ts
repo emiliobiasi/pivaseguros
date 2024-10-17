@@ -149,6 +149,34 @@ export async function updateSeguroFiancaResidencialToFinalized(
   }
 }
 
+// Função para atualizar o campo "status" para "APROVADO" ou "REPROVADO"
+export async function updateSeguroFiancaResidencialStatus(
+  id: string,
+  status: "APROVADO" | "REPROVADO"
+): Promise<SeguroFiancaResidencial> {
+  try {
+    const updatedRecord = await pb
+      .collection("seguro_fianca_residencial")
+      .update<SeguroFiancaResidencial>(id, {
+        status: status,
+      });
+    console.log(
+      `Seguro Fiança Residencial ${id} atualizado para ${status}:`,
+      updatedRecord
+    );
+    return updatedRecord;
+  } catch (error) {
+    const err = error as PocketBaseError;
+    console.error(
+      `Erro ao atualizar o Seguro Fiança Residencial ${id} para ${status}:`,
+      err
+    );
+    throw new Error(
+      `Erro ao atualizar o Seguro Fiança Residencial para ${status}`
+    );
+  }
+}
+
 // Função para iniciar a subscription em tempo real
 export function subscribeToSeguroFiancaResidencialUpdates(
   onRecordChange: (data: RecordSubscription<SeguroFiancaResidencial>) => void

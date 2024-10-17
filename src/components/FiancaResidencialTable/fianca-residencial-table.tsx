@@ -27,6 +27,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import {
   updateSeguroFiancaResidencialToPending,
   updateSeguroFiancaResidencialToFinalized,
+  updateSeguroFiancaResidencialStatus,
 } from "@/utils/api/SeguroFiancaResidencialService";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
@@ -39,11 +40,11 @@ type TableContentProps = {
 export function FiancaResidencialTable({ data }: TableContentProps) {
   const [seguros, setSeguros] = useState<SeguroFiancaResidencial[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedSeguro, setSelectedSeguro] = useState<SeguroFiancaResidencial | null>(
-    null
-  );
+  const [selectedSeguro, setSelectedSeguro] =
+    useState<SeguroFiancaResidencial | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingAction, setLoadingAction] = useState<string | null>(null);
+  const [loadingStatus, setLoadingStatus] = useState<string | null>(null); 
 
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [sortBy, setSortBy] = useState<"acao" | "hora" | null>(null);
@@ -125,6 +126,36 @@ export function FiancaResidencialTable({ data }: TableContentProps) {
     }
   };
 
+  const handleStatusChange = async (
+    id: string,
+    novoStatus: "APROVADO" | "REPROVADO"
+  ) => {
+    try {
+      setLoadingStatus(id); // Ativa o loading para o botão de "Status" correspondente
+
+      const updatedRecord = await updateSeguroFiancaResidencialStatus(
+        id,
+        novoStatus
+      );
+
+      setSeguros((prevSeguros) => {
+        const updatedSeguros = prevSeguros.map((seguro) =>
+          seguro.id === id
+            ? { ...seguro, status: updatedRecord.status }
+            : seguro
+        );
+        return updatedSeguros;
+      });
+
+      toast.success(`O status foi atualizado para ${novoStatus}`);
+    } catch (error) {
+      console.error("Erro ao atualizar o status:", error);
+      toast.error("Erro ao atualizar o status.");
+    } finally {
+      setLoadingStatus(null); // Remove o loading do botão de "Status" após a atualização
+    }
+  };
+
   const openUserModal = (seguro: SeguroFiancaResidencial) => {
     setSelectedSeguro(seguro);
     setIsModalOpen(true);
@@ -154,6 +185,9 @@ export function FiancaResidencialTable({ data }: TableContentProps) {
                     Ação
                   </TableHead>
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
+                    Status
+                  </TableHead>
+                  <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
                     Nome da Imobiliária/Corretor
                   </TableHead>
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
@@ -169,6 +203,9 @@ export function FiancaResidencialTable({ data }: TableContentProps) {
                   <TableRow key={i}>
                     <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
                       <Skeleton className="h-6 w-16" />
+                    </TableCell>
+                    <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
+                      <Skeleton className="h-6 w-24" />
                     </TableCell>
                     <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
                       <Skeleton className="h-6 w-24" />
@@ -204,6 +241,9 @@ export function FiancaResidencialTable({ data }: TableContentProps) {
                       ) : (
                         <ChevronDown className="inline ml-1" />
                       ))}
+                  </TableHead>
+                  <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
+                    Status
                   </TableHead>
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
                     Nome da Imobiliária/Corretor
@@ -277,6 +317,44 @@ export function FiancaResidencialTable({ data }: TableContentProps) {
                       )}
                     </TableCell>
                     <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
+                      {loadingStatus === seguro.id ? (
+                        <div className="flex items-center">
+                          <Loader2 className="animate-spin w-4 h-4 mr-2" />
+                          {seguro.status === "APROVADO"
+                            ? "Reprovando..."
+                            : "Aprovando..."}
+                        </div>
+                      ) : (
+                        <Select
+                          value={seguro.status}
+                          onValueChange={(value) =>
+                            handleStatusChange(
+                              seguro.id,
+                              value as "APROVADO" | "REPROVADO"
+                            )
+                          }
+                        >
+                          <SelectTrigger className="w-[140px]">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="APROVADO">
+                              <div className="flex items-center">
+                                <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
+                                <span>Aprovado</span>
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="REPROVADO">
+                              <div className="flex items-center">
+                                <Clock className="w-4 h-4 mr-2 text-red-500" />
+                                <span>Reprovado</span>
+                              </div>
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      )}
+                    </TableCell>
+                    <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
                       <button
                         onClick={() => openUserModal(seguro)}
                         className="text-blue-600 hover:text-blue-800"
@@ -298,7 +376,7 @@ export function FiancaResidencialTable({ data }: TableContentProps) {
           )}
         </div>
       </div>
-      
+
       {selectedSeguro && (
         <SeguroFiancaResidencialModal
           seguro={selectedSeguro}

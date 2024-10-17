@@ -27,6 +27,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import {
   updateSeguroFiancaEmpresarialMais2AnosToPending,
   updateSeguroFiancaEmpresarialMais2AnosToFinalized,
+  updateSeguroFiancaEmpresarialMais2AnosStatus,
 } from "@/utils/api/SeguroFiancaEmpresarialMais2AnosService";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
@@ -45,6 +46,7 @@ export function FiancaEmpresarialMais2AnosTable({ data }: TableContentProps) {
     useState<SeguroFiancaEmpresarialMais2Anos | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingAction, setLoadingAction] = useState<string | null>(null);
+  const [loadingStatus, setLoadingStatus] = useState<string | null>(null); // Estado para carregamento do status
 
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [sortBy, setSortBy] = useState<"acao" | "hora" | null>(null);
@@ -132,6 +134,38 @@ export function FiancaEmpresarialMais2AnosTable({ data }: TableContentProps) {
     }
   };
 
+  const handleStatusChange = async (
+    id: string,
+    novoStatus: "APROVADO" | "REPROVADO"
+  ) => {
+    try {
+      setLoadingStatus(id); // Ativa o carregamento do status
+
+      const updatedRecord = await updateSeguroFiancaEmpresarialMais2AnosStatus(
+        id,
+        novoStatus
+      );
+
+      setSeguros((prevSeguros) => {
+        const updatedSeguros = prevSeguros.map((seguro) =>
+          seguro.id === id
+            ? { ...seguro, status: updatedRecord.status }
+            : seguro
+        );
+        return ordenarPendentesPrimeiro(updatedSeguros);
+      });
+
+      toast.success(`O status foi atualizado para ${novoStatus}`, {
+        duration: 3000,
+      });
+    } catch (error) {
+      console.error("Erro ao atualizar o status:", error);
+      toast.error("Erro ao atualizar o status.");
+    } finally {
+      setLoadingStatus(null); // Desativa o carregamento após a conclusão
+    }
+  };
+
   const openUserModal = (seguro: SeguroFiancaEmpresarialMais2Anos) => {
     setSelectedSeguro(seguro);
     setIsModalOpen(true);
@@ -161,6 +195,9 @@ export function FiancaEmpresarialMais2AnosTable({ data }: TableContentProps) {
                     Ação
                   </TableHead>
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
+                    Status
+                  </TableHead>
+                  <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
                     Nome da Imobiliária
                   </TableHead>
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
@@ -176,6 +213,9 @@ export function FiancaEmpresarialMais2AnosTable({ data }: TableContentProps) {
                   <TableRow key={i}>
                     <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
                       <Skeleton className="h-6 w-16" />
+                    </TableCell>
+                    <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
+                      <Skeleton className="h-6 w-24" />
                     </TableCell>
                     <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
                       <Skeleton className="h-6 w-24" />
@@ -211,6 +251,9 @@ export function FiancaEmpresarialMais2AnosTable({ data }: TableContentProps) {
                       ) : (
                         <ChevronDown className="inline ml-1" />
                       ))}
+                  </TableHead>
+                  <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
+                    Status
                   </TableHead>
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
                     Nome da Imobiliária
@@ -277,6 +320,44 @@ export function FiancaEmpresarialMais2AnosTable({ data }: TableContentProps) {
                               <div className="flex items-center">
                                 <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
                                 <span>Finalizado</span>
+                              </div>
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      )}
+                    </TableCell>
+                    <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
+                      {loadingStatus === seguro.id ? (
+                        <div className="flex items-center">
+                          <Loader2 className="animate-spin w-4 h-4 mr-2" />
+                          {seguro.status === "APROVADO"
+                            ? "Reprovando..."
+                            : "Aprovando..."}
+                        </div>
+                      ) : (
+                        <Select
+                          value={seguro.status}
+                          onValueChange={(value) =>
+                            handleStatusChange(
+                              seguro.id,
+                              value as "APROVADO" | "REPROVADO"
+                            )
+                          }
+                        >
+                          <SelectTrigger className="w-[140px]">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="APROVADO">
+                              <div className="flex items-center">
+                                <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
+                                <span>Aprovado</span>
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="REPROVADO">
+                              <div className="flex items-center">
+                                <Clock className="w-4 h-4 mr-2 text-red-500" />
+                                <span>Reprovado</span>
                               </div>
                             </SelectItem>
                           </SelectContent>

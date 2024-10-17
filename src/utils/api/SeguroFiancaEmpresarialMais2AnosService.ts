@@ -161,6 +161,34 @@ export async function updateSeguroFiancaEmpresarialMais2AnosToFinalized(
   }
 }
 
+// Função para atualizar o campo "status" para "APROVADO" ou "REPROVADO"
+export async function updateSeguroFiancaEmpresarialMais2AnosStatus(
+  id: string,
+  status: "APROVADO" | "REPROVADO"
+): Promise<SeguroFiancaEmpresarialMais2Anos> {
+  try {
+    const updatedRecord = await pb
+      .collection("seguro_fianca_empresarial_mais_2_anos")
+      .update<SeguroFiancaEmpresarialMais2Anos>(id, {
+        status: status,
+      });
+    console.log(
+      `Seguro Fiança Empresarial Acima de 2 Anos ${id} atualizado para ${status}:`,
+      updatedRecord
+    );
+    return updatedRecord;
+  } catch (error) {
+    const err = error as PocketBaseError;
+    console.error(
+      `Erro ao atualizar o Seguro Fiança Empresarial Acima de 2 Anos ${id} para ${status}:`,
+      err
+    );
+    throw new Error(
+      `Erro ao atualizar o Seguro Fiança Empresarial Acima de 2 Anos para ${status}`
+    );
+  }
+}
+
 // Função para iniciar a subscription em tempo real
 export function subscribeToSeguroFiancaEmpresarialMais2AnosUpdates(
   onRecordChange: (

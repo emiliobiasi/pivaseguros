@@ -156,6 +156,34 @@ export async function updateSeguroFiancaEmpresarialMenos2AnosToFinalized(
   }
 }
 
+// Função para atualizar o campo "status" para "APROVADO" ou "REPROVADO"
+export async function updateSeguroFiancaEmpresarialMenos2AnosStatus(
+  id: string,
+  status: "APROVADO" | "REPROVADO"
+): Promise<SeguroFiancaEmpresarialMenos2Anos> {
+  try {
+    const updatedRecord = await pb
+      .collection("seguro_fianca_empresarial_menos_2_anos")
+      .update<SeguroFiancaEmpresarialMenos2Anos>(id, {
+        status: status,
+      });
+    console.log(
+      `Seguro Fiança: Pessoa Jurídica Comercial (CNPJ Menos de 2 Anos) ${id} atualizado para ${status}:`,
+      updatedRecord
+    );
+    return updatedRecord;
+  } catch (error) {
+    const err = error as PocketBaseError;
+    console.error(
+      `Erro ao atualizar o Seguro Fiança: Pessoa Jurídica Comercial (CNPJ Menos de 2 Anos) ${id} para ${status}:`,
+      err
+    );
+    throw new Error(
+      `Erro ao atualizar o Seguro Fiança: Pessoa Jurídica Comercial (CNPJ Menos de 2 Anos) para ${status}`
+    );
+  }
+}
+
 // Função para iniciar a subscription em tempo real
 export function subscribeToSeguroFiancaEmpresarialMenos2AnosUpdates(
   onRecordChange: (
