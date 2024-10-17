@@ -241,7 +241,6 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
     // Função de validação
     const validateForm = () => {
       const errors: string[] = [];
-      if (!formData.acao) errors.push("Ação");
       if (!formData.nome_imobiliaria) errors.push("Nome da Imobiliária");
       if (!formData.opcao_tributaria) errors.push("Opção Tributária");
       if (!formData.nome_empresa) errors.push("Nome da Empresa");
