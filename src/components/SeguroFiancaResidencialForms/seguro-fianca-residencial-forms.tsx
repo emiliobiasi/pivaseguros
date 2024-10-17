@@ -227,7 +227,7 @@ export function SeguroFiancaResidencialForms() {
       if (!formData.estado_civil_residente)
         errors.push("Estado Civil do Residente");
       if (!formData.renda_composta_conjuge)
-        errors.push("Renda Composta do Conjugê");
+        errors.push("Renda Composta do Cônjuge");
       if (!formData.cep_locacao) errors.push("CEP");
       if (!formData.endereco_locacao) errors.push("Endereço");
       if (!formData.bairro_locacao) errors.push("Bairro");
@@ -284,6 +284,14 @@ export function SeguroFiancaResidencialForms() {
             Para concluir a análise do Seguro Fiança Residencial, solicitamos o
             preenchimento dos dados a seguir:
           </CardDescription>
+
+          <h3 className="" style={{ marginTop: "1.5rem " }}>
+            💡Os campos marcados com{" "}
+            <strong>
+              <RequiredAsterisk />
+            </strong>{" "}
+            são <strong>obrigatórios.</strong>
+          </h3>
         </CardHeader>
         <form onSubmit={handleSubmit} ref={formRef}>
           <CardContent>
@@ -652,6 +660,14 @@ export function SeguroFiancaResidencialForms() {
                   {/* Informações do Cônjuge */}
                   {formData.estado_civil_residente === "CASADO" && (
                     <>
+                      <h3 className="mt-4">
+                        {" "}
+                        Preencha os campos obrigatórios{" "}
+                        <strong>
+                          <RequiredAsterisk />
+                        </strong>{" "}
+                        abaixo:{" "}
+                      </h3>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="renda_composta_conjuge">

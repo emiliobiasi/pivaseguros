@@ -416,6 +416,13 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
             (CNPJ Menos de 2 Anos), solicitamos o preenchimento dos dados a
             seguir:
           </CardDescription>
+          <h3 className="" style={{ marginTop: "1.5rem " }}>
+            💡Os campos marcados com{" "}
+            <strong>
+              <RequiredAsterisk />
+            </strong>{" "}
+            são <strong>obrigatórios.</strong>
+          </h3>
         </CardHeader>
         <form onSubmit={handleSubmit} ref={formRef}>
           <CardContent>

@@ -314,6 +314,14 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
             (CNPJ Acima de 2 Anos), solicitamos o preenchimento dos dados a
             seguir:
           </CardDescription>
+
+          <h3 className="" style={{ marginTop: "1.5rem " }}>
+            💡Os campos marcados com{" "}
+            <strong>
+              <RequiredAsterisk />
+            </strong>{" "}
+            são <strong>obrigatórios.</strong>
+          </h3>
         </CardHeader>
         <form onSubmit={handleSubmit} ref={formRef}>
           <CardContent>

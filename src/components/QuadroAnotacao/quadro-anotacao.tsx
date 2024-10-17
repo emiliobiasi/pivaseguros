@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import {
   fetchQuadroAnotacao,
   updateQuadroAnotacao,
+  subscribeToQuadroAnotacaoUpdates,
+  unsubscribeFromQuadroAnotacaoUpdates,
 } from "@/utils/api/QuadroAnotacaoService";
 
 export function QuadroAnotacao() {
@@ -15,8 +17,8 @@ export function QuadroAnotacao() {
     mesAtual: "",
   });
 
-  const [loading, setLoading] = useState(true); // Estado para indicar carregamento
-  const [error, setError] = useState<string | null>(null); // Estado para erros
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // Função assíncrona para buscar dados do banco
@@ -27,7 +29,7 @@ export function QuadroAnotacao() {
         // Atualiza o estado com os dados recebidos e formata os valores
         setValues({
           metaAnual: formatCurrency(data.meta_anual || ""),
-          faltaMeta: formatCurrency(data.falta_para_meta || "", true), // isNegative = true
+          faltaMeta: formatCurrency(data.falta_para_meta || "", true),
           acumuladoAnual: formatCurrency(data.acumulado_anual || ""),
           metaMensal: formatCurrency(data.meta_mensal || ""),
           mesAtual: data.mes_atual || "",
@@ -42,6 +44,25 @@ export function QuadroAnotacao() {
     };
 
     fetchData();
+
+    // Subscrever para atualizações em tempo real
+    const handleRealTimeUpdates = (e: any) => {
+      const updatedData = e.record;
+      setValues({
+        metaAnual: formatCurrency(updatedData.meta_anual || ""),
+        faltaMeta: formatCurrency(updatedData.falta_para_meta || "", true),
+        acumuladoAnual: formatCurrency(updatedData.acumulado_anual || ""),
+        metaMensal: formatCurrency(updatedData.meta_mensal || ""),
+        mesAtual: updatedData.mes_atual || "",
+      });
+    };
+
+    subscribeToQuadroAnotacaoUpdates(handleRealTimeUpdates);
+
+    // Cancelar a assinatura quando o componente for desmontado
+    return () => {
+      unsubscribeFromQuadroAnotacaoUpdates();
+    };
   }, []);
 
   const formatCurrency = (value: string, isNegative = false) => {
