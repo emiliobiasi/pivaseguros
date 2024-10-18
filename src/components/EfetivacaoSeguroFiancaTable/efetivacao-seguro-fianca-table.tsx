@@ -159,18 +159,24 @@ export function EfetivacaoSeguroFiancaTable({ data }: TableContentProps) {
                     Seguradora
                   </TableHead>
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
+                    Inquilino
+                  </TableHead>
+                  <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
                     Hora
                   </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {[...Array(5)].map((_, i) => (
+                {[...Array(6)].map((_, i) => (
                   <TableRow key={i}>
                     <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
                       <Skeleton className="h-6 w-16" />
                     </TableCell>
                     <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
                       <Skeleton className="h-6 w-24" />
+                    </TableCell>
+                    <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
+                      <Skeleton className="h-6 w-32" />
                     </TableCell>
                     <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
                       <Skeleton className="h-6 w-32" />
@@ -209,6 +215,9 @@ export function EfetivacaoSeguroFiancaTable({ data }: TableContentProps) {
                   </TableHead>
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
                     Seguradora
+                  </TableHead>
+                  <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
+                    Inquilino
                   </TableHead>
                   <TableHead
                     className="px-3 py-2 lg:px-6 lg:py-3 cursor-pointer"
@@ -284,7 +293,13 @@ export function EfetivacaoSeguroFiancaTable({ data }: TableContentProps) {
                       </button>
                     </TableCell>
                     <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
-                      {seguro.seguradora}
+                      {seguro.seguradora.charAt(0).toUpperCase() +
+                        seguro.seguradora.slice(1)}
+                    </TableCell>
+                    <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
+                      {seguro.nome_inquilino_1
+                        ? seguro.nome_inquilino_1
+                        : "Inquilino não informado pela imobiliária"}
                     </TableCell>
                     <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
                       {new Date(seguro.created).toLocaleDateString()} -{" "}
