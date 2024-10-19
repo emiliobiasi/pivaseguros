@@ -1,4 +1,4 @@
-import { TrendingUp } from "lucide-react";
+import { Flame, TrendingUp } from "lucide-react";
 import { Bar, BarChart, XAxis, YAxis, Tooltip, LabelList } from "recharts";
 import {
   Card,
@@ -30,14 +30,24 @@ export function GraficoBarraHorizontal({
   const totalCount = data.reduce((total, item) => total + item.count, 0);
 
   return (
-    <Card>
+    <Card style={{ width: "70%" }}>
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        <CardTitle
+          style={{ display: "flex", alignItems: "center", marginBottom: "5px" }}
+        >
+          <Flame style={{ marginRight: "8px", color: "orange" }} />
+          {title}
+        </CardTitle>
+        <CardDescription style={{ fontSize: "1em", color: "black" }}>
+          {description}:{" "}
+          <span style={{ fontWeight: "bold", fontSize: "1.1em" }}>
+            {totalCount}
+          </span>
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <BarChart
-          width={600}
+          width={700}
           height={300}
           data={data}
           layout="vertical"
@@ -60,8 +70,12 @@ export function GraficoBarraHorizontal({
               const percentage = (Number(value) / totalCount) * 100;
               return [`${value} (${percentage.toFixed(2)}%)`, "Seguros"];
             }}
-            contentStyle={{ backgroundColor: "#ffffff", color: "#000000" }} // Tooltip branco com texto preto
-            cursor={{ fill: "rgba(0, 0, 0, 0.1)" }} // Destaque ao passar o mouse sobre a barra
+            contentStyle={{
+              backgroundColor: "#ffffff",
+              color: "#000000",
+              borderRadius: "7px",
+            }} // Tooltip branco com texto preto
+            cursor={{ fill: "rgba(0, 0, 0, 0.1)", radius: 5 }}
           />
           <Bar dataKey={dataKey} fill="#28a745" radius={5}>
             <LabelList
@@ -71,7 +85,12 @@ export function GraficoBarraHorizontal({
                 const percentage = (value / totalCount) * 100;
                 return `${value} (${percentage.toFixed(2)}%)`;
               }}
-              style={{ fill: "#FFFFFF" }} // Define a cor do texto como branco
+              style={{
+                fill: "#FFFFFF",
+                fontWeight: "bold",
+                fontSize: 12,
+                textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)",
+              }} // Define a cor do texto como branco
             />
           </Bar>
         </BarChart>

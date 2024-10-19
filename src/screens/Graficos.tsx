@@ -91,7 +91,7 @@ const Graficos = () => {
         data={combinedData}
         dataKey="count"
         xAxisKey="nome_imobiliaria_original" // Exibe o nome original
-        title="Seguros por Imobiliária"
+        title="INCÊNDIO: Seguros por Imobiliária"
         description="Total de Seguros de Incêndio (Comercial e Residencial) criados no último mês"
       />
     </div>
