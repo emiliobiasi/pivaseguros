@@ -139,6 +139,34 @@ export async function updateSeguroIncendioToFinalized(
   }
 }
 
+// Função para buscar seguros de incêndio criados no último mês
+export async function fetchSeguroIncendioLastMonth(): Promise<
+  SeguroIncendio[]
+> {
+  try {
+    // Calcula a data do último mês
+    const lastMonthDate = new Date();
+    lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
+
+    // Formata a data para ser usada no filtro
+    const lastMonthFilter = `created >= "${lastMonthDate.toISOString()}"`;
+
+    // Faz a busca dos registros criados no último mês
+    const response = await pb
+      .collection("seguro_incendio")
+      .getFullList<SeguroIncendio>({
+        sort: "-created",
+        filter: lastMonthFilter, // Aplica o filtro para buscar registros do último mês
+      });
+
+    return response;
+  } catch (error) {
+    const err = error as ClientResponseError;
+    console.error("Erro ao buscar Seguros Incêndio do último mês:", err);
+    throw new Error("Erro ao buscar Seguros Incêndio do último mês");
+  }
+}
+
 // Função para iniciar a subscription em tempo real
 export function subscribeToSeguroIncendioUpdates(
   onRecordChange: (data: RecordSubscription<SeguroIncendio>) => void

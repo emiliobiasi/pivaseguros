@@ -9,6 +9,7 @@ import {
   Building,
   CaptionsIcon,
   Coins,
+  ChartBar,
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/logo.png";
@@ -473,6 +474,21 @@ function SidebarContent() {
             <ExternalLink className="h-5 w-5 mr-3" />
             <span>Fazer orçamento</span>
           </a>
+        </li>
+
+        {/* Gráfic */}
+        <li>
+          <button
+            onClick={() => navigate("/graficos")}
+            className={`flex items-center w-full px-4 py-2 text-left text-sm ${
+              location.pathname === "/graficos"
+                ? "bg-gray-200 dark:bg-gray-700 text-green-700 dark:text-white"
+                : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+            }`}
+          >
+            <ChartBar className="h-5 w-5 mr-3" />
+            <span>Gráficos</span>
+          </button>
         </li>
       </ul>
 

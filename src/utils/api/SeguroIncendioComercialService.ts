@@ -7,23 +7,36 @@ export async function createSeguroIncendioComercial(
   data: SeguroIncendioComercial
 ): Promise<SeguroIncendioComercial> {
   try {
-    // Buscar o seguro existente com o maior valor de "id_numero"
-    const lastRecord = await pb
-      .collection("seguro_incendio_comercial")
-      .getFirstListItem<SeguroIncendioComercial>("", {
-        sort: "-id_numero", // Ordena em ordem decrescente pelo campo "id_numero"
-        limit: 1,
-      });
+    // Inicializa lastRecord como nulo
+    let lastRecord: SeguroIncendioComercial | null = null;
 
-    // Determinar o próximo valor para "id_numero"
+    try {
+      // Tenta obter o último registro com base em "id_numero"
+      lastRecord = await pb
+        .collection("seguro_incendio_comercial")
+        .getFirstListItem<SeguroIncendioComercial>("", {
+          sort: "-id_numero",
+        });
+    } catch (error) {
+      const err = error as ClientResponseError;
+      if (err.status === 404) {
+        // Nenhum registro encontrado, continua com lastRecord como nulo
+        console.log("Nenhum registro encontrado. Iniciando id_numero em 1.");
+      } else {
+        // Re-lança outros erros
+        throw err;
+      }
+    }
+
+    // Determina o próximo valor para "id_numero"
     const nextIdNumero = lastRecord ? (lastRecord.id_numero || 0) + 1 : 1;
 
-    // Cria o novo seguro com o campo "id_numero" incrementado
+    // Cria o novo registro com o campo "id_numero" incrementado
     const record = await pb
       .collection("seguro_incendio_comercial")
       .create<SeguroIncendioComercial>({
         ...data,
-        id_numero: nextIdNumero, // Adiciona o campo "id_numero" ao novo registro
+        id_numero: nextIdNumero,
       });
 
     console.log("Seguro Incêndio Comercial criado com sucesso:", record);
@@ -97,7 +110,9 @@ export async function updateSeguroIncendioComercialToPending(
       `Erro ao atualizar o Seguro Incêndio Comercial ${id} para PENDENTE:`,
       err
     );
-    throw new Error("Erro ao atualizar o Seguro Incêndio Comercial para PENDENTE");
+    throw new Error(
+      "Erro ao atualizar o Seguro Incêndio Comercial para PENDENTE"
+    );
   }
 }
 
@@ -122,7 +137,40 @@ export async function updateSeguroIncendioComercialToFinalized(
       `Erro ao atualizar o Seguro Incêndio Comercial ${id} para FINALIZADO:`,
       err
     );
-    throw new Error("Erro ao atualizar o Seguro Incêndio Comercial para FINALIZADO");
+    throw new Error(
+      "Erro ao atualizar o Seguro Incêndio Comercial para FINALIZADO"
+    );
+  }
+}
+
+// Função para buscar seguros de incêndio comercial criados no último mês
+export async function fetchSeguroIncendioComercialLastMonth(): Promise<
+  SeguroIncendioComercial[]
+> {
+  try {
+    // Calcula a data do último mês
+    const lastMonthDate = new Date();
+    lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
+
+    // Formata a data para ser usada no filtro
+    const lastMonthFilter = `created >= "${lastMonthDate.toISOString()}"`;
+
+    // Faz a busca dos registros criados no último mês
+    const response = await pb
+      .collection("seguro_incendio_comercial")
+      .getFullList<SeguroIncendioComercial>({
+        sort: "-created",
+        filter: lastMonthFilter, // Aplica o filtro para buscar registros do último mês
+      });
+
+    return response;
+  } catch (error) {
+    const err = error as ClientResponseError;
+    console.error(
+      "Erro ao buscar Seguros Incêndio Comercial do último mês:",
+      err
+    );
+    throw new Error("Erro ao buscar Seguros Incêndio Comercial do último mês");
   }
 }
 

@@ -206,7 +206,6 @@ export function SeguroIncendioComercialForms() {
     // Função de validação
     const validateForm = () => {
       const errors: string[] = [];
-      if (!formData.acao) errors.push("Ação");
       if (!formData.nome_imobiliaria) errors.push("Nome da Imobiliária");
       if (!formData.email_imobiliaria) errors.push("Email da Imobiliária");
       if (!formData.nome_locatario) errors.push("Nome do Locatário");
@@ -589,28 +588,6 @@ export function SeguroIncendioComercialForms() {
 
               <TabsContent value="property">
                 <div className="grid gap-4 py-4">
-                  {/* <div className="space-y-2">
-                    <Label htmlFor="tipo_imovel">
-                      Tipo do Imóvel <RequiredAsterisk />
-                    </Label>
-                    <Select
-                      value={formData.tipo_imovel}
-                      onValueChange={(value) =>
-                        handleSelectChange("tipo_imovel", value)
-                      }
-                      required
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione o tipo do imóvel" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="CASA">Casa</SelectItem>
-                        <SelectItem value="APARTAMENTO">Apartamento</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div> */}
-                  {/* Campos adicionais do imóvel */}
-
                   <div className="space-y-2">
                     <Label htmlFor="atividade">
                       Atividade da Empresa <RequiredAsterisk />

@@ -19,6 +19,7 @@ import TituloCapitalizacaoScreen from "@/screens/TituloCapitalizacaoScreen";
 import { DashboardTituloCapitalizacao } from "@/screens/DashboardTituloCapitalizacao";
 import { DashboardEfetivacaoSeguroFianca } from "@/screens/DashboardEfetivacaoSeguroFianca";
 import { DashboardFiancaEmpresarialMenos2Anos } from "@/screens/DashboardFiancaEmpresarialMenos2Anos";
+import Graficos from "@/screens/Graficos";
 
 const RoutesComponent = () => {
   return (
@@ -70,6 +71,14 @@ const RoutesComponent = () => {
               }
             />
             <Route
+              path="graficos"
+              element={
+                <PrivateRoute>
+                  <Graficos />
+                </PrivateRoute>
+              }
+            />
+            <Route
               path="dashboard-incendio"
               element={
                 <PrivateRoute>
@@ -105,7 +114,7 @@ const RoutesComponent = () => {
               path="dashboard-fianca-empresarial-menos-2-anos"
               element={
                 <PrivateRoute>
-                  <DashboardFiancaEmpresarialMenos2Anos/ >
+                  <DashboardFiancaEmpresarialMenos2Anos />
                 </PrivateRoute>
               }
             />
