@@ -152,7 +152,7 @@ export async function updateSeguroFiancaResidencialToFinalized(
 // Função para atualizar o campo "status" para "APROVADO" ou "REPROVADO"
 export async function updateSeguroFiancaResidencialStatus(
   id: string,
-  status: "APROVADO" | "REPROVADO"
+  status: "EM ANÁLISE" | "APROVADO" | "REPROVADO"
 ): Promise<SeguroFiancaResidencial> {
   try {
     const updatedRecord = await pb

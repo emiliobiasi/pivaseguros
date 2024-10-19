@@ -29,6 +29,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { formatCPF } from "@/utils/regex/regexCPF";
+import { formatCNPJ } from "@/utils/regex/regexCNPJ";
 import { formatCEP } from "@/utils/regex/regexCEP";
 import { createSeguroIncendioComercial } from "@/utils/api/SeguroIncendioComercialService";
 import {
@@ -140,6 +141,13 @@ export function SeguroIncendioComercialForms() {
           [name]: formattedValue,
         }));
       }
+    } else if (name === "cnpj_locador_opcional" || name === "cnpj_locatario") {
+      formattedValue = formatCNPJ(value);
+      // Aqui você pode adicionar lógica específica para o CNPJ, se necessário
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: formattedValue,
+      }));
     } else if (
       [
         "incendio",
@@ -202,7 +210,6 @@ export function SeguroIncendioComercialForms() {
       if (!formData.nome_imobiliaria) errors.push("Nome da Imobiliária");
       if (!formData.email_imobiliaria) errors.push("Email da Imobiliária");
       if (!formData.nome_locatario) errors.push("Nome do Locatário");
-      if (!formData.cpf_locatario) errors.push("CPF do Locatário");
       if (!formData.data_nascimento_locatario)
         errors.push("Data de Nascimento");
       if (!formData.estado_civil) errors.push("Estado Civil");
@@ -332,7 +339,7 @@ export function SeguroIncendioComercialForms() {
 
               <TabsContent value="personal">
                 <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="nome_imobiliaria">
                         Nome da Imobiliária <RequiredAsterisk />
@@ -360,8 +367,6 @@ export function SeguroIncendioComercialForms() {
                         placeholder="Digite o email da imobiliária"
                       />
                     </div>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="nome_locatario">
                         Nome do Locatário <RequiredAsterisk />
@@ -375,20 +380,35 @@ export function SeguroIncendioComercialForms() {
                         placeholder="Digite o nome do locatário"
                       />
                     </div>
+                  </div>
+
+                  <h3 className="mt-5">
+                    <RequiredAsterisk /> Preencha apenas um dos campos abaixo,
+                    de acordo com o documeto do locatário:
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="cpf_locatario">
-                        CPF do Locatário <RequiredAsterisk />
-                      </Label>
+                      <Label htmlFor="cpf_locatario">CPF do Locatário</Label>
                       <Input
                         id="cpf_locatario"
                         name="cpf_locatario"
                         value={formData.cpf_locatario}
                         onChange={handleInputChange}
-                        required
+                        placeholder="Digite o CPF do locatário"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="cnpj_locatario">CNPJ do Locatário</Label>
+                      <Input
+                        id="cnpj_locatario"
+                        name="cnpj_locatario"
+                        value={formData.cnpj_locatario}
+                        onChange={handleInputChange}
                         placeholder="Digite o CPF do locatário"
                       />
                     </div>
                   </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="data_nascimento_locatario">

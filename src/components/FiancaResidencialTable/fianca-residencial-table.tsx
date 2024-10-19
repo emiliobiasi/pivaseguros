@@ -1,3 +1,4 @@
+import { SeguroFiancaResidencial } from "@/types/SeguroFiancaResidencial";
 import { useEffect, useState } from "react";
 import {
   Table,
@@ -20,8 +21,9 @@ import {
   Loader2,
   ChevronUp,
   ChevronDown,
+  Timer,
+  X,
 } from "lucide-react";
-import { SeguroFiancaResidencial } from "@/types/SeguroFiancaResidencial";
 import { SeguroFiancaResidencialModal } from "../SeguroFiancaResidencialModal/seguro-fianca-residencial-modal";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -44,7 +46,7 @@ export function FiancaResidencialTable({ data }: TableContentProps) {
     useState<SeguroFiancaResidencial | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingAction, setLoadingAction] = useState<string | null>(null);
-  const [loadingStatus, setLoadingStatus] = useState<string | null>(null); 
+  const [loadingStatus, setLoadingStatus] = useState<string | null>(null);
 
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [sortBy, setSortBy] = useState<"acao" | "hora" | null>(null);
@@ -128,7 +130,7 @@ export function FiancaResidencialTable({ data }: TableContentProps) {
 
   const handleStatusChange = async (
     id: string,
-    novoStatus: "APROVADO" | "REPROVADO"
+    novoStatus: "EM ANÁLISE" | "APROVADO" | "REPROVADO"
   ) => {
     try {
       setLoadingStatus(id); // Ativa o loading para o botão de "Status" correspondente
@@ -330,7 +332,7 @@ export function FiancaResidencialTable({ data }: TableContentProps) {
                           onValueChange={(value) =>
                             handleStatusChange(
                               seguro.id,
-                              value as "APROVADO" | "REPROVADO"
+                              value as "EM ANÁLISE" | "APROVADO" | "REPROVADO"
                             )
                           }
                         >
@@ -338,6 +340,12 @@ export function FiancaResidencialTable({ data }: TableContentProps) {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
+                            <SelectItem value="EM ANÁLISE">
+                              <div className="flex items-center">
+                                <Timer className="w-4 h-4 mr-2 text-yellow-500" />
+                                <span>Em análise</span>
+                              </div>
+                            </SelectItem>
                             <SelectItem value="APROVADO">
                               <div className="flex items-center">
                                 <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
@@ -346,7 +354,7 @@ export function FiancaResidencialTable({ data }: TableContentProps) {
                             </SelectItem>
                             <SelectItem value="REPROVADO">
                               <div className="flex items-center">
-                                <Clock className="w-4 h-4 mr-2 text-red-500" />
+                                <X className="w-4 h-4 mr-2 text-red-500" />
                                 <span>Reprovado</span>
                               </div>
                             </SelectItem>

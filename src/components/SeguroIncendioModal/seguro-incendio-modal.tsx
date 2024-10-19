@@ -57,14 +57,23 @@ export function SeguroIncendioModal({
             </p>
 
             <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
-              Informações do Proponente
+              Informações do Locatário
             </h3>
             <p>
-              <strong>Nome do Proponente:</strong> {seguro.nome_locatario}
+              <strong>Nome do Locatário:</strong> {seguro.nome_locatario}
             </p>
-            <p>
-              <strong>CPF do Proponente:</strong> {seguro.cpf_locatario}
-            </p>
+            <>
+              {seguro.cpf_locatario && (
+                <>
+                  <strong>CPF do Locatário:</strong> {seguro.cpf_locatario}
+                </>
+              )}
+              {seguro.cnpj_locatario && (
+                <>
+                  <strong>CNPJ do Locatário:</strong> {seguro.cnpj_locatario}
+                </>
+              )}
+            </>
             <p>
               <strong>Data de Nascimento:</strong>{" "}
               {new Date(seguro.data_nascimento_locatario).toLocaleDateString()}
@@ -187,43 +196,6 @@ export function SeguroIncendioModal({
               <strong>Incluir Cláusula Beneficiária:</strong>{" "}
               {seguro.inclusao_clausula_beneficiaria ? "Sim" : "Não"}
             </p>
-
-            {(seguro.cpf_locador_opcional || seguro.nome_locador) && (
-              <>
-                <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
-                  Locador CPF (opcional)
-                </h3>
-                {seguro.cpf_locador_opcional && (
-                  <p>
-                    <strong>CPF do Locador:</strong>{" "}
-                    {seguro.cpf_locador_opcional}
-                  </p>
-                )}
-                {seguro.nome_locador && (
-                  <p>
-                    <strong>Nome do Locador:</strong> {seguro.nome_locador}
-                  </p>
-                )}
-              </>
-            )}
-            {(seguro.cnpj_locador_opcional || seguro.nome_locador_cnpj) && (
-              <>
-                <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
-                  Locador CNPJ (opcional)
-                </h3>
-                {seguro.cnpj_locador_opcional && (
-                  <p>
-                    <strong>CNPJ do Locador:</strong>{" "}
-                    {seguro.cnpj_locador_opcional}
-                  </p>
-                )}
-                {seguro.nome_locador_cnpj && (
-                  <p>
-                    <strong>Nome do Locador:</strong> {seguro.nome_locador_cnpj}
-                  </p>
-                )}
-              </>
-            )}
           </div>
         </div>
         <div className="mt-6">

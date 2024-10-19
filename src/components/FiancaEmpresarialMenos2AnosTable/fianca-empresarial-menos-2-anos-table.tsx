@@ -21,6 +21,8 @@ import {
   Loader2,
   ChevronUp,
   ChevronDown,
+  X,
+  Timer,
 } from "lucide-react";
 
 import { Skeleton } from "@/components/ui/skeleton";
@@ -136,7 +138,7 @@ export function FiancaEmpresarialMenos2AnosTable({ data }: TableContentProps) {
 
   const handleStatusChange = async (
     id: string,
-    novoStatus: "APROVADO" | "REPROVADO"
+    novoStatus: "EM ANÁLISE" | "APROVADO" | "REPROVADO"
   ) => {
     try {
       setLoadingStatus(id); // Ativa o loading para o status
@@ -340,7 +342,7 @@ export function FiancaEmpresarialMenos2AnosTable({ data }: TableContentProps) {
                           onValueChange={(value) =>
                             handleStatusChange(
                               seguro.id,
-                              value as "APROVADO" | "REPROVADO"
+                              value as "EM ANÁLISE" | "APROVADO" | "REPROVADO"
                             )
                           }
                         >
@@ -348,6 +350,12 @@ export function FiancaEmpresarialMenos2AnosTable({ data }: TableContentProps) {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
+                            <SelectItem value="EM ANÁLISE">
+                              <div className="flex items-center">
+                                <Timer className="w-4 h-4 mr-2 text-yellow-500" />
+                                <span>Em análise</span>
+                              </div>
+                            </SelectItem>
                             <SelectItem value="APROVADO">
                               <div className="flex items-center">
                                 <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
@@ -356,7 +364,7 @@ export function FiancaEmpresarialMenos2AnosTable({ data }: TableContentProps) {
                             </SelectItem>
                             <SelectItem value="REPROVADO">
                               <div className="flex items-center">
-                                <Clock className="w-4 h-4 mr-2 text-red-500" />
+                                <X className="w-4 h-4 mr-2 text-red-500" />
                                 <span>Reprovado</span>
                               </div>
                             </SelectItem>

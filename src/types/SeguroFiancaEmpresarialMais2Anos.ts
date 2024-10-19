@@ -1,7 +1,7 @@
 export type SeguroFiancaEmpresarialMais2Anos = {
   id: string;
   id_numero: number;
-  status: "APROVADO" | "REPROVADO";
+  status: "EM ANÁLISE" | "APROVADO" | "REPROVADO";
   acao: "PENDENTE" | "FINALIZADO";
 
   nome_imobiliaria: string;

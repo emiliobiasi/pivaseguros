@@ -284,7 +284,7 @@ export function EfetivacaoSeguroFiancaForms() {
     <div className="mb-40 flex justify-center">
       <Card className="w-full max-w-4xl md:mx-10 sm:mx-10">
         <CardHeader className="mb-5">
-          <CardTitle>Seguro Fiança</CardTitle>
+          <CardTitle>Efetivação de Seguro Fiança</CardTitle>
           <CardDescription>
             Para concluir a efetivação do Seguro Fiança, solicitamos o
             preenchimento dos dados a seguir:
@@ -521,30 +521,6 @@ export function EfetivacaoSeguroFiancaForms() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="cpf_proprietario">
-                        CPF do Proprietário
-                      </Label>
-                      <Input
-                        id="cpf_proprietario"
-                        name="cpf_proprietario"
-                        value={formData.cpf_proprietario}
-                        onChange={handleInputChange}
-                        placeholder="Digite o CPF do proprietário"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="cnpj_proprietario">
-                        CNPJ do Proprietário
-                      </Label>
-                      <Input
-                        id="cnpj_proprietario"
-                        name="cnpj_proprietario"
-                        value={formData.cnpj_proprietario}
-                        onChange={handleInputChange}
-                        placeholder="Digite o CNPJ do proprietário"
-                      />
-                    </div>
-                    <div className="space-y-2">
                       <Label htmlFor="rg_proprietario">
                         RG do Proprietário <RequiredAsterisk />
                       </Label>
@@ -583,6 +559,37 @@ export function EfetivacaoSeguroFiancaForms() {
                         onChange={handleInputChange}
                         required
                         placeholder="Digite o email do proprietário"
+                      />
+                    </div>
+                  </div>
+
+                  <h3 className="mt-5">
+                    <RequiredAsterisk /> Preencha apenas um dos campos abaixo,
+                    de acordo com o documeto do proprietário:
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="cpf_proprietario">
+                        CPF do Proprietário
+                      </Label>
+                      <Input
+                        id="cpf_proprietario"
+                        name="cpf_proprietario"
+                        value={formData.cpf_proprietario}
+                        onChange={handleInputChange}
+                        placeholder="Digite o CPF do proprietário"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="cnpj_proprietario">
+                        CNPJ do Proprietário
+                      </Label>
+                      <Input
+                        id="cnpj_proprietario"
+                        name="cnpj_proprietario"
+                        value={formData.cnpj_proprietario}
+                        onChange={handleInputChange}
+                        placeholder="Digite o CNPJ do proprietário"
                       />
                     </div>
                   </div>

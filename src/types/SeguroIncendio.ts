@@ -5,7 +5,8 @@ export type SeguroIncendio = {
   nome_imobiliaria: string;
   email_imobiliaria: string;
   nome_locatario: string;
-  cpf_locatario: string;
+  cpf_locatario?: string;
+  cnpj_locatario?: string;
   data_nascimento_locatario: Date;
   estado_civil: "SOLTEIRO" | "CASADO" | "VIÚVO" | "DIVORCIADO";
   sexo_locatario: "MASCULINO" | "FEMININO";

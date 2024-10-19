@@ -57,7 +57,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
   const [formData, setFormData] = useState<SeguroFiancaEmpresarialMenos2Anos>({
     id: "",
     id_numero: 0,
-    status: "REPROVADO",
+    status: "EM ANÁLISE",
     acao: "PENDENTE",
     nome_imobiliaria: "",
     nome_pretendente: "",

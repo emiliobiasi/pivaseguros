@@ -159,7 +159,7 @@ export async function updateSeguroFiancaEmpresarialMenos2AnosToFinalized(
 // Função para atualizar o campo "status" para "APROVADO" ou "REPROVADO"
 export async function updateSeguroFiancaEmpresarialMenos2AnosStatus(
   id: string,
-  status: "APROVADO" | "REPROVADO"
+  status: "EM ANÁLISE" | "APROVADO" | "REPROVADO"
 ): Promise<SeguroFiancaEmpresarialMenos2Anos> {
   try {
     const updatedRecord = await pb

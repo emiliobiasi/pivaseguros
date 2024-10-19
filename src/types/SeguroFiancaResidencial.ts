@@ -1,7 +1,7 @@
 export type SeguroFiancaResidencial = {
   id: string;
   id_numero: number;
-  status: "APROVADO" | "REPROVADO";
+  status: "EM ANÁLISE" | "APROVADO" | "REPROVADO";
   acao: "PENDENTE" | "FINALIZADO";
   nome_imobiliaria_corretor: string;
 
@@ -39,6 +39,7 @@ export type SeguroFiancaResidencial = {
   bairro_locacao: string;
   cidade_locacao: string;
   estado_locacao: string;
+  tipo_imovel: "CASA" | "APTO" | "CASA CONDOMÍNIO";
   complemento_locacao?: string;
   valor_aluguel: number;
   valor_conta_agua?: number;

@@ -183,6 +183,9 @@ export function SeguroFiancaResidencialModal({
               Informações da Locação
             </h3>
             <p>
+              <strong>Tipo do Imóvel:</strong> {seguro.tipo_imovel}
+            </p>
+            <p>
               <strong>CEP:</strong> {seguro.cep_locacao}
             </p>
             <p>

@@ -56,7 +56,7 @@ export function SeguroFiancaResidencialForms() {
   const [formData, setFormData] = useState<SeguroFiancaResidencial>({
     id: "",
     id_numero: 0,
-    status: "REPROVADO",
+    status: "EM ANÁLISE",
     acao: "PENDENTE",
     nome_imobiliaria_corretor: "",
     cpf_residente: "",
@@ -76,6 +76,7 @@ export function SeguroFiancaResidencialForms() {
     cidade_locacao: "",
     estado_locacao: "",
     numero_locacao: "",
+    tipo_imovel: "CASA",
     valor_aluguel: 0,
     danos_imovel: "SIM",
     multa_recisao: "SIM",
@@ -222,6 +223,7 @@ export function SeguroFiancaResidencialForms() {
       if (!formData.profissao) errors.push("Profissão");
       if (!formData.data_nascimento) errors.push("Data de Nascimento");
       if (!formData.residir_imovel) errors.push("Reside no Imóvel");
+      if (!formData.renda_mensal) errors.push("Renda Mensal do Pretendente");
       if (!formData.responder_financeiramente)
         errors.push("Responde Financeiramente");
       if (!formData.estado_civil_residente)
@@ -473,7 +475,7 @@ export function SeguroFiancaResidencialForms() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="renda_mensal">
-                        Renda Mensal do Pretendente
+                        Renda Mensal do Pretendente <RequiredAsterisk />
                       </Label>
                       <Input
                         id="renda_mensal"
@@ -482,6 +484,7 @@ export function SeguroFiancaResidencialForms() {
                         value={formData.renda_mensal}
                         onChange={handleInputChange}
                         placeholder="Digite a renda mensal do pretendente"
+                        required
                       />
                     </div>
                   </div>
@@ -805,7 +808,7 @@ export function SeguroFiancaResidencialForms() {
                         )}
                       </div>
                     </div>
-                    <div className="space-y-2 sm:col-span-2">
+                    <div className="space-y-2">
                       <Label htmlFor="endereco_locacao">
                         Endereço <RequiredAsterisk />
                       </Label>
@@ -834,8 +837,6 @@ export function SeguroFiancaResidencialForms() {
                         disabled={isLoading}
                       />
                     </div>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="bairro_locacao">
                         Bairro <RequiredAsterisk />
@@ -850,6 +851,31 @@ export function SeguroFiancaResidencialForms() {
                         disabled={isLoading}
                       />
                     </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="tipo_imovel">
+                        Tipo do Imóvel <RequiredAsterisk />
+                      </Label>
+                      <Select
+                        value={formData.tipo_imovel}
+                        onValueChange={(value) =>
+                          handleSelectChange("tipo_imovel", value)
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Tipo do Imóvel" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="CASA">CASA</SelectItem>
+                          <SelectItem value="APTO">APTO</SelectItem>
+                          <SelectItem value="CASA CONDOMÍNIO">
+                            CASA CONDOMÍNIO
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                     <div className="space-y-2">
                       <Label htmlFor="complemento_locacao">Complemento</Label>
                       <Input
@@ -861,8 +887,6 @@ export function SeguroFiancaResidencialForms() {
                         disabled={isLoading}
                       />
                     </div>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="cidade_locacao">
                         Cidade <RequiredAsterisk />

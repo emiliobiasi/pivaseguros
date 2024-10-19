@@ -57,14 +57,21 @@ export function SeguroIncendioComercialModal({
             </p>
 
             <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
-              Informações do Proponente
+              Informações do Locatário
             </h3>
             <p>
-              <strong>Nome do Proponente:</strong> {seguro.nome_locatario}
+              <strong>Nome do Locatário:</strong> {seguro.nome_locatario}
             </p>
-            <p>
-              <strong>CPF do Proponente:</strong> {seguro.cpf_locatario}
-            </p>
+            {seguro.cpf_locatario && (
+              <p>
+                <strong>CPF do Locatário:</strong> {seguro.cpf_locatario}
+              </p>
+            )}
+            {seguro.cnpj_locatario && (
+              <p>
+                <strong>CNPJ do Locatário:</strong> {seguro.cnpj_locatario}
+              </p>
+            )}
             <p>
               <strong>Data de Nascimento:</strong>{" "}
               {new Date(seguro.data_nascimento_locatario).toLocaleDateString()}
