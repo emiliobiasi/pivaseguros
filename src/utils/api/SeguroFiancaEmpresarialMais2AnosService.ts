@@ -189,6 +189,39 @@ export async function updateSeguroFiancaEmpresarialMais2AnosStatus(
   }
 }
 
+// Função para buscar seguros de fiança empresarial acima de 2 anos criados no último mês
+export async function fetchSeguroFiancaEmpresarialMais2AnosLastMonth(): Promise<
+  SeguroFiancaEmpresarialMais2Anos[]
+> {
+  try {
+    // Calcula a data do último mês
+    const lastMonthDate = new Date();
+    lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
+
+    // Formata a data para ser usada no filtro
+    const lastMonthFilter = `created >= "${lastMonthDate.toISOString()}"`;
+
+    // Faz a busca dos registros criados no último mês
+    const response = await pb
+      .collection("seguro_fianca_empresarial_mais_2_anos")
+      .getFullList<SeguroFiancaEmpresarialMais2Anos>({
+        sort: "-created",
+        filter: lastMonthFilter, // Aplica o filtro para buscar registros do último mês
+      });
+
+    return response;
+  } catch (error) {
+    const err = error as ClientResponseError;
+    console.error(
+      "Erro ao buscar Seguros Fiança Empresarial Acima de 2 Anos do último mês:",
+      err
+    );
+    throw new Error(
+      "Erro ao buscar Seguros Fiança Empresarial Acima de 2 Anos do último mês"
+    );
+  }
+}
+
 // Função para iniciar a subscription em tempo real
 export function subscribeToSeguroFiancaEmpresarialMais2AnosUpdates(
   onRecordChange: (
