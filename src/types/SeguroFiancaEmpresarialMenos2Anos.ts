@@ -13,6 +13,7 @@ export type SeguroFiancaEmpresarialMenos2Anos = {
   orgao_emissor_rg: string;
   estado_civil_locatario: "SOLTEIRO" | "CASADO" | "DIVORCIADO" | "VIÚVO";
   email: string;
+  telefone_pretendente: string;
   nome_conjuge?: string;
   cpf_conjuge?: string;
   sexo_pretendente_conjuge?: "MASCULINO" | "FEMININO";
@@ -132,10 +133,11 @@ export type SeguroFiancaEmpresarialMenos2Anos = {
   luz_imovel_alugado?: number;
   gas_canalizado_imovel_alugado?: number;
   motivo_locacao:
-  | "ABERTURA DE FILIAL"
-  | "ABERTURA DE MATRIZ"
-  | "TROCA LOCAL DE SEDE"
-  | "REDUÇÃO DE CUSTOS";
-  cpf_morador: string;
+    | "ABERTURA DE FILIAL"
+    | "ABERTURA DE MATRIZ"
+    | "TROCA LOCAL DE SEDE"
+    | "REDUÇÃO DE CUSTOS"
+    | "LOCAÇÃO PARA MORADIA";
+  cpf_morador?: string;
   created: Date;
 };

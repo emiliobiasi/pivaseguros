@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { RefAttributes, useEffect, useState } from "react";
 import { GraficoBarraHorizontal } from "@/components/GraficoBarraHorizontal/grafico-barra-horizontal";
 import { fetchSeguroIncendioLastMonth } from "@/utils/api/SeguroIncendioService";
 import { fetchSeguroIncendioComercialLastMonth } from "@/utils/api/SeguroIncendioComercialService";
@@ -6,6 +6,20 @@ import { fetchSeguroFiancaEmpresarialMais2AnosLastMonth } from "@/utils/api/Segu
 import { fetchSeguroFiancaEmpresarialMenos2AnosLastMonth } from "@/utils/api/SeguroFiancaEmpresarialMenos2AnosService";
 import { fetchSeguroFiancaResidencialLastMonth } from "@/utils/api/SeguroFiancaResidencialService";
 import { SkeletonHorizontalBarChart } from "@/components/SkeletonHorizontalBarChart/skeleton-horizontal-bar-chart";
+import { Flame, LucideProps, House } from "lucide-react";
+import { JSX } from "react/jsx-runtime";
+
+const FireIcon = (
+  props: JSX.IntrinsicAttributes &
+    Omit<LucideProps, "ref"> &
+    RefAttributes<SVGSVGElement>
+) => <Flame {...props} />;
+
+const HouseIcon = (
+  props: JSX.IntrinsicAttributes &
+    Omit<LucideProps, "ref"> &
+    RefAttributes<SVGSVGElement>
+) => <House {...props} />;
 
 // Definir o tipo combinado
 type CombinedSeguroData = {
@@ -182,6 +196,7 @@ const Graficos = () => {
         xAxisKey="nome_imobiliaria_original" // Exibe o nome original
         title="INCÊNDIO: Seguros por Imobiliária"
         description="Total de Seguros de Incêndio (Comercial e Residencial) criados no último mês"
+        icon={<FireIcon style={{ marginRight: "8px", color: "orange" }} />}
       />
 
       {/* Novo Gráfico com dados combinados de seguros de fiança */}
@@ -191,6 +206,7 @@ const Graficos = () => {
         xAxisKey="nome_imobiliaria_original" // Exibe o nome original
         title="FIANÇA: Seguros por Imobiliária"
         description="Total de Seguros de Fiança (Empresarial e Residencial) criados no último mês"
+        icon={<HouseIcon style={{ marginRight: "8px", color: "green" }} />}
       />
     </div>
   );

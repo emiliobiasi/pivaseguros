@@ -1,4 +1,4 @@
-import { Flame, TrendingUp } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import {
   Bar,
   BarChart,
@@ -24,6 +24,7 @@ type GraficoBarraHorizontalProps = {
   title: string;
   description: string;
   trendingMessage?: string;
+  icon?: React.ReactNode;
 };
 
 // Definir a interface para os ticks personalizados
@@ -42,6 +43,7 @@ export function GraficoBarraHorizontal({
   title,
   description,
   trendingMessage,
+  icon,
 }: GraficoBarraHorizontalProps) {
   // Calcular o total de seguros para calcular as porcentagens
   const totalCount = data.reduce((total, item) => total + item.count, 0);
@@ -125,7 +127,7 @@ export function GraficoBarraHorizontal({
         <CardTitle
           style={{ display: "flex", alignItems: "center", marginBottom: "5px" }}
         >
-          <Flame style={{ marginRight: "8px", color: "orange" }} />
+          {icon}
           {title}
         </CardTitle>
         <CardDescription style={{ fontSize: "1em", color: "black" }}>

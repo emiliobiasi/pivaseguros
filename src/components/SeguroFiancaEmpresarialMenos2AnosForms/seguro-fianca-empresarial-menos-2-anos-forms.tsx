@@ -69,6 +69,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
     orgao_emissor_rg: "",
     estado_civil_locatario: "SOLTEIRO",
     email: "",
+    telefone_pretendente: "",
     tipo_residencia: "MENOS DE 1 ANO",
     condicao_imovel: "PRÓPRIO",
     arca_com_aluguel: "SIM",
@@ -101,7 +102,8 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
       name === "fone_celular" ||
       name === "fone" ||
       name === "fone_conjuge" ||
-      name === "telefone_contato"
+      name === "telefone_contato" ||
+      name === "telefone_pretendente"
     ) {
       formattedValue = formatTelefone(value);
     } else if (
@@ -347,6 +349,8 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
       if (!formData.nome_imobiliaria) errors.push("Nome da Imobiliária");
       if (!formData.nome_pretendente) errors.push("Nome do Pretendente");
       if (!formData.sexo_pretendente) errors.push("Sexo do Pretendente");
+      if (!formData.telefone_pretendente)
+        errors.push("Telefone do Pretendente");
       if (!formData.cpf) errors.push("CPF");
       if (!formData.rg) errors.push("RG");
       if (!formData.data_expedicao_rg) errors.push("Data de Expedição do RG");
@@ -368,7 +372,6 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
       if (!formData.investimento_abertura)
         errors.push("Investimento para Abertura");
       if (!formData.motivo_locacao) errors.push("Motivo da Locação");
-      if (!formData.cpf_morador) errors.push("CPF do Morador");
       if (!formData.aluguel_imovel_alugado) errors.push("Valor do Aluguel");
 
       return errors;
@@ -635,6 +638,19 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       />
                     </div>
                     <div className="space-y-2">
+                      <Label htmlFor="orgao_emissor_rg">
+                        Órgão Emissor do RG <RequiredAsterisk />
+                      </Label>
+                      <Input
+                        id="orgao_emissor_rg"
+                        name="orgao_emissor_rg"
+                        value={formData.orgao_emissor_rg}
+                        onChange={handleInputChange}
+                        required
+                        placeholder="Digite o órgão emissor do RG"
+                      />
+                    </div>
+                    <div className="space-y-2">
                       <Label htmlFor="data_nascimento">
                         Data de Nascimento <RequiredAsterisk />
                       </Label>
@@ -653,23 +669,10 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         required
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="orgao_emissor_rg">
-                        Órgão Emissor do RG <RequiredAsterisk />
-                      </Label>
-                      <Input
-                        id="orgao_emissor_rg"
-                        name="orgao_emissor_rg"
-                        value={formData.orgao_emissor_rg}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="Digite o órgão emissor do RG"
-                      />
-                    </div>
 
                     <div className="space-y-2">
                       <Label htmlFor="email">
-                        Email <RequiredAsterisk />
+                        Email do Pretendente <RequiredAsterisk />
                       </Label>
                       <Input
                         id="email"
@@ -679,6 +682,20 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         onChange={handleInputChange}
                         required
                         placeholder="Digite o email"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="telefone_pretendente">
+                        Telefone do Pretendente <RequiredAsterisk />
+                      </Label>
+                      <Input
+                        id="telefone_pretendente"
+                        name="telefone_pretendente"
+                        type="text"
+                        value={formData.telefone_pretendente}
+                        onChange={handleInputChange}
+                        required
+                        placeholder="Digite o telefone do pretendente"
                       />
                     </div>
 
@@ -1346,29 +1363,19 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="salario">
-                        Salário <RequiredAsterisk />
+                        Salário / Rendimentos <RequiredAsterisk />
                       </Label>
                       <Input
                         id="salario"
                         name="salario"
+                        type="number"
                         value={formData.salario || ""}
                         onChange={handleInputChange}
                         placeholder="Digite o salário"
                         required
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="outros_rendimentos">
-                        Outros Rendimentos
-                      </Label>
-                      <Input
-                        id="outros_rendimentos"
-                        name="outros_rendimentos"
-                        value={formData.outros_rendimentos || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite outros rendimentos"
-                      />
-                    </div>
+
                     <div className="space-y-2">
                       <Label htmlFor="total_rendimentos_mensais">
                         Total de Rendimentos Mensais
@@ -2039,6 +2046,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         placeholder="Digite o valor do gás"
                       />
                     </div>
+
                     <div className="space-y-2">
                       <Label htmlFor="motivo_locacao">
                         Motivo da Locação <RequiredAsterisk />
@@ -2066,23 +2074,30 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                           <SelectItem value="REDUÇÃO DE CUSTOS">
                             Redução de Custos
                           </SelectItem>
+                          <SelectItem value="LOCAÇÃO PARA MORADIA">
+                            Locação para Moradia
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="cpf">
-                        CPF do Morador <RequiredAsterisk />
-                      </Label>
-                      <Input
-                        id="cpf_morador"
-                        name="cpf_morador"
-                        value={formData.cpf_morador}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="Digite o CPF do morador"
-                        maxLength={14}
-                      />
-                    </div>
+
+                    {formData.motivo_locacao === "LOCAÇÃO PARA MORADIA" && (
+                      <>
+                        <div className="space-y-2">
+                          <Label htmlFor="cpf">
+                            CPF do Morador <RequiredAsterisk />
+                          </Label>
+                          <Input
+                            id="cpf_morador"
+                            name="cpf_morador"
+                            value={formData.cpf_morador}
+                            onChange={handleInputChange}
+                            placeholder="Digite o CPF do morador"
+                            maxLength={14}
+                          />
+                        </div>
+                      </>
+                    )}
                   </div>
 
                   <div className="grid gap-4 py-4">

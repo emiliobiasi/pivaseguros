@@ -83,6 +83,9 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
             <p>
               <strong>Email:</strong> {seguro.email}
             </p>
+            <p>
+              <strong>Telefone:</strong> {seguro.telefone_pretendente}
+            </p>
             {seguro.fone_residencial && (
               <p>
                 <strong>Fone Residencial:</strong> {seguro.fone_residencial}
@@ -321,7 +324,7 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
 
             {seguro.salario !== undefined && seguro.salario !== 0 ? (
               <p>
-                <strong>Salário:</strong> R${" "}
+                <strong>Salário / Rendimentos:</strong> R${" "}
                 {formatValor(seguro.salario.toFixed(2))}
               </p>
             ) : (
@@ -329,17 +332,7 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                 <strong>Salário:</strong> Não Informado
               </p>
             )}
-            {seguro.outros_rendimentos !== undefined &&
-            seguro.outros_rendimentos !== 0 ? (
-              <p>
-                <strong>Outros Rendimentos:</strong> R${" "}
-                {formatValor(seguro.outros_rendimentos.toFixed(2))}
-              </p>
-            ) : (
-              <p>
-                <strong>Outros Rendimentos:</strong> Não Informado
-              </p>
-            )}
+
             {seguro.total_rendimentos_mensais !== undefined &&
             seguro.total_rendimentos_mensais !== 0 ? (
               <p>
@@ -618,6 +611,13 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
             <p>
               <strong>Motivo da Locação:</strong> {seguro.motivo_locacao}
             </p>
+            {seguro.motivo_locacao === "LOCAÇÃO PARA MORADIA" && (
+              <>
+                <p>
+                  <strong>CPF do Morador:</strong> {seguro.cpf_morador}
+                </p>
+              </>
+            )}
 
             {/* Ônus */}
             <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
@@ -665,77 +665,10 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                         {formatValor(seguro.valor_parcela_a_2.toFixed(2))}
                       </p>
                     )}
-                    {/* {seguro.tipo_qtd_parcela_a_3 && (
-                      <p>
-                        <strong>Quantidade de Parcelas Tipo A3:</strong>{" "}
-                        {seguro.tipo_qtd_parcela_a_3}
-                      </p>
-                    )}
-                    {seguro.valor_parcela_a_3 !== undefined && (
-                      <p>
-                        <strong>Valor da Parcela A3:</strong> R${" "}
-                        {formatValor(seguro.valor_parcela_a_3.toFixed(2))}
-                      </p>
-                    )} */}
                   </>
                 )}
-                {/* {(seguro.tipo_qtd_parcela_b_1 || seguro.valor_parcela_b_1) && (
-                  <>
-                    <h4 className="text-md font-semibold mt-4">
-                      Parcelas Tipo B
-                    </h4>
-                    {seguro.tipo_qtd_parcela_b_1 && (
-                      <p>
-                        <strong>Quantidade de Parcelas Tipo B1:</strong>{" "}
-                        {seguro.tipo_qtd_parcela_b_1}
-                      </p>
-                    )}
-                    {seguro.valor_parcela_b_1 !== undefined && (
-                      <p>
-                        <strong>Valor da Parcela B1:</strong> R${" "}
-                        {formatValor(seguro.valor_parcela_b_1.toFixed(2))}
-                      </p>
-                    )}
-                    {seguro.tipo_qtd_parcela_b_2 && (
-                      <p>
-                        <strong>Quantidade de Parcelas Tipo B2:</strong>{" "}
-                        {seguro.tipo_qtd_parcela_b_2}
-                      </p>
-                    )}
-                    {seguro.valor_parcela_b_2 !== undefined && (
-                      <p>
-                        <strong>Valor da Parcela B2:</strong> R${" "}
-                        {formatValor(seguro.valor_parcela_b_2.toFixed(2))}
-                      </p>
-                    )}
-                    {seguro.tipo_qtd_parcela_b_3 && (
-                      <p>
-                        <strong>Quantidade de Parcelas Tipo B3:</strong>{" "}
-                        {seguro.tipo_qtd_parcela_b_3}
-                      </p>
-                    )}
-                    {seguro.valor_parcela_b_3 !== undefined && (
-                      <p>
-                        <strong>Valor da Parcela B3:</strong> R${" "}
-                        {formatValor(seguro.valor_parcela_b_3.toFixed(2))}
-                      </p>
-                    )}
-                  </>
-                )} */}
               </>
             )}
-
-            {/* Outros */}
-            <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
-              Outros
-            </h3>
-            <p>
-              <strong>CPF do Morador:</strong> {seguro.cpf_morador}
-            </p>
-            <p>
-              <strong>Data de Criação:</strong>{" "}
-              {new Date(seguro.created).toLocaleDateString()}
-            </p>
           </div>
         </div>
 
