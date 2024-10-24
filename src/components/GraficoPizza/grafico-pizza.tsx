@@ -55,7 +55,7 @@ export function GraficoPizza({
         <CardTitle>Aprovados e Reprovados: Seguros Fiança</CardTitle>
         <CardDescription>Total de IDs: {totalForms}</CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 pb-0">
+      <CardContent className="flex-1 pb-0 mt-4">
         <ChartContainer
           config={chartConfig}
           className="mx-auto aspect-square max-h-[250px] pb-0 [&_.recharts-pie-label-text]:fill-foreground"
@@ -65,7 +65,9 @@ export function GraficoPizza({
             <Pie
               data={chartData}
               dataKey="value"
-              label={({ name }) => name} // Mostra o rótulo
+              label={({ name, percent }) =>
+                ` ${name}: ${(percent * 100).toFixed(2)}%`
+              } // Mostra o rótulo com a porcentagem
               nameKey="label"
               outerRadius={80}
               fill="var(--color-foreground)"

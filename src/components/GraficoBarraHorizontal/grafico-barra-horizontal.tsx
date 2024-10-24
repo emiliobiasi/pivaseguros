@@ -61,7 +61,7 @@ export function GraficoBarraHorizontal({
   };
 
   // Definir o tamanho máximo do nome
-  const maxNameLength = 15; // Ajuste conforme necessário
+  const maxNameLength = 10; // Ajuste conforme necessário
 
   // Função personalizada para renderizar os ticks do eixo Y com tooltip
   const renderCustomizedYAxisTick = (props: CustomizedAxisTickProps) => {
