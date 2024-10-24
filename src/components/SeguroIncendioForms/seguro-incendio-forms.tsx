@@ -76,7 +76,7 @@ export function SeguroIncendioForms() {
     valor_seguro: 0,
     forma_pagamento: "1X FATURA MENSAL - SEM ENTRADA",
     inclusao_clausula_beneficiaria: "SIM",
-    // cnpj_ou_cpf: "CNPJ",
+    cnpj_ou_cpf: "CNPJ",
     created: new Date(),
   });
 
