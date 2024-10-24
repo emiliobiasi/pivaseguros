@@ -42,6 +42,7 @@ export type SeguroIncendio = {
     | "10X FATURA MENSAL - SEM ENTRADA"
     | "11X FATURA MENSAL - SEM ENTRADA";
   inclusao_clausula_beneficiaria: "SIM" | "NÃO";
+  cnpj_ou_cpf: "CNPJ" | "CPF";
   cpf_locador_opcional?: string;
   cnpj_locador_opcional?: string;
   nome_locador?: string;

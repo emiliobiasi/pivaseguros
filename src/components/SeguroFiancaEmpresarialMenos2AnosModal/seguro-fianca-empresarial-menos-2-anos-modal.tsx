@@ -329,19 +329,7 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
               </p>
             ) : (
               <p>
-                <strong>Salário:</strong> Não Informado
-              </p>
-            )}
-
-            {seguro.total_rendimentos_mensais !== undefined &&
-            seguro.total_rendimentos_mensais !== 0 ? (
-              <p>
-                <strong>Total de Rendimentos Mensais:</strong> R${" "}
-                {formatValor(seguro.total_rendimentos_mensais.toFixed(2))}
-              </p>
-            ) : (
-              <p>
-                <strong>Total de Rendimentos Mensais:</strong> Não Informado
+                <strong>Salário / Rendimentos:</strong> Não Informado
               </p>
             )}
 

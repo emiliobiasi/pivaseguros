@@ -90,13 +90,30 @@ export function SeguroIncendioModal({
                 <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
                   Informações do Locador
                 </h3>
-                <p>
-                  <strong>Nome do Locador:</strong> {seguro.nome_locador}
-                </p>
+
+                {seguro.nome_locador && (
+                  <p>
+                    <strong>Nome do Locador:</strong> {seguro.nome_locador}
+                  </p>
+                )}
+
                 {seguro.cpf_locador_opcional && (
                   <p>
                     <strong>CPF do Locador:</strong>{" "}
                     {seguro.cpf_locador_opcional}
+                  </p>
+                )}
+
+                {seguro.nome_locador_cnpj && (
+                  <p>
+                    <strong>Nome do Locador:</strong> {seguro.nome_locador_cnpj}
+                  </p>
+                )}
+
+                {seguro.cnpj_locador_opcional && (
+                  <p>
+                    <strong>CNPJ do Locador:</strong>{" "}
+                    {seguro.cnpj_locador_opcional}
                   </p>
                 )}
               </>

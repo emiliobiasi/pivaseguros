@@ -76,8 +76,8 @@ export function SeguroIncendioForms() {
     valor_seguro: 0,
     forma_pagamento: "1X FATURA MENSAL - SEM ENTRADA",
     inclusao_clausula_beneficiaria: "SIM",
+    // cnpj_ou_cpf: "CNPJ",
     created: new Date(),
-    // Outros campos que possam estar na sua interface SeguroIncendio
   });
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -388,8 +388,8 @@ export function SeguroIncendioForms() {
                   </div>
 
                   <h3 className="mt-5">
-                  <RequiredAsterisk /> Preencha apenas um dos campos abaixo, de acordo com o
-                    documeto do locatário:
+                    <RequiredAsterisk /> Preencha apenas um dos campos abaixo,
+                    de acordo com o documeto do locatário:
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
@@ -816,64 +816,99 @@ export function SeguroIncendioForms() {
                       </SelectContent>
                     </Select>
                   </div>
-                  {/* CPF */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                  <>
                     <div className="space-y-2">
-                      <Label htmlFor="cpf_locador_opcional">
-                        CPF do Locador (Opcional)
+                      <Label htmlFor="cnpj_ou_cpf">
+                        Escolha o que você vai preencher do locador: CNPJ ou CPF{" "}
+                        <RequiredAsterisk />
                       </Label>
-                      <Input
-                        id="cpf_locador_opcional"
-                        name="cpf_locador_opcional"
-                        value={formData.cpf_locador_opcional || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite o CPF do locador (opcional)"
-                        disabled={isLoading}
-                      />
+                      <Select
+                        value={formData.cnpj_ou_cpf}
+                        onValueChange={(value) =>
+                          handleSelectChange("cnpj_ou_cpf", value)
+                        }
+                        required
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione uma opção" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="CNPJ">CNPJ</SelectItem>
+                          <SelectItem value="CPF">CPF</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="nome_locador">
-                        Nome do Locador (CPF)
-                      </Label>
-                      <Input
-                        id="nome_locador"
-                        name="nome_locador"
-                        value={formData.nome_locador || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite o nome do locador"
-                        disabled={isLoading}
-                      />
-                    </div>
-                  </div>
-                  {/* CNPJ */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="cnpj_locador_opcional">
-                        CNPJ do Locador (Opcional)
-                      </Label>
-                      <Input
-                        id="cnpj_locador_opcional"
-                        name="cnpj_locador_opcional"
-                        value={formData.cnpj_locador_opcional || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite o CNPJ do locador (opcional)"
-                        disabled={isLoading}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="nome_locador_cnpj">
-                        Nome do Locador (CNPJ)
-                      </Label>
-                      <Input
-                        id="nome_locador_cnpj"
-                        name="nome_locador_cnpj"
-                        value={formData.nome_locador_cnpj || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite o nome do locador"
-                        disabled={isLoading}
-                      />
-                    </div>
-                  </div>
+
+                    {/* CPF */}
+                    {formData.cnpj_ou_cpf === "CPF" && (
+                      <>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="cpf_locador_opcional">
+                              CPF do Locador <RequiredAsterisk />
+                            </Label>
+                            <Input
+                              id="cpf_locador_opcional"
+                              name="cpf_locador_opcional"
+                              value={formData.cpf_locador_opcional || ""}
+                              onChange={handleInputChange}
+                              placeholder="Digite o CPF do locador"
+                              disabled={isLoading}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="nome_locador">
+                              Nome do Locador <RequiredAsterisk />
+                            </Label>
+                            <Input
+                              id="nome_locador"
+                              name="nome_locador"
+                              value={formData.nome_locador || ""}
+                              onChange={handleInputChange}
+                              placeholder="Digite o nome do locador"
+                              disabled={isLoading}
+                            />
+                          </div>
+                        </div>
+                      </>
+                    )}
+
+                    {/* CNPJ */}
+                    {formData.cnpj_ou_cpf === "CNPJ" && (
+                      <>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="cnpj_locador_opcional">
+                              CNPJ do Locador <RequiredAsterisk />
+                            </Label>
+                            <Input
+                              id="cnpj_locador_opcional"
+                              name="cnpj_locador_opcional"
+                              value={formData.cnpj_locador_opcional || ""}
+                              onChange={handleInputChange}
+                              placeholder="Digite o CNPJ do locador"
+                              disabled={isLoading}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="nome_locador_cnpj">
+                              Nome do Locador <RequiredAsterisk />
+                            </Label>
+                            <Input
+                              id="nome_locador_cnpj"
+                              name="nome_locador_cnpj"
+                              value={formData.nome_locador_cnpj || ""}
+                              onChange={handleInputChange}
+                              placeholder="Digite o nome do locador"
+                              disabled={isLoading}
+                            />
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </>
+
                   <div className="flex items-center space-x-2 mt-4">
                     <Checkbox
                       id="terms"

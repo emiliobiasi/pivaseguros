@@ -364,7 +364,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
       if (!formData.arca_com_aluguel) errors.push("Arca com Aluguel");
       if (!formData.vinculo_empregaticio) errors.push("Vínculo Empregatício");
       if (!formData.profissao) errors.push("Profissão");
-      if (!formData.salario) errors.push("Salário");
+      if (!formData.salario) errors.push("Salário / Rendimentos");
       if (!formData.alocacao_pretendida_constituida)
         errors.push("Alocação Pretendida Constituída");
       if (!formData.franquia) errors.push("Franquia");
@@ -1373,19 +1373,6 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         onChange={handleInputChange}
                         placeholder="Digite o salário"
                         required
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="total_rendimentos_mensais">
-                        Total de Rendimentos Mensais
-                      </Label>
-                      <Input
-                        id="total_rendimentos_mensais"
-                        name="total_rendimentos_mensais"
-                        value={formData.total_rendimentos_mensais || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite o total de rendimentos mensais"
                       />
                     </div>
                   </div>
