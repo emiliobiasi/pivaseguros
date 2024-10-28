@@ -101,13 +101,19 @@ export function EfetivacaoSeguroFiancaForms() {
       name === "cpf_proprietario"
     ) {
       formattedValue = formatCPF(value);
-    } else if (name === "cnpj_proprietario") {
+    } else if (
+      name === "cnpj_proprietario" ||
+      name === "cnpj_inquilino_3" ||
+      name === "cnpj_inquilino_4"
+    ) {
       formattedValue = formatCNPJ(value);
     } else if (name === "rg_proprietario") {
       formattedValue = formatRG(value);
     } else if (
       name === "telefone_inquilino_1" ||
       name === "telefone_inquilino_2" ||
+      name === "telefone_inquilino_3" ||
+      name === "telefone_inquilino_4" ||
       name === "telefone_proprietario" ||
       name === "telefone_imobiliaria"
     ) {
@@ -387,111 +393,251 @@ export function EfetivacaoSeguroFiancaForms() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="nome_inquilino_1">
-                        Nome do Inquilino (1)
-                      </Label>
-                      <Input
-                        id="nome_inquilino_1"
-                        name="nome_inquilino_1"
-                        value={formData.nome_inquilino_1}
-                        onChange={handleInputChange}
-                        placeholder="Digite o nome de um inquilino"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="cpf_inquilino_1">
-                        CPF do Inquilino (1)
-                      </Label>
-                      <Input
-                        id="cpf_inquilino_1"
-                        name="cpf_inquilino_1"
-                        value={formData.cpf_inquilino_1}
-                        onChange={handleInputChange}
-                        placeholder="Digite o CPF do inquilino"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="telefone_inquilino_1">
-                        Telefone do Inquilino (1)
-                      </Label>
-                      <Input
-                        id="telefone_inquilino_1"
-                        name="telefone_inquilino_1"
-                        value={formData.telefone_inquilino_1}
-                        onChange={handleInputChange}
-                        type="tel"
-                        placeholder="Digite o telefone do Inquilino (1)"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email_inquilino_1">
-                        Email do inquilino (1)
-                      </Label>
-                      <Input
-                        id="email_inquilino_1"
-                        name="email_inquilino_1"
-                        type="email"
-                        value={formData.email_inquilino_1}
-                        onChange={handleInputChange}
-                        placeholder="Digite o email do outro inquilino"
-                      />
-                    </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="inquilino_documento">
+                      Inquilino é Pessoa Física ou Jurídica?{" "}
+                      <RequiredAsterisk />
+                    </Label>
+                    <Select
+                      value={formData.inquilino_documento}
+                      onValueChange={(value) =>
+                        handleSelectChange("inquilino_documento", value)
+                      }
+                      required
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Escolha entre PF ou PJ" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="PESSOA FÍSICA">
+                          PESSOA FÍSICA
+                        </SelectItem>
+                        <SelectItem value="PESSOA JURÍDICA">
+                          PESSOA JURÍDICA
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="nome_inquilino_2">
-                        Nome do Inquilino (2)
-                      </Label>
-                      <Input
-                        id="nome_inquilino_2"
-                        name="nome_inquilino_2"
-                        value={formData.nome_inquilino_2}
-                        onChange={handleInputChange}
-                        placeholder="Digite o nome do outro inquilino"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="cpf_inquilino_2">
-                        CPF do Inquilino (2)
-                      </Label>
-                      <Input
-                        id="cpf_inquilino_2"
-                        name="cpf_inquilino_2"
-                        value={formData.cpf_inquilino_2}
-                        onChange={handleInputChange}
-                        placeholder="Digite o CPF do outro inquilino"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="telefone_inquilino_2">
-                        Telefone do Inquilino (2)
-                      </Label>
-                      <Input
-                        id="telefone_inquilino_2"
-                        name="telefone_inquilino_2"
-                        value={formData.telefone_inquilino_2}
-                        onChange={handleInputChange}
-                        type="tel"
-                        placeholder="Digite o telefone do Inquilino (2)"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email_inquilino_2">
-                        Email do inquilino (2)
-                      </Label>
-                      <Input
-                        id="email_inquilino_2"
-                        name="email_inquilino_2"
-                        type="email"
-                        value={formData.email_inquilino_2}
-                        onChange={handleInputChange}
-                        placeholder="Digite o email do outro inquilino"
-                      />
-                    </div>
-                  </div>
+                  {formData.inquilino_documento === "PESSOA FÍSICA" && (
+                    <>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="nome_inquilino_1">
+                            Nome do Inquilino (1)
+                          </Label>
+                          <Input
+                            id="nome_inquilino_1"
+                            name="nome_inquilino_1"
+                            value={formData.nome_inquilino_1}
+                            onChange={handleInputChange}
+                            placeholder="Digite o nome de um inquilino"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="cpf_inquilino_1">
+                            CPF do Inquilino (1)
+                          </Label>
+                          <Input
+                            id="cpf_inquilino_1"
+                            name="cpf_inquilino_1"
+                            value={formData.cpf_inquilino_1}
+                            onChange={handleInputChange}
+                            placeholder="Digite o CPF do inquilino"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="telefone_inquilino_1">
+                            Telefone do Inquilino (1)
+                          </Label>
+                          <Input
+                            id="telefone_inquilino_1"
+                            name="telefone_inquilino_1"
+                            value={formData.telefone_inquilino_1}
+                            onChange={handleInputChange}
+                            type="tel"
+                            placeholder="Digite o telefone do Inquilino (1)"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="email_inquilino_1">
+                            Email do inquilino (1)
+                          </Label>
+                          <Input
+                            id="email_inquilino_1"
+                            name="email_inquilino_1"
+                            type="email"
+                            value={formData.email_inquilino_1}
+                            onChange={handleInputChange}
+                            placeholder="Digite o email do outro inquilino"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="nome_inquilino_2">
+                            Nome do Inquilino (2)
+                          </Label>
+                          <Input
+                            id="nome_inquilino_2"
+                            name="nome_inquilino_2"
+                            value={formData.nome_inquilino_2}
+                            onChange={handleInputChange}
+                            placeholder="Digite o nome do outro inquilino"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="cpf_inquilino_2">
+                            CPF do Inquilino (2)
+                          </Label>
+                          <Input
+                            id="cpf_inquilino_2"
+                            name="cpf_inquilino_2"
+                            value={formData.cpf_inquilino_2}
+                            onChange={handleInputChange}
+                            placeholder="Digite o CPF do outro inquilino"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="telefone_inquilino_2">
+                            Telefone do Inquilino (2)
+                          </Label>
+                          <Input
+                            id="telefone_inquilino_2"
+                            name="telefone_inquilino_2"
+                            value={formData.telefone_inquilino_2}
+                            onChange={handleInputChange}
+                            type="tel"
+                            placeholder="Digite o telefone do Inquilino (2)"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="email_inquilino_2">
+                            Email do inquilino (2)
+                          </Label>
+                          <Input
+                            id="email_inquilino_2"
+                            name="email_inquilino_2"
+                            type="email"
+                            value={formData.email_inquilino_2}
+                            onChange={handleInputChange}
+                            placeholder="Digite o email do outro inquilino"
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {formData.inquilino_documento === "PESSOA JURÍDICA" && (
+                    <>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="nome_inquilino_3">
+                            Nome do Inquilino (1)
+                          </Label>
+                          <Input
+                            id="nome_inquilino_3"
+                            name="nome_inquilino_3"
+                            value={formData.nome_inquilino_3}
+                            onChange={handleInputChange}
+                            placeholder="Digite o nome de um inquilino"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="cnpj_inquilino_3">
+                            CNPJ do Inquilino (1)
+                          </Label>
+                          <Input
+                            id="cnpj_inquilino_3"
+                            name="cnpj_inquilino_3"
+                            value={formData.cnpj_inquilino_3}
+                            onChange={handleInputChange}
+                            placeholder="Digite o CNPJ do inquilino"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="telefone_inquilino_3">
+                            Telefone do Inquilino (1)
+                          </Label>
+                          <Input
+                            id="telefone_inquilino_3"
+                            name="telefone_inquilino_3"
+                            value={formData.telefone_inquilino_3}
+                            onChange={handleInputChange}
+                            type="tel"
+                            placeholder="Digite o telefone do Inquilino (1)"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="email_inquilino_3">
+                            Email do inquilino (1)
+                          </Label>
+                          <Input
+                            id="email_inquilino_3"
+                            name="email_inquilino_3"
+                            type="email"
+                            value={formData.email_inquilino_3}
+                            onChange={handleInputChange}
+                            placeholder="Digite o email do outro inquilino"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="nome_inquilino_4">
+                            Nome do Inquilino (2)
+                          </Label>
+                          <Input
+                            id="nome_inquilino_4"
+                            name="nome_inquilino_4"
+                            value={formData.nome_inquilino_4}
+                            onChange={handleInputChange}
+                            placeholder="Digite o nome do outro inquilino"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="cnpj_inquilino_4">
+                            CNPJ do Inquilino (2)
+                          </Label>
+                          <Input
+                            id="cnpj_inquilino_4"
+                            name="cnpj_inquilino_4"
+                            value={formData.cnpj_inquilino_4}
+                            onChange={handleInputChange}
+                            placeholder="Digite o CNPJ do outro inquilino"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="telefone_inquilino_4">
+                            Telefone do Inquilino (2)
+                          </Label>
+                          <Input
+                            id="telefone_inquilino_4"
+                            name="telefone_inquilino_4"
+                            value={formData.telefone_inquilino_4}
+                            onChange={handleInputChange}
+                            type="tel"
+                            placeholder="Digite o telefone do Inquilino (2)"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="email_inquilino_4">
+                            Email do inquilino (2)
+                          </Label>
+                          <Input
+                            id="email_inquilino_4"
+                            name="email_inquilino_4"
+                            type="email"
+                            value={formData.email_inquilino_4}
+                            onChange={handleInputChange}
+                            placeholder="Digite o email do outro inquilino"
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="space-y-2">

@@ -4,6 +4,9 @@ export type EfetivacaoSeguroFianca = {
   acao: "PENDENTE" | "FINALIZADO";
   nome_imobiliaria: string;
   telefone_imobiliaria: string;
+
+  inquilino_documento?: "PESSOA FÍSICA" | "PESSOA JURÍDICA";
+
   nome_inquilino_1?: string;
   cpf_inquilino_1?: string;
   email_inquilino_1?: string;
@@ -12,6 +15,17 @@ export type EfetivacaoSeguroFianca = {
   cpf_inquilino_2?: string;
   email_inquilino_2?: string;
   telefone_inquilino_2?: string;
+
+  nome_inquilino_3?: string;
+  cnpj_inquilino_3?: string;
+  email_inquilino_3?: string;
+  telefone_inquilino_3?: string;
+
+  nome_inquilino_4?: string;
+  cnpj_inquilino_4?: string;
+  email_inquilino_4?: string;
+  telefone_inquilino_4?: string;
+
   nome_proprietario: string;
   profissao_proprietario: string;
   cpf_proprietario?: string;

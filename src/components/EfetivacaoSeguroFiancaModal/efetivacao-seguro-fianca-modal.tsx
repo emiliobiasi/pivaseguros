@@ -58,56 +58,122 @@ export function EfetivacaoSeguroFiancaModal({
               <strong>Telefone:</strong> {efetivacao.telefone_imobiliaria}
             </p>
 
-            {/* Informações do Inquilino 1 */}
-            {efetivacao.nome_inquilino_1 && (
+            {efetivacao.inquilino_documento === "PESSOA FÍSICA" && (
               <>
-                <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
-                  Informações do Inquilino 1
-                </h3>
-                <p>
-                  <strong>Nome:</strong> {efetivacao.nome_inquilino_1}
-                </p>
-                {efetivacao.cpf_inquilino_1 && (
-                  <p>
-                    <strong>CPF:</strong> {efetivacao.cpf_inquilino_1}
-                  </p>
+                {/* Informações do Inquilino 1 */}
+                {efetivacao.nome_inquilino_1 && (
+                  <>
+                    <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+                      Informações do Inquilino 1
+                    </h3>
+                    <p>
+                      <strong>Nome:</strong> {efetivacao.nome_inquilino_1}
+                    </p>
+                    {efetivacao.cpf_inquilino_1 && (
+                      <p>
+                        <strong>CPF:</strong> {efetivacao.cpf_inquilino_1}
+                      </p>
+                    )}
+                    {efetivacao.email_inquilino_1 && (
+                      <p>
+                        <strong>Email:</strong> {efetivacao.email_inquilino_1}
+                      </p>
+                    )}
+                    {efetivacao.telefone_inquilino_1 && (
+                      <p>
+                        <strong>Telefone:</strong>{" "}
+                        {efetivacao.telefone_inquilino_1}
+                      </p>
+                    )}
+                  </>
                 )}
-                {efetivacao.email_inquilino_1 && (
-                  <p>
-                    <strong>Email:</strong> {efetivacao.email_inquilino_1}
-                  </p>
-                )}
-                {efetivacao.telefone_inquilino_1 && (
-                  <p>
-                    <strong>Telefone:</strong> {efetivacao.telefone_inquilino_1}
-                  </p>
+
+                {/* Informações do Inquilino 2 */}
+                {efetivacao.nome_inquilino_2 && (
+                  <>
+                    <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+                      Informações do Inquilino 2
+                    </h3>
+                    <p>
+                      <strong>Nome:</strong> {efetivacao.nome_inquilino_2}
+                    </p>
+                    {efetivacao.cpf_inquilino_2 && (
+                      <p>
+                        <strong>CPF:</strong> {efetivacao.cpf_inquilino_2}
+                      </p>
+                    )}
+                    {efetivacao.email_inquilino_2 && (
+                      <p>
+                        <strong>Email:</strong> {efetivacao.email_inquilino_2}
+                      </p>
+                    )}
+                    {efetivacao.telefone_inquilino_2 && (
+                      <p>
+                        <strong>Telefone:</strong>{" "}
+                        {efetivacao.telefone_inquilino_2}
+                      </p>
+                    )}
+                  </>
                 )}
               </>
             )}
 
-            {/* Informações do Inquilino 2 */}
-            {efetivacao.nome_inquilino_2 && (
+            {efetivacao.inquilino_documento === "PESSOA JURÍDICA" && (
               <>
-                <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
-                  Informações do Inquilino 2
-                </h3>
-                <p>
-                  <strong>Nome:</strong> {efetivacao.nome_inquilino_2}
-                </p>
-                {efetivacao.cpf_inquilino_2 && (
-                  <p>
-                    <strong>CPF:</strong> {efetivacao.cpf_inquilino_2}
-                  </p>
+                {/* Informações do Inquilino 3 */}
+                {efetivacao.nome_inquilino_3 && (
+                  <>
+                    <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+                      Informações do Inquilino 1
+                    </h3>
+                    <p>
+                      <strong>Nome:</strong> {efetivacao.nome_inquilino_3}
+                    </p>
+                    {efetivacao.cnpj_inquilino_3 && (
+                      <p>
+                        <strong>CNPJ:</strong> {efetivacao.cnpj_inquilino_3}
+                      </p>
+                    )}
+                    {efetivacao.email_inquilino_3 && (
+                      <p>
+                        <strong>Email:</strong> {efetivacao.email_inquilino_3}
+                      </p>
+                    )}
+                    {efetivacao.telefone_inquilino_3 && (
+                      <p>
+                        <strong>Telefone:</strong>{" "}
+                        {efetivacao.telefone_inquilino_3}
+                      </p>
+                    )}
+                  </>
                 )}
-                {efetivacao.email_inquilino_2 && (
-                  <p>
-                    <strong>Email:</strong> {efetivacao.email_inquilino_2}
-                  </p>
-                )}
-                {efetivacao.telefone_inquilino_2 && (
-                  <p>
-                    <strong>Telefone:</strong> {efetivacao.telefone_inquilino_2}
-                  </p>
+
+                {/* Informações do Inquilino 4 */}
+                {efetivacao.nome_inquilino_4 && (
+                  <>
+                    <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+                      Informações do Inquilino 2
+                    </h3>
+                    <p>
+                      <strong>Nome:</strong> {efetivacao.nome_inquilino_4}
+                    </p>
+                    {efetivacao.cnpj_inquilino_4 && (
+                      <p>
+                        <strong>CNPJ:</strong> {efetivacao.cnpj_inquilino_4}
+                      </p>
+                    )}
+                    {efetivacao.email_inquilino_4 && (
+                      <p>
+                        <strong>Email:</strong> {efetivacao.email_inquilino_4}
+                      </p>
+                    )}
+                    {efetivacao.telefone_inquilino_4 && (
+                      <p>
+                        <strong>Telefone:</strong>{" "}
+                        {efetivacao.telefone_inquilino_4}
+                      </p>
+                    )}
+                  </>
                 )}
               </>
             )}
@@ -147,7 +213,8 @@ export function EfetivacaoSeguroFiancaModal({
               <strong>Índice de Reajuste:</strong> {efetivacao.indice_reajuste}
             </p>
             <p>
-              <strong>Dia do Vencimento do Aluguel:</strong> {efetivacao.vencimento_aluguel}
+              <strong>Dia do Vencimento do Aluguel:</strong>{" "}
+              {efetivacao.vencimento_aluguel}
             </p>
           </div>
 

@@ -102,7 +102,7 @@ function SidebarContent() {
     form_seguro_fianca_empresarial_mais_2_anos: 0,
     form_seguro_fianca_empresarial_menos_2_anos: 0,
     form_efetivacao_seguro_fianca_tb: 0,
-    form_titulo_capitalizacao: 0,
+    // form_titulo_capitalizacao: 0, COMENTANDO ATÉ CORRIGIR O ERRO
   });
 
   useEffect(() => {
@@ -118,7 +118,7 @@ function SidebarContent() {
         form_seguro_fianca_empresarial_mais_2_anos: 0,
         form_seguro_fianca_empresarial_menos_2_anos: 0,
         form_efetivacao_seguro_fianca_tb: 0,
-        form_titulo_capitalizacao: 0,
+        // form_titulo_capitalizacao: 0, COMENTANDO ATÉ CORRIGIR O ERRO
       };
 
       // Contar notificações por tipo de formulário
@@ -134,8 +134,8 @@ function SidebarContent() {
           counts.form_seguro_fianca_empresarial_menos_2_anos++;
         if (notification.form_efetivacao_seguro_fianca_tb)
           counts.form_efetivacao_seguro_fianca_tb++;
-        if (notification.form_titulo_capitalizacao)
-          counts.form_titulo_capitalizacao++;
+        // if (notification.form_titulo_capitalizacao)
+        //   counts.form_titulo_capitalizacao++; COMENTANDO ATÉ CORRIGIR O ERRO
       });
 
       setNotificationsCount(counts);
@@ -171,8 +171,8 @@ function SidebarContent() {
             newCounts.form_seguro_fianca_empresarial_menos_2_anos++;
           if (notification.form_efetivacao_seguro_fianca_tb)
             newCounts.form_efetivacao_seguro_fianca_tb++;
-          if (notification.form_titulo_capitalizacao)
-            newCounts.form_titulo_capitalizacao++;
+          // if (notification.form_titulo_capitalizacao)
+          //   newCounts.form_titulo_capitalizacao++; COMENTANDO ATÉ CORRIGIR O ERRO
 
           return newCounts;
         });
@@ -453,14 +453,14 @@ function SidebarContent() {
           >
             <CaptionsIcon className="h-5 w-5 mr-3" />
             <span>Título de Capitalização</span>
-            {notificationsCount.form_titulo_capitalizacao > 0 && (
+            {/* {notificationsCount.form_titulo_capitalizacao > 0 && (
               <span
                 className="ml-2 text-xs text-white bg-green-800 flex items-center justify-center rounded-full flex-shrink-0"
                 style={{ width: "0.95rem", height: "0.95rem" }}
               >
                 {notificationsCount.form_titulo_capitalizacao}
               </span>
-            )}
+            )}    COMENTADO ATÉ CORRIGIR O ERRO */}
           </button>
         </li>
 
