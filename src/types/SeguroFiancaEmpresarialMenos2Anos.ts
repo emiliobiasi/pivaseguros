@@ -131,7 +131,14 @@ export type SeguroFiancaEmpresarialMenos2Anos = {
   iptu_imovel_alugado?: number;
   agua_imovel_alugado?: number;
   luz_imovel_alugado?: number;
+  energia_imovel_alugado?: number;
   gas_canalizado_imovel_alugado?: number;
+
+  danos_imovel: "SIM" | "NÃO";
+  multa_rescisao: "SIM" | "NÃO";
+  pintura_interna: "SIM" | "NÃO";
+  pintura_externa: "SIM" | "NÃO";
+
   motivo_locacao:
     | "ABERTURA DE FILIAL"
     | "ABERTURA DE MATRIZ"

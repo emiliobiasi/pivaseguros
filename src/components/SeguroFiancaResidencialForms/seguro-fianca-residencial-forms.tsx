@@ -324,7 +324,7 @@ export function SeguroFiancaResidencialForms() {
                     color: currentTab === "address" ? "white" : undefined,
                   }}
                 >
-                  Dados da Locação
+                  Dados da Locação Pretendida
                 </TabsTrigger>
 
                 <TabsTrigger

@@ -360,12 +360,15 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                     currentTab === "payment" ? "" : "bg-gray-200"
                   }`}
                   style={{
+                    width: "100%",
+                    // marginLeft: "10%",
+                    // marginRight: "10px",
                     backgroundColor:
                       currentTab === "payment" ? "#16a34a" : undefined,
                     color: currentTab === "payment" ? "white" : undefined,
                   }}
                 >
-                  Dados da Locação
+                  Dados da Locação Pretendida
                 </TabsTrigger>
                 <TabsTrigger
                   value="coberturas"
