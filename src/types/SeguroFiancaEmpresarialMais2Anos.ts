@@ -5,7 +5,16 @@ export type SeguroFiancaEmpresarialMais2Anos = {
   acao: "PENDENTE" | "FINALIZADO";
 
   nome_imobiliaria: string;
-  opcao_tributaria: "LUCRO REAL" | "LUCRO" | "PRESUMIDO" | "SIMPLES NACIONAL";
+
+  tipo_empresa:
+    | "LTDA"
+    | "INDIVIDUAL/ME"
+    | "S.A. CAPITAL ABERTO"
+    | "S.A. CAPITAL FECHADO"
+    | "SEM FINS LUCRATIVOS"
+    | "PÚBLICO"	
+
+  opcao_tributaria: "LUCRO REAL" | "LUCRO PRESUMIDO" | "SIMPLES NACIONAL";
   nome_empresa: string;
   cnpj: string;
   telefone_empresa: string;

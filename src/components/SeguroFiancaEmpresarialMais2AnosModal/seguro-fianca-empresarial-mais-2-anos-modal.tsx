@@ -56,6 +56,9 @@ export function SeguroFiancaEmpresarialMais2AnosModal({
               <strong>Nome da Empresa:</strong> {seguro.nome_empresa}
             </p>
             <p>
+              <strong>Tipo de Empresa:</strong> {seguro.tipo_empresa}
+            </p>
+            <p>
               <strong>CNPJ:</strong> {seguro.cnpj}
             </p>
             <p>

@@ -59,6 +59,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
     id_numero: 0,
     status: "EM ANÁLISE",
     acao: "PENDENTE",
+    tipo_empresa: "LTDA",
     opcao_tributaria: "LUCRO REAL",
     nome_empresa: "",
     cnpj: "",
@@ -387,23 +388,59 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
 
               <TabsContent value="personal">
                 <div className="grid gap-4 py-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="nome_imobiliaria">
-                      Nome da Imobiliária <RequiredAsterisk />
-                    </Label>
-                    <Input
-                      id="nome_imobiliaria"
-                      name="nome_imobiliaria"
-                      value={formData.nome_imobiliaria}
-                      onChange={handleInputChange}
-                      type="text"
-                      required
-                      placeholder="Digite o nome da imobiliária"
-                    />
-                  </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="danos_imovel">
+                      <Label htmlFor="nome_imobiliaria">
+                        Nome da Imobiliária <RequiredAsterisk />
+                      </Label>
+                      <Input
+                        id="nome_imobiliaria"
+                        name="nome_imobiliaria"
+                        value={formData.nome_imobiliaria}
+                        onChange={handleInputChange}
+                        type="text"
+                        required
+                        placeholder="Digite o nome da imobiliária"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="tipo_empresa">
+                        Tipo de Empresa <RequiredAsterisk />
+                      </Label>
+                      <Select
+                        value={formData.tipo_empresa}
+                        onValueChange={(value) =>
+                          handleSelectChange("tipo_empresa", value)
+                        }
+                        required
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Tipo de Empresa" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="LTDA">LTDA</SelectItem>
+                          <SelectItem value="INDIVIDUAL/ME">
+                            INDIVIDUAL/ME
+                          </SelectItem>
+                          <SelectItem value="S.A. CAPITAL ABERTO">
+                            S.A. CAPITAL ABERTO
+                          </SelectItem>
+                          <SelectItem value="S.A. CAPITAL FECHADO">
+                            S.A. CAPITAL FECHADO
+                          </SelectItem>
+                          <SelectItem value="SEM FINS LUCRATIVOS">
+                            SEM FINS LUCRATIVOS
+                          </SelectItem>
+                          <SelectItem value="PÚBLICO">PÚBLICO</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="opcao_tributaria">
                         Opção Tributária <RequiredAsterisk />
                       </Label>
                       <Select
@@ -418,8 +455,9 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="LUCRO REAL">LUCRO REAL</SelectItem>
-                          <SelectItem value="LUCRO">LUCRO</SelectItem>
-                          <SelectItem value="PRESUMIDO">PRESUMIDO</SelectItem>
+                          <SelectItem value="LUCRO PRESUMIDO">
+                            LUCRO PRESUMIDO
+                          </SelectItem>
                           <SelectItem value="SIMPLES NACIONAL">
                             SIMPLES NACIONAL
                           </SelectItem>
