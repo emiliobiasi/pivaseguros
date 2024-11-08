@@ -241,7 +241,6 @@ export function EfetivacaoSeguroFiancaForms() {
       if (!formData.endereco) errors.push("Endereço");
       if (!formData.numero) errors.push("Número");
       if (!formData.bairro) errors.push("Bairro");
-      if (!formData.complemento) errors.push("Complemento");
       if (!formData.cidade) errors.push("Cidade");
       if (!formData.estado) errors.push("Estado");
       if (!formData.tipo_residencia) errors.push("Tipo de Residência");

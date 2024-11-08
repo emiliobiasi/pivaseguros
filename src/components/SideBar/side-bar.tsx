@@ -57,7 +57,11 @@ export function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
             className="text-xl font-bold text-gray-800 dark:text-white cursor-pointer"
             onClick={() => navigate("/inicio")}
           >
-            <img src={logo} alt="Logo" />
+            <img
+              src={logo}
+              alt="Logo"
+              onClick={() => window.location.reload()}
+            />
           </span>
         </div>
         <SidebarContent />
@@ -221,7 +225,10 @@ function SidebarContent() {
         {/* Início */}
         <li>
           <button
-            onClick={() => navigate("/inicio")}
+            onClick={() => {
+              navigate("/inicio");
+              window.location.reload();
+            }}
             className={`flex items-center w-full px-4 py-2 text-left text-sm ${
               location.pathname === "/inicio"
                 ? "bg-gray-200 dark:bg-gray-700 text-green-700 dark:text-white"
