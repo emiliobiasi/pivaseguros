@@ -3,6 +3,7 @@ import { XCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { formatValor } from "@/utils/regex/regexValor";
+import { formatarData } from "@/utils/dateformater/dateFormater";
 
 type EfetivacaoSeguroFiancaModalProps = {
   efetivacao: EfetivacaoSeguroFianca;
@@ -195,11 +196,11 @@ export function EfetivacaoSeguroFiancaModal({
             )}
             <p>
               <strong>Início do Contrato:</strong>{" "}
-              {new Date(efetivacao.inicio_contrato).toLocaleDateString()}
+              {formatarData(efetivacao.inicio_contrato)}
             </p>
             <p>
               <strong>Término do Contrato:</strong>{" "}
-              {new Date(efetivacao.termino_contrato).toLocaleDateString()}
+              {formatarData(efetivacao.termino_contrato)}
             </p>
 
             <p>
@@ -269,9 +270,7 @@ export function EfetivacaoSeguroFiancaModal({
             )}
             <p>
               <strong>Data de Nascimento:</strong>{" "}
-              {new Date(
-                efetivacao.data_nascimento_proprietario
-              ).toLocaleDateString()}
+              {formatarData(efetivacao.data_nascimento_proprietario)}
             </p>
             <p>
               <strong>RG:</strong> {efetivacao.rg_proprietario}

@@ -3,6 +3,7 @@ import { XCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { formatValor } from "@/utils/regex/regexValor";
+import { formatarData } from "@/utils/dateformater/dateFormater";
 
 type TituloCapitalizacaoModalProps = {
   titulo: TituloCapitalizacao;
@@ -76,8 +77,7 @@ export function TituloCapitalizacaoModal({
               {formatValor(titulo.valor_remuneracao.toFixed(2))}
             </p>
             <p>
-              <strong>Data de Criação:</strong>{" "}
-              {new Date(titulo.created).toLocaleDateString()}
+              <strong>Data de Criação:</strong> {formatarData(titulo.created)}
             </p>
           </div>
 

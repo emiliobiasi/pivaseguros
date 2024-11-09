@@ -3,6 +3,8 @@ import { XCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { formatValor } from "@/utils/regex/regexValor";
+import { formatarData } from "@/utils/dateformater/dateFormater";
+
 
 type SeguroFiancaEmpresarialMenos2AnosModalProps = {
   seguro: SeguroFiancaEmpresarialMenos2Anos;
@@ -69,11 +71,11 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
               </p>
               <p>
                 <strong>Data de Expedição do RG:</strong>{" "}
-                {new Date(seguro.data_expedicao_rg).toLocaleDateString()}
+                {formatarData(seguro.data_expedicao_rg)}
               </p>
               <p>
                 <strong>Data de Nascimento:</strong>{" "}
-                {new Date(seguro.data_nascimento).toLocaleDateString()}
+                {formatarData(seguro.data_nascimento)}
               </p>
               <p>
                 <strong>Órgão Emissor do RG:</strong> {seguro.orgao_emissor_rg}
@@ -128,17 +130,13 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                 {seguro.data_expedicao_rg_conjuge && (
                   <p>
                     <strong>Data de Expedição do RG do Cônjuge:</strong>{" "}
-                    {new Date(
-                      seguro.data_expedicao_rg_conjuge
-                    ).toLocaleDateString()}
+                    {formatarData(seguro.data_expedicao_rg_conjuge)}
                   </p>
                 )}
                 {seguro.data_nascimento_conjuge && (
                   <p>
                     <strong>Data de Nascimento do Cônjuge:</strong>{" "}
-                    {new Date(
-                      seguro.data_nascimento_conjuge
-                    ).toLocaleDateString()}
+                    {formatarData(seguro.data_nascimento_conjuge)}
                   </p>
                 )}
                 {seguro.orgao_emissor_conjuge && (
@@ -315,7 +313,7 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
               {seguro.data_emissao && (
                 <p>
                   <strong>Data de Emissão:</strong>{" "}
-                  {new Date(seguro.data_emissao).toLocaleDateString()}
+                  {formatarData(seguro.data_emissao)}
                 </p>
               )}
               {seguro.fone && (
@@ -363,10 +361,8 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                   )}
                   {seguro.data_emissao_conjuge && (
                     <p>
-                      <strong>Data de Emissão:</strong>{" "}
-                      {new Date(
-                        seguro.data_emissao_conjuge
-                      ).toLocaleDateString()}
+                      <strong>Data de Emissão Cônjuge:</strong>{" "}
+                      {formatarData(seguro.data_emissao_conjuge)}
                     </p>
                   )}
                   {seguro.fone_conjuge && (

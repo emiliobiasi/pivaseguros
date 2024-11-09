@@ -3,6 +3,8 @@ import { XCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { formatValor } from "@/utils/regex/regexValor";
+import { formatarData } from "@/utils/dateformater/dateFormater";
+
 
 type SeguroIncendioModalProps = {
   seguro: SeguroIncendio;
@@ -76,7 +78,7 @@ export function SeguroIncendioModal({
             </>
             <p>
               <strong>Data de Nascimento:</strong>{" "}
-              {new Date(seguro.data_nascimento_locatario).toLocaleDateString()}
+              {formatarData(seguro.data_nascimento_locatario)}
             </p>
             <p>
               <strong>Estado Civil:</strong> {seguro.estado_civil}
