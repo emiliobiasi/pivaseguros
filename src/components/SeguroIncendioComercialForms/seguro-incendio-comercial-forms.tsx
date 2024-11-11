@@ -701,7 +701,7 @@ export function SeguroIncendioComercialForms() {
                         <SelectItem value="PLANO PADRÃO GRATUITO">
                           Plano Padrão Gratuito
                         </SelectItem>
-                        <SelectItem value="PLANO INTERMEDIÁRIO ">
+                        <SelectItem value="PLANO INTERMEDIÁRIO">
                           Plano Intermediário
                         </SelectItem>
                         <SelectItem value="PLANO DE REDE REFERENCIADA">
