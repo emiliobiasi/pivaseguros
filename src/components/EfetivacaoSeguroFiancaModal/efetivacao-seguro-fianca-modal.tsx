@@ -252,12 +252,47 @@ export function EfetivacaoSeguroFiancaModal({
             <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
               Informações do Proprietário
             </h3>
-            <p>
-              <strong>Nome:</strong> {efetivacao.nome_proprietario}
-            </p>
-            <p>
-              <strong>Profissão:</strong> {efetivacao.profissao_proprietario}
-            </p>
+            {efetivacao.proprietario_documento === "PESSOA FÍSICA" && (
+              <>
+                <p>
+                  <strong>Nome:</strong> {efetivacao.nome_proprietario}
+                </p>
+                <p>
+                  <strong>Profissão:</strong>{" "}
+                  {efetivacao.profissao_proprietario}
+                </p>
+
+                <p>
+                  <strong>Email:</strong> {efetivacao.email_proprietario}
+                </p>
+                <p>
+                  <strong>Telefone:</strong> {efetivacao.telefone_proprietario}
+                </p>
+                <p>
+                  <strong>RG:</strong> {efetivacao.rg_proprietario}
+                </p>
+              </>
+            )}
+            {efetivacao.proprietario_documento === "PESSOA JURÍDICA" && (
+              <>
+                <p>
+                  <strong>Nome da Empresa:</strong> {efetivacao.nome_empresa}
+                </p>
+                <p>
+                  <strong>CNPJ:</strong> {efetivacao.cnpj_empresa}
+                </p>
+                <p>
+                  <strong>Email da Empresa:</strong> {efetivacao.email_empresa}
+                </p>
+                <p>
+                  <strong>Telefone da Empresa:</strong> {efetivacao.telefone_empresa}
+                </p>
+                <p>
+                  <strong>Atividade da Empresa:</strong> {efetivacao.atividade_empresa}
+                </p>
+              </>
+            )}
+
             {efetivacao.cpf_proprietario && (
               <p>
                 <strong>CPF:</strong> {efetivacao.cpf_proprietario}
@@ -272,21 +307,13 @@ export function EfetivacaoSeguroFiancaModal({
               <strong>Data de Nascimento:</strong>{" "}
               {formatarData(efetivacao.data_nascimento_proprietario)}
             </p>
-            <p>
-              <strong>RG:</strong> {efetivacao.rg_proprietario}
-            </p>
+
             <p>
               <strong>Estado Civil:</strong>{" "}
               {efetivacao.estado_civil_proprietario}
             </p>
             <p>
               <strong>Reside no Brasil:</strong> {efetivacao.reside_brasil}
-            </p>
-            <p>
-              <strong>Email:</strong> {efetivacao.email_proprietario}
-            </p>
-            <p>
-              <strong>Telefone:</strong> {efetivacao.telefone_proprietario}
             </p>
           </div>
 
