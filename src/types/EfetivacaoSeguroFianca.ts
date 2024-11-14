@@ -6,7 +6,6 @@ export type EfetivacaoSeguroFianca = {
   telefone_imobiliaria: string;
 
   inquilino_documento?: "PESSOA FÍSICA" | "PESSOA JURÍDICA";
-  proprietario_documento?: "PESSOA FÍSICA" | "PESSOA JURÍDICA";
 
   nome_inquilino_1?: string;
   cpf_inquilino_1?: string;
@@ -27,23 +26,16 @@ export type EfetivacaoSeguroFianca = {
   email_inquilino_4?: string;
   telefone_inquilino_4?: string;
 
-  nome_empresa?: string;
-  cnpj_empresa?: string;
-  email_empresa?: string;
-  telefone_empresa?: string;
-  atividade_empresa?: string;
-
-  nome_proprietario?: string;
-  profissao_proprietario?: string;
+  nome_proprietario: string;
+  profissao_proprietario: string;
   cpf_proprietario?: string;
   cnpj_proprietario?: string;
   data_nascimento_proprietario: Date;
-  rg_proprietario?: string;
-  
+  rg_proprietario: string;
   estado_civil_proprietario: "SOLTEIRO" | "CASADO" | "VIÚVO" | "DIVORCIADO";
   reside_brasil: "SIM" | "NÃO";
-  email_proprietario?: string;
-  telefone_proprietario?: string;
+  email_proprietario: string;
+  telefone_proprietario: string;
   finalidade:
     | "RESIDENCIAL"
     | "COMERCIAL EMPREENDEDOR"

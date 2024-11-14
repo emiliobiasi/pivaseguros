@@ -61,9 +61,14 @@ export function EfetivacaoSeguroFiancaForms() {
     acao: "PENDENTE",
     nome_imobiliaria: "",
     telefone_imobiliaria: "",
+    nome_proprietario: "",
+    profissao_proprietario: "",
     data_nascimento_proprietario: new Date(),
+    rg_proprietario: "",
     estado_civil_proprietario: "SOLTEIRO",
     reside_brasil: "SIM",
+    email_proprietario: "",
+    telefone_proprietario: "",
     finalidade: "RESIDENCIAL",
     cep: "",
     endereco: "",
@@ -99,7 +104,6 @@ export function EfetivacaoSeguroFiancaForms() {
     } else if (
       name === "cnpj_proprietario" ||
       name === "cnpj_inquilino_3" ||
-      name === "cnpj_empresa" ||
       name === "cnpj_inquilino_4"
     ) {
       formattedValue = formatCNPJ(value);
@@ -111,7 +115,6 @@ export function EfetivacaoSeguroFiancaForms() {
       name === "telefone_inquilino_3" ||
       name === "telefone_inquilino_4" ||
       name === "telefone_proprietario" ||
-      name === "telefone_empresa" ||
       name === "telefone_imobiliaria"
     ) {
       formattedValue = formatTelefone(value);
@@ -221,14 +224,18 @@ export function EfetivacaoSeguroFiancaForms() {
       if (!formData.nome_imobiliaria) errors.push("Nome da Imobiliária");
       if (!formData.telefone_imobiliaria)
         errors.push("Telefone da Imobiliária");
-
+      if (!formData.nome_proprietario) errors.push("Nome do Proprietário");
+      if (!formData.profissao_proprietario)
+        errors.push("Profissão do Proprietário");
       if (!formData.data_nascimento_proprietario)
         errors.push("Data de Nascimento do Proprietário");
-
+      if (!formData.rg_proprietario) errors.push("RG do Proprietário");
       if (!formData.estado_civil_proprietario)
         errors.push("Estado Civil do Proprietário");
       if (!formData.reside_brasil) errors.push("Reside no Brasil");
-
+      if (!formData.email_proprietario) errors.push("Email do Proprietário");
+      if (!formData.telefone_proprietario)
+        errors.push("Telefone do Proprietário");
       if (!formData.finalidade) errors.push("Finalidade");
       if (!formData.cep) errors.push("CEP");
       if (!formData.endereco) errors.push("Endereço");
@@ -631,173 +638,75 @@ export function EfetivacaoSeguroFiancaForms() {
                     </>
                   )}
 
-                  <div className="space-y-2">
-                    <Label htmlFor="proprietario_documento">
-                      Proprietário é Pessoa Física ou Jurídica?{" "}
-                      <RequiredAsterisk />
-                    </Label>
-                    <Select
-                      value={formData.proprietario_documento}
-                      onValueChange={(value) =>
-                        handleSelectChange("proprietario_documento", value)
-                      }
-                      required
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Escolha entre PF ou PJ" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="PESSOA FÍSICA">
-                          PESSOA FÍSICA
-                        </SelectItem>
-                        <SelectItem value="PESSOA JURÍDICA">
-                          PESSOA JURÍDICA
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="nome_proprietario">
+                        Nome do Proprietário <RequiredAsterisk />
+                      </Label>
+                      <Input
+                        id="nome_proprietario"
+                        name="nome_proprietario"
+                        value={formData.nome_proprietario}
+                        onChange={handleInputChange}
+                        required
+                        placeholder="Digite o nome do proprietário"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="profissao_proprietario">
+                        Profissão do Proprietário <RequiredAsterisk />
+                      </Label>
+                      <Input
+                        id="profissao_proprietario"
+                        name="profissao_proprietario"
+                        value={formData.profissao_proprietario}
+                        onChange={handleInputChange}
+                        required
+                        placeholder="Digite a profissão do proprietário"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="rg_proprietario">
+                        RG do Proprietário <RequiredAsterisk />
+                      </Label>
+                      <Input
+                        id="rg_proprietario"
+                        name="rg_proprietario"
+                        value={formData.rg_proprietario}
+                        onChange={handleInputChange}
+                        placeholder="Digite o RG do proprietário"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="telefone_proprietario">
+                        Telefone do Proprietário <RequiredAsterisk />
+                      </Label>
+                      <Input
+                        id="telefone_proprietario"
+                        name="telefone_proprietario"
+                        value={formData.telefone_proprietario}
+                        onChange={handleInputChange}
+                        required
+                        type="tel"
+                        placeholder="Digite o telefone do proprietário"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="email_proprietario">
+                        Email do Proprietário <RequiredAsterisk />
+                      </Label>
+                      <Input
+                        id="email_proprietario"
+                        name="email_proprietario"
+                        type="email"
+                        value={formData.email_proprietario}
+                        onChange={handleInputChange}
+                        required
+                        placeholder="Digite o email do proprietário"
+                      />
+                    </div>
                   </div>
-
-                  {formData.proprietario_documento === "PESSOA FÍSICA" && (
-                    <>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="nome_proprietario">
-                            Nome do Proprietário <RequiredAsterisk />
-                          </Label>
-                          <Input
-                            id="nome_proprietario"
-                            name="nome_proprietario"
-                            value={formData.nome_proprietario}
-                            onChange={handleInputChange}
-                            placeholder="Digite o nome do proprietário"
-                            type="text"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="profissao_proprietario">
-                            Profissão do Proprietário <RequiredAsterisk />
-                          </Label>
-                          <Input
-                            id="profissao_proprietario"
-                            name="profissao_proprietario"
-                            value={formData.profissao_proprietario}
-                            onChange={handleInputChange}
-                            placeholder="Digite a profissão do proprietário"
-                            type="text"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="rg_proprietario">
-                            RG do Proprietário <RequiredAsterisk />
-                          </Label>
-                          <Input
-                            id="rg_proprietario"
-                            name="rg_proprietario"
-                            value={formData.rg_proprietario}
-                            onChange={handleInputChange}
-                            placeholder="Digite o RG do proprietário"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="telefone_proprietario">
-                            Telefone do Proprietário <RequiredAsterisk />
-                          </Label>
-                          <Input
-                            id="telefone_proprietario"
-                            name="telefone_proprietario"
-                            value={formData.telefone_proprietario}
-                            onChange={handleInputChange}
-                            type="tel"
-                            placeholder="Digite o telefone do proprietário"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="email_proprietario">
-                            Email do Proprietário <RequiredAsterisk />
-                          </Label>
-                          <Input
-                            id="email_proprietario"
-                            name="email_proprietario"
-                            type="email"
-                            value={formData.email_proprietario}
-                            onChange={handleInputChange}
-                            placeholder="Digite o email do proprietário"
-                          />
-                        </div>
-                      </div>
-                    </>
-                  )}
-
-                  {formData.proprietario_documento === "PESSOA JURÍDICA" && (
-                    <>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="nome_empresa">
-                            Nome da Empresa <RequiredAsterisk />
-                          </Label>
-                          <Input
-                            id="nome_empresa"
-                            name="nome_empresa"
-                            value={formData.nome_empresa}
-                            onChange={handleInputChange}
-                            placeholder="Digite o nome da empresa"
-                            type="text"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="cnpj_empresa">
-                            CNPJ da Empresa <RequiredAsterisk />
-                          </Label>
-                          <Input
-                            id="cnpj_empresa"
-                            name="cnpj_empresa"
-                            value={formData.cnpj_empresa}
-                            onChange={handleInputChange}
-                            placeholder="Digite o CNPJ da empresa"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="email_empresa">
-                            Email da Empresa <RequiredAsterisk />
-                          </Label>
-                          <Input
-                            id="email_empresa"
-                            name="email_empresa"
-                            value={formData.email_empresa}
-                            onChange={handleInputChange}
-                            placeholder="Digite o email da empresa"
-                            type="email"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="telefone_empresa">
-                            Telefone da Empresa <RequiredAsterisk />
-                          </Label>
-                          <Input
-                            id="telefone_empresa"
-                            name="telefone_empresa"
-                            value={formData.telefone_empresa}
-                            onChange={handleInputChange}
-                            type="tel"
-                            placeholder="Digite o telefone da empresa"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="atividade_empresa">
-                            Atividade da Empresa <RequiredAsterisk />
-                          </Label>
-                          <Input
-                            id="atividade_empresa"
-                            name="atividade_empresa"
-                            value={formData.atividade_empresa}
-                            onChange={handleInputChange}
-                            type="text"
-                            placeholder="Digite a atividade da empresa"
-                          />
-                        </div>
-                      </div>
-                    </>
-                  )}
 
                   <h3 className="mt-5">
                     <RequiredAsterisk /> Preencha apenas um dos campos abaixo,
