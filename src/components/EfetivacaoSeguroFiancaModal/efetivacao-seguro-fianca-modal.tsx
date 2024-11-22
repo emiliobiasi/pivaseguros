@@ -230,9 +230,17 @@ export function EfetivacaoSeguroFiancaModal({
             <p>
               <strong>Endereço:</strong> {efetivacao.endereco}
             </p>
-            <p>
-              <strong>Número:</strong> {efetivacao.numero}
-            </p>
+            {efetivacao.numero !== null &&
+            efetivacao.numero !== undefined &&
+            efetivacao.numero !== 0 ? (
+              <p>
+                <strong>Número:</strong> {efetivacao.numero}
+              </p>
+            ) : (
+              <p>
+                <strong>Número:</strong> S/N
+              </p>
+            )}
             <p>
               <strong>Bairro:</strong> {efetivacao.bairro}
             </p>

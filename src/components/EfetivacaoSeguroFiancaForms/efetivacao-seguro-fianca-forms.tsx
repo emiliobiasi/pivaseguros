@@ -47,6 +47,7 @@ import { buscaEnderecoPorCEP, EnderecoViaCep } from "@/utils/api/Cep";
 export function EfetivacaoSeguroFiancaForms() {
   const [currentTab, setCurrentTab] = useState("personal");
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [snCheck, setSnCheck] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -241,7 +242,7 @@ export function EfetivacaoSeguroFiancaForms() {
       if (!formData.finalidade) errors.push("Finalidade");
       if (!formData.cep) errors.push("CEP");
       if (!formData.endereco) errors.push("Endereço");
-      if (!formData.numero) errors.push("Número");
+      // if (!formData.numero) errors.push("Número");
       if (!formData.bairro) errors.push("Bairro");
       if (!formData.cidade) errors.push("Cidade");
       if (!formData.estado) errors.push("Estado");
@@ -256,6 +257,9 @@ export function EfetivacaoSeguroFiancaForms() {
       if (!formData.seguradora) errors.push("Seguradora");
       if (!formData.indice_reajuste) errors.push("Índice de Reajuste");
       if (!formData.vencimento_aluguel) errors.push("Vencimento do Aluguel");
+      if (!snCheck && !formData.numero) {
+        errors.push("Número da Locação");
+      }
       return errors;
     };
 
@@ -936,7 +940,7 @@ export function EfetivacaoSeguroFiancaForms() {
                     </Select>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="cep">
                         CEP <RequiredAsterisk />
@@ -969,20 +973,45 @@ export function EfetivacaoSeguroFiancaForms() {
                         disabled={isLoading}
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="numero">
-                        Número <RequiredAsterisk />
-                      </Label>
-                      <Input
-                        id="numero"
-                        name="numero"
-                        type="text"
-                        value={formData.numero || ""}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="Digite o número"
-                        disabled={isLoading}
+
+                    {!snCheck && (
+                      <div className="space-y-2">
+                        <Label htmlFor="numero">
+                          Número <RequiredAsterisk />
+                        </Label>
+                        <Input
+                          id="numero"
+                          name="numero"
+                          type="text"
+                          value={formData.numero || ""}
+                          onChange={handleInputChange}
+                          required
+                          placeholder="Digite o número"
+                          disabled={isLoading}
+                        />
+                      </div>
+                    )}
+                    <div className="space-y-2 mt-2 mb-1 sm:mt-10">
+                      <Checkbox
+                        id="sn"
+                        checked={snCheck}
+                        onCheckedChange={(checked) => {
+                          setSnCheck(checked === true);
+
+                          if (checked === true) {
+                            setFormData((prevState) => ({
+                              ...prevState,
+                              numero: 0,
+                            }));
+                          }
+                        }}
                       />
+                      <label
+                        htmlFor="sn"
+                        className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        S/N
+                      </label>
                     </div>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

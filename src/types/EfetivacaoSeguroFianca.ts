@@ -51,7 +51,7 @@ export type EfetivacaoSeguroFianca = {
     | "COMERCIAL PESSOA JURÍDICA";
   cep: string;
   endereco: string;
-  numero: number;
+  numero?: number;
   bairro: string;
   complemento?: string;
   cidade: string;
