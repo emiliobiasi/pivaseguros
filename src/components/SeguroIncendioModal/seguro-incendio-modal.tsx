@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { formatValor } from "@/utils/regex/regexValor";
 import { formatarData } from "@/utils/dateformater/dateFormater";
 
-
 type SeguroIncendioModalProps = {
   seguro: SeguroIncendio;
   isOpen: boolean;
@@ -86,40 +85,6 @@ export function SeguroIncendioModal({
             <p>
               <strong>Sexo:</strong> {seguro.sexo_locatario}
             </p>
-
-            {seguro.nome_locador && (
-              <>
-                <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
-                  Informações do Locador
-                </h3>
-
-                {seguro.nome_locador && (
-                  <p>
-                    <strong>Nome do Locador:</strong> {seguro.nome_locador}
-                  </p>
-                )}
-
-                {seguro.cpf_locador_opcional && (
-                  <p>
-                    <strong>CPF do Locador:</strong>{" "}
-                    {seguro.cpf_locador_opcional}
-                  </p>
-                )}
-
-                {seguro.nome_locador_cnpj && (
-                  <p>
-                    <strong>Nome do Locador:</strong> {seguro.nome_locador_cnpj}
-                  </p>
-                )}
-
-                {seguro.cnpj_locador_opcional && (
-                  <p>
-                    <strong>CNPJ do Locador:</strong>{" "}
-                    {seguro.cnpj_locador_opcional}
-                  </p>
-                )}
-              </>
-            )}
           </div>
 
           {/* Segunda Coluna */}
@@ -158,63 +123,99 @@ export function SeguroIncendioModal({
           {/* Terceira Coluna */}
           <div className="space-y-4 bg-gray-100 p-4 rounded-lg">
             <h3 className="text-lg font-semibold text-[#025d37]">Coberturas</h3>
-            {seguro.incendio !== undefined && seguro.incendio > 0 && (
-              <p>
-                <strong>Incêndio:</strong> R${" "}
-                {formatValor(seguro.incendio.toFixed(2))}
-              </p>
-            )}
-            {seguro.vendaval !== undefined && seguro.vendaval > 0 && (
-              <p>
-                <strong>Vendaval:</strong> R${" "}
-                {formatValor(seguro.vendaval.toFixed(2))}
-              </p>
-            )}
-            {seguro.danos_eletricos !== undefined &&
-              seguro.danos_eletricos > 0 && (
+            <>
+              {seguro.incendio !== undefined && seguro.incendio > 0 && (
                 <p>
-                  <strong>Danos Elétricos:</strong> R${" "}
-                  {formatValor(seguro.danos_eletricos.toFixed(2))}
+                  <strong>Incêndio:</strong> R${" "}
+                  {formatValor(seguro.incendio.toFixed(2))}
                 </p>
               )}
-            {seguro.impacto_veiculos !== undefined &&
-              seguro.impacto_veiculos > 0 && (
+              {seguro.vendaval !== undefined && seguro.vendaval > 0 && (
                 <p>
-                  <strong>Impacto de Veículos:</strong> R${" "}
-                  {formatValor(seguro.impacto_veiculos.toFixed(2))}
+                  <strong>Vendaval:</strong> R${" "}
+                  {formatValor(seguro.vendaval.toFixed(2))}
                 </p>
               )}
-            {seguro.perda_aluguel !== undefined && seguro.perda_aluguel > 0 && (
-              <p>
-                <strong>Perda de Aluguel:</strong> R${" "}
-                {formatValor(seguro.perda_aluguel.toFixed(2))}
-              </p>
-            )}
-            {seguro.responsabilidade_civil !== undefined &&
-              seguro.responsabilidade_civil > 0 && (
-                <p>
-                  <strong>Responsabilidade Civil:</strong> R${" "}
-                  {formatValor(seguro.responsabilidade_civil.toFixed(2))}
-                </p>
-              )}
+              {seguro.danos_eletricos !== undefined &&
+                seguro.danos_eletricos > 0 && (
+                  <p>
+                    <strong>Danos Elétricos:</strong> R${" "}
+                    {formatValor(seguro.danos_eletricos.toFixed(2))}
+                  </p>
+                )}
+              {seguro.impacto_veiculos !== undefined &&
+                seguro.impacto_veiculos > 0 && (
+                  <p>
+                    <strong>Impacto de Veículos:</strong> R${" "}
+                    {formatValor(seguro.impacto_veiculos.toFixed(2))}
+                  </p>
+                )}
+              {seguro.perda_aluguel !== undefined &&
+                seguro.perda_aluguel > 0 && (
+                  <p>
+                    <strong>Perda de Aluguel:</strong> R${" "}
+                    {formatValor(seguro.perda_aluguel.toFixed(2))}
+                  </p>
+                )}
+              {seguro.responsabilidade_civil !== undefined &&
+                seguro.responsabilidade_civil > 0 && (
+                  <p>
+                    <strong>Responsabilidade Civil:</strong> R${" "}
+                    {formatValor(seguro.responsabilidade_civil.toFixed(2))}
+                  </p>
+                )}
+            </>
 
             <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
               Informações do Seguro
             </h3>
-            <p>
-              <strong>ASSISTÊNCIA</strong> {seguro.plano_escolhido}
-            </p>
-            <p>
-              <strong>Valor do Seguro:</strong> R${" "}
-              {formatValor(seguro.valor_seguro.toFixed(2))}
-            </p>
-            <p>
-              <strong>Forma de Pagamento:</strong> {seguro.forma_pagamento}
-            </p>
-            <p>
-              <strong>Incluir Cláusula Beneficiária:</strong>{" "}
-              {seguro.inclusao_clausula_beneficiaria ? "Sim" : "Não"}
-            </p>
+            <>
+              <p>
+                <strong>ASSISTÊNCIA</strong> {seguro.plano_escolhido}
+              </p>
+              <p>
+                <strong>Valor do Seguro:</strong> R${" "}
+                {formatValor(seguro.valor_seguro.toFixed(2))}
+              </p>
+              <p>
+                <strong>Forma de Pagamento:</strong> {seguro.forma_pagamento}
+              </p>
+              <p>
+                <strong>Incluir Cláusula Beneficiária:</strong>{" "}
+                {seguro.inclusao_clausula_beneficiaria ? "Sim" : "Não"}
+              </p>
+            </>
+
+            <>
+              <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+                Informações do Locador
+              </h3>
+
+              {seguro.nome_locador && (
+                <p>
+                  <strong>Nome do Locador:</strong> {seguro.nome_locador}
+                </p>
+              )}
+
+              {seguro.cpf_locador_opcional && (
+                <p>
+                  <strong>CPF do Locador:</strong> {seguro.cpf_locador_opcional}
+                </p>
+              )}
+
+              {seguro.nome_locador_cnpj && (
+                <p>
+                  <strong>Nome do Locador:</strong> {seguro.nome_locador_cnpj}
+                </p>
+              )}
+
+              {seguro.cnpj_locador_opcional && (
+                <p>
+                  <strong>CNPJ do Locador:</strong>{" "}
+                  {seguro.cnpj_locador_opcional}
+                </p>
+              )}
+            </>
           </div>
         </div>
         <div className="mt-6">
