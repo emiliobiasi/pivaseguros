@@ -48,122 +48,279 @@ export function SeguroFiancaResidencialModal({
           {/* Primeira Coluna */}
           <div className="space-y-4 bg-gray-100 p-4 rounded-lg">
             <>
-              <h3 className="text-lg font-semibold text-[#025d37]">
-                Informações do Pretendente
-              </h3>
-              <p>
-                <strong>Nome:</strong> {seguro.nome_residente}
-              </p>
-              <p>
-                <strong>CPF:</strong> {seguro.cpf_residente}
-              </p>
-              <p>
-                <strong>Data de Nascimento:</strong>{" "}
-                {formatarData(seguro.data_nascimento)}
-              </p>
-              <p>
-                <strong>Estado Civil:</strong> {seguro.estado_civil_residente}
-              </p>
-              <p>
-                <strong>Profissão:</strong> {seguro.profissao}
-              </p>
-              {seguro.renda_mensal !== undefined && seguro.renda_mensal > 0 && (
-                <p>
-                  <strong>Renda Mensal:</strong> R${" "}
-                  {formatValor(seguro.renda_mensal.toFixed(2))}
-                </p>
-              )}
-              <p>
-                <strong>Telefone do Pretendente:</strong> {seguro.telefone}
-              </p>
-              <p>
-                <strong>Email do Pretendente:</strong> {seguro.email}
-              </p>
-              <p>
-                <strong>Residirá no Imóvel?:</strong> {seguro.residir_imovel}
-              </p>
-              <p>
-                <strong>Responderá Financeiramente:</strong>{" "}
-                {seguro.responder_financeiramente}
-              </p>
-            </>
-
-            {/* Informações do Outro Residente, se disponível */}
-            {seguro.residir_imovel === "NÃO" && (
               <>
-                <h3 className="text-lg font-semibold text-[#025d37]">
-                  Informações do Residente
-                </h3>
+                <>
+                  <h3 className="text-lg font-semibold text-[#025d37]">
+                    Informações do{" "}
+                    {seguro.incluir_pretendente === "SIM" ? "1º " : ""}
+                    Pretendente
+                  </h3>
+                </>
+
                 <p>
-                  <strong>Nome:</strong> {seguro.nome_residente_nao}
+                  <strong>Nome:</strong> {seguro.nome_residente}
                 </p>
                 <p>
-                  <strong>CPF:</strong> {seguro.cpf_residente_nao}
+                  <strong>CPF:</strong> {seguro.cpf_residente}
                 </p>
                 <p>
                   <strong>Data de Nascimento:</strong>{" "}
-                  {formatarData(seguro.data_nascimento_residente_nao)}
+                  {formatarData(seguro.data_nascimento)}
                 </p>
                 <p>
-                  <strong>Telefone:</strong> {seguro.telefone_residente_nao}
+                  <strong>Estado Civil:</strong> {seguro.estado_civil_residente}
                 </p>
                 <p>
-                  <strong>Email:</strong> {seguro.email_residente_nao}
+                  <strong>Profissão:</strong> {seguro.profissao}
                 </p>
-                <p>
-                  <strong>Profissão:</strong> {seguro.profissao_residente_nao}
-                </p>
-                <p>
-                  <strong>Renda mensal:</strong> {seguro.cpf_residente_nao}
-                </p>
-              </>
-            )}
-
-            {/* Informações do Cônjuge, se disponível */}
-            {seguro.estado_civil_residente === "CASADO" && (
-              <>
-                <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
-                  Informações do Cônjuge
-                </h3>
-                <p>
-                  <strong>Renda Composta com Cônjuge:</strong>{" "}
-                  {seguro.renda_composta_conjuge}
-                </p>
-                <p>
-                  <strong>Nome do Cônjuge:</strong> {seguro.nome_conjuge}
-                </p>
-                {seguro.cpf_conjuge && (
-                  <p>
-                    <strong>CPF do Cônjuge:</strong> {seguro.cpf_conjuge}
-                  </p>
-                )}
-
-                {seguro.telefone_conjuge && (
-                  <p>
-                    <strong>Telefone do Cônjuge:</strong>{" "}
-                    {seguro.telefone_conjuge}
-                  </p>
-                )}
-                {seguro.email_conjuge && (
-                  <p>
-                    <strong>Email do Cônjuge:</strong> {seguro.email_conjuge}
-                  </p>
-                )}
-                {seguro.profissao_conjuge_opcional && (
-                  <p>
-                    <strong>Profissão do Cônjuge:</strong>{" "}
-                    {seguro.profissao_conjuge_opcional}
-                  </p>
-                )}
-                {seguro.renda_mensal_conjuge_opcional &&
-                  Number(seguro.renda_mensal_conjuge_opcional) && (
+                {seguro.renda_mensal !== undefined &&
+                  seguro.renda_mensal > 0 && (
                     <p>
-                      <strong>Renda Mensal do Cônjuge:</strong> R${" "}
-                      {formatValor(
-                        Number(seguro.renda_mensal_conjuge_opcional).toFixed(2)
-                      )}
+                      <strong>Renda Mensal:</strong> R${" "}
+                      {formatValor(seguro.renda_mensal.toFixed(2))}
                     </p>
                   )}
+                <p>
+                  <strong>Telefone do Pretendente:</strong> {seguro.telefone}
+                </p>
+                <p>
+                  <strong>Email do Pretendente:</strong> {seguro.email}
+                </p>
+                <p>
+                  <strong>Residirá no Imóvel?:</strong> {seguro.residir_imovel}
+                </p>
+                <p>
+                  <strong>Responderá Financeiramente:</strong>{" "}
+                  {seguro.responder_financeiramente}
+                </p>
+                {seguro.incluir_pretendente !== undefined && (
+                  <p>
+                    <strong>Incluiu um 2º pretendente no cadastro?</strong>
+                    {seguro.incluir_pretendente}
+                  </p>
+                )}
+              </>
+
+              <>
+                {/* Informações do Outro Residente, se disponível */}
+                {seguro.residir_imovel === "NÃO" && (
+                  <>
+                    <h3 className="text-lg font-semibold text-[#025d37]">
+                      Informações do Residente
+                    </h3>
+                    <p>
+                      <strong>Nome:</strong> {seguro.nome_residente_nao}
+                    </p>
+                    <p>
+                      <strong>CPF:</strong> {seguro.cpf_residente_nao}
+                    </p>
+                    <p>
+                      <strong>Data de Nascimento:</strong>{" "}
+                      {formatarData(seguro.data_nascimento_residente_nao)}
+                    </p>
+                    <p>
+                      <strong>Telefone:</strong> {seguro.telefone_residente_nao}
+                    </p>
+                    <p>
+                      <strong>Email:</strong> {seguro.email_residente_nao}
+                    </p>
+                    <p>
+                      <strong>Profissão:</strong>{" "}
+                      {seguro.profissao_residente_nao}
+                    </p>
+                    <p>
+                      <strong>Renda mensal:</strong> {seguro.cpf_residente_nao}
+                    </p>
+                  </>
+                )}
+
+                {/* Informações do Cônjuge, se disponível */}
+                {seguro.estado_civil_residente === "CASADO" && (
+                  <>
+                    <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+                      Informações do Cônjuge
+                    </h3>
+                    <p>
+                      <strong>Renda Composta com Cônjuge:</strong>{" "}
+                      {seguro.renda_composta_conjuge}
+                    </p>
+                    <p>
+                      <strong>Nome do Cônjuge:</strong> {seguro.nome_conjuge}
+                    </p>
+                    {seguro.cpf_conjuge && (
+                      <p>
+                        <strong>CPF do Cônjuge:</strong> {seguro.cpf_conjuge}
+                      </p>
+                    )}
+
+                    {seguro.telefone_conjuge && (
+                      <p>
+                        <strong>Telefone do Cônjuge:</strong>{" "}
+                        {seguro.telefone_conjuge}
+                      </p>
+                    )}
+                    {seguro.email_conjuge && (
+                      <p>
+                        <strong>Email do Cônjuge:</strong>{" "}
+                        {seguro.email_conjuge}
+                      </p>
+                    )}
+                    {seguro.profissao_conjuge_opcional && (
+                      <p>
+                        <strong>Profissão do Cônjuge:</strong>{" "}
+                        {seguro.profissao_conjuge_opcional}
+                      </p>
+                    )}
+                    {seguro.renda_mensal_conjuge_opcional &&
+                      Number(seguro.renda_mensal_conjuge_opcional) && (
+                        <p>
+                          <strong>Renda Mensal do Cônjuge:</strong> R${" "}
+                          {formatValor(
+                            Number(
+                              seguro.renda_mensal_conjuge_opcional
+                            ).toFixed(2)
+                          )}
+                        </p>
+                      )}
+                  </>
+                )}
+              </>
+            </>
+
+            {/* Informações do Segundo Residente, se disponível */}
+            {seguro.incluir_pretendente === "SIM" && (
+              <>
+                <>
+                  <h3 className="text-lg font-semibold text-[#025d37]">
+                    Informações do 2º Pretendente
+                  </h3>
+                  <p>
+                    <strong>Nome:</strong> {seguro.nome_residente_2}
+                  </p>
+                  <p>
+                    <strong>CPF:</strong> {seguro.cpf_residente_2}
+                  </p>
+                  <p>
+                    <strong>Data de Nascimento:</strong>{" "}
+                    {seguro.data_nascimento_2 &&
+                      formatarData(seguro.data_nascimento_2)}
+                  </p>
+                  <p>
+                    <strong>Estado Civil:</strong>{" "}
+                    {seguro.estado_civil_residente_2}
+                  </p>
+                  <p>
+                    <strong>Profissão:</strong> {seguro.profissao_2}
+                  </p>
+                  {seguro.renda_mensal_2 !== undefined &&
+                    seguro.renda_mensal_2 > 0 && (
+                      <p>
+                        <strong>Renda Mensal:</strong> R${" "}
+                        {formatValor(seguro.renda_mensal_2.toFixed(2))}
+                      </p>
+                    )}
+                  <p>
+                    <strong>Telefone do Pretendente:</strong>{" "}
+                    {seguro.telefone_2}
+                  </p>
+                  <p>
+                    <strong>Email do Pretendente:</strong> {seguro.email_2}
+                  </p>
+                  <p>
+                    <strong>Residirá no Imóvel?:</strong>{" "}
+                    {seguro.residir_imovel_2}
+                  </p>
+                  <p>
+                    <strong>Responderá Financeiramente:</strong>{" "}
+                    {seguro.responder_financeiramente_2}
+                  </p>
+                </>
+
+                {/* Informações do Outro Residente, se disponível */}
+                {seguro.residir_imovel_2 === "NÃO" && (
+                  <>
+                    <h3 className="text-lg font-semibold text-[#025d37]">
+                      Informações do Residente
+                    </h3>
+                    <p>
+                      <strong>Nome:</strong> {seguro.nome_residente_nao_2}
+                    </p>
+                    <p>
+                      <strong>CPF:</strong> {seguro.cpf_residente_nao_2}
+                    </p>
+                    <p>
+                      <strong>Data de Nascimento:</strong>{" "}
+                      {seguro.data_nascimento_residente_nao_2 &&
+                        formatarData(seguro.data_nascimento_residente_nao_2)}
+                    </p>
+                    <p>
+                      <strong>Telefone:</strong>{" "}
+                      {seguro.telefone_residente_nao_2}
+                    </p>
+                    <p>
+                      <strong>Email:</strong> {seguro.email_residente_nao_2}
+                    </p>
+                    <p>
+                      <strong>Profissão:</strong>{" "}
+                      {seguro.profissao_residente_nao_2}
+                    </p>
+                    <p>
+                      <strong>Renda mensal:</strong>{" "}
+                      {seguro.cpf_residente_nao_2}
+                    </p>
+                  </>
+                )}
+
+                {/* Informações do Cônjuge, se disponível */}
+                {seguro.estado_civil_residente_2 === "CASADO" && (
+                  <>
+                    <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+                      Informações do Cônjuge
+                    </h3>
+                    <p>
+                      <strong>Renda Composta com Cônjuge:</strong>{" "}
+                      {seguro.renda_composta_conjuge_2}
+                    </p>
+                    <p>
+                      <strong>Nome do Cônjuge:</strong> {seguro.nome_conjuge_2}
+                    </p>
+                    {seguro.cpf_conjuge_2 && (
+                      <p>
+                        <strong>CPF do Cônjuge:</strong> {seguro.cpf_conjuge_2}
+                      </p>
+                    )}
+
+                    {seguro.telefone_conjuge_2 && (
+                      <p>
+                        <strong>Telefone do Cônjuge:</strong>{" "}
+                        {seguro.telefone_conjuge_2}
+                      </p>
+                    )}
+                    {seguro.email_conjuge_2 && (
+                      <p>
+                        <strong>Email do Cônjuge:</strong>{" "}
+                        {seguro.email_conjuge_2}
+                      </p>
+                    )}
+                    {seguro.profissao_conjuge_opcional_2 && (
+                      <p>
+                        <strong>Profissão do Cônjuge:</strong>{" "}
+                        {seguro.profissao_conjuge_opcional_2}
+                      </p>
+                    )}
+                    {seguro.renda_mensal_conjuge_opcional_2 &&
+                      Number(seguro.renda_mensal_conjuge_opcional_2) && (
+                        <p>
+                          <strong>Renda Mensal do Cônjuge:</strong> R${" "}
+                          {formatValor(
+                            Number(
+                              seguro.renda_mensal_conjuge_opcional_2
+                            ).toFixed(2)
+                          )}
+                        </p>
+                      )}
+                  </>
+                )}
               </>
             )}
           </div>
@@ -173,10 +330,28 @@ export function SeguroFiancaResidencialModal({
             <h3 className="text-lg font-semibold text-[#025d37]">
               Informações da Imobiliária/Corretor
             </h3>
-            <p>
-              <strong>Nome da Imobiliária/Corretor:</strong>{" "}
-              {seguro.nome_imobiliaria_corretor}
-            </p>
+
+            {seguro.nome_imobiliaria_corretor_2 ? (
+              <>
+                <p>
+                  <strong>
+                    Nome da Imobiliária/Corretor (1º Pretendente):
+                  </strong>{" "}
+                  {seguro.nome_imobiliaria_corretor}
+                </p>
+                <p>
+                  <strong>
+                    Nome da Imobiliária/Corretor (2º Pretendente):
+                  </strong>{" "}
+                  {seguro.nome_imobiliaria_corretor_2}
+                </p>
+              </>
+            ) : (
+              <p>
+                <strong>Nome da Imobiliária/Corretor:</strong>{" "}
+                {seguro.nome_imobiliaria_corretor}
+              </p>
+            )}
 
             <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
               Informações da Locação

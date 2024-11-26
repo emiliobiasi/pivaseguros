@@ -3,10 +3,10 @@ export type SeguroFiancaResidencial = {
   id_numero: number;
   status: "EM ANÁLISE" | "APROVADO" | "REPROVADO";
   acao: "PENDENTE" | "FINALIZADO";
-  nome_imobiliaria_corretor: string;
 
-  cpf_residente: string;
+  nome_imobiliaria_corretor: string;
   nome_residente: string;
+  cpf_residente: string;
   telefone: string;
   email: string;
   profissao: string;
@@ -33,6 +33,39 @@ export type SeguroFiancaResidencial = {
   telefone_conjuge?: string;
   email_conjuge?: string;
   renda_mensal_conjuge_opcional?: string;
+
+  // //////////////////////////////////
+
+  nome_imobiliaria_corretor_2?: string;
+  nome_residente_2?: string;
+  cpf_residente_2?: string;
+  telefone_2?: string;
+  email_2?: string;
+  profissao_2?: string;
+  renda_mensal_2?: number;
+  data_nascimento_2?: Date;
+  estado_civil_residente_2?: "SOLTEIRO" | "CASADO" | "VIÚVO" | "DIVORCIADO";
+
+  nome_residente_nao_2?: string;
+  cpf_residente_nao_2?: string;
+  data_nascimento_residente_nao_2?: Date;
+  profissao_residente_nao_2?: string;
+  renda_mensal_residente_nao_2?: number;
+
+  telefone_residente_nao_2?: string;
+  email_residente_nao_2?: string;
+
+  residir_imovel_2?: "SIM" | "NÃO";
+  responder_financeiramente_2?: "SIM" | "NÃO";
+
+  renda_composta_conjuge_2?: "SIM" | "NÃO";
+  nome_conjuge_2?: string;
+  cpf_conjuge_2?: string;
+  profissao_conjuge_opcional_2?: string;
+  telefone_conjuge_2?: string;
+  email_conjuge_2?: string;
+  renda_mensal_conjuge_opcional_2?: string;
+
   cep_locacao: string;
   endereco_locacao: string;
   numero_locacao: string;
@@ -51,6 +84,9 @@ export type SeguroFiancaResidencial = {
   multa_recisao: "SIM" | "NÃO";
   pintura_interna: "SIM" | "NÃO";
   pintura_externa: "SIM" | "NÃO";
+
+  incluir_pretendente: "SIM" | "NÃO";
+
   observacao?: string;
   created: Date;
 };
