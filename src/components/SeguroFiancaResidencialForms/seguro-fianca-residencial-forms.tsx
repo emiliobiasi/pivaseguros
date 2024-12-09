@@ -845,7 +845,7 @@ export function SeguroFiancaResidencialForms() {
                         </h1>
                       </>
 
-                      <div className="space-y-2">
+                      {/* <div className="space-y-2">
                         <Label htmlFor="nome_imobiliaria_corretor_2">
                           Nome da Imobiliária/Corretor <RequiredAsterisk />
                         </Label>
@@ -856,7 +856,7 @@ export function SeguroFiancaResidencialForms() {
                           onChange={handleInputChange}
                           placeholder="Digite o nome da imobiliária ou corretor"
                         />
-                      </div>
+                      </div> */}
 
                       {/* Informações Pessoais do Pretendente */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

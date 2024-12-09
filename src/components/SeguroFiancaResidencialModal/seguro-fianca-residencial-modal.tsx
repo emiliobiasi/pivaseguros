@@ -331,7 +331,8 @@ export function SeguroFiancaResidencialModal({
               Informações da Imobiliária/Corretor
             </h3>
 
-            {seguro.nome_imobiliaria_corretor_2 ? (
+            <>
+              {/* {seguro.nome_imobiliaria_corretor_2 ? (
               <>
                 <p>
                   <strong>
@@ -351,7 +352,13 @@ export function SeguroFiancaResidencialModal({
                 <strong>Nome da Imobiliária/Corretor:</strong>{" "}
                 {seguro.nome_imobiliaria_corretor}
               </p>
-            )}
+            )} */}
+            </>
+
+            <p>
+              <strong>Nome da Imobiliária/Corretor:</strong>{" "}
+              {seguro.nome_imobiliaria_corretor}
+            </p>
 
             <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
               Informações da Locação
