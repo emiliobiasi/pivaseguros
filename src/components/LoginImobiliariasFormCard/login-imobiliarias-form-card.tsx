@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useAuth } from "@/contexts/auth/useAuth";
 import {
   Card,
   CardHeader,
@@ -13,9 +12,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import pivaLogo from "@/assets/logo.png";
 import { Loader2 } from "lucide-react";
+import { useAuthImobiliarias } from "@/contexts/auth/imobiliarias/useAuthImobiliarias";
 
 export function LoginImobiliariaFormCard() {
-  const { loginWithEmail } = useAuth(); // Hook de autenticação
+  const { loginWithEmail } = useAuthImobiliarias(); // Hook de autenticação
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -36,7 +36,7 @@ export function LoginImobiliariaFormCard() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background p-4">
+    <div className="flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-lg sm:max-w-md shadow-lg lg:px-10">
         <CardHeader className="space-y-4 text-center">
           <div className="flex justify-center items-center">
@@ -48,10 +48,11 @@ export function LoginImobiliariaFormCard() {
           </div>
 
           <CardTitle className="text-xl sm:text-2xl font-bold">
-            Acesso Imobiliárias
+            Bem vindo de volta!
           </CardTitle>
           <CardDescription>
-            Insira seu email e senha para acessar a plataforma exclusiva das imobiliárias parceiras.
+            Insira seu email e senha para acessar a plataforma exclusiva das
+            imobiliárias parceiras.
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
@@ -89,6 +90,23 @@ export function LoginImobiliariaFormCard() {
               </div>
             </div>
             {error && <p className="text-red-600 text-sm">{error}</p>}
+            <div className="text-sm text-center space-y-2 mt-2">
+              <a
+                href="/esqueci-minha-senha"
+                className="text-blue-500 hover:underline"
+              >
+                Esqueci minha senha
+              </a>
+              <p>
+                Não possui uma conta?{" "}
+                <a
+                  href="/imobiliarias/cadastrar"
+                  className="text-blue-500 hover:underline font-semibold"
+                >
+                  Cadastre-se aqui
+                </a>
+              </p>
+            </div>
           </CardContent>
           <CardFooter className="flex justify-end">
             <Button

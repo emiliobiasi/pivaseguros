@@ -21,7 +21,10 @@ import { DashboardEfetivacaoSeguroFianca } from "@/screens/DashboardEfetivacaoSe
 import { DashboardFiancaEmpresarialMenos2Anos } from "@/screens/DashboardFiancaEmpresarialMenos2Anos";
 import Graficos from "@/screens/Graficos";
 import LoginImobiliarias from "@/screens/LoginImobiliarias";
-import { AuthImobiliariaProvider } from "@/contexts/auth/imobiliarias/AuthContextImobiliárias";
+import { AuthImobiliariaProvider } from "@/contexts/auth/imobiliarias/AuthContextImobiliarias";
+import PrivateRouteImobiliarias from "@/contexts/auth/imobiliarias/PrivateRouteImobiliarias";
+import CadastrarImobiliarias from "@/screens/CadastrarImobiliarias";
+import ResetPasswordForm from "@/screens/ResetPasswordForm";
 
 const RoutesComponent = () => {
   return (
@@ -30,23 +33,57 @@ const RoutesComponent = () => {
         <AuthImobiliariaProvider>
           <Routes>
             <Route path="/entrar" element={<Login />} />
-            <Route path="imobiliarias/entrar" element={<LoginImobiliarias />} />
-            <Route path="/formulario" element={<FormsLayout />}>
+            <Route
+              path="/imobiliarias/entrar"
+              element={<LoginImobiliarias />}
+            />
+            <Route
+              path="/esqueci-minha-senha"
+              element={<ResetPasswordForm />}
+            />
+            <Route
+              path="imobiliarias/cadastrar"
+              element={<CadastrarImobiliarias />}
+            />
+            <Route
+              path="/formulario"
+              element={
+                <PrivateRouteImobiliarias>
+                  <FormsLayout />
+                </PrivateRouteImobiliarias>
+              }
+            >
               <Route
                 path="seguro-incendio"
-                element={<SeguroIncendioScreen />}
+                element={
+                  <PrivateRouteImobiliarias>
+                    <SeguroIncendioScreen />
+                  </PrivateRouteImobiliarias>
+                }
               />
               <Route
                 path="seguro-incendio-comercial"
-                element={<SeguroIncendioComercialScreen />}
+                element={
+                  <PrivateRouteImobiliarias>
+                    <SeguroIncendioComercialScreen />
+                  </PrivateRouteImobiliarias>
+                }
               />
               <Route
                 path="seguro-fianca-empresarial-mais-2-anos"
-                element={<SeguroFiancaEmpresarialMais2AnosScreen />}
+                element={
+                  <PrivateRouteImobiliarias>
+                    <SeguroFiancaEmpresarialMais2AnosScreen />
+                  </PrivateRouteImobiliarias>
+                }
               />
               <Route
                 path="seguro-fianca-empresarial-menos-2-anos"
-                element={<SeguroFiancaEmpresarialMenos2AnosScreen />}
+                element={
+                  <PrivateRouteImobiliarias>
+                    <SeguroFiancaEmpresarialMenos2AnosScreen />
+                  </PrivateRouteImobiliarias>
+                }
               />
               <Route
                 path="seguro-fianca-residencial"
@@ -54,11 +91,19 @@ const RoutesComponent = () => {
               />
               <Route
                 path="efetivacao-seguro-fianca"
-                element={<EfetivacaoSeguroFiancaScreen />}
+                element={
+                  <PrivateRouteImobiliarias>
+                    <EfetivacaoSeguroFiancaScreen />
+                  </PrivateRouteImobiliarias>
+                }
               />
               <Route
                 path="titulo-capitalizacao"
-                element={<TituloCapitalizacaoScreen />}
+                element={
+                  <PrivateRouteImobiliarias>
+                    <TituloCapitalizacaoScreen />
+                  </PrivateRouteImobiliarias>
+                }
               />
             </Route>
             <Route

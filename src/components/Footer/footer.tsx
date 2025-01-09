@@ -17,8 +17,8 @@ const Footer: React.FC = () => {
           {/* Seção de Direitos Reservados */}
           <div className="text-center md:text-left">
             <p className="text-sm text-gray-500">
-              © Copyright 2024 - Piva Corretora de Seguros - Todos os direitos
-              reservados
+              © Copyright 2025 - Piva Corretora de Seguros - Todos os direitos
+              reservados.
             </p>
           </div>
 
