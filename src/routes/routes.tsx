@@ -25,6 +25,7 @@ import { AuthImobiliariaProvider } from "@/contexts/auth/imobiliarias/AuthContex
 import PrivateRouteImobiliarias from "@/contexts/auth/imobiliarias/PrivateRouteImobiliarias";
 import CadastrarImobiliarias from "@/screens/CadastrarImobiliarias";
 import ResetPasswordForm from "@/screens/ResetPasswordForm";
+import PainelAdmImobiliarias from "@/screens/PainelAdmImobiliarias";
 
 const RoutesComponent = () => {
   return (
@@ -45,14 +46,7 @@ const RoutesComponent = () => {
               path="imobiliarias/cadastrar"
               element={<CadastrarImobiliarias />}
             />
-            <Route
-              path="/formulario"
-              element={
-                <PrivateRouteImobiliarias>
-                  <FormsLayout />
-                </PrivateRouteImobiliarias>
-              }
-            >
+            <Route path="/formulario" element={<FormsLayout />}>
               <Route
                 path="seguro-incendio"
                 element={
@@ -183,6 +177,14 @@ const RoutesComponent = () => {
                 element={
                   <PrivateRoute>
                     <DashboardEfetivacaoSeguroFianca />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="painel-adm-imobiliarias"
+                element={
+                  <PrivateRoute>
+                    <PainelAdmImobiliarias />
                   </PrivateRoute>
                 }
               />

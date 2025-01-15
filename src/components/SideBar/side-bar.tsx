@@ -10,6 +10,10 @@ import {
   CaptionsIcon,
   Coins,
   ChartBar,
+  PanelTopCloseIcon,
+  ShieldAlertIcon,
+  DockIcon,
+  User,
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/logo.png";
@@ -29,6 +33,7 @@ import {
   unsubscribeFromNotificationsUpdates,
   deleteNotifications,
 } from "@/utils/api/NotificacoesService";
+import pb from "@/utils/backend/pb";
 
 type SideBarProps = {
   sidebarOpen: boolean;
@@ -108,6 +113,19 @@ function SidebarContent() {
     form_efetivacao_seguro_fianca_tb: 0,
     // form_titulo_capitalizacao: 0, COMENTANDO ATÉ CORRIGIR O ERRO
   });
+
+  const authorizedUsers = [
+    { id: "g6f27sjx3kjqktf", email: "comercial@pivaseguros.com.br" },
+    { id: "bdq7guk6qiwyggd", email: "teste@email.com" },
+  ];
+
+  const currentUser = pb.authStore.model;
+  const currentUserId = currentUser?.id;
+  const currentUserEmail = currentUser?.email;
+
+  const isAuthorized = authorizedUsers.some(
+    (user) => user.id === currentUserId && user.email === currentUserEmail
+  );
 
   useEffect(() => {
     // Função para buscar as notificações inicialmente
@@ -239,7 +257,6 @@ function SidebarContent() {
             <span>Início</span>
           </button>
         </li>
-
         {/* Dashboards Incêndio */}
         <li>
           <Accordion type="single" collapsible>
@@ -309,7 +326,6 @@ function SidebarContent() {
             </AccordionItem>
           </Accordion>
         </li>
-
         {/* Outros dashboards de Fiança */}
         <li>
           <Accordion type="single" collapsible>
@@ -447,7 +463,6 @@ function SidebarContent() {
             </AccordionItem>
           </Accordion>
         </li>
-
         {/* Título de Capitalização */}
         <li>
           <button
@@ -470,19 +485,7 @@ function SidebarContent() {
             )}    COMENTADO ATÉ CORRIGIR O ERRO */}
           </button>
         </li>
-
-        <li>
-          <a
-            href="https://piva-orcamentos-01.vercel.app/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-          >
-            <ExternalLink className="h-5 w-5 mr-3" />
-            <span>Fazer orçamento</span>
-          </a>
-        </li>
-
+        
         {/* Gráfic */}
         <li>
           <button
@@ -496,11 +499,54 @@ function SidebarContent() {
             <ChartBar className="h-5 w-5 mr-3" />
             <span>Gráficos</span>
           </button>
+        
+        </li>
+        {/* FAZER ORÇAMENTO */}
+        <li>
+          <a
+            href="https://piva-orcamentos-01.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            <ExternalLink className="h-5 w-5 mr-3" />
+            <span>Fazer orçamento</span>
+          </a>
+        </li>
+        {/* BOLETOS */}
+        <li>
+          <button
+            onClick={() => navigate("/boletos")}
+            className={`flex items-center w-full px-4 py-2 text-left text-sm ${
+              location.pathname === "/boletos"
+                ? "bg-gray-200 dark:bg-gray-700 text-green-700 dark:text-white"
+                : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+            }`}
+          >
+            <DockIcon className="h-5 w-5 mr-3" />
+            <span>Boletos</span>
+          </button>
         </li>
       </ul>
 
-      {/* Botão de Logout */}
+      {/* Botão de Logout e ADM*/}
       <div className="border-t border-gray-200 dark:border-gray-700">
+        {/* ADMIN */}
+
+        {isAuthorized && (
+          <button
+            onClick={() => navigate("/painel-adm-imobiliarias")}
+            className={`flex items-center w-full px-4 py-2 text-left text-sm ${
+              location.pathname === "/painel-adm-imobiliarias"
+                ? "bg-gray-200 dark:bg-gray-700 text-green-700 dark:text-white"
+                : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+            }`}
+          >
+            <User className="h-5 w-5 mr-3" />
+            <span>Painel ADM</span>
+          </button>
+        )}
+
         <button
           onClick={handleLogout}
           className="flex items-center w-full px-4 py-2 text-left text-gray-700 dark:text-gray-200 hover:bg-red-500 hover:text-white dark:hover:bg-red-600"
