@@ -10,7 +10,7 @@ import { ClientResponseError, RecordSubscription } from "pocketbase";
  * @returns A imobiliária criada.
  */
 export async function createImobiliaria(
-  data: Omit<Imobiliaria, "id" | "created"> // Exclui campos que serão gerados automaticamente
+  data: Omit<Imobiliaria, "id" | "created" | "password"> // Exclui campos que serão gerados automaticamente
 ): Promise<Imobiliaria> {
   try {
     // Cria o novo registro na coleção "imobiliarias"
@@ -54,6 +54,7 @@ export async function fetchImobiliariaList(
 
     // Construir filtros adicionais
     const additionalFilters = Object.entries(filter)
+      .filter(([_, value]) => value !== undefined && value !== "")
       .map(([key, value]) => `${key} = "${value}"`)
       .join(" && ");
 
@@ -90,7 +91,7 @@ export async function fetchImobiliariaList(
  */
 export async function updateImobiliaria(
   id: string,
-  data: Partial<Omit<Imobiliaria, "id" | "created">>
+  data: Partial<Omit<Imobiliaria, "id" | "created" | "password">>
 ): Promise<Imobiliaria> {
   try {
     // Atualiza o registro na coleção "imobiliarias"
@@ -151,28 +152,22 @@ export async function fetchImobiliariaLastMonth(): Promise<Imobiliaria[]> {
   }
 }
 
-// /**
-//  * Função para assinar atualizações em tempo real na coleção "imobiliarias".
-//  * @param onRecordChange Callback a ser executado quando houver uma mudança.
-//  * @returns Subscription ID para cancelar posteriormente.
-//  */
-// export function subscribeToImobiliariaUpdates(
-//   onRecordChange: (data: RecordSubscription<Imobiliaria>) => void
-// ): string {
-//   const subscription = pb
-//     .collection("imobiliarias")
-//     .subscribe("*", onRecordChange);
-//   console.log("Subscrição para atualizações de Imobiliárias iniciada.");
-//   return subscription;
-// }
-
-// /**
-//  * Função para cancelar a assinatura de atualizações na coleção "imobiliarias".
-//  * @param subscriptionId ID da subscrição a ser cancelada.
-//  */
-// export function unsubscribeFromImobiliariaUpdates(
-//   subscriptionId: string
-// ): void {
-//   pb.collection("imobiliarias").unsubscribe(subscriptionId);
-//   console.log("Subscrição de Imobiliárias cancelada.");
-// }
+/**
+ * Função para assinar atualizações em tempo real na coleção "imobiliarias".
+ * @param onRecordChange Callback a ser executado quando houver uma mudança.
+ * @returns Função para desinscrever a assinatura.
+ */
+export async function subscribeToImobiliariaUpdates(
+  onRecordChange: (data: RecordSubscription<Imobiliaria>) => void
+): Promise<() => void> {
+  try {
+    const unsubscribe = await pb
+      .collection("imobiliarias")
+      .subscribe("*", onRecordChange);
+    console.log("Subscrição para atualizações de Imobiliárias iniciada.");
+    return unsubscribe;
+  } catch (error) {
+    console.error("Erro ao assinar atualizações de Imobiliárias:", error);
+    throw new Error("Erro ao assinar atualizações de Imobiliárias");
+  }
+}

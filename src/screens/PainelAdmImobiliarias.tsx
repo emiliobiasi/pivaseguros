@@ -1,3 +1,5 @@
+// src/components/PainelAdmImobiliarias.tsx
+
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -30,38 +32,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import pb from "@/utils/backend/pb";
 import { useNavigate } from "react-router-dom";
+import pb from "@/utils/backend/pb";
 
-// Tipo para representar uma imobiliária
-type Imobiliaria = {
-  id: number;
-  nome: string;
-  email: string;
-  dataCadastro: string;
-  porto: number;
-  tokio: number;
-  too: number;
-  potencial: number;
-};
+// Importar o tipo Imobiliaria
+import { Imobiliaria } from "@/types/Imobiliarias";
 
-// Dados mockados de imobiliárias (aumentado para simular um grande número)
-const imobiliarias: Imobiliaria[] = Array(100)
-  .fill(null)
-  .map((_, index) => ({
-    id: index + 1,
-    nome: `Imobiliária ${String.fromCharCode(65 + (index % 26))}${
-      Math.floor(index / 26) + 1
-    }`,
-    email: `imo${String.fromCharCode(65 + (index % 26))}${
-      Math.floor(index / 26) + 1
-    }@example.com`,
-    dataCadastro: new Date(2023, 0, 1 + index).toISOString().split("T")[0],
-    porto: Math.floor(Math.random() * 500),
-    tokio: Math.floor(Math.random() * 500),
-    too: Math.floor(Math.random() * 500),
-    potencial: Math.floor(Math.random() * 500),
-  }));
+// Importar as funções do service
+import {
+  fetchImobiliariaList,
+  updateImobiliaria,
+  subscribeToImobiliariaUpdates,
+} from "@/utils/api/ImobiliariasService";
+
+// Importar tipos do PocketBase para RecordSubscription
+import { RecordSubscription } from "pocketbase";
 
 export default function PainelAdmImobiliarias() {
   const navigate = useNavigate();
@@ -88,107 +73,190 @@ export default function PainelAdmImobiliarias() {
       navigate("/inicio");
     }
   }, [isAuthorized, navigate]);
+
+  // Estados para gerenciamento de imobiliárias
+  const [imobiliarias, setImobiliarias] = useState<Imobiliaria[]>([]);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const [selectedImobiliaria, setSelectedImobiliaria] =
     useState<Imobiliaria | null>(null);
   const [editedValues, setEditedValues] = useState({
-    porto: 0,
-    tokio: 0,
-    too: 0,
-    potencial: 0,
+    qtd_boleto_porto: 0,
+    qtd_boleto_tokio: 0,
+    qtd_boleto_too: 0,
+    qtd_boleto_potencial: 0,
   });
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [savedImobiliaria, setSavedImobiliaria] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredImobiliarias, setFilteredImobiliarias] =
-    useState(imobiliarias);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(12);
-  const [sortBy, setSortBy] = useState<"nome" | "dataCadastro">("nome");
+  const [itemsPerPage] = useState(12);
+  const [sortBy, setSortBy] = useState<"nome" | "created">("nome");
 
+  // useEffect para buscar imobiliárias do backend
   useEffect(() => {
-    let filtered = imobiliarias.filter((imobiliaria) =>
-      imobiliaria.nome.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    filtered.sort((a, b) => {
-      if (sortBy === "nome") {
-        return a.nome.localeCompare(b.nome);
-      } else {
-        return (
-          new Date(b.dataCadastro).getTime() -
-          new Date(a.dataCadastro).getTime()
+    const loadImobiliarias = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetchImobiliariaList(
+          currentPage,
+          itemsPerPage,
+          searchTerm,
+          {} // Adicione filtros conforme necessário
         );
+        setImobiliarias(response.items);
+        setTotalItems(response.totalItems);
+        setTotalPages(response.totalPages);
+      } catch (err) {
+        setError("Erro ao carregar as imobiliárias.");
+        console.error(err);
+      } finally {
+        setLoading(false);
       }
-    });
-    setFilteredImobiliarias(filtered);
-    setCurrentPage(1);
-  }, [searchTerm, sortBy]);
+    };
+
+    loadImobiliarias();
+  }, [currentPage, itemsPerPage, searchTerm, sortBy]);
+
+  // useEffect para gerenciar assinaturas em tempo real
+  useEffect(() => {
+    let unsubscribe: () => void;
+
+    const setupSubscription = async () => {
+      try {
+        unsubscribe = await subscribeToImobiliariaUpdates(handleRecordChange);
+      } catch (error) {
+        console.error("Erro ao assinar atualizações de Imobiliárias:", error);
+      }
+    };
+
+    setupSubscription();
+
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, []);
+
+  const handleRecordChange = (data: RecordSubscription<Imobiliaria>) => {
+    console.log("Mudança detectada:", data);
+    if (data.action === "create") {
+      setImobiliarias((prev) => [data.record, ...prev]);
+      setTotalItems((prev) => prev + 1);
+    } else if (data.action === "update") {
+      setImobiliarias((prev) =>
+        prev.map((imo) => (imo.id === data.record.id ? data.record : imo))
+      );
+    } else if (data.action === "delete") {
+      setImobiliarias((prev) =>
+        prev.filter((imo) => imo.id !== data.record.id)
+      );
+      setTotalItems((prev) => prev - 1);
+    }
+  };
 
   const handleEdit = (imobiliaria: Imobiliaria) => {
     setSelectedImobiliaria(imobiliaria);
     setEditedValues({
-      porto: imobiliaria.porto,
-      tokio: imobiliaria.tokio,
-      too: imobiliaria.too,
-      potencial: imobiliaria.potencial,
+      qtd_boleto_porto: imobiliaria.qtd_boleto_porto || 0,
+      qtd_boleto_tokio: imobiliaria.qtd_boleto_tokio || 0,
+      qtd_boleto_too: imobiliaria.qtd_boleto_too || 0,
+      qtd_boleto_potencial: imobiliaria.qtd_boleto_potencial || 0,
     });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (selectedImobiliaria) {
-      // Aqui você implementaria a lógica para salvar os dados no backend
-      console.log(
-        "Salvando dados para",
-        selectedImobiliaria.nome,
-        editedValues
-      );
-      setSavedImobiliaria(selectedImobiliaria.nome);
-      setShowConfirmation(true);
-      setSelectedImobiliaria(null);
+      try {
+        const updatedData = {
+          qtd_boleto_porto: editedValues.qtd_boleto_porto,
+          qtd_boleto_tokio: editedValues.qtd_boleto_tokio,
+          qtd_boleto_too: editedValues.qtd_boleto_too,
+          qtd_boleto_potencial: editedValues.qtd_boleto_potencial,
+        };
+        const updatedImobiliaria = await updateImobiliaria(
+          selectedImobiliaria.id,
+          updatedData
+        );
+        console.log("Imobiliária atualizada com sucesso:", updatedImobiliaria);
+        setSavedImobiliaria(updatedImobiliaria.nome);
+        setShowConfirmation(true);
+        setSelectedImobiliaria(null);
+        // Atualizar a lista localmente sem recarregar a página
+        setImobiliarias((prev) =>
+          prev.map((imo) =>
+            imo.id === updatedImobiliaria.id ? updatedImobiliaria : imo
+          )
+        );
+      } catch (err) {
+        console.error("Erro ao atualizar a imobiliária:", err);
+        setError("Erro ao atualizar a imobiliária.");
+      }
     }
   };
 
   const handleConfirmationClose = () => {
     setShowConfirmation(false);
-    window.location.reload();
+    // Opcional: Remover a recarga da página
+    // window.location.reload();
   };
 
-  const pageCount = Math.ceil(filteredImobiliarias.length / itemsPerPage);
-  const currentImobiliarias = filteredImobiliarias.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reinicia a página ao pesquisar
+  };
+
+  const handleSortChange = (value: "nome" | "created") => {
+    setSortBy(value);
+    setCurrentPage(1); // Reinicia a página ao ordenar
+  };
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6 text-gray-800">
         Lista de Imobiliárias
       </h1>
+
+      {/* Barra de Pesquisa e Ordenação */}
       <div className="flex flex-col md:flex-row gap-4 mb-4">
         <div className="relative flex-grow">
           <Input
             type="text"
             placeholder="Pesquisar imobiliária..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleSearchChange}
             className="pl-10"
           />
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
         </div>
-        <Select
-          value={sortBy}
-          onValueChange={(value) => setSortBy(value as "nome" | "dataCadastro")}
-        >
+        <Select value={sortBy} onValueChange={handleSortChange}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Ordenar por" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="nome">Nome</SelectItem>
-            <SelectItem value="dataCadastro">Data de Cadastro</SelectItem>
+            <SelectItem value="created">Data de Cadastro</SelectItem>
           </SelectContent>
         </Select>
       </div>
+
+      {/* Feedback de Carregamento e Erro */}
+      {loading && <p className="text-center">Carregando imobiliárias...</p>}
+      {error && <p className="text-center text-red-500">{error}</p>}
+
+      {/* Lista de Imobiliárias */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {currentImobiliarias.map((imobiliaria) => (
+        {!loading && imobiliarias.length === 0 && (
+          <p className="text-center col-span-full">
+            Nenhuma imobiliária encontrada.
+          </p>
+        )}
+        {imobiliarias.map((imobiliaria) => (
           <Card
             key={imobiliaria.id}
             className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300"
@@ -204,7 +272,10 @@ export default function PainelAdmImobiliarias() {
                 {imobiliaria.email}
               </p>
               <p className="text-sm text-gray-600 mb-4">
-                Cadastro: {imobiliaria.dataCadastro}
+                Cadastro:{" "}
+                {imobiliaria.created
+                  ? new Date(imobiliaria.created).toLocaleDateString()
+                  : "N/A"}
               </p>
               <Dialog>
                 <DialogTrigger asChild>
@@ -225,16 +296,26 @@ export default function PainelAdmImobiliarias() {
                     </p>
                     <p>
                       <strong>Data de Cadastro:</strong>{" "}
-                      {imobiliaria.dataCadastro}
+                      {imobiliaria.created
+                        ? new Date(imobiliaria.created).toLocaleDateString()
+                        : "N/A"}
+                    </p>
+                    <p>
+                      <strong>Contato:</strong> {imobiliaria.contato}
                     </p>
                   </div>
                   <p className="text-sm text-gray-600 mb-4">
-                    Atualize aqui o número de arquivos (referente a cada
+                    Atualize aqui o número de boletos (referente a cada
                     seguradora) que serão enviados para a{" "}
                     {selectedImobiliaria?.nome}
                   </p>
                   <div className="grid gap-4 py-4">
-                    {["porto", "tokio", "too", "potencial"].map((field) => (
+                    {[
+                      { field: "qtd_boleto_porto", label: "Porto" },
+                      { field: "qtd_boleto_tokio", label: "Tokio" },
+                      { field: "qtd_boleto_too", label: "Too" },
+                      { field: "qtd_boleto_potencial", label: "Potencial" },
+                    ].map(({ field, label }) => (
                       <div
                         key={field}
                         className="grid grid-cols-4 items-center gap-4"
@@ -243,7 +324,7 @@ export default function PainelAdmImobiliarias() {
                           htmlFor={field}
                           className="text-right capitalize"
                         >
-                          {field}
+                          {label}
                         </label>
                         <Input
                           id={field}
@@ -274,6 +355,8 @@ export default function PainelAdmImobiliarias() {
           </Card>
         ))}
       </div>
+
+      {/* Paginação */}
       <div className="mt-8 flex justify-between items-center">
         <Button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -283,23 +366,26 @@ export default function PainelAdmImobiliarias() {
           <ChevronLeft className="mr-2 h-4 w-4" /> Anterior
         </Button>
         <span>
-          Página {currentPage} de {pageCount}
+          Página {currentPage} de {totalPages}
         </span>
         <Button
           onClick={() =>
-            setCurrentPage((prev) => Math.min(prev + 1, pageCount))
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
           }
-          disabled={currentPage === pageCount}
+          disabled={currentPage === totalPages}
           className="bg-green-600 hover:bg-green-700 text-white"
         >
           Próxima <ChevronRight className="ml-2 h-4 w-4" />
         </Button>
       </div>
+
+      {/* Diálogo de Confirmação */}
       <AlertDialog open={showConfirmation} onOpenChange={setShowConfirmation}>
         <AlertDialogContent>
           <AlertDialogTitle>Confirmação</AlertDialogTitle>
           <AlertDialogDescription>
-            Propriedades do envio de boletos alteradas com sucesso para a IMOBILIÁRIA {savedImobiliaria}.
+            Propriedades do envio de boletos alteradas com sucesso para a
+            IMOBILIÁRIA {savedImobiliaria}.
           </AlertDialogDescription>
           <AlertDialogCancel onClick={handleConfirmationClose}>
             Fechar
