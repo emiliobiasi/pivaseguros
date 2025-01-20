@@ -14,8 +14,9 @@ export interface UploadedFile {
   status: 'success' | 'error'
 }
 
-export interface RealEstate {
-  id: string;
-  name: string;
-}
+// export interface RealEstate {
+//   qtd_boleto_porto: number
+//   id: string;
+//   name: string;
+// }
 

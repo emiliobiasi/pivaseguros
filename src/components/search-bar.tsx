@@ -55,7 +55,8 @@ export function SearchBar({ onSelect }: SearchBarProps) {
   }, [searchTerm]);
 
   return (
-    <div className="relative w-full max-w-2xl mx-auto">
+    // <div className="relative w-full max-w-2xl mx-auto">
+    <div className="relative w-full max-w-4xl mx-auto">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -64,11 +65,11 @@ export function SearchBar({ onSelect }: SearchBarProps) {
             aria-expanded={open}
             className="w-full justify-start text-left font-normal border-gray-300 text-black bg-white hover:bg-white hover:text-black"
           >
-            <Search className="mr-2 h-4 w-4 shrink-0 text-gray-500" />
+            <Search className="mr-2 h-4 w-8 shrink-0 text-gray-500" />
             {value ? value : "Buscar imobiliária..."}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-full p-0 bg-white" align="start">
+        <PopoverContent className="w-96 p-0 bg-white" align="start">
           <Command className="bg-white">
             <CommandInput
               placeholder="Digite o nome da imobiliária..."
