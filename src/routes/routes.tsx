@@ -26,6 +26,7 @@ import PrivateRouteImobiliarias from "@/contexts/auth/imobiliarias/PrivateRouteI
 import CadastrarImobiliarias from "@/screens/CadastrarImobiliarias";
 import ResetPasswordForm from "@/screens/ResetPasswordForm";
 import PainelAdmImobiliarias from "@/screens/PainelAdmImobiliarias";
+import SeguradorasUploadPage from "@/screens/SeguradorasUploadPage";
 
 const RoutesComponent = () => {
   return (
@@ -185,6 +186,14 @@ const RoutesComponent = () => {
                 element={
                   <PrivateRoute>
                     <PainelAdmImobiliarias />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="boletos-imobiliaria-upload"
+                element={
+                  <PrivateRoute>
+                    <SeguradorasUploadPage />
                   </PrivateRoute>
                 }
               />

@@ -485,7 +485,7 @@ function SidebarContent() {
             )}    COMENTADO ATÉ CORRIGIR O ERRO */}
           </button>
         </li>
-        
+
         {/* Gráfic */}
         <li>
           <button
@@ -499,7 +499,6 @@ function SidebarContent() {
             <ChartBar className="h-5 w-5 mr-3" />
             <span>Gráficos</span>
           </button>
-        
         </li>
         {/* FAZER ORÇAMENTO */}
         <li>
@@ -516,9 +515,9 @@ function SidebarContent() {
         {/* BOLETOS */}
         <li>
           <button
-            onClick={() => navigate("/boletos")}
+            onClick={() => navigate("/boletos-imobiliaria-upload")}
             className={`flex items-center w-full px-4 py-2 text-left text-sm ${
-              location.pathname === "/boletos"
+              location.pathname === "/boletos-imobiliaria-upload"
                 ? "bg-gray-200 dark:bg-gray-700 text-green-700 dark:text-white"
                 : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
             }`}
