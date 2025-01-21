@@ -1,61 +1,61 @@
 // src/app/SeguradorasUploadPage.tsx (ou pages/SeguradorasUploadPage.tsx)
-import { useState } from "react"
-import { Header } from "@/components/header"
-import { SearchSection } from "@/components/search-section"
-import { InsuranceGrid } from "@/components/insurance-grid"
-import { FileList } from "@/components/file-list"
-import { Button } from "@/components/ui/button"
-import { UploadedFile } from "@/types/Insurance"
-import { Toaster } from "sonner"
-import { motion, AnimatePresence } from "framer-motion"
-import { SummaryDialog } from "@/components/summary-dialog"
-import { UploadInstructions } from "@/components/upload-instructions"
-import { ConfirmationModal } from "@/components/confirmation-modal"
-import { Imobiliaria } from "@/types/Imobiliarias"
+import { useState } from "react";
+import { Header } from "@/components/header";
+import { SearchSection } from "@/components/search-section";
+import { InsuranceGrid } from "@/components/insurance-grid";
+import { FileList } from "@/components/file-list";
+import { Button } from "@/components/ui/button";
+import { UploadedFile } from "@/types/insurance";
+import { Toaster } from "sonner";
+import { motion, AnimatePresence } from "framer-motion";
+import { SummaryDialog } from "@/components/summary-dialog";
+import { UploadInstructions } from "@/components/upload-instructions";
+import { ConfirmationModal } from "@/components/confirmation-modal";
+import { Imobiliaria } from "@/types/Imobiliarias";
 
-import { Mail, User, Building2 } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
+import { Mail, User, Building2 } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function SeguradorasUploadPage() {
   const [selectedImobiliaria, setSelectedRealEstate] =
-    useState<Imobiliaria | null>(null)
-  const [files, setFiles] = useState<UploadedFile[]>([])
-  const [showSummary, setShowSummary] = useState(false)
-  const [showConfirmation, setShowConfirmation] = useState(false)
+    useState<Imobiliaria | null>(null);
+  const [files, setFiles] = useState<UploadedFile[]>([]);
+  const [showSummary, setShowSummary] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleRealEstateSelect = (company: Imobiliaria) => {
-    setSelectedRealEstate(company)
-    setFiles([])
-  }
+    setSelectedRealEstate(company);
+    setFiles([]);
+  };
 
-  console.log("files: ", files)
-  console.log("selectedImobiliaria: ", selectedImobiliaria)
+  console.log("files: ", files);
+  console.log("selectedImobiliaria: ", selectedImobiliaria);
 
   // Soma o total de boletos exigidos
   const getTotalRequiredFiles = (imobiliaria: Imobiliaria | null) => {
-    if (!imobiliaria) return 0
+    if (!imobiliaria) return 0;
 
     return (
       (imobiliaria.qtd_boleto_porto || 0) +
       (imobiliaria.qtd_boleto_potencial || 0) +
       (imobiliaria.qtd_boleto_tokio || 0) +
       (imobiliaria.qtd_boleto_too || 0)
-    )
-  }
+    );
+  };
 
-  const totalRequiredFiles = getTotalRequiredFiles(selectedImobiliaria)
+  const totalRequiredFiles = getTotalRequiredFiles(selectedImobiliaria);
 
   // Verifica se o número de arquivos enviados é suficiente
-  const allFilesUploaded = files.length === totalRequiredFiles
+  const allFilesUploaded = files.length === totalRequiredFiles;
 
   const handleFileUpload = (newFiles: File[], company: string) => {
     setFiles((prevFiles) => {
-      const updated = [...prevFiles]
+      const updated = [...prevFiles];
 
       newFiles.forEach((file) => {
         const alreadyExists = updated.some(
           (f) => f.name === file.name && f.insuranceCompany === company
-        )
+        );
         if (!alreadyExists) {
           updated.push({
             id: Math.random().toString(36).substr(2, 9),
@@ -63,34 +63,34 @@ export default function SeguradorasUploadPage() {
             type: file.type.includes("pdf") ? "PDF" : "Excel",
             insuranceCompany: company,
             status: "success",
-          })
+          });
         }
-      })
+      });
 
-      return updated
-    })
-  }
+      return updated;
+    });
+  };
 
   const handleDelete = (id: string) => {
-    setFiles((prev) => prev.filter((file) => file.id !== id))
-  }
+    setFiles((prev) => prev.filter((file) => file.id !== id));
+  };
 
   const handleSubmit = () => {
-    console.log("Submitting files:", files)
-    setShowSummary(false)
-    setShowConfirmation(true)
-  }
+    console.log("Submitting files:", files);
+    setShowSummary(false);
+    setShowConfirmation(true);
+  };
 
   const handleConfirmationClose = () => {
-    setShowConfirmation(false)
-    setSelectedRealEstate(null)
-    setFiles([])
-  }
+    setShowConfirmation(false);
+    setSelectedRealEstate(null);
+    setFiles([]);
+  };
 
   const uploadedFilesCount = files.reduce((acc, file) => {
-    acc[file.insuranceCompany] = (acc[file.insuranceCompany] || 0) + 1
-    return acc
-  }, {} as { [key: string]: number })
+    acc[file.insuranceCompany] = (acc[file.insuranceCompany] || 0) + 1;
+    return acc;
+  }, {} as { [key: string]: number });
 
   return (
     <div className="flex flex-col justfy-center overflow-y-auto max-h-screen">
@@ -186,5 +186,5 @@ export default function SeguradorasUploadPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

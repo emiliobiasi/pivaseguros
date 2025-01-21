@@ -100,7 +100,7 @@ export function LoginImobiliariaFormCard() {
               <p>
                 Não possui uma conta?{" "}
                 <a
-                  href="/imobiliarias/cadastrar"
+                  href="/imobiliaria/cadastrar"
                   className="text-blue-500 hover:underline font-semibold"
                 >
                   Cadastre-se aqui

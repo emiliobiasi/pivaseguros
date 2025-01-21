@@ -27,178 +27,202 @@ import CadastrarImobiliarias from "@/screens/CadastrarImobiliarias";
 import ResetPasswordForm from "@/screens/ResetPasswordForm";
 import PainelAdmImobiliarias from "@/screens/PainelAdmImobiliarias";
 import SeguradorasUploadPage from "@/screens/SeguradorasUploadPage";
+import BoletoDownloadPage from "@/screens/BoletoDownloadPage";
+import { BoletosProvider } from "@/contexts/boletos/boletos-context";
+import ImobiliariaLayout from "@/screens/ImobiliariaLayout";
+import BoletoDownloadHistoricoPage from "@/screens/BoletoDownloadHistoricoPage";
 
 const RoutesComponent = () => {
   return (
     <Router>
       <AuthProvider>
         <AuthImobiliariaProvider>
-          <Routes>
-            <Route path="/entrar" element={<Login />} />
-            <Route
-              path="/imobiliarias/entrar"
-              element={<LoginImobiliarias />}
-            />
-            <Route
-              path="/esqueci-minha-senha"
-              element={<ResetPasswordForm />}
-            />
-            <Route
-              path="imobiliarias/cadastrar"
-              element={<CadastrarImobiliarias />}
-            />
-            <Route path="/formulario" element={<FormsLayout />}>
+          <BoletosProvider>
+            <Routes>
+              <Route path="/entrar" element={<Login />} />
               <Route
-                path="seguro-incendio"
-                element={
-                  <PrivateRouteImobiliarias>
-                    <SeguroIncendioScreen />
-                  </PrivateRouteImobiliarias>
-                }
+                path="/imobiliaria/entrar"
+                element={<LoginImobiliarias />}
               />
               <Route
-                path="seguro-incendio-comercial"
-                element={
-                  <PrivateRouteImobiliarias>
-                    <SeguroIncendioComercialScreen />
-                  </PrivateRouteImobiliarias>
-                }
+                path="/esqueci-minha-senha"
+                element={<ResetPasswordForm />}
               />
               <Route
-                path="seguro-fianca-empresarial-mais-2-anos"
-                element={
-                  <PrivateRouteImobiliarias>
-                    <SeguroFiancaEmpresarialMais2AnosScreen />
-                  </PrivateRouteImobiliarias>
-                }
+                path="imobiliaria/cadastrar"
+                element={<CadastrarImobiliarias />}
               />
+              <Route path="/imobiliaria" element={<ImobiliariaLayout />}>
+                <Route
+                  path="download-boletos"
+                  element={
+                    <PrivateRouteImobiliarias>
+                      <BoletoDownloadPage />
+                    </PrivateRouteImobiliarias>
+                  }
+                />
+                <Route
+                  path="download-boletos/historico"
+                  element={
+                    <PrivateRouteImobiliarias>
+                      <BoletoDownloadHistoricoPage />
+                    </PrivateRouteImobiliarias>
+                  }
+                />
+                <Route path="formulario" element={<FormsLayout />}>
+                  <Route
+                    path="seguro-incendio"
+                    element={
+                      <PrivateRouteImobiliarias>
+                        <SeguroIncendioScreen />
+                      </PrivateRouteImobiliarias>
+                    }
+                  />
+                  <Route
+                    path="seguro-incendio-comercial"
+                    element={
+                      <PrivateRouteImobiliarias>
+                        <SeguroIncendioComercialScreen />
+                      </PrivateRouteImobiliarias>
+                    }
+                  />
+                  <Route
+                    path="seguro-fianca-empresarial-mais-2-anos"
+                    element={
+                      <PrivateRouteImobiliarias>
+                        <SeguroFiancaEmpresarialMais2AnosScreen />
+                      </PrivateRouteImobiliarias>
+                    }
+                  />
+                  <Route
+                    path="seguro-fianca-empresarial-menos-2-anos"
+                    element={
+                      <PrivateRouteImobiliarias>
+                        <SeguroFiancaEmpresarialMenos2AnosScreen />
+                      </PrivateRouteImobiliarias>
+                    }
+                  />
+                  <Route
+                    path="seguro-fianca-residencial"
+                    element={<SeguroFiancaResidencialScreen />}
+                  />
+                  <Route
+                    path="efetivacao-seguro-fianca"
+                    element={
+                      <PrivateRouteImobiliarias>
+                        <EfetivacaoSeguroFiancaScreen />
+                      </PrivateRouteImobiliarias>
+                    }
+                  />
+                  <Route
+                    path="titulo-capitalizacao"
+                    element={
+                      <PrivateRouteImobiliarias>
+                        <TituloCapitalizacaoScreen />
+                      </PrivateRouteImobiliarias>
+                    }
+                  />
+                </Route>
+              </Route>
               <Route
-                path="seguro-fianca-empresarial-menos-2-anos"
-                element={
-                  <PrivateRouteImobiliarias>
-                    <SeguroFiancaEmpresarialMenos2AnosScreen />
-                  </PrivateRouteImobiliarias>
-                }
-              />
-              <Route
-                path="seguro-fianca-residencial"
-                element={<SeguroFiancaResidencialScreen />}
-              />
-              <Route
-                path="efetivacao-seguro-fianca"
-                element={
-                  <PrivateRouteImobiliarias>
-                    <EfetivacaoSeguroFiancaScreen />
-                  </PrivateRouteImobiliarias>
-                }
-              />
-              <Route
-                path="titulo-capitalizacao"
-                element={
-                  <PrivateRouteImobiliarias>
-                    <TituloCapitalizacaoScreen />
-                  </PrivateRouteImobiliarias>
-                }
-              />
-            </Route>
-            <Route
-              path="/"
-              element={
-                <PrivateRoute>
-                  <SideBarLayout />
-                </PrivateRoute>
-              }
-            >
-              <Route
-                path="inicio"
-                element={
-                  <PrivateRoute>
-                    <Home />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="graficos"
-                element={
-                  <PrivateRoute>
-                    <Graficos />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="dashboard-incendio"
+                path="/"
                 element={
                   <PrivateRoute>
-                    <DashboardIncendio />
+                    <SideBarLayout />
                   </PrivateRoute>
                 }
-              />
-              <Route
-                path="dashboard-incendio-comercial"
-                element={
-                  <PrivateRoute>
-                    <DashboardIncendioComercial />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="dashboard-fianca-residencial"
-                element={
-                  <PrivateRoute>
-                    <DashboardFiancaResidencial />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="dashboard-fianca-empresarial-mais-2-anos"
-                element={
-                  <PrivateRoute>
-                    <DashboardFiancaEmpresarialMais2Anos />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="dashboard-fianca-empresarial-menos-2-anos"
-                element={
-                  <PrivateRoute>
-                    <DashboardFiancaEmpresarialMenos2Anos />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="dashboard-titulo-capitalizacao"
-                element={
-                  <PrivateRoute>
-                    <DashboardTituloCapitalizacao />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="dashboard-efetivacao-seguro-fianca"
-                element={
-                  <PrivateRoute>
-                    <DashboardEfetivacaoSeguroFianca />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="painel-adm-imobiliarias"
-                element={
-                  <PrivateRoute>
-                    <PainelAdmImobiliarias />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="boletos-imobiliaria-upload"
-                element={
-                  <PrivateRoute>
-                    <SeguradorasUploadPage />
-                  </PrivateRoute>
-                }
-              />
-            </Route>
-          </Routes>
+              >
+                <Route
+                  path="inicio"
+                  element={
+                    <PrivateRoute>
+                      <Home />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="graficos"
+                  element={
+                    <PrivateRoute>
+                      <Graficos />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="dashboard-incendio"
+                  element={
+                    <PrivateRoute>
+                      <DashboardIncendio />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="dashboard-incendio-comercial"
+                  element={
+                    <PrivateRoute>
+                      <DashboardIncendioComercial />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="dashboard-fianca-residencial"
+                  element={
+                    <PrivateRoute>
+                      <DashboardFiancaResidencial />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="dashboard-fianca-empresarial-mais-2-anos"
+                  element={
+                    <PrivateRoute>
+                      <DashboardFiancaEmpresarialMais2Anos />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="dashboard-fianca-empresarial-menos-2-anos"
+                  element={
+                    <PrivateRoute>
+                      <DashboardFiancaEmpresarialMenos2Anos />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="dashboard-titulo-capitalizacao"
+                  element={
+                    <PrivateRoute>
+                      <DashboardTituloCapitalizacao />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="dashboard-efetivacao-seguro-fianca"
+                  element={
+                    <PrivateRoute>
+                      <DashboardEfetivacaoSeguroFianca />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="painel-adm-imobiliarias"
+                  element={
+                    <PrivateRoute>
+                      <PainelAdmImobiliarias />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="boletos-imobiliaria-upload"
+                  element={
+                    <PrivateRoute>
+                      <SeguradorasUploadPage />
+                    </PrivateRoute>
+                  }
+                />
+              </Route>
+            </Routes>
+          </BoletosProvider>
         </AuthImobiliariaProvider>
       </AuthProvider>
     </Router>

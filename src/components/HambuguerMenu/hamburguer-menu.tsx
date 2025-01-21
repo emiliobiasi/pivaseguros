@@ -16,8 +16,12 @@ import { useNavigate } from "react-router-dom";
 import { AuthImobiliariaContext } from "@/contexts/auth/imobiliarias/AuthContextImobiliarias";
 
 const menuItems = [
-  { icon: FileText, label: "Formulários", path: "/formularios" },
-  { icon: CreditCard, label: "Boletos", path: "/boletos" },
+  { icon: FileText, label: "Formulários", path: "/imobiliaria/formulario" },
+  {
+    icon: CreditCard,
+    label: "Boletos",
+    path: "/imobiliaria/download-boletos",
+  },
   { icon: Settings, label: "Configurações", path: "/configuracoes" },
   { icon: ExitIcon, label: "Sair", action: "logout" },
 ];

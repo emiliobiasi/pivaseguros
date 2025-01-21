@@ -17,7 +17,7 @@ export default function BoletosHistorico() {
     const storedBoletos = localStorage.getItem('historicoBoletosDownload')
     if (storedBoletos) {
       const parsedBoletos = JSON.parse(storedBoletos)
-      parsedBoletos.sort((a, b) => new Date(b.dataDownload).getTime() - new Date(a.dataDownload).getTime())
+      parsedBoletos.sort((a: { dataDownload: string | number | Date }, b: { dataDownload: string | number | Date }) => new Date(b.dataDownload).getTime() - new Date(a.dataDownload).getTime())
       setHistorico(parsedBoletos)
     }
   }, [])

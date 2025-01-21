@@ -209,7 +209,7 @@ function CadastrarImobiliariasFormCard() {
             <p className="text-sm text-gray-600">
               Já possui uma conta?{" "}
               <a
-                href="/imobiliarias/entrar"
+                href="/imobiliaria/entrar"
                 className="text-blue-600 hover:underline font-medium"
               >
                 Entre aqui.

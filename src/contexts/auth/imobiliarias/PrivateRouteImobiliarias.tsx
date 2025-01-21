@@ -13,7 +13,7 @@ const PrivateRouteImobiliarias = ({
   const authContext = useContext(AuthImobiliariaContext);
 
   if (!authContext?.isAuthenticated) {
-    return <Navigate to="/imobiliarias/entrar" />;
+    return <Navigate to="/imobiliaria/entrar" />;
   }
 
   return <>{children}</>;

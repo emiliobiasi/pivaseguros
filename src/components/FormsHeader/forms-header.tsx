@@ -13,25 +13,29 @@ export function FormsHeader() {
   function handleFormSelection(value: string) {
     switch (value) {
       case "seguro-incendio":
-        navigate("/formulario/seguro-incendio");
+        navigate("/imobiliaria/formulario/seguro-incendio");
         break;
       case "seguro-incendio-comercial":
-        navigate("/formulario/seguro-incendio-comercial");
+        navigate("/imobiliaria/formulario/seguro-incendio-comercial");
         break;
       case "seguro-fianca-residencial":
-        navigate("/formulario/seguro-fianca-residencial");
+        navigate("/imobiliaria/formulario/seguro-fianca-residencial");
         break;
       case "efetivacao-seguro-fianca":
-        navigate("/formulario/efetivacao-seguro-fianca");
+        navigate("/imobiliaria/formulario/efetivacao-seguro-fianca");
         break;
       case "seguro-fianca-empresarial-mais-2-anos":
-        navigate("/formulario/seguro-fianca-empresarial-mais-2-anos");
+        navigate(
+          "/imobiliaria/formulario/seguro-fianca-empresarial-mais-2-anos"
+        );
         break;
       case "seguro-fianca-empresarial-menos-2-anos":
-        navigate("/formulario/seguro-fianca-empresarial-menos-2-anos");
+        navigate(
+          "/imobiliaria/formulario/seguro-fianca-empresarial-menos-2-anos"
+        );
         break;
       case "titulo-capitalizacao":
-        navigate("/formulario/titulo-capitalizacao");
+        navigate("/imobiliaria/formulario/titulo-capitalizacao");
         break;
       default:
         break;
@@ -46,7 +50,6 @@ export function FormsHeader() {
             <h1 className="font- font-bold tracking-tighter w-full text-4xl">
               Bem vindo ao departamento de soluções para locação
             </h1>
-
           </div>
         </section>
 
@@ -84,7 +87,6 @@ export function FormsHeader() {
                     Análise Fiança Pessoa Física Comercial (CNPJ MENOS DE 2
                     ANOS)
                   </SelectItem>
-
 
                   {/* Efetivação de Título de Capitalização */}
                   {/* EFETIVAÇÕES */}

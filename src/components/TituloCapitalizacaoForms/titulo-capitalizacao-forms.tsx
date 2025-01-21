@@ -748,7 +748,7 @@ export function TituloCapitalizacaoForms() {
           <Button
             onClick={() => {
               setIsSuccessModalOpen(false);
-              navigate("/formulario");
+              navigate("/imobiliaria/formulario");
             }}
             className="w-full mt-4 bg-green-700 hover:bg-green-600"
           >

@@ -42,7 +42,7 @@ export const AuthImobiliariaProvider = ({
     try {
       await pb.collection("imobiliarias").authWithPassword(email, password);
       setIsAuthenticated(true);
-      navigate("/formulario");
+      navigate("/imobiliaria/formulario");
     } catch (err) {
       pb.handleError(err as PocketBaseError);
       throw err;

@@ -12,7 +12,7 @@ export function HeaderFormMenu() {
 
       {/* Logo na direita */}
       <div
-        onClick={() => navigate("/formulario")}
+        onClick={() => navigate("/imobiliaria/formulario")}
         className="w-40 h-auto sm:my-8 cursor-pointer"
       >
         <img src={pivaLogo} alt="Logo" className="lg:ms-20 md:ms-10" />
