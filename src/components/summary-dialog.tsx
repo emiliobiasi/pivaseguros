@@ -5,18 +5,18 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { FileIcon, CheckCircle } from 'lucide-react'
-import { UploadedFile } from "@/types/insurance"
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { FileIcon, CheckCircle } from "lucide-react";
+import { UploadedFile } from "@/types/insurance";
 
 interface SummaryDialogProps {
-  isOpen: boolean
-  onClose: () => void
-  onConfirm: () => void
-  files: UploadedFile[]
-  realEstateName: string
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  files: UploadedFile[];
+  realEstateName: string;
 }
 
 export function SummaryDialog({
@@ -28,11 +28,11 @@ export function SummaryDialog({
 }: SummaryDialogProps) {
   const groupedFiles = files.reduce((acc, file) => {
     if (!acc[file.insuranceCompany]) {
-      acc[file.insuranceCompany] = []
+      acc[file.insuranceCompany] = [];
     }
-    acc[file.insuranceCompany].push(file)
-    return acc
-  }, {} as Record<string, UploadedFile[]>)
+    acc[file.insuranceCompany].push(file);
+    return acc;
+  }, {} as Record<string, UploadedFile[]>);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -72,18 +72,21 @@ export function SummaryDialog({
         </ScrollArea>
 
         <DialogFooter className="mt-6">
-          <Button variant="outline" onClick={onClose} className="border-green-300 text-green-700 hover:bg-green-50">
+          <Button
+            variant="outline"
+            onClick={onClose}
+            className="text-black bg-white border border-black hover:text-white hover:bg-black"
+          >
             Cancelar
           </Button>
-          <Button 
-          onClick={onConfirm}
-          className="text-black bg-white border border-black"
+          <Button
+            onClick={onConfirm}
+            className="text-white bg-green-800 hover:bg-green-600"
           >
-          Confirmar Envio
+            Confirmar Envio
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
-

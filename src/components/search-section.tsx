@@ -1,8 +1,8 @@
-import { SearchBar } from './search-bar'
-import { RealEstate } from '@/types/insurance'
+import { SearchBar } from "./search-bar";
+import { RealEstate } from "@/types/insurance";
 
 interface SearchSectionProps {
-  onSelect: (company: RealEstate) => void
+  onSelect: (company: RealEstate) => void;
 }
 
 export function SearchSection({ onSelect }: SearchSectionProps) {
@@ -21,6 +21,5 @@ export function SearchSection({ onSelect }: SearchSectionProps) {
         <SearchBar onSelect={onSelect} />
       </div>
     </div>
-  )
+  );
 }
-

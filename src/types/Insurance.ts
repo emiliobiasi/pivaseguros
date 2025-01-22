@@ -7,6 +7,7 @@ export interface InsuranceRule {
 }
 
 export interface UploadedFile {
+  content: string
   id: string
   name: string
   type: string
