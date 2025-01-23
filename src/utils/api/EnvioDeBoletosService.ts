@@ -61,7 +61,14 @@ export async function fetchEnvioDeBoletosList(
 
     const additionalFilters = Object.entries(filter)
       .filter(([_, value]) => value !== undefined && value !== "")
-      .map(([key, value]) => `${key} = "${value}"`)
+      .map(([key, value]) => {
+        // Se for boolean, monta sem aspas
+        if (typeof value === "boolean") {
+          return `${key} = ${value}`; // finalizado = false
+        }
+        // Se for string, monta com aspas
+        return `${key} = "${value}"`;
+      })
       .join(" && ");
 
     const combinedFilter = [searchFilter, additionalFilters]

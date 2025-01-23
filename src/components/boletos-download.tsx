@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CircularProgress } from "./circular-progress";
-import { useNavigate } from "react-router-dom"; // Substituto de next/navigation
+import { useNavigate } from "react-router-dom";
 import { useBoletosContext } from "@/contexts/boletos/boletos-context";
 import {
   AlertDialog,
@@ -19,42 +19,29 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogCancel,
-  AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 
-interface Boleto {
-  id: string;
-  nome: string;
-  url: string;
-  vencimento: string;
-  valor: string;
+import pb from "@/utils/backend/pb";
+import { EnvioDeBoletos } from "@/types/EnviosDeBoletos";
+import { fetchEnvioDeBoletosList } from "@/utils/api/EnvioDeBoletosService";
+
+// Tipos auxiliares (se necessário você pode adaptar)
+interface BoletoFetched extends EnvioDeBoletos {
+  // Se quiser mapear mais campos específicos, adicione aqui
+  // nome?: string;
+  // vencimento?: string;
 }
 
-const boletos: Boleto[] = [
-  {
-    id: "jan2024",
-    nome: "Boleto Janeiro",
-    url: "/boletos/janeiro.pdf",
-    vencimento: "31/01/2024",
-    valor: "R$ 150,00",
-  },
-  {
-    id: "fev2024",
-    nome: "Boleto Fevereiro",
-    url: "/boletos/fevereiro.pdf",
-    vencimento: "29/02/2024",
-    valor: "R$ 150,00",
-  },
-  {
-    id: "mar2024",
-    nome: "Boleto Março",
-    url: "/boletos/marco.pdf",
-    vencimento: "31/03/2024",
-    valor: "R$ 150,00",
-  },
-];
+interface ExpandedBoleto {
+  id: string;
+  arquivo: string;
+  created: string | undefined; // Pode usar Date, mas verifique se você está lidando com strings na API
+}
 
+// Componente principal
 export default function BoletosDownload() {
+  const [envios, setEnvios] = useState<BoletoFetched[]>([]);
+  const [boletos, setBoletos] = useState<ExpandedBoleto[]>([]);
   const [downloadedBoletos, setDownloadedBoletos] = useState<Set<string>>(
     new Set()
   );
@@ -64,7 +51,7 @@ export default function BoletosDownload() {
   );
   const [showCelebration, setShowCelebration] = useState(false);
   const [showExitAlert, setShowExitAlert] = useState(false);
-  const navigate = useNavigate(); // Substitui useRouter
+  const navigate = useNavigate();
 
   const {
     setAllBoletosDownloaded,
@@ -72,27 +59,71 @@ export default function BoletosDownload() {
     setIsProcessFinalized,
   } = useBoletosContext();
 
-  const allDownloaded = downloadedBoletos.size === boletos.length;
-  const progress =
-    boletos.length > 0 ? (downloadedBoletos.size / boletos.length) * 100 : 0;
+  // Carregar boletos do PocketBase
+  useEffect(() => {
+    const currentUser = pb.authStore.model;
+    if (!currentUser) {
+      return;
+    }
 
+    const currentUserId = currentUser.id;
+
+    console.log("Buscando boletos para o usuário:", currentUserId);
+
+    // Busca apenas registros onde:
+    // - imobiliaria == currentUserId
+    // - finalizado == false
+    // Ajuste o page e limit conforme sua necessidade
+    fetchEnvioDeBoletosList(1, 50, "", {
+      imobiliaria: currentUserId,
+      finalizado: false,
+    })
+      .then((response) => {
+        setEnvios(response.items);
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar boletos:", error);
+      });
+  }, []);
+
+  // Expandir envios para boletos
+  useEffect(() => {
+    const expandedBoletos = envios.flatMap((envio) =>
+      envio.arquivos.map((arquivo) => ({
+        id: envio.id,
+        arquivo,
+        created: envio.created ? new Date(envio.created).toISOString() : undefined,
+      }))
+    );
+    setBoletos(expandedBoletos);
+  }, [envios]);
+
+  // Atualiza o contexto sobre a quantidade de boletos
   useEffect(() => {
     setHasBoletosToDownload(boletos.length > 0);
-    setAllBoletosDownloaded(allDownloaded);
-  }, [setHasBoletosToDownload, setAllBoletosDownloaded, allDownloaded]);
+    setAllBoletosDownloaded(downloadedBoletos.size === boletos.length);
+  }, [
+    boletos,
+    downloadedBoletos,
+    setHasBoletosToDownload,
+    setAllBoletosDownloaded,
+  ]);
 
+  // Prevenir o usuário de sair se ainda houver boletos pendentes
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (!allDownloaded && boletos.length > 0) {
+      if (downloadedBoletos.size < boletos.length && boletos.length > 0) {
         e.preventDefault();
         e.returnValue = "";
       }
     };
-
     window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [allDownloaded]);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [downloadedBoletos, boletos]);
 
+  // Recupera do localStorage se já houver boletos baixados
   useEffect(() => {
     const storedBoletos = localStorage.getItem("downloadedBoletos");
     if (storedBoletos) {
@@ -100,13 +131,17 @@ export default function BoletosDownload() {
     }
   }, []);
 
-  const handleDownload = async (boleto: Boleto) => {
+  // Função de "download" (exemplo fictício para simular)
+  const handleDownload = async (arquivo: string) => {
     setIsDownloading(true);
-    setCurrentDownloadId(boleto.id);
+    setCurrentDownloadId(arquivo);
+
+    // Simular atraso no download
     await new Promise((resolve) => setTimeout(resolve, 1000));
+
     setDownloadedBoletos((prev) => {
       const newSet = new Set(prev);
-      newSet.add(boleto.id);
+      newSet.add(arquivo);
       localStorage.setItem(
         "downloadedBoletos",
         JSON.stringify(Array.from(newSet))
@@ -114,15 +149,13 @@ export default function BoletosDownload() {
       return newSet;
     });
 
+    // Registrar no histórico local
     const historico = JSON.parse(
       localStorage.getItem("historicoBoletosDownload") || "[]"
     );
     historico.push({
-      id: boleto.id,
-      nome: boleto.nome,
+      arquivo,
       dataDownload: new Date().toLocaleString(),
-      vencimento: boleto.vencimento,
-      valor: boleto.valor,
     });
     localStorage.setItem("historicoBoletosDownload", JSON.stringify(historico));
 
@@ -130,8 +163,9 @@ export default function BoletosDownload() {
     setCurrentDownloadId(null);
   };
 
+  // Finaliza o processo e redireciona
   const handleFinalize = () => {
-    if (allDownloaded) {
+    if (downloadedBoletos.size === boletos.length) {
       setIsProcessFinalized(true);
       setShowCelebration(true);
       setTimeout(() => {
@@ -143,6 +177,12 @@ export default function BoletosDownload() {
     }
   };
 
+  // Cálculo de progresso
+  const allDownloaded = downloadedBoletos.size === boletos.length;
+  const progress =
+    boletos.length > 0 ? (downloadedBoletos.size / boletos.length) * 100 : 0;
+
+  // Se nenhum boleto está disponível
   if (boletos.length === 0) {
     return (
       <div className="text-center text-gray-500 p-8">
@@ -155,6 +195,7 @@ export default function BoletosDownload() {
     );
   }
 
+  // Animação de "parabéns" se todos foram baixados
   if (showCelebration) {
     return (
       <div className="text-center mb-6 animate-fade-in p-8">
@@ -177,28 +218,29 @@ export default function BoletosDownload() {
         <CircularProgress progress={progress} size={120} strokeWidth={8} />
       </div>
 
-      {/* Lista de boletos */}
+      {/* Lista de boletos (adaptado para o que você realmente tem na sua coleção) */}
       <div className="space-y-4">
-        {boletos.map((boleto) => (
+        {boletos.map((boleto, index) => (
           <div
-            key={boleto.id}
+            key={`${boleto.id}-${index}`}
             className="flex flex-col sm:flex-row justify-between items-center bg-white p-4 rounded-lg shadow-md"
           >
             {/* Informações do boleto */}
             <div className="flex flex-col mb-4 sm:mb-0">
               <span className="font-semibold text-gray-800 text-lg">
-                {boleto.nome}
+                Arquivo: {boleto.arquivo}
               </span>
               <span className="text-sm text-gray-600">
-                Vencimento: {boleto.vencimento}
-              </span>
-              <span className="text-sm text-gray-600">
-                Valor: {boleto.valor}
+                {`Anexado em: ${
+                  boleto.created
+                    ? new Date(boleto.created).toLocaleString()
+                    : "Data inválida"
+                }`}
               </span>
             </div>
 
             {/* Botão de download */}
-            {downloadedBoletos.has(boleto.id) ? (
+            {downloadedBoletos.has(boleto.arquivo) ? (
               <div className="flex items-center text-green-600">
                 <CheckCircle className="w-6 h-6 mr-2" />
                 <span>Baixado</span>
@@ -207,11 +249,11 @@ export default function BoletosDownload() {
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => handleDownload(boleto)}
+                onClick={() => handleDownload(boleto.arquivo)}
                 disabled={isDownloading}
                 className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center"
               >
-                {isDownloading && currentDownloadId === boleto.id ? (
+                {isDownloading && currentDownloadId === boleto.arquivo ? (
                   <div className="flex items-center">
                     <CircularProgress
                       progress={100}
@@ -269,7 +311,7 @@ export default function BoletosDownload() {
         </div>
       )}
 
-      {/* Alerta de saída */}
+      {/* Alerta de saída (quando tentar sair sem baixar tudo) */}
       <AlertDialog open={showExitAlert} onOpenChange={setShowExitAlert}>
         <AlertDialogContent>
           <AlertDialogHeader>
