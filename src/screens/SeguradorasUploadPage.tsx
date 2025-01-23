@@ -84,11 +84,9 @@ export default function SeguradorasUploadPage() {
     try {
       // Preparar os arquivos como uma lista de File
       const arquivos = files.map((file) => {
-        // Se já for instância de File, retorne diretamente
         if (file instanceof File) {
-          return file;
+          return file; 
         }
-        // Caso contrário, cria uma nova instância de File a partir do conteúdo
         return new File([file.content || ""], file.name, { type: file.type });
       });
 

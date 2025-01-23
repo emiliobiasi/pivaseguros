@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { InsuranceRule } from "../types/Insurance";
+import { InsuranceRule } from "../types/insurance";
 import { FileType, FileText } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 

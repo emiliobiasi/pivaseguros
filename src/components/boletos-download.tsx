@@ -23,7 +23,17 @@ import {
 
 import pb from "@/utils/backend/pb";
 import { EnvioDeBoletos } from "@/types/EnviosDeBoletos";
-import { fetchEnvioDeBoletosList } from "@/utils/api/EnvioDeBoletosService";
+import {
+  downloadBoleto,
+  fetchEnvioDeBoletosList,
+  updateEnvioDeBoletos,
+} from "@/utils/api/EnvioDeBoletosService";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip";
 
 // Tipos auxiliares (se necessário você pode adaptar)
 interface BoletoFetched extends EnvioDeBoletos {
@@ -90,9 +100,11 @@ export default function BoletosDownload() {
   useEffect(() => {
     const expandedBoletos = envios.flatMap((envio) =>
       envio.arquivos.map((arquivo) => ({
-        id: envio.id,
+        id: envio.id, // Certifique-se de incluir o ID do registro
         arquivo,
-        created: envio.created ? new Date(envio.created).toISOString() : undefined,
+        created: envio.created
+          ? new Date(envio.created).toISOString()
+          : undefined,
       }))
     );
     setBoletos(expandedBoletos);
@@ -117,7 +129,13 @@ export default function BoletosDownload() {
         e.returnValue = "";
       }
     };
-    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    // Adiciona o evento quando ainda há downloads pendentes
+    if (downloadedBoletos.size < boletos.length) {
+      window.addEventListener("beforeunload", handleBeforeUnload);
+    }
+
+    // Remove o evento quando todos os downloads forem concluídos
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
@@ -132,48 +150,78 @@ export default function BoletosDownload() {
   }, []);
 
   // Função de "download" (exemplo fictício para simular)
-  const handleDownload = async (arquivo: string) => {
+  const handleDownload = async (arquivo: string, recordId: string) => {
     setIsDownloading(true);
     setCurrentDownloadId(arquivo);
 
-    // Simular atraso no download
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      await downloadBoleto("envios_de_boletos", recordId, arquivo);
 
-    setDownloadedBoletos((prev) => {
-      const newSet = new Set(prev);
-      newSet.add(arquivo);
-      localStorage.setItem(
-        "downloadedBoletos",
-        JSON.stringify(Array.from(newSet))
-      );
-      return newSet;
-    });
+      setDownloadedBoletos((prev) => {
+        const newSet = new Set(prev);
+        newSet.add(arquivo);
+        localStorage.setItem(
+          "downloadedBoletos",
+          JSON.stringify(Array.from(newSet))
+        );
+        return newSet;
+      });
 
-    // Registrar no histórico local
-    const historico = JSON.parse(
-      localStorage.getItem("historicoBoletosDownload") || "[]"
-    );
-    historico.push({
-      arquivo,
-      dataDownload: new Date().toLocaleString(),
-    });
-    localStorage.setItem("historicoBoletosDownload", JSON.stringify(historico));
+      console.log(`Download do arquivo "${arquivo}" concluído.`);
+    } catch (error) {
+      console.error(`Erro ao baixar o arquivo ${arquivo}:`, error);
+    } finally {
+      setIsDownloading(false);
+      setCurrentDownloadId(null);
+    }
+  };
+
+  // Função para baixar todos os boletos
+  const handleDownloadAll = async () => {
+    setIsDownloading(true);
+
+    for (const boleto of boletos) {
+      try {
+        await handleDownload(boleto.arquivo, boleto.id);
+      } catch (error) {
+        console.error(
+          `Erro ao baixar o arquivo ${boleto.arquivo} do registro ${boleto.id}:`,
+          error
+        );
+      }
+    }
 
     setIsDownloading(false);
-    setCurrentDownloadId(null);
   };
 
   // Finaliza o processo e redireciona
-  const handleFinalize = () => {
-    if (downloadedBoletos.size === boletos.length) {
+  const handleFinalize = async () => {
+    if (!allDownloaded) return;
+
+    try {
+      // Atualizar todos os envios
+      const updates = envios.map((envio) =>
+        updateEnvioDeBoletos(envio.id, { finalizado: true })
+      );
+
+      // Aguarda todas as atualizações
+      await Promise.all(updates);
+
+      console.log("Todos os envios foram marcados como finalizados.");
+
+      // Redirecionar para o histórico após a atualização
       setIsProcessFinalized(true);
       setShowCelebration(true);
+
       setTimeout(() => {
         setDownloadedBoletos(new Set());
         setShowCelebration(false);
         localStorage.removeItem("downloadedBoletos");
         navigate("/imobiliaria/download-boletos/historico");
       }, 3000);
+    } catch (error) {
+      console.error("Erro ao finalizar os envios:", error);
+      alert("Houve um erro ao finalizar os envios. Tente novamente.");
     }
   };
 
@@ -226,10 +274,19 @@ export default function BoletosDownload() {
             className="flex flex-col sm:flex-row justify-between items-center bg-white p-4 rounded-lg shadow-md"
           >
             {/* Informações do boleto */}
-            <div className="flex flex-col mb-4 sm:mb-0">
-              <span className="font-semibold text-gray-800 text-lg">
-                Arquivo: {boleto.arquivo}
-              </span>
+            <div className="flex flex-col mb-4 sm:mb-0 w-full sm:w-auto">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="font-semibold text-gray-800 text-md truncate max-w-full sm:max-w-xs cursor-pointer">
+                      Arquivo: {boleto.arquivo}
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{boleto.arquivo}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
               <span className="text-sm text-gray-600">
                 {`Anexado em: ${
                   boleto.created
@@ -239,62 +296,55 @@ export default function BoletosDownload() {
               </span>
             </div>
 
-            {/* Botão de download */}
-            {downloadedBoletos.has(boleto.arquivo) ? (
-              <div className="flex items-center text-green-600">
-                <CheckCircle className="w-6 h-6 mr-2" />
-                <span>Baixado</span>
-              </div>
-            ) : (
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => handleDownload(boleto.arquivo)}
-                disabled={isDownloading}
-                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center"
-              >
-                {isDownloading && currentDownloadId === boleto.arquivo ? (
-                  <div className="flex items-center">
-                    <CircularProgress
-                      progress={100}
-                      size={20}
-                      strokeWidth={3}
-                    />
-                    <span className="ml-2">Baixando...</span>
-                  </div>
-                ) : (
-                  <>
-                    <Download className="mr-2 w-5 h-5" />
-                    Baixar Boleto
-                  </>
-                )}
-              </Button>
-            )}
+            {/* Indicar status do download */}
+            <div className="flex items-center text-green-600 w-full sm:w-auto">
+              {downloadedBoletos.has(boleto.arquivo) ? (
+                <>
+                  <CheckCircle className="w-6 h-6 mr-2" />
+                  <span>Baixado</span>
+                </>
+              ) : (
+                <span className="text-gray-500">Aguardando download...</span>
+              )}
+            </div>
           </div>
         ))}
       </div>
 
-      {/* Botão de finalização */}
-      <div className="mt-6">
+      {/* Botão para baixar todos os boletos */}
+      <div className="mt-6 max-w-3xl mx-5">
         <Button
-          onClick={handleFinalize}
-          disabled={!allDownloaded}
+          onClick={handleDownloadAll}
+          disabled={downloadedBoletos.size === boletos.length || isDownloading}
           className={`w-full py-3 px-6 font-bold rounded-full text-white transition-all duration-300 transform ${
-            allDownloaded
-              ? "bg-green-600 hover:bg-green-700 scale-105"
-              : "bg-gray-300 cursor-not-allowed"
+            isDownloading
+              ? "bg-gray-300 hover:bg-green-700 scale-105 cursor-not-allowed"
+              : "bg-green-600 hover:bg-green-700 scale-105"
           }`}
         >
-          {allDownloaded ? (
+          {isDownloading ? (
             <>
-              Finalizar e Ver Histórico
-              <ArrowRight className="ml-2 w-5 h-5" />
+              <CircularProgress size={20} strokeWidth={3} progress={0} />
+              <span className="ml-2">Baixando Todos os Boletos...</span>
             </>
           ) : (
-            "Baixe todos os boletos para finalizar"
+            "Baixar Todos os Boletos"
           )}
         </Button>
       </div>
+
+      {/* Botão de finalização - visível apenas quando todos os arquivos foram baixados */}
+      {allDownloaded && (
+        <div className="mt-4 max-w-3xl mx-5">
+          <Button
+            onClick={handleFinalize}
+            className="w-full py-3 px-6 font-bold rounded-full text-white bg-green-600 hover:bg-green-700 scale-105 transition-all duration-300 transform"
+          >
+            Finalizar e Ver Histórico
+            <ArrowRight className="ml-2 w-5 h-5" />
+          </Button>
+        </div>
+      )}
 
       {/* Mensagem de atenção */}
       {!allDownloaded && boletos.length > 0 && (

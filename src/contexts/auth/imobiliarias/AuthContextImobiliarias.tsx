@@ -80,7 +80,7 @@ export const AuthImobiliariaProvider = ({
   const logout = () => {
     pb.logout();
     setIsAuthenticated(false);
-    navigate("/imobiliarias/entrar");
+    navigate("/imobiliaria/entrar");
   };
 
   return (

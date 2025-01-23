@@ -18,10 +18,11 @@ export async function createEnvioDeBoletos(
 
     // Adicionar os campos regulares
     formData.append("imobiliaria", data.imobiliaria);
+    formData.append("finalizado", String(data.finalizado)); // Certifique-se de enviar como string
 
-    // Adicionar os arquivos
+    // Adicionar os arquivos ao campo "arquivos"
     files.forEach((file) => {
-      formData.append("arquivos", file); // Certifique-se de que "arquivos" é o nome do campo no PocketBase
+      formData.append("arquivos", file); // Certifique-se de que "arquivos" é o nome correto
     });
 
     // Enviar a requisição para o PocketBase
@@ -181,5 +182,40 @@ export async function subscribeToEnvioDeBoletosUpdates(
   } catch (error) {
     console.error("Erro ao assinar atualizações de envios de boletos:", error);
     throw new Error("Erro ao assinar atualizações de envios de boletos");
+  }
+}
+
+/**
+ * Função para gerar a URL do arquivo e realizar o download.
+ * @param collectionName Nome da coleção.
+ * @param recordId ID do registro.
+ * @param filename Nome do arquivo.
+ */
+export async function downloadBoleto(
+  collectionName: string,
+  recordId: string,
+  filename: string
+): Promise<void> {
+  try {
+    // Gera a URL do arquivo no PocketBase
+    const fileUrl = pb.files.getUrl(
+      {
+        id: recordId,
+        collectionId: collectionName,
+      },
+      filename,
+      { download: true }
+    );
+
+    // Cria um link para iniciar o download
+    const link = document.createElement("a");
+    link.href = fileUrl;
+    link.download = filename;
+    link.click();
+
+    console.log(`Download iniciado para o arquivo: ${filename}`);
+  } catch (error) {
+    console.error(`Erro ao realizar o download do arquivo ${filename}:`, error);
+    throw new Error("Erro ao realizar o download do arquivo.");
   }
 }

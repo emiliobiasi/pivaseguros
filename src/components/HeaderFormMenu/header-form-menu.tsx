@@ -7,15 +7,19 @@ export function HeaderFormMenu() {
 
   return (
     <header className="flex h-28 w-full shrink-0 items-center justify-between px-4 md:px-6">
-      {/* Menu e Ícone do Menu Hambúrguer à esquerda */}
+      {/* Menu Hambúrguer à esquerda */}
       <HamburguerMenu />
 
-      {/* Logo na direita */}
+      {/* Logo */}
       <div
         onClick={() => navigate("/imobiliaria/formulario")}
-        className="w-40 h-auto sm:my-8 cursor-pointer"
+        className="w-40 h-auto cursor-pointer sm:mx-auto lg:ml-auto lg:mr-0"
       >
-        <img src={pivaLogo} alt="Logo" className="lg:ms-20 md:ms-10" />
+        <img
+          src={pivaLogo}
+          alt="Logo"
+          className="lg:me-10 md:me-6 sm:mx-auto"
+        />
       </div>
     </header>
   );

@@ -14,6 +14,7 @@ import { CreditCard, FileText, Menu, Settings } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthImobiliariaContext } from "@/contexts/auth/imobiliarias/AuthContextImobiliarias";
+import { useAuthImobiliarias } from "@/contexts/auth/imobiliarias/useAuthImobiliarias";
 
 const menuItems = [
   { icon: FileText, label: "Formulários", path: "/imobiliaria/formulario" },
@@ -29,7 +30,7 @@ const menuItems = [
 export function HamburguerMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  const authContext = useContext(AuthImobiliariaContext);
+  const { logout } = useAuthImobiliarias();
 
   const handleNavigation = (path: string) => {
     setIsOpen(false);
@@ -37,8 +38,8 @@ export function HamburguerMenu() {
   };
 
   const handleMenuClick = (item: (typeof menuItems)[0]) => {
-    if (item.action === "logout" && authContext?.logout) {
-      authContext.logout();
+    if (item.action === "logout") {
+      logout();
     } else if (item.path) {
       handleNavigation(item.path);
     }

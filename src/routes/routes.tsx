@@ -52,7 +52,14 @@ const RoutesComponent = () => {
                 path="imobiliaria/cadastrar"
                 element={<CadastrarImobiliarias />}
               />
-              <Route path="/imobiliaria" element={<ImobiliariaLayout />}>
+              <Route
+                path="/imobiliaria"
+                element={
+                  <PrivateRouteImobiliarias>
+                    <ImobiliariaLayout />
+                  </PrivateRouteImobiliarias>
+                }
+              >
                 <Route
                   path="download-boletos"
                   element={
@@ -69,7 +76,14 @@ const RoutesComponent = () => {
                     </PrivateRouteImobiliarias>
                   }
                 />
-                <Route path="formulario" element={<FormsLayout />}>
+                <Route
+                  path="formulario"
+                  element={
+                    <PrivateRouteImobiliarias>
+                      <FormsLayout />
+                    </PrivateRouteImobiliarias>
+                  }
+                >
                   <Route
                     path="seguro-incendio"
                     element={
