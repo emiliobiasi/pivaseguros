@@ -122,24 +122,24 @@ export default function BoletosDownload() {
   ]);
 
   // Prevenir o usuário de sair se ainda houver boletos pendentes
-  useEffect(() => {
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (downloadedBoletos.size < boletos.length && boletos.length > 0) {
-        e.preventDefault();
-        e.returnValue = "";
-      }
-    };
+  // useEffect(() => {
+  //   const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+  //     if (downloadedBoletos.size < boletos.length && boletos.length > 0) {
+  //       e.preventDefault();
+  //       e.returnValue = "";
+  //     }
+  //   };
 
-    // Adiciona o evento quando ainda há downloads pendentes
-    if (downloadedBoletos.size < boletos.length) {
-      window.addEventListener("beforeunload", handleBeforeUnload);
-    }
+  //   // Adiciona o evento quando ainda há downloads pendentes
+  //   if (downloadedBoletos.size < boletos.length) {
+  //     window.addEventListener("beforeunload", handleBeforeUnload);
+  //   }
 
-    // Remove o evento quando todos os downloads forem concluídos
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [downloadedBoletos, boletos]);
+  //   // Remove o evento quando todos os downloads forem concluídos
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //   };
+  // }, [downloadedBoletos, boletos]);
 
   // Recupera do localStorage se já houver boletos baixados
   useEffect(() => {
@@ -268,51 +268,61 @@ export default function BoletosDownload() {
 
       {/* Lista de boletos (adaptado para o que você realmente tem na sua coleção) */}
       <div className="space-y-4">
-        {boletos.map((boleto, index) => (
-          <div
-            key={`${boleto.id}-${index}`}
-            className="flex flex-col sm:flex-row justify-between items-center bg-white p-4 rounded-lg shadow-md"
-          >
-            {/* Informações do boleto */}
-            <div className="flex flex-col mb-4 sm:mb-0 w-full sm:w-auto">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className="font-semibold text-gray-800 text-md truncate max-w-full sm:max-w-xs cursor-pointer">
-                      Arquivo: {boleto.arquivo}
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{boleto.arquivo}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-              <span className="text-sm text-gray-600">
-                {`Anexado em: ${
-                  boleto.created
-                    ? new Date(boleto.created).toLocaleString()
-                    : "Data inválida"
-                }`}
-              </span>
-            </div>
+        {boletos.map((boleto, index) => {
+          const isDownloaded = downloadedBoletos.has(boleto.arquivo);
 
-            {/* Indicar status do download */}
-            <div className="flex items-center text-green-600 w-full sm:w-auto">
-              {downloadedBoletos.has(boleto.arquivo) ? (
-                <>
-                  <CheckCircle className="w-6 h-6 mr-2" />
-                  <span>Baixado</span>
-                </>
-              ) : (
-                <span className="text-gray-500">Aguardando download...</span>
-              )}
+          return (
+            <div
+              key={`${boleto.id}-${index}`}
+              className="flex flex-col sm:flex-row justify-between items-center bg-white p-4 rounded-lg shadow-md"
+            >
+              {/* Informações do boleto */}
+              <div className="flex flex-col mb-4 sm:mb-0 w-full sm:w-auto">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <span className="font-semibold text-gray-800 text-md truncate max-w-full sm:max-w-xs cursor-pointer">
+                        Arquivo: {boleto.arquivo}
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{boleto.arquivo}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                <span className="text-sm text-gray-600">
+                  {`Anexado em: ${
+                    boleto.created
+                      ? new Date(boleto.created).toLocaleString()
+                      : "Data inválida"
+                  }`}
+                </span>
+              </div>
+
+              {/* Botão ou status de download */}
+              <div className="flex items-center space-x-2">
+                {isDownloaded ? (
+                  <div className="flex items-center text-green-600">
+                    <CheckCircle className="w-6 h-6 mr-2" />
+                    <span>Baixado</span>
+                  </div>
+                ) : (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleDownload(boleto.arquivo, boleto.id)}
+                  >
+                    <Download className="mr-2 h-4 w-4" /> Baixar
+                  </Button>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Botão para baixar todos os boletos */}
-      <div className="mt-6 max-w-3xl mx-5">
+      {/* <div className="mt-6 max-w-3xl mx-5">
         <Button
           onClick={handleDownloadAll}
           disabled={downloadedBoletos.size === boletos.length || isDownloading}
@@ -331,7 +341,7 @@ export default function BoletosDownload() {
             "Baixar Todos os Boletos"
           )}
         </Button>
-      </div>
+      </div> */}
 
       {/* Botão de finalização - visível apenas quando todos os arquivos foram baixados */}
       {allDownloaded && (
