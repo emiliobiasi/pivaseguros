@@ -65,7 +65,7 @@ export default function SeguradorasUploadPage() {
             type: file.type.includes("pdf") ? "PDF" : "Excel",
             insuranceCompany: company,
             status: "success",
-            content: "",
+            file: file,
           });
         }
       });
@@ -83,12 +83,7 @@ export default function SeguradorasUploadPage() {
 
     try {
       // Preparar os arquivos como uma lista de File
-      const arquivos = files.map((file) => {
-        if (file instanceof File) {
-          return file; 
-        }
-        return new File([file.content || ""], file.name, { type: file.type });
-      });
+      const arquivos = files.map((file) => file.file);
 
       // Dados regulares do envio
       const envioData = {

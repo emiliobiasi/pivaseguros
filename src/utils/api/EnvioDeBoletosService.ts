@@ -18,11 +18,9 @@ export async function createEnvioDeBoletos(
 
     // Adicionar os campos regulares
     formData.append("imobiliaria", data.imobiliaria);
-    formData.append("finalizado", String(data.finalizado)); // Certifique-se de enviar como string
 
-    // Adicionar os arquivos ao campo "arquivos"
     files.forEach((file) => {
-      formData.append("arquivos", file); // Certifique-se de que "arquivos" é o nome correto
+      formData.append("arquivos", file);
     });
 
     // Enviar a requisição para o PocketBase
@@ -61,7 +59,7 @@ export async function fetchEnvioDeBoletosList(
     const searchFilter = searchTerm ? `(imobiliaria ~ "${searchTerm}")` : "";
 
     const additionalFilters = Object.entries(filter)
-      .filter(([_, value]) => value !== undefined && value !== "")
+      .filter(([value]) => value !== undefined && value !== "")
       .map(([key, value]) => {
         // Se for boolean, monta sem aspas
         if (typeof value === "boolean") {

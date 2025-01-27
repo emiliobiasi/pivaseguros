@@ -1,18 +1,19 @@
 export interface InsuranceRule {
-  company: string
+  company: string;
   rules: {
-    type: string
-    documentType: string
-  }[]
+    type: string;
+    documentType: string;
+  }[];
 }
 
 export interface UploadedFile {
-  content: string
-  id: string
-  name: string
-  type: string
-  insuranceCompany: string
-  status: 'success' | 'error'
+  id: string;
+  name: string;
+  type: string;
+  insuranceCompany: string;
+  status: "success" | "error" | "pending";
+  content?: string;
+  file: File;
 }
 
 // export interface RealEstate {
@@ -20,4 +21,3 @@ export interface UploadedFile {
 //   id: string;
 //   name: string;
 // }
-
