@@ -311,6 +311,7 @@ export default function BoletosDownload() {
                     variant="outline"
                     size="sm"
                     onClick={() => handleDownload(boleto.arquivo, boleto.id)}
+                    className="bg-green-600 hover:bg-green-700 hover:text-white text-white"
                   >
                     <Download className="mr-2 h-4 w-4" /> Baixar
                   </Button>

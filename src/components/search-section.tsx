@@ -1,8 +1,8 @@
 import { SearchBar } from "./search-bar";
-import { RealEstate } from "@/types/insurance";
+import { Imobiliaria } from "@/types/Imobiliarias";
 
 interface SearchSectionProps {
-  onSelect: (company: RealEstate) => void;
+  onSelect: (company: Imobiliaria) => void;
 }
 
 export function SearchSection({ onSelect }: SearchSectionProps) {

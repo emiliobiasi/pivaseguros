@@ -23,7 +23,7 @@ const menuItems = [
     label: "Boletos",
     path: "/imobiliaria/download-boletos",
   },
-  { icon: Settings, label: "Configurações", path: "/configuracoes" },
+  { icon: Settings, label: "Configurações", path: "/imobiliaria/configuracoes" },
   { icon: ExitIcon, label: "Sair", action: "logout" },
 ];
 

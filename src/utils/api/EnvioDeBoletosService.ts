@@ -59,13 +59,20 @@ export async function fetchEnvioDeBoletosList(
     const searchFilter = searchTerm ? `(imobiliaria ~ "${searchTerm}")` : "";
 
     const additionalFilters = Object.entries(filter)
-      .filter(([value]) => value !== undefined && value !== "")
+      .filter(([_, value]) => value !== undefined && value !== "")
       .map(([key, value]) => {
-        // Se for boolean, monta sem aspas
         if (typeof value === "boolean") {
           return `${key} = ${value}`; // finalizado = false
         }
-        // Se for string, monta com aspas
+
+        // Caso o valor seja um objeto para operadores customizados
+        if (typeof value === "object" && value !== null) {
+          const conditions = Object.entries(value)
+            .map(([operator, val]) => `${key} ${operator} "${val}"`) // Exemplo: created >= "2025-01-01"
+            .join(" && ");
+          return `(${conditions})`;
+        }
+
         return `${key} = "${value}"`;
       })
       .join(" && ");

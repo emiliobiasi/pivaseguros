@@ -14,6 +14,7 @@ import {
   ShieldAlertIcon,
   DockIcon,
   User,
+  FileClock,
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/logo.png";
@@ -500,18 +501,6 @@ function SidebarContent() {
             <span>Gráficos</span>
           </button>
         </li>
-        {/* FAZER ORÇAMENTO */}
-        <li>
-          <a
-            href="https://piva-orcamentos-01.vercel.app/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-          >
-            <ExternalLink className="h-5 w-5 mr-3" />
-            <span>Fazer orçamento</span>
-          </a>
-        </li>
         {/* BOLETOS */}
         <li>
           <button
@@ -525,6 +514,32 @@ function SidebarContent() {
             <DockIcon className="h-5 w-5 mr-3" />
             <span>Boletos</span>
           </button>
+        </li>
+        {/* BOLETOS */}
+        <li>
+          <button
+            onClick={() => navigate("/historico-de-envio-de-boletos")}
+            className={`flex items-center w-full px-4 py-2 text-left text-sm ${
+              location.pathname === "/boletos-imobiliaria-upload"
+                ? "bg-gray-200 dark:bg-gray-700 text-green-700 dark:text-white"
+                : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+            }`}
+          >
+            <FileClock className="h-5 w-5 mr-3" />
+            <span>Histórico de Envios</span>
+          </button>
+        </li>
+        {/* FAZER ORÇAMENTO */}
+        <li>
+          <a
+            href="https://piva-orcamentos-01.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            <ExternalLink className="h-5 w-5 mr-3" />
+            <span>Fazer orçamento</span>
+          </a>
         </li>
       </ul>
 
