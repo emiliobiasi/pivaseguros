@@ -1,26 +1,13 @@
-"use client";
-
-import { useState, useEffect } from "react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { CalendarIcon, Search, Filter, ChevronDown } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { useState, useEffect } from "react"
+import { format } from "date-fns"
+import { ptBR } from "date-fns/locale"
+import { CalendarIcon, Filter } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import { Input } from "@/components/ui/input"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import {
   Pagination,
   PaginationContent,
@@ -29,43 +16,37 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+} from "@/components/ui/pagination"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { MagnifyingGlassIcon, ChevronDownIcon } from "@radix-ui/react-icons"
 
 interface Envio {
-  id: string;
-  imobiliaria: string;
-  arquivos: string[];
-  finalizado: boolean;
-  created: Date;
+  id: string
+  imobiliaria: string
+  arquivos: string[]
+  finalizado: boolean
+  created: Date
 }
 
-const ITEMS_PER_PAGE = 5; // Definindo o número de itens por página
+const ITEMS_PER_PAGE = 5 // Definindo o número de itens por página
 
 export default function HistoricoEnvios() {
-  const [date, setDate] = useState<Date>(new Date());
-  const [envios, setEnvios] = useState<Envio[]>([]);
-  const [filteredEnvios, setFilteredEnvios] = useState<Envio[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<
-    "todos" | "finalizados" | "pendentes"
-  >("todos");
+  const [date, setDate] = useState<Date>(new Date())
+  const [envios, setEnvios] = useState<Envio[]>([])
+  const [filteredEnvios, setFilteredEnvios] = useState<Envio[]>([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [searchTerm, setSearchTerm] = useState("")
+  const [statusFilter, setStatusFilter] = useState<"todos" | "finalizados" | "pendentes">("todos")
 
   useEffect(() => {
-    fetchEnvios();
-  }, []);
+    fetchEnvios()
+  }, [])
 
   useEffect(() => {
-    filterEnvios();
-  }, [envios, searchTerm, statusFilter]); //Fixed unnecessary dependencies
+    filterEnvios()
+  }, [envios, searchTerm, statusFilter]) //Fixed unnecessary dependencies
 
   const fetchEnvios = async () => {
     // Simular chamada à API
@@ -75,38 +56,29 @@ export default function HistoricoEnvios() {
       arquivos: [`contrato_${(index + 1).toString().padStart(3, "0")}.pdf`],
       finalizado: index % 2 === 0,
       created: new Date(2023, date.getMonth(), index + 1),
-    }));
+    }))
 
-    setEnvios(simulatedData);
-  };
+    setEnvios(simulatedData)
+  }
 
   const filterEnvios = () => {
-    let filtered = envios.filter((envio) =>
-      envio.imobiliaria.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    let filtered = envios.filter((envio) => envio.imobiliaria.toLowerCase().includes(searchTerm.toLowerCase()))
 
     if (statusFilter !== "todos") {
-      filtered = filtered.filter((envio) =>
-        statusFilter === "finalizados" ? envio.finalizado : !envio.finalizado
-      );
+      filtered = filtered.filter((envio) => (statusFilter === "finalizados" ? envio.finalizado : !envio.finalizado))
     }
 
-    setFilteredEnvios(filtered);
-    setTotalPages(Math.ceil(filtered.length / ITEMS_PER_PAGE));
-    setCurrentPage(1);
-  };
+    setFilteredEnvios(filtered)
+    setTotalPages(Math.ceil(filtered.length / ITEMS_PER_PAGE))
+    setCurrentPage(1)
+  }
 
-  const paginatedEnvios = filteredEnvios.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
+  const paginatedEnvios = filteredEnvios.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
 
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold">
-          Histórico de Envios
-        </CardTitle>
+        <CardTitle className="text-2xl font-bold">Histórico de Envios</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-4 sm:space-y-0">
@@ -117,15 +89,11 @@ export default function HistoricoEnvios() {
                   variant="outline"
                   className={cn(
                     "w-full sm:w-[240px] justify-start text-left font-normal",
-                    !date && "text-muted-foreground"
+                    !date && "text-muted-foreground",
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date ? (
-                    format(date, "MMMM yyyy", { locale: ptBR })
-                  ) : (
-                    <span>Selecione o mês</span>
-                  )}
+                  {date ? format(date, "MMMM yyyy", { locale: ptBR }) : <span>Selecione o mês</span>}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
@@ -142,6 +110,7 @@ export default function HistoricoEnvios() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full sm:w-[300px]"
+              icon={<MagnifyingGlassIcon className="h-4 w-4 text-gray-500" />}
             />
           </div>
           <div className="flex items-center space-x-2 w-full sm:w-auto">
@@ -150,21 +119,13 @@ export default function HistoricoEnvios() {
                 <Button variant="outline" className="w-full sm:w-auto">
                   <Filter className="mr-2 h-4 w-4" />
                   Filtrar
-                  <ChevronDown className="ml-2 h-4 w-4" />
+                  <ChevronDownIcon className="ml-2 h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => setStatusFilter("todos")}>
-                  Todos
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => setStatusFilter("finalizados")}
-                >
-                  Finalizados
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setStatusFilter("pendentes")}>
-                  Pendentes
-                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setStatusFilter("todos")}>Todos</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setStatusFilter("finalizados")}>Finalizados</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setStatusFilter("pendentes")}>Pendentes</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -183,16 +144,12 @@ export default function HistoricoEnvios() {
             <TableBody>
               {paginatedEnvios.map((envio) => (
                 <TableRow key={envio.id}>
-                  <TableCell className="font-medium">
-                    {envio.imobiliaria}
-                  </TableCell>
+                  <TableCell className="font-medium">{envio.imobiliaria}</TableCell>
                   <TableCell>{envio.arquivos.join(", ")}</TableCell>
                   <TableCell>
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                        envio.finalizado
-                          ? "bg-green-100 text-green-900"
-                          : "bg-yellow-100 text-yellow-900"
+                        envio.finalizado ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"
                       }`}
                     >
                       {envio.finalizado ? "Finalizado" : "Pendente"}
@@ -210,31 +167,26 @@ export default function HistoricoEnvios() {
             <PaginationItem>
               <PaginationPrevious
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                currentPage={currentPage}
+                disabled={currentPage === 1}
               />
             </PaginationItem>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <PaginationItem key={page}>
-                <PaginationLink
-                  onClick={() => setCurrentPage(page)}
-                  isActive={currentPage === page}
-                >
+                <PaginationLink onClick={() => setCurrentPage(page)} isActive={currentPage === page}>
                   {page}
                 </PaginationLink>
               </PaginationItem>
             ))}
             <PaginationItem>
               <PaginationNext
-                onClick={() =>
-                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                }
-                currentPage={currentPage}
-                totalPages={totalPages}
+                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
               />
             </PaginationItem>
           </PaginationContent>
         </Pagination>
       </CardContent>
     </Card>
-  );
+  )
 }
+
