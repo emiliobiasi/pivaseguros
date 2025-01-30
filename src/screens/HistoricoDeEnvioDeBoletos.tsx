@@ -101,7 +101,7 @@ export default function HistoricoEnvios() {
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {date ? (
-                    format(date, "MMMM yyyy", { locale: ptBR })
+                    format(date, "MMMM/yyyy", { locale: ptBR })
                   ) : (
                     <span>Selecione o mês</span>
                   )}
