@@ -2,6 +2,10 @@ import { EnvioDeBoletos } from "@/types/EnviosDeBoletos";
 import pb, { PocketBaseError } from "@/utils/backend/pb";
 import { ClientResponseError, RecordSubscription } from "pocketbase";
 
+type FilterOptions = Omit<Partial<EnvioDeBoletos>, "created"> & {
+  created?: string | Date; // Permite filtros complexos como string
+};
+
 /**
  * Função para criar um novo Envio de Boletos.
  * @param data Dados do envio de boletos a ser criado.
@@ -49,7 +53,7 @@ export async function fetchEnvioDeBoletosList(
   page: number,
   limit: number,
   searchTerm: string = "",
-  filter: Partial<EnvioDeBoletos> = {}
+  filter: FilterOptions = {}
 ): Promise<{
   items: EnvioDeBoletos[];
   totalItems: number;
@@ -61,16 +65,12 @@ export async function fetchEnvioDeBoletosList(
     const additionalFilters = Object.entries(filter)
       .filter(([_, value]) => value !== undefined && value !== "")
       .map(([key, value]) => {
-        if (typeof value === "boolean") {
-          return `${key} = ${value}`; // finalizado = false
-        }
+        if (typeof value === "boolean") return `${key} = ${value}`;
 
-        // Caso o valor seja um objeto para operadores customizados
-        if (typeof value === "object" && value !== null) {
-          const conditions = Object.entries(value)
-            .map(([operator, val]) => `${key} ${operator} "${val}"`) // Exemplo: created >= "2025-01-01"
-            .join(" && ");
-          return `(${conditions})`;
+        if (key === "created") {
+          if (typeof value === "string") return value;
+          if (value instanceof Date)
+            return `created = "${value.toISOString()}"`;
         }
 
         return `${key} = "${value}"`;
@@ -85,9 +85,11 @@ export async function fetchEnvioDeBoletosList(
       .collection("envios_de_boletos")
       .getList<EnvioDeBoletos>(page, limit, {
         sort: "-created",
+        expand: "imobiliaria", // Adicione o expand aqui
         filter: combinedFilter,
       });
 
+    // A resposta já virá com os dados expandidos
     return {
       items: response.items,
       totalItems: response.totalItems,

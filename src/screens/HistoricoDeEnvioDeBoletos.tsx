@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -37,21 +35,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-interface Envio {
-  id: string;
-  imobiliaria: string;
-  arquivos: string[];
-  finalizado: boolean;
-  created: Date;
-}
+import { EnvioDeBoletos } from "@/types/EnviosDeBoletos";
+import { fetchEnvioDeBoletosList } from "@/utils/api/EnvioDeBoletosService";
 
 const ITEMS_PER_PAGE = 5; // Definindo o número de itens por página
 
 export default function HistoricoEnvios() {
   const [date, setDate] = useState<Date>(new Date());
-  const [envios, setEnvios] = useState<Envio[]>([]);
-  const [filteredEnvios, setFilteredEnvios] = useState<Envio[]>([]);
+  const [envios, setEnvios] = useState<EnvioDeBoletos[]>([]);
+  const [filteredEnvios, setFilteredEnvios] = useState<EnvioDeBoletos[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
@@ -61,45 +53,32 @@ export default function HistoricoEnvios() {
 
   useEffect(() => {
     fetchEnvios();
-  }, []);
-
-  useEffect(() => {
-    filterEnvios();
-  }, [envios, searchTerm, statusFilter]); //Fixed unnecessary dependencies
+  }, [date, searchTerm, statusFilter, currentPage]);
 
   const fetchEnvios = async () => {
-    // Simular chamada à API
-    const simulatedData: Envio[] = Array.from({ length: 50 }, (_, index) => ({
-      id: `${index + 1}`,
-      imobiliaria: `Imobiliária ${String.fromCharCode(65 + (index % 26))}`,
-      arquivos: [`contrato_${(index + 1).toString().padStart(3, "0")}.pdf`],
-      finalizado: index % 2 === 0,
-      created: new Date(2023, date.getMonth(), index + 1),
-    }));
+    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
 
-    setEnvios(simulatedData);
-  };
-
-  const filterEnvios = () => {
-    let filtered = envios.filter((envio) =>
-      envio.imobiliaria.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    if (statusFilter !== "todos") {
-      filtered = filtered.filter((envio) =>
-        statusFilter === "finalizados" ? envio.finalizado : !envio.finalizado
+    try {
+      const { items, totalPages } = await fetchEnvioDeBoletosList(
+        currentPage,
+        ITEMS_PER_PAGE,
+        searchTerm,
+        {
+          created: `created >= "${firstDay.toISOString()}" && created <= "${lastDay.toISOString()}"`,
+          finalizado:
+            statusFilter !== "todos"
+              ? statusFilter === "finalizados"
+              : undefined,
+        }
       );
+
+      setEnvios(items);
+      setTotalPages(totalPages);
+    } catch (error) {
+      console.error("Erro ao buscar envios:", error);
     }
-
-    setFilteredEnvios(filtered);
-    setTotalPages(Math.ceil(filtered.length / ITEMS_PER_PAGE));
-    setCurrentPage(1);
   };
-
-  const paginatedEnvios = filteredEnvios.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
 
   return (
     <Card className="w-full">
@@ -181,12 +160,12 @@ export default function HistoricoEnvios() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {paginatedEnvios.map((envio) => (
+              {envios.map((envio) => (
                 <TableRow key={envio.id}>
                   <TableCell className="font-medium">
-                    {envio.imobiliaria}
+                    {envio.expand?.imobiliaria?.nome || envio.imobiliaria}
                   </TableCell>
-                  <TableCell>{envio.arquivos.join(", ")}</TableCell>
+                  <TableCell>{envio.arquivos.length}</TableCell>
                   <TableCell>
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-semibold ${
@@ -198,7 +177,9 @@ export default function HistoricoEnvios() {
                       {envio.finalizado ? "Finalizado" : "Pendente"}
                     </span>
                   </TableCell>
-                  <TableCell>{format(envio.created, "dd/MM/yyyy")}</TableCell>
+                  <TableCell>
+                    {format(new Date(envio.created), "dd/MM/yyyy")}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -210,7 +191,6 @@ export default function HistoricoEnvios() {
             <PaginationItem>
               <PaginationPrevious
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                currentPage={currentPage}
               />
             </PaginationItem>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -228,8 +208,6 @@ export default function HistoricoEnvios() {
                 onClick={() =>
                   setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                 }
-                currentPage={currentPage}
-                totalPages={totalPages}
               />
             </PaginationItem>
           </PaginationContent>
