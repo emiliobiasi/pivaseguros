@@ -171,3 +171,116 @@ export async function subscribeToImobiliariaUpdates(
     throw new Error("Erro ao assinar atualizações de Imobiliárias");
   }
 }
+
+/**
+ * Função para atualizar o email de uma Imobiliária.
+ * @param id ID da imobiliária a ser atualizada.
+ * @param newEmail Novo email da imobiliária.
+ * @returns A imobiliária atualizada.
+ */
+// src/services/imobiliariaService.ts - Função atualizada
+
+export async function updateImobiliariaEmail(
+  newEmail: string,
+  password: string
+): Promise<void> {
+  try {
+    if (!pb.authStore.model) {
+      throw new Error("Usuário não autenticado.");
+    }
+
+    // Validação do email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(newEmail)) {
+      throw new Error("Formato de email inválido.");
+    }
+
+    // Autenticar com a senha atual
+    await pb
+      .collection("imobiliarias")
+      .authWithPassword(pb.authStore.model.email, password);
+
+    // Solicitar mudança de email
+    await pb.collection("imobiliarias").requestEmailChange(newEmail);
+  } catch (error) {
+    const err = error as ClientResponseError;
+    console.error("Erro ao atualizar email:", err);
+    throw new Error(err.message || "Falha ao solicitar alteração de email");
+  }
+}
+
+/**
+ * Função para atualizar o nome de uma Imobiliária.
+ * @param id ID da imobiliária a ser atualizada.
+ * @param newName Novo nome da imobiliária.
+ * @returns A imobiliária atualizada.
+ */
+export async function updateImobiliariaName(
+  id: string,
+  newName: string
+): Promise<Imobiliaria> {
+  try {
+    // Validação básica do nome
+    if (newName.trim().length === 0) {
+      throw new Error("O nome não pode estar vazio.");
+    }
+
+    // Atualiza o campo nome na coleção "imobiliarias"
+    const updatedRecord = await pb
+      .collection("imobiliarias")
+      .update<Imobiliaria>(id, { nome: newName });
+
+    console.log(
+      `Nome da Imobiliária ${id} atualizado com sucesso:`,
+      updatedRecord
+    );
+    return updatedRecord;
+  } catch (error) {
+    const err = error as PocketBaseError;
+    console.error(`Erro ao atualizar o nome da Imobiliária ${id}:`, err);
+    throw new Error("Erro ao atualizar o nome da Imobiliária.");
+  }
+}
+
+/**
+ * Função para trocar a senha de uma Imobiliária.
+ * @param id ID da imobiliária a ser atualizada.
+ * @param newPassword Nova senha da imobiliária.
+ * @returns A imobiliária atualizada.
+ */
+export async function changeImobiliariaPassword(
+  currentPassword: string,
+  newPassword: string,
+  confirmPassword: string
+): Promise<void> {
+  try {
+    // Validações básicas
+    if (newPassword !== confirmPassword) {
+      throw new Error("As novas senhas não coincidem.");
+    }
+
+    if (!pb.authStore.model) {
+      throw new Error("Usuário não autenticado.");
+    }
+
+    // Autenticar com a senha atual
+    await pb
+      .collection("imobiliarias")
+      .authWithPassword(pb.authStore.model.email, currentPassword);
+
+    // Atualizar a senha
+    await pb.collection("imobiliarias").update(pb.authStore.model.id, {
+      password: newPassword,
+      passwordConfirm: newPassword,
+    });
+
+    // Reautenticar com a nova senha
+    await pb
+      .collection("imobiliarias")
+      .authWithPassword(pb.authStore.model.email, newPassword);
+  } catch (error) {
+    const err = error as ClientResponseError;
+    console.error("Erro ao alterar senha:", err);
+    throw new Error(err.message || "Falha ao alterar a senha");
+  }
+}

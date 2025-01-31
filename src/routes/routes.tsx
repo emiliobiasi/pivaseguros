@@ -32,6 +32,7 @@ import { BoletosProvider } from "@/contexts/boletos/boletos-context";
 import ImobiliariaLayout from "@/screens/ImobiliariaLayout";
 import BoletoDownloadHistoricoPage from "@/screens/BoletoDownloadHistoricoPage";
 import HistoricoDeEnvioDeBoletos from "@/screens/HistoricoDeEnvioDeBoletos";
+import ConfiguracoesDaConta from "@/screens/ConfiguracoesDaConta";
 
 const RoutesComponent = () => {
   return (
@@ -66,6 +67,14 @@ const RoutesComponent = () => {
                   element={
                     <PrivateRouteImobiliarias>
                       <BoletoDownloadPage />
+                    </PrivateRouteImobiliarias>
+                  }
+                />
+                <Route
+                  path="configuracoes"
+                  element={
+                    <PrivateRouteImobiliarias>
+                      <ConfiguracoesDaConta />
                     </PrivateRouteImobiliarias>
                   }
                 />
