@@ -1,7 +1,7 @@
-import { SeguroFiancaResidencial } from "@/types/SeguroFiancaResidencial";
-import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { SeguroFiancaResidencial } from "@/types/SeguroFiancaResidencial"
+import { useState, useRef } from "react"
+import { useNavigate } from "react-router-dom"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -9,49 +9,43 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  ArrowLeft,
-  ArrowRight,
-  CheckCircle,
-  Send,
-  Loader2,
-} from "lucide-react";
-import { formatCPF } from "@/utils/regex/regexCPF";
-import { formatCEP } from "@/utils/regex/regexCEP";
-import { formatTelefone } from "@/utils/regex/regexTelefone";
-import { createSeguroFiancaResidencial } from "@/utils/api/SeguroFiancaResidencialService";
+} from "@/components/ui/select"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Checkbox } from "@/components/ui/checkbox"
+import { ArrowLeft, ArrowRight, CheckCircle, Send, Loader2 } from "lucide-react"
+import { formatCPF } from "@/utils/regex/regexCPF"
+import { formatCEP } from "@/utils/regex/regexCEP"
+import { formatTelefone } from "@/utils/regex/regexTelefone"
+import { createSeguroFiancaResidencial } from "@/utils/api/SeguroFiancaResidencialService"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import pivaLogo from "@/assets/logo.png";
-import { buscaEnderecoPorCEP, EnderecoViaCep } from "@/utils/api/Cep";
+} from "@/components/ui/dialog"
+import pivaLogo from "@/assets/logo.png"
+import { buscaEnderecoPorCEP, EnderecoViaCep } from "@/utils/api/Cep"
 // Importações adicionais que possam estar no seu código original
 
 export function SeguroFiancaResidencialForms() {
-  const [currentTab, setCurrentTab] = useState("personal");
-  const [agreedToTerms, setAgreedToTerms] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [currentTab, setCurrentTab] = useState("personal")
+  const [agreedToTerms, setAgreedToTerms] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
 
-  const navigate = useNavigate();
-  const formRef = useRef<HTMLFormElement>(null);
+  const navigate = useNavigate()
+  const formRef = useRef<HTMLFormElement>(null)
 
   const [formData, setFormData] = useState<SeguroFiancaResidencial>({
     id: "",
@@ -85,11 +79,11 @@ export function SeguroFiancaResidencialForms() {
     incluir_pretendente: "NÃO",
     data_nascimento_residente_nao: new Date(),
     created: new Date(),
-  });
+  })
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    let formattedValue = value;
+    const { name, value } = e.target
+    let formattedValue = value
 
     if (
       name === "telefone" ||
@@ -99,7 +93,7 @@ export function SeguroFiancaResidencialForms() {
       name === "telefone_conjuge_2" ||
       name === "telefone_residente_nao_2"
     ) {
-      formattedValue = formatTelefone(value);
+      formattedValue = formatTelefone(value)
     } else if (
       name === "cpf_residente" ||
       name === "cpf_conjuge" ||
@@ -108,19 +102,19 @@ export function SeguroFiancaResidencialForms() {
       name === "cpf_conjuge_2" ||
       name === "cpf_residente_nao_2"
     ) {
-      formattedValue = formatCPF(value);
+      formattedValue = formatCPF(value)
     } else if (name === "cep_locacao") {
-      formattedValue = formatCEP(value);
+      formattedValue = formatCEP(value)
 
-      const cepNumeros = formattedValue.replace(/\D/g, "");
+      const cepNumeros = formattedValue.replace(/\D/g, "")
 
       if (cepNumeros.length === 8) {
         try {
-          setIsLoading(true);
-          setErrorMessage(""); // Limpa mensagens de erro anteriores
+          setIsLoading(true)
+          setErrorMessage("") // Limpa mensagens de erro anteriores
 
           // Chama a função importada para buscar o endereço
-          const data: EnderecoViaCep = await buscaEnderecoPorCEP(cepNumeros);
+          const data: EnderecoViaCep = await buscaEnderecoPorCEP(cepNumeros)
 
           // Atualiza os campos de endereço com os dados retornados
           setFormData((prevState) => ({
@@ -130,14 +124,14 @@ export function SeguroFiancaResidencialForms() {
             cidade_locacao: data.localidade || "",
             estado_locacao: data.uf || "",
             [name]: formattedValue, // Atualiza o campo CEP também
-          }));
+          }))
         } catch (error: unknown) {
-          console.error("Erro ao buscar o CEP:", error);
+          console.error("Erro ao buscar o CEP:", error)
           setErrorMessage(
             error instanceof Error
               ? error.message
               : "Erro ao buscar o CEP. Tente novamente."
-          );
+          )
 
           // Limpa os campos de endereço em caso de erro
           setFormData((prevState) => ({
@@ -147,9 +141,9 @@ export function SeguroFiancaResidencialForms() {
             cidade_locacao: "",
             estado_locacao: "",
             [name]: formattedValue,
-          }));
+          }))
         } finally {
-          setIsLoading(false);
+          setIsLoading(false)
         }
       } else {
         // Se o CEP tiver menos de 8 dígitos, limpa os campos de endereço
@@ -160,7 +154,7 @@ export function SeguroFiancaResidencialForms() {
           cidade_locacao: "",
           estado_locacao: "",
           [name]: formattedValue,
-        }));
+        }))
       }
     } else if (
       [
@@ -176,15 +170,15 @@ export function SeguroFiancaResidencialForms() {
       // formattedValue = formatValor(value);
     } else if (name === "data_nascimento") {
       // Manter o valor da data sem formatação adicional
-      formattedValue = value;
+      formattedValue = value
     }
 
     // Atualiza o estado geral do formulário
     setFormData((prevState) => ({
       ...prevState,
       [name]: formattedValue,
-    }));
-  };
+    }))
+  }
 
   const handleSelectChange = (
     name: keyof SeguroFiancaResidencial,
@@ -193,98 +187,98 @@ export function SeguroFiancaResidencialForms() {
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
-    }));
-  };
+    }))
+  }
 
   const handleNext = () => {
-    const tabs = ["personal", "address", "payment"];
-    const currentIndex = tabs.indexOf(currentTab);
+    const tabs = ["personal", "address", "payment"]
+    const currentIndex = tabs.indexOf(currentTab)
     if (currentIndex < tabs.length - 1) {
-      setCurrentTab(tabs[currentIndex + 1]);
+      setCurrentTab(tabs[currentIndex + 1])
     }
-  };
+  }
 
   const handlePrevious = () => {
-    const tabs = ["personal", "address", "payment"];
-    const currentIndex = tabs.indexOf(currentTab);
+    const tabs = ["personal", "address", "payment"]
+    const currentIndex = tabs.indexOf(currentTab)
     if (currentIndex > 0) {
-      setCurrentTab(tabs[currentIndex - 1]);
+      setCurrentTab(tabs[currentIndex - 1])
     }
-  };
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
 
     // Verifique se o handleSubmit está sendo acionado
-    console.log("handleSubmit acionado com dados:", formData);
+    console.log("handleSubmit acionado com dados:", formData)
 
     // Função de validação
     const validateForm = () => {
-      const errors: string[] = [];
+      const errors: string[] = []
       if (!formData.nome_imobiliaria_corretor)
-        errors.push("Nome da Imobiliária/Corretor");
-      if (!formData.cpf_residente) errors.push("CPF do Residente");
-      if (!formData.nome_residente) errors.push("Nome do Residente");
-      if (!formData.telefone) errors.push("Telefone");
-      if (!formData.email) errors.push("Email");
-      if (!formData.profissao) errors.push("Profissão");
-      if (!formData.data_nascimento) errors.push("Data de Nascimento");
-      if (!formData.residir_imovel) errors.push("Reside no Imóvel");
-      if (!formData.renda_mensal) errors.push("Renda Mensal do Pretendente");
+        errors.push("Nome da Imobiliária/Corretor")
+      if (!formData.cpf_residente) errors.push("CPF do Residente")
+      if (!formData.nome_residente) errors.push("Nome do Residente")
+      if (!formData.telefone) errors.push("Telefone")
+      if (!formData.email) errors.push("Email")
+      if (!formData.profissao) errors.push("Profissão")
+      if (!formData.data_nascimento) errors.push("Data de Nascimento")
+      if (!formData.residir_imovel) errors.push("Reside no Imóvel")
+      if (!formData.renda_mensal) errors.push("Renda Mensal do Pretendente")
       if (!formData.responder_financeiramente)
-        errors.push("Responde Financeiramente");
+        errors.push("Responde Financeiramente")
       if (!formData.estado_civil_residente)
-        errors.push("Estado Civil do Residente");
+        errors.push("Estado Civil do Residente")
       if (!formData.renda_composta_conjuge)
-        errors.push("Renda Composta do Cônjuge");
+        errors.push("Renda Composta do Cônjuge")
       if (!formData.incluir_pretendente)
-        errors.push("Incluir um 2º Pretendente");
-      if (!formData.cep_locacao) errors.push("CEP");
-      if (!formData.endereco_locacao) errors.push("Endereço");
-      if (!formData.bairro_locacao) errors.push("Bairro");
-      if (!formData.cidade_locacao) errors.push("Cidade");
-      if (!formData.estado_locacao) errors.push("Estado");
-      if (!formData.numero_locacao) errors.push("Número");
-      if (!formData.valor_aluguel) errors.push("Valor do Aluguel");
-      if (!formData.danos_imovel) errors.push("Danos ao Imóvel");
-      if (!formData.multa_recisao) errors.push("Multa por Recisão");
-      if (!formData.pintura_interna) errors.push("Pintura Interna");
-      if (!formData.pintura_externa) errors.push("Pintura Externa");
+        errors.push("Incluir um 2º Pretendente")
+      if (!formData.cep_locacao) errors.push("CEP")
+      if (!formData.endereco_locacao) errors.push("Endereço")
+      if (!formData.bairro_locacao) errors.push("Bairro")
+      if (!formData.cidade_locacao) errors.push("Cidade")
+      if (!formData.estado_locacao) errors.push("Estado")
+      if (!formData.numero_locacao) errors.push("Número")
+      if (!formData.valor_aluguel) errors.push("Valor do Aluguel")
+      if (!formData.danos_imovel) errors.push("Danos ao Imóvel")
+      if (!formData.multa_recisao) errors.push("Multa por Recisão")
+      if (!formData.pintura_interna) errors.push("Pintura Interna")
+      if (!formData.pintura_externa) errors.push("Pintura Externa")
       if (!formData.data_nascimento_residente_nao)
-        errors.push("Data de Nascimento do Residente Não");
+        errors.push("Data de Nascimento do Residente Não")
 
-      return errors;
-    };
+      return errors
+    }
 
-    const validationErrors = validateForm();
+    const validationErrors = validateForm()
     if (validationErrors.length > 0) {
       setErrorMessage(
         `Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou os campos. Campos obrigatórios que faltam: ${validationErrors.join(
           ", "
         )}`
-      );
-      return;
+      )
+      return
     }
 
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      await createSeguroFiancaResidencial(formData); // Certifique-se de que está chamando a função correta
-      console.log("Dados enviados para criação:", formData);
+      await createSeguroFiancaResidencial(formData) // Certifique-se de que está chamando a função correta
+      console.log("Dados enviados para criação:", formData)
 
       // Reseta o formulário e abre o modal de sucesso
-      formRef.current?.reset();
-      setIsSuccessModalOpen(true);
+      formRef.current?.reset()
+      setIsSuccessModalOpen(true)
     } catch (error) {
-      console.error("Erro ao enviar o formulário:", error);
+      console.error("Erro ao enviar o formulário:", error)
       setErrorMessage(
         "Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou campos de email corretamente. Tente novamente."
-      );
+      )
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
-  const RequiredAsterisk = () => <span className="text-red-500">*</span>;
+  const RequiredAsterisk = () => <span className="text-red-500">*</span>
 
   return (
     <div className="mb-40 flex justify-center">
@@ -332,6 +326,20 @@ export function SeguroFiancaResidencialForms() {
                       currentTab === "address" ? "#16a34a" : undefined,
                     color: currentTab === "address" ? "white" : undefined,
                   }}
+                  disabled={
+                    (formData.estado_civil_residente === "CASADO" &&
+                      (formData.nome_conjuge === "" ||
+                        formData.cpf_conjuge === "")) ||
+                    (formData.incluir_pretendente === "SIM" &&
+                      formData.estado_civil_residente_2 === "CASADO" &&
+                      (formData.nome_conjuge_2 === "" ||
+                        formData.cpf_conjuge_2 === "")) ||
+                    (formData.renda_composta_conjuge === "SIM" &&
+                      (formData.profissao_conjuge_opcional === "" ||
+                        formData.renda_mensal_conjuge_opcional === "" ||
+                        formData.telefone_conjuge === "" ||
+                        formData.email_conjuge === ""))
+                  }
                 >
                   Dados da Locação Pretendida
                 </TabsTrigger>
@@ -346,6 +354,20 @@ export function SeguroFiancaResidencialForms() {
                       currentTab === "payment" ? "#16a34a" : undefined,
                     color: currentTab === "payment" ? "white" : undefined,
                   }}
+                  disabled={
+                    (formData.estado_civil_residente === "CASADO" &&
+                      (formData.nome_conjuge === "" ||
+                        formData.cpf_conjuge === "")) ||
+                    (formData.incluir_pretendente === "SIM" &&
+                      formData.estado_civil_residente_2 === "CASADO" &&
+                      (formData.nome_conjuge_2 === "" ||
+                        formData.cpf_conjuge_2 === "")) ||
+                    (formData.renda_composta_conjuge === "SIM" &&
+                      (formData.profissao_conjuge_opcional === "" ||
+                        formData.renda_mensal_conjuge_opcional === "" ||
+                        formData.telefone_conjuge === "" ||
+                        formData.email_conjuge === ""))
+                  }
                 >
                   Coberturas
                 </TabsTrigger>
@@ -689,11 +711,10 @@ export function SeguroFiancaResidencialForms() {
                       <>
                         <h3 className="mt-4">
                           {" "}
-                          Preencha os campos obrigatórios{" "}
                           <strong>
-                            <RequiredAsterisk />
+                            Preencha os campos obrigatórios <RequiredAsterisk />
+                            abaixo:{" "}
                           </strong>{" "}
-                          abaixo:{" "}
                         </h3>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                           <div className="space-y-2">
@@ -1619,7 +1640,65 @@ export function SeguroFiancaResidencialForms() {
                 <ArrowLeft className="mr-2 h-4 w-4" /> Anterior
               </Button>
             )}
-            {currentTab !== "payment" ? (
+
+            {/* {currentTab === "personal" && (
+              <>
+                {formData.estado_civil_residente === "CASADO" &&
+                (formData.nome_conjuge === "" ||
+                  formData.cpf_conjuge === "") ? (
+                  <Button
+                    type="button"
+                    disabled
+                    className="ml-auto bg-gray-400 text-white shadow"
+                  >
+                    Próximo <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    onClick={handleNext}
+                    className="ml-auto bg-[#00612B] text-white shadow hover:bg-[#02693E] focus-visible:ring-[#02693E] hover:bg-green-500"
+                  >
+                    Próximo <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                )}
+              </>
+            )} */}
+
+            {currentTab === "personal" && (
+              <>
+                {(formData.estado_civil_residente === "CASADO" &&
+                  (formData.nome_conjuge === "" ||
+                    formData.cpf_conjuge === "")) ||
+                (formData.incluir_pretendente === "SIM" &&
+                  formData.estado_civil_residente_2 === "CASADO" &&
+                  (formData.nome_conjuge_2 === "" ||
+                    formData.cpf_conjuge_2 === "")) ||
+                (formData.renda_composta_conjuge === "SIM" &&
+                  (formData.profissao_conjuge_opcional === "" ||
+                    formData.renda_mensal_conjuge_opcional === "" ||
+                    formData.telefone_conjuge === "" ||
+                    formData.email_conjuge === "")) ? (
+                  <Button
+                    type="button"
+                    disabled
+                    className="ml-auto bg-gray-400 text-white shadow"
+                  >
+                    Próximo <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    onClick={handleNext}
+                    className="ml-auto bg-[#00612B] text-white shadow hover:bg-[#02693E] focus-visible:ring-[#02693E] hover:bg-green-500"
+                  >
+                    Próximo <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                )}
+              </>
+            )}
+
+            {currentTab !== "payment" && currentTab !== "personal" && (
               <Button
                 type="button"
                 onClick={handleNext}
@@ -1627,22 +1706,15 @@ export function SeguroFiancaResidencialForms() {
               >
                 Próximo <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
-            ) : (
+            )}
+
+            {currentTab === "payment" && (
               <Button
                 type="submit"
                 disabled={!agreedToTerms || isLoading}
                 className="ml-auto bg-green-700 hover:bg-green-600"
               >
-                {isLoading ? (
-                  <>
-                    Enviando...
-                    <Loader2 className="ml-2 h-4 w-4 animate-spin" />
-                  </>
-                ) : (
-                  <>
-                    Enviar <Send className="ml-2 h-4 w-4" />
-                  </>
-                )}
+                {isLoading ? "Carregando..." : "Finalizar"}
               </Button>
             )}
           </CardFooter>
@@ -1669,8 +1741,8 @@ export function SeguroFiancaResidencialForms() {
           </DialogDescription>
           <Button
             onClick={() => {
-              setIsSuccessModalOpen(false);
-              navigate("/imobiliaria/formulario");
+              setIsSuccessModalOpen(false)
+              navigate("/imobiliaria/formulario")
             }}
             className="w-full mt-4 bg-green-700 hover:bg-green-600"
           >
@@ -1679,5 +1751,5 @@ export function SeguroFiancaResidencialForms() {
         </DialogContent>
       </Dialog>
     </div>
-  );
+  )
 }

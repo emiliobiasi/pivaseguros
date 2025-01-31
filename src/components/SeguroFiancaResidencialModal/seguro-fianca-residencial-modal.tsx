@@ -275,7 +275,7 @@ export function SeguroFiancaResidencialModal({
                 {seguro.estado_civil_residente_2 === "CASADO" && (
                   <>
                     <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
-                      Informações do Cônjuge
+                      Informações do Cônjuge do 2º Pretendente
                     </h3>
                     <p>
                       <strong>Renda Composta com Cônjuge:</strong>{" "}
