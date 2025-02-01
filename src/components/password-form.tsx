@@ -84,7 +84,7 @@ export function PasswordForm({ onCancel }: PasswordFormProps) {
         <Button type="button" variant="outline" onClick={onCancel}>
           Cancelar
         </Button>
-        <Button type="submit">Alterar Senha</Button>
+        <Button type="submit" className="bg-green-700 hover:bg-green-800">Alterar Senha</Button>
       </div>
     </form>
   );

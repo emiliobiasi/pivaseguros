@@ -1,31 +1,33 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { AlertCircle, Pencil } from "lucide-react";
-import { ProfileEditDialog } from "@/components/profile-edit-dialog";
-import { PasswordForm } from "@/components/password-form";
-import { DeleteAccountDialog } from "@/components/delete-account-dialog";
-import pb from "@/utils/backend/pb";
+} from "@/components/ui/card"
+import { AlertCircle, Pencil } from "lucide-react"
+import { ProfileEditDialog } from "@/components/profile-edit-dialog"
+import { PasswordForm } from "@/components/password-form"
+import { DeleteAccountDialog } from "@/components/delete-account-dialog"
+import pb from "@/utils/backend/pb"
 
 export default function ConfiguracoesDaConta() {
-  const [isEditingProfile, setIsEditingProfile] = useState(false);
-  const [isEditingPassword, setIsEditingPassword] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isEditingProfile, setIsEditingProfile] = useState(false)
+  const [isEditingPassword, setIsEditingPassword] = useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
-  const currentUser = pb.authStore.model;
-  const currentUserId = currentUser?.id;
-  const currentUserEmail = currentUser?.email;
-  const currentUserName = currentUser?.nome;
+  const currentUser = pb.authStore.model
+  const currentUserId = currentUser?.id
+  const currentUserEmail = currentUser?.email
+  const currentUserName = currentUser?.nome
 
   return (
-    <div className="container mx-auto p-4 space-y-6">
-      <h1 className="mb-6 text-center">Configurações da Conta</h1>
+    <div className="container mx-auto p-4 space-y-6 ">
+      <h1 className="mb-10 text-2xl text-center font-bold">
+        Configurações da Conta
+      </h1>
 
       {/* ALTERAR EMAIL OU NOME */}
       <Card>
@@ -72,6 +74,7 @@ export default function ConfiguracoesDaConta() {
             <Button
               onClick={() => setIsEditingPassword(true)}
               variant="outline"
+              
             >
               <Pencil className="mr-2 h-4 w-4" /> Alterar Senha
             </Button>
@@ -106,5 +109,5 @@ export default function ConfiguracoesDaConta() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }
