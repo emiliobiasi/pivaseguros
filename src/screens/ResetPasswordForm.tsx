@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext } from "react"
 import {
   Card,
   CardHeader,
@@ -6,40 +6,40 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-} from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { AuthImobiliariaContext } from "@/contexts/auth/imobiliarias/AuthContextImobiliarias";
+} from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Loader2 } from "lucide-react"
+import { AuthImobiliariaContext } from "@/contexts/auth/imobiliarias/AuthContextImobiliarias"
 
 const ResetPasswordForm = () => {
-  const authContext = useContext(AuthImobiliariaContext); // Acesse o contexto
-  const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const authContext = useContext(AuthImobiliariaContext) // Acesse o contexto
+  const [email, setEmail] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const handleResetPassword = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSuccessMessage(null);
-    setErrorMessage(null);
+    e.preventDefault()
+    setSuccessMessage(null)
+    setErrorMessage(null)
 
     try {
-      setLoading(true);
-      await authContext?.requestPasswordReset(email);
+      setLoading(true)
+      await authContext?.requestPasswordReset(email)
       setSuccessMessage(
         "Instruções para redefinir sua senha foram enviadas para o email informado."
-      );
+      )
     } catch (err) {
-      console.error("Erro ao solicitar redefinição de senha:", err);
+      console.error("Erro ao solicitar redefinição de senha:", err)
       setErrorMessage(
         "Não foi possível enviar o email de redefinição de senha."
-      );
+      )
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-neutral-100 p-4">
@@ -72,7 +72,7 @@ const ResetPasswordForm = () => {
               <p className="text-red-600 text-sm">{errorMessage}</p>
             )}
           </CardContent>
-          <CardFooter className="flex justify-end">
+          <CardFooter className="flex flex-col items-center space-y-4">
             <Button
               type="submit"
               className="w-full text-white py-2 px-3 rounded flex items-center justify-center"
@@ -85,11 +85,18 @@ const ResetPasswordForm = () => {
                 "Enviar Instruções"
               )}
             </Button>
+
+            <div className="text-sm font-semibold text-center text-gray-700 underline cursor-pointer">
+              <a href="/imobiliaria/entrar" className="hover:text-blue-700">
+                Após ter redefinido a senha, clique aqui para fazer o login da
+                sua conta.
+              </a>
+            </div>
           </CardFooter>
         </form>
       </Card>
     </div>
-  );
-};
+  )
+}
 
-export default ResetPasswordForm;
+export default ResetPasswordForm

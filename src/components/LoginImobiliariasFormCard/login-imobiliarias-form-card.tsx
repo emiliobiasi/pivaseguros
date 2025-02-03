@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from "react"
 import {
   Card,
   CardHeader,
@@ -6,34 +6,34 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-} from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import pivaLogo from "@/assets/logo.png";
-import { Loader2 } from "lucide-react";
-import { useAuthImobiliarias } from "@/contexts/auth/imobiliarias/useAuthImobiliarias";
+} from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import pivaLogo from "@/assets/logo.png"
+import { Loader2 } from "lucide-react"
+import { useAuthImobiliarias } from "@/contexts/auth/imobiliarias/useAuthImobiliarias"
 
 export function LoginImobiliariaFormCard() {
-  const { loginWithEmail } = useAuthImobiliarias(); // Hook de autenticação
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false); // Estado de loading
+  const { loginWithEmail } = useAuthImobiliarias() // Hook de autenticação
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false) // Estado de loading
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     try {
-      setError(null);
-      setLoading(true); // Inicia o loading
-      await loginWithEmail(email, password);
+      setError(null)
+      setLoading(true) // Inicia o loading
+      await loginWithEmail(email, password)
     } catch (error) {
-      console.error("Erro de login", error);
-      setError("Falha ao logar. Por favor, verifique suas credenciais.");
+      console.error("Erro de login", error)
+      setError("Falha ao logar. Por favor, verifique suas credenciais.")
     } finally {
-      setLoading(false); // Encerra o loading
+      setLoading(false) // Encerra o loading
     }
-  };
+  }
 
   return (
     <div className="flex items-center justify-center bg-background p-4">
@@ -93,7 +93,7 @@ export function LoginImobiliariaFormCard() {
             <div className="text-sm text-center space-y-2 mt-2">
               <a
                 href="/esqueci-minha-senha"
-                className="text-blue-500 hover:underline"
+                className="text-blue-500 hover:underline font-semibold"
               >
                 Esqueci minha senha
               </a>
@@ -125,7 +125,7 @@ export function LoginImobiliariaFormCard() {
         </form>
       </Card>
     </div>
-  );
+  )
 }
 
 function LockIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -145,7 +145,7 @@ function LockIcon(props: React.SVGProps<SVGSVGElement>) {
       <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
       <path d="M7 11V7a5 5 0 0 1 10 0v4" />
     </svg>
-  );
+  )
 }
 
 function MailIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -165,5 +165,5 @@ function MailIcon(props: React.SVGProps<SVGSVGElement>) {
       <rect width="20" height="16" x="2" y="4" rx="2" />
       <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
     </svg>
-  );
+  )
 }
