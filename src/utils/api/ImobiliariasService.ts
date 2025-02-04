@@ -112,14 +112,32 @@ export async function updateImobiliaria(
  * Função para excluir uma Imobiliária.
  * @param id ID da imobiliária a ser excluída.
  */
-export async function deleteImobiliaria(id: string): Promise<void> {
+export async function deleteImobiliaria(
+  imobiliariaId: string
+): Promise<void> {
   try {
-    await pb.collection("imobiliarias").delete(id);
-    console.log(`Imobiliária ${id} excluída com sucesso.`);
+    // Primeiro, buscamos todos os registros que dependem da imobiliária
+    const dependentRecords = await pb
+      .collection("envios_de_boletos")
+      .getFullList({ filter: `imobiliaria = "${imobiliariaId}"` });
+
+    // Excluímos cada um deles
+    for (const record of dependentRecords) {
+      await pb.collection("envios_de_boletos").delete(record.id);
+    }
+
+    // Agora podemos excluir a imobiliária sem erros
+    await pb.collection("imobiliarias").delete(imobiliariaId);
+
+    console.log(
+      `Imobiliária ${imobiliariaId} e registros relacionados foram excluídos.`
+    );
   } catch (error) {
-    const err = error as PocketBaseError;
-    console.error(`Erro ao excluir a Imobiliária ${id}:`, err);
-    throw new Error("Erro ao excluir a Imobiliária");
+    console.error(
+      "Erro ao excluir a imobiliária e registros relacionados:",
+      error
+    );
+    throw new Error("Falha ao excluir a imobiliária");
   }
 }
 

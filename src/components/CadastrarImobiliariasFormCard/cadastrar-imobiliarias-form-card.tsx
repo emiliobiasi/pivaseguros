@@ -1,4 +1,4 @@
-import { useState, useContext } from "react"
+import { useState, useContext } from "react";
 import {
   Card,
   CardHeader,
@@ -6,47 +6,47 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-} from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import pivaLogo from "@/assets/logo.png"
-import { Loader2 } from "lucide-react"
-import { AuthImobiliariaContext } from "@/contexts/auth/imobiliarias/AuthContextImobiliarias" // Importe o contexto
-import { formatTelefone } from "../../utils/regex/regexTelefone"
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import pivaLogo from "@/assets/logo.png";
+import { Loader2 } from "lucide-react";
+import { AuthImobiliariaContext } from "@/contexts/auth/imobiliarias/AuthContextImobiliarias"; // Importe o contexto
+import { formatTelefone } from "../../utils/regex/regexTelefone";
 
 const CadastrarImobiliarias = () => {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <CadastrarImobiliariasFormCard />
     </div>
-  )
-}
+  );
+};
 
-export default CadastrarImobiliarias
+export default CadastrarImobiliarias;
 
 function CadastrarImobiliariasFormCard() {
-  const authContext = useContext(AuthImobiliariaContext) // Acesse o contexto
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
-  const [phone, setPhone] = useState("")
-  const [username, setUsername] = useState("")
-  const [companyName, setCompanyName] = useState("")
-  const [error, setError] = useState<string[] | null>(null)
-  const [loading, setLoading] = useState(false)
+  const authContext = useContext(AuthImobiliariaContext); // Acesse o contexto
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const [username, setUsername] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [error, setError] = useState<string[] | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (password !== confirmPassword) {
-      setError(["As senhas não coincidem."])
-      return
+      setError(["As senhas não coincidem."]);
+      return;
     }
 
     try {
-      setError(null)
-      setLoading(true)
+      setError(null);
+      setLoading(true);
 
       // Dados para cadastro
       const data = {
@@ -56,45 +56,53 @@ function CadastrarImobiliariasFormCard() {
         passwordConfirm: confirmPassword,
         nome: companyName,
         contato: phone,
-      }
+      };
 
       // Chamada ao método registerWithEmail
-      await authContext?.registerWithEmail(data)
+      await authContext?.registerWithEmail(data);
 
-      alert("Cadastro realizado com sucesso!")
+      alert("Cadastro realizado com sucesso!");
     } catch (error) {
       const typedError = error as {
         response?: {
           data?: {
-            email?: { code: string }
-            password?: { code: string }
-            username?: { code: string }
-          }
-        }
-      }
+            email?: { code: string };
+            password?: { code: string };
+            username?: { code: string };
+            nome?: { code: string };
+          };
+        };
+      };
       if (typedError.response && typedError.response.data) {
-        const { email, password, username } = typedError.response.data
-        const errorMessages = []
+        const { email, password, username, nome } = typedError.response.data;
+        const errorMessages = [];
         if (email && email.code === "validation_invalid_email") {
           errorMessages.push(
             "Este email já está cadastrado ou é inválido. Por favor, use outro email."
-          )
+          );
         }
         if (password && password.code === "validation_length_out_of_range") {
-          errorMessages.push("A senha deve ter entre 8 e 72 caracteres.")
+          errorMessages.push("A senha deve ter entre 8 e 72 caracteres.");
         }
         if (username && username.code === "validation_invalid_username") {
-          errorMessages.push("O nome de usuário é inválido ou já está em uso.")
+          errorMessages.push(
+            "O Nome Único da Imobiliária é inválido ou já está em uso."
+          );
         }
-        setError(errorMessages)
+        if (nome && nome.code === "validation_not_unique") {
+          errorMessages.push(
+            "O Nome da Imobiliária é inválido ou já está em uso."
+          );
+        }
+        setError(errorMessages);
       } else {
-        console.error("Erro no cadastro:", error)
-        setError(["Falha ao cadastrar. Por favor, tente novamente."])
+        console.error("Erro no cadastro:", error);
+        setError(["Falha ao cadastrar. Por favor, tente novamente."]);
       }
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <Card className="w-full max-w-8xl shadow-lg p-6 flex flex-col lg:flex-row lg:items-center space-y-6 lg:space-y-0 lg:space-x-10 bg-white overflow-hidden">
@@ -254,5 +262,5 @@ function CadastrarImobiliariasFormCard() {
         </form>
       </div>
     </Card>
-  )
+  );
 }

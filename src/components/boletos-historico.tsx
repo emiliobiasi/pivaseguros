@@ -1,80 +1,91 @@
 import { useState, useEffect } from "react";
-import { Download, FileText, CheckCircle } from "lucide-react";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import {
+  Download,
+  FileText,
+  Calendar as CalendarIcon,
+  ChevronDown,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import pb from "@/utils/backend/pb";
 import { EnvioDeBoletos } from "@/types/EnviosDeBoletos";
 import {
   fetchEnvioDeBoletosList,
   downloadBoleto,
 } from "@/utils/api/EnvioDeBoletosService";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface BoletoHistoricoItem {
-  id: string; 
-  arquivo: string; 
-  created?: string; 
+  id: string;
+  arquivo: string;
+  created?: string;
 }
 
 export default function BoletosHistorico() {
   const [boletos, setBoletos] = useState<BoletoHistoricoItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [downloadedSet, setDownloadedSet] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    // Exemplo: pegar o usuário atual do PocketBase
+    fetchBoletos();
+  }, [selectedDate]);
+
+  const fetchBoletos = async () => {
     const currentUser = pb.authStore.model;
     if (!currentUser) return;
 
     const currentUserId = currentUser.id;
 
-    // Buscar somente os boletos "finalizados" do usuário atual
+    const firstDay = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      1
+    );
+    const lastDay = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth() + 1,
+      0
+    );
+
     setIsLoading(true);
-    fetchEnvioDeBoletosList(1, 50, "", {
-      imobiliaria: currentUserId,
-      finalizado: true,
-    })
-      .then((response) => {
-        // 'response.items' retorna um array de EnvioDeBoletos
-        // Precisamos "achatar" (flatten) a lista de 'arquivos'
-        const expanded = response.items.flatMap((envio: EnvioDeBoletos) =>
-          envio.arquivos.map((arquivo) => ({
-            id: envio.id,
-            arquivo,
-            // Ajuste se quiser mostrar a data formatada
-            created: envio.created
-              ? new Date(envio.created).toLocaleString()
-              : undefined,
-          }))
-        );
-        setBoletos(expanded);
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar boletos finalizados:", error);
-      })
-      .finally(() => {
-        setIsLoading(false);
+    try {
+      const response = await fetchEnvioDeBoletosList(1, 50, "", {
+        imobiliaria: currentUserId,
+        finalizado: true,
+        created: `created >= "${firstDay.toISOString()}" && created <= "${lastDay.toISOString()}"`,
       });
-  }, []);
 
-  // Opcional: recuperar e armazenar no localStorage se o usuário já tiver
-  // re-baixado algum arquivo do histórico
-  useEffect(() => {
-    const stored = localStorage.getItem("historicoBoletosDownloadedSet");
-    if (stored) {
-      setDownloadedSet(new Set(JSON.parse(stored)));
+      const expanded = response.items.flatMap((envio: EnvioDeBoletos) =>
+        envio.arquivos.map((arquivo) => ({
+          id: envio.id,
+          arquivo,
+          created: envio.created
+            ? new Date(envio.created).toLocaleString()
+            : undefined,
+        }))
+      );
+
+      setBoletos(expanded);
+    } catch (error) {
+      console.error("Erro ao buscar boletos finalizados:", error);
+    } finally {
+      setIsLoading(false);
     }
-  }, []);
+  };
 
-  // Função para realizar o download de um arquivo
   const handleDownload = async (recordId: string, arquivo: string) => {
     try {
       await downloadBoleto("envios_de_boletos", recordId, arquivo);
-
-      // Marca como baixado (novamente) e salva no localStorage
       setDownloadedSet((prev) => {
         const newSet = new Set(prev);
         newSet.add(arquivo);
-
-        // Se quiser registrar no localStorage
         localStorage.setItem(
           "historicoBoletosDownloadedSet",
           JSON.stringify(Array.from(newSet))
@@ -86,70 +97,82 @@ export default function BoletosHistorico() {
     }
   };
 
-  if (isLoading) {
-    return <div className="p-8 text-center">Carregando histórico...</div>;
-  }
-
-  if (boletos.length === 0) {
-    return (
-      <div className="text-center text-gray-500 p-8">
-        <FileText className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-        <p className="text-xl font-semibold">Nenhum boleto finalizado ainda.</p>
-        <p className="mt-2">
-          Quando houver boletos finalizados, aparecerão aqui.
-        </p>
-      </div>
-    );
-  }
-
   return (
     <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">
-        Histórico de Boletos Finalizados
-      </h2>
-      <div className="space-y-4">
-        {boletos.map((boleto, index) => {
-          const alreadyDownloaded = downloadedSet.has(boleto.arquivo);
+      <div className="flex space-x-4 items-center justify-between mb-6">
+        <h2 className="text-xl font-bold mb-4">
+          Histórico de Boletos Finalizados
+        </h2>
 
-          return (
-            <div
-              key={`${boleto.id}-${boleto.arquivo}-${index}`}
-              className="flex flex-col sm:flex-row justify-between items-center bg-white p-4 rounded-lg shadow-md"
-            >
-              <div className="flex flex-col mb-2 sm:mb-0">
-                {/* Exemplo de informações que você queira exibir */}
-                <span className="font-medium text-gray-700 text-lg">
-                  Arquivo: {boleto.arquivo}
-                </span>
-                {boleto.created && (
-                  <span className="text-sm text-gray-500">
-                    Data do Envio: {boleto.created}
-                  </span>
-                )}
-              </div>
-
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => handleDownload(boleto.id, boleto.arquivo)}
-                className="bg-gradient-to-r from-green-600 to-green-700 text-white hover:from-green-700 hover:text-white hover:to-green-800 w-full sm:w-auto mt-2 sm:mt-0"
-              >
-                {alreadyDownloaded ? (
-                  <>
-                    <CheckCircle className="mr-2 h-4 w-4" />
-                    Baixar Novamente
-                  </>
-                ) : (
-                  <>
-                    <Download className="mr-2 h-4 w-4" />
-                    Baixar Novamente
-                  </>
-                )}
+        {/* Filtro por Mês */}
+        <div className="mb-6 flex items-center gap-4">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="flex items-center">
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {format(selectedDate, "MMMM/yyyy", { locale: ptBR })}
+                <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
-            </div>
-          );
-        })}
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={selectedDate}
+                onSelect={(date) => date && setSelectedDate(date)}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
       </div>
+
+      {/* Seção de Carregamento */}
+      {isLoading ? (
+        <div className="p-8 text-center">Carregando histórico...</div>
+      ) : boletos.length === 0 ? (
+        <div className="text-center text-gray-500 p-8">
+          <FileText className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+          <p className="text-xl font-semibold">
+            Nenhum boleto finalizado neste período.
+          </p>
+          <p className="mt-2">
+            Selecione outro mês para visualizar boletos antigos.
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {boletos.map((boleto, index) => {
+            const alreadyDownloaded = downloadedSet.has(boleto.arquivo);
+            return (
+              <div
+                key={`${boleto.id}-${boleto.arquivo}-${index}`}
+                className="flex flex-col sm:flex-row justify-between items-center bg-white p-4 rounded-lg shadow-md"
+              >
+                <div className="flex flex-col mb-2 sm:mb-0">
+                  <span className="font-medium text-gray-700 text-lg">
+                    Arquivo: {boleto.arquivo}
+                  </span>
+                  {boleto.created && (
+                    <span className="text-sm text-gray-500">
+                      Data do Envio: {boleto.created}
+                    </span>
+                  )}
+                </div>
+
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => handleDownload(boleto.id, boleto.arquivo)}
+                  className="bg-gradient-to-r from-green-600 to-green-700 text-white hover:from-green-700 hover:text-white hover:to-green-800 w-full sm:w-auto mt-2 sm:mt-0"
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  {alreadyDownloaded ? "Baixar Novamente" : "Baixar"}
+                </Button>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

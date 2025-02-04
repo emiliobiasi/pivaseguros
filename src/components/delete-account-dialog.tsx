@@ -11,30 +11,60 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "./ui/use-toast";
-
-
-interface DeleteAccountDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}
+import { deleteImobiliaria } from "@/utils/api/ImobiliariasService";
+import pb from "@/utils/backend/pb";
 
 export function DeleteAccountDialog({
   open,
   onOpenChange,
-}: DeleteAccountDialogProps) {
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
   const [step, setStep] = useState(1);
   const [confirmText, setConfirmText] = useState("");
+  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
-  const handleDeleteAccount = () => {
-    // Lógica para deletar a conta
-    toast({
-      title: "Conta apagada",
-      description: "Sua conta foi apagada permanentemente.",
-      variant: "destructive",
-    });
-    onOpenChange(false);
-    setStep(1);
+  // Obtém o usuário logado
+  const currentUser = pb.authStore.model;
+  const imobiliariaId = currentUser?.id; // Pega o ID do usuário autenticado
+  console.log("ID da imobiliária:", imobiliariaId);
+
+  const handleDeleteAccount = async () => {
+    if (!imobiliariaId) {
+      toast({
+        title: "Erro",
+        description: "ID da conta não encontrado.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await deleteImobiliaria(imobiliariaId); // Chama a função para deletar a imobiliária
+
+      toast({
+        title: "Conta apagada",
+        description: "Sua conta foi apagada permanentemente.",
+        variant: "destructive",
+      });
+
+      pb.authStore.clear(); // Faz logout do usuário após a exclusão da conta
+
+      onOpenChange(false);
+      setStep(1);
+    } catch (error) {
+      console.error("Erro ao deletar a conta:", error);
+      toast({
+        title: "Erro",
+        description: "Falha ao apagar a conta. Tente novamente.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const renderStep = () => {
@@ -59,7 +89,8 @@ export function DeleteAccountDialog({
         return (
           <>
             <DialogDescription>
-              Por favor, digite "APAGAR MINHA CONTA" para confirmar a exclusão.
+              Por favor, digite <strong>"APAGAR MINHA CONTA"</strong> para
+              confirmar a exclusão.
             </DialogDescription>
             <div className="space-y-2">
               <Label htmlFor="confirmText">Confirmação</Label>
@@ -68,18 +99,23 @@ export function DeleteAccountDialog({
                 value={confirmText}
                 onChange={(e) => setConfirmText(e.target.value)}
                 placeholder="APAGAR MINHA CONTA"
+                disabled={loading}
               />
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setStep(1)}>
+              <Button
+                variant="outline"
+                onClick={() => setStep(1)}
+                disabled={loading}
+              >
                 Voltar
               </Button>
               <Button
                 variant="destructive"
                 onClick={handleDeleteAccount}
-                disabled={confirmText !== "APAGAR MINHA CONTA"}
+                disabled={confirmText !== "APAGAR MINHA CONTA" || loading}
               >
-                Apagar Conta Permanentemente
+                {loading ? "Apagando..." : "Apagar Conta Permanentemente"}
               </Button>
             </DialogFooter>
           </>

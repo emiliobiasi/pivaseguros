@@ -48,7 +48,22 @@ interface ExpandedBoleto {
   created: string | undefined; // Pode usar Date, mas verifique se você está lidando com strings na API
 }
 
-// Componente principal
+// Lista de nomes de meses em Português
+const monthNamesPtBr = [
+  "Janeiro",
+  "Fevereiro",
+  "Março",
+  "Abril",
+  "Maio",
+  "Junho",
+  "Julho",
+  "Agosto",
+  "Setembro",
+  "Outubro",
+  "Novembro",
+  "Dezembro",
+];
+
 export default function BoletosDownload() {
   const [envios, setEnvios] = useState<BoletoFetched[]>([]);
   const [boletos, setBoletos] = useState<ExpandedBoleto[]>([]);
@@ -83,7 +98,6 @@ export default function BoletosDownload() {
     // Busca apenas registros onde:
     // - imobiliaria == currentUserId
     // - finalizado == false
-    // Ajuste o page e limit conforme sua necessidade
     fetchEnvioDeBoletosList(1, 50, "", {
       imobiliaria: currentUserId,
       finalizado: false,
@@ -121,26 +135,6 @@ export default function BoletosDownload() {
     setAllBoletosDownloaded,
   ]);
 
-  // Prevenir o usuário de sair se ainda houver boletos pendentes
-  // useEffect(() => {
-  //   const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-  //     if (downloadedBoletos.size < boletos.length && boletos.length > 0) {
-  //       e.preventDefault();
-  //       e.returnValue = "";
-  //     }
-  //   };
-
-  //   // Adiciona o evento quando ainda há downloads pendentes
-  //   if (downloadedBoletos.size < boletos.length) {
-  //     window.addEventListener("beforeunload", handleBeforeUnload);
-  //   }
-
-  //   // Remove o evento quando todos os downloads forem concluídos
-  //   return () => {
-  //     window.removeEventListener("beforeunload", handleBeforeUnload);
-  //   };
-  // }, [downloadedBoletos, boletos]);
-
   // Recupera do localStorage se já houver boletos baixados
   useEffect(() => {
     const storedBoletos = localStorage.getItem("downloadedBoletos");
@@ -149,7 +143,7 @@ export default function BoletosDownload() {
     }
   }, []);
 
-  // Função de "download" (exemplo fictício para simular)
+  // Função de "download"
   const handleDownload = async (arquivo: string, recordId: string) => {
     setIsDownloading(true);
     setCurrentDownloadId(arquivo);
@@ -230,6 +224,32 @@ export default function BoletosDownload() {
   const progress =
     boletos.length > 0 ? (downloadedBoletos.size / boletos.length) * 100 : 0;
 
+  // Agrupa boletos por Mês/Ano
+  const groupedBoletos = boletos.reduce((acc, boleto) => {
+    if (boleto.created) {
+      const date = new Date(boleto.created);
+      const month = date.getMonth(); // 0 - 11
+      const year = date.getFullYear();
+      const key = `${month}-${year}`;
+      if (!acc[key]) {
+        acc[key] = {
+          month,
+          year,
+          boletos: [],
+        };
+      }
+      acc[key].boletos.push(boleto);
+    }
+    return acc;
+  }, {} as Record<string, { month: number; year: number; boletos: ExpandedBoleto[] }>);
+
+  // Converte o objeto em um array para podermos ordenar (se quiser por data)
+  const groupedBoletosArray = Object.values(groupedBoletos).sort(
+    (a, b) =>
+      // Ordena por ano e mês ascendente
+      a.year - b.year || a.month - b.month
+  );
+
   // Se nenhum boleto está disponível
   if (boletos.length === 0) {
     return (
@@ -262,87 +282,82 @@ export default function BoletosDownload() {
   return (
     <div className="p-6 bg-gray-50">
       {/* Cabeçalho do progresso */}
-      <div className="mb-6 flex justify-center">
+      <div className="mb-6 flex justify-center max-h-60 overflow-y-auto">
         <CircularProgress progress={progress} size={120} strokeWidth={8} />
       </div>
 
-      {/* Lista de boletos (adaptado para o que você realmente tem na sua coleção) */}
-      <div className="space-y-4">
-        {boletos.map((boleto, index) => {
-          const isDownloaded = downloadedBoletos.has(boleto.arquivo);
+      <div className="max-h-[480px] overflow-y-auto">
+        {/* Aqui fazemos o loop para cada grupo de mês/ano */}
+        {groupedBoletosArray.map(({ month, year, boletos: boletosDoMes }) => {
+          const monthName = monthNamesPtBr[month];
 
           return (
-            <div
-              key={`${boleto.id}-${index}`}
-              className="flex flex-col sm:flex-row justify-between items-center bg-white p-4 rounded-lg shadow-md"
-            >
-              {/* Informações do boleto */}
-              <div className="flex flex-col mb-4 sm:mb-0 w-full sm:w-auto">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <span className="font-semibold text-gray-800 text-md truncate max-w-full sm:max-w-xs cursor-pointer">
-                        Arquivo: {boleto.arquivo}
-                      </span>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{boleto.arquivo}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                <span className="text-sm text-gray-600">
-                  {`Anexado em: ${
-                    boleto.created
-                      ? new Date(boleto.created).toLocaleString()
-                      : "Data inválida"
-                  }`}
-                </span>
-              </div>
+            <div key={`${month}-${year}`} className="mb-8 ">
+              <h2 className="text-xl font-bold text-gray-700 mb-4">
+                {monthName} / {year}
+              </h2>
 
-              {/* Botão ou status de download */}
-              <div className="flex items-center space-x-2">
-                {isDownloaded ? (
-                  <div className="flex items-center text-green-600">
-                    <CheckCircle className="w-6 h-6 mr-2" />
-                    <span>Baixado</span>
-                  </div>
-                ) : (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleDownload(boleto.arquivo, boleto.id)}
-                    className="bg-green-600 hover:bg-green-700 hover:text-white text-white"
-                  >
-                    <Download className="mr-2 h-4 w-4" /> Baixar
-                  </Button>
-                )}
+              {/* Lista de boletos para aquele Mês/Ano */}
+              <div className="space-y-4">
+                {boletosDoMes.map((boleto, index) => {
+                  const isDownloaded = downloadedBoletos.has(boleto.arquivo);
+
+                  return (
+                    <div
+                      key={`${boleto.id}-${index}`}
+                      className="flex flex-col sm:flex-row justify-between items-center bg-white p-4 mr-5 rounded-lg shadow-md"
+                    >
+                      {/* Informações do boleto */}
+                      <div className="flex flex-col mb-4 sm:mb-0 w-ful sm:w-auto">
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <span className="font-semibold text-gray-800 text-md truncate max-w-full sm:max-w-xs cursor-pointer">
+                                Arquivo: {boleto.arquivo}
+                              </span>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>{boleto.arquivo}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                        <span className="text-sm text-gray-600">
+                          {`Anexado em: ${
+                            boleto.created
+                              ? new Date(boleto.created).toLocaleString()
+                              : "Data inválida"
+                          }`}
+                        </span>
+                      </div>
+
+                      {/* Botão ou status de download */}
+                      <div className="flex items-center space-x-2">
+                        {isDownloaded ? (
+                          <div className="flex items-center text-green-600">
+                            <CheckCircle className="w-6 h-6 mr-2" />
+                            <span>Baixado</span>
+                          </div>
+                        ) : (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() =>
+                              handleDownload(boleto.arquivo, boleto.id)
+                            }
+                            className="bg-green-600 hover:bg-green-700 hover:text-white text-white"
+                          >
+                            <Download className="mr-2 h-4 w-4" /> Baixar
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           );
         })}
       </div>
-
-      {/* Botão para baixar todos os boletos */}
-      {/* <div className="mt-6 max-w-3xl mx-5">
-        <Button
-          onClick={handleDownloadAll}
-          disabled={downloadedBoletos.size === boletos.length || isDownloading}
-          className={`w-full py-3 px-6 font-bold rounded-full text-white transition-all duration-300 transform ${
-            isDownloading
-              ? "bg-gray-300 hover:bg-green-700 scale-105 cursor-not-allowed"
-              : "bg-green-600 hover:bg-green-700 scale-105"
-          }`}
-        >
-          {isDownloading ? (
-            <>
-              <CircularProgress size={20} strokeWidth={3} progress={0} />
-              <span className="ml-2">Baixando Todos os Boletos...</span>
-            </>
-          ) : (
-            "Baixar Todos os Boletos"
-          )}
-        </Button>
-      </div> */}
 
       {/* Botão de finalização - visível apenas quando todos os arquivos foram baixados */}
       {allDownloaded && (
