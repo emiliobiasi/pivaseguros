@@ -1,4 +1,4 @@
-import { useContext } from "react";
+// import { useContext } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -13,7 +13,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { CreditCard, FileText, Menu, Settings } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthImobiliariaContext } from "@/contexts/auth/imobiliarias/AuthContextImobiliarias";
+// import { AuthImobiliariaContext } from "@/contexts/auth/imobiliarias/AuthContextImobiliarias";
 import { useAuthImobiliarias } from "@/contexts/auth/imobiliarias/useAuthImobiliarias";
 
 const menuItems = [

@@ -1,5 +1,3 @@
-// src/components/PainelAdmImobiliarias.tsx
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -76,7 +74,7 @@ export default function PainelAdmImobiliarias() {
 
   // Estados para gerenciamento de imobiliárias
   const [imobiliarias, setImobiliarias] = useState<Imobiliaria[]>([]);
-  const [totalItems, setTotalItems] = useState(0);
+  const [, setTotalItems] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

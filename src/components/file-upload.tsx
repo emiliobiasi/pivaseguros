@@ -1,9 +1,8 @@
-"use client";
 
-import { Upload, X, FileIcon } from "lucide-react";
+import { Upload, FileIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { InsuranceRule } from "../types/Insurance";
 import { toast } from "sonner";
@@ -14,7 +13,7 @@ interface FileUploadProps {
   onFilesChange: (files: File[]) => void;
 }
 
-export function FileUpload({ rules, onFilesChange }: FileUploadProps) {
+export function FileUpload({ onFilesChange }: FileUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
 

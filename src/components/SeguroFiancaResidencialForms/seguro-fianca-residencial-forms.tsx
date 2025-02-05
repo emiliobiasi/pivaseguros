@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Checkbox } from "@/components/ui/checkbox"
-import { ArrowLeft, ArrowRight, CheckCircle, Send, Loader2 } from "lucide-react"
+import { ArrowLeft, ArrowRight, CheckCircle, Loader2 } from "lucide-react"
 import { formatCPF } from "@/utils/regex/regexCPF"
 import { formatCEP } from "@/utils/regex/regexCEP"
 import { formatTelefone } from "@/utils/regex/regexTelefone"
