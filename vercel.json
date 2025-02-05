@@ -1,0 +1,65 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    { "src": "/entrar", "dest": "/index.html" },
+    { "src": "/imobiliaria/entrar", "dest": "/index.html" },
+    { "src": "/esqueci-minha-senha", "dest": "/index.html" },
+    { "src": "/imobiliaria/cadastrar", "dest": "/index.html" },
+    { "src": "/imobiliaria/download-boletos", "dest": "/index.html" },
+    { "src": "/imobiliaria/configuracoes", "dest": "/index.html" },
+    { "src": "/imobiliaria/download-boletos/historico", "dest": "/index.html" },
+    { "src": "/imobiliaria/formulario/seguro-incendio", "dest": "/index.html" },
+    {
+      "src": "/imobiliaria/formulario/seguro-incendio-comercial",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/imobiliaria/formulario/seguro-fianca-empresarial-mais-2-anos",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/imobiliaria/formulario/seguro-fianca-empresarial-menos-2-anos",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/imobiliaria/formulario/seguro-fianca-residencial",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/imobiliaria/formulario/efetivacao-seguro-fianca",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/imobiliaria/formulario/titulo-capitalizacao",
+      "dest": "/index.html"
+    },
+    { "src": "/", "dest": "/index.html" },
+    { "src": "/inicio", "dest": "/index.html" },
+    { "src": "/graficos", "dest": "/index.html" },
+    { "src": "/dashboard-incendio", "dest": "/index.html" },
+    { "src": "/dashboard-incendio-comercial", "dest": "/index.html" },
+    { "src": "/dashboard-fianca-residencial", "dest": "/index.html" },
+    {
+      "src": "/dashboard-fianca-empresarial-mais-2-anos",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/dashboard-fianca-empresarial-menos-2-anos",
+      "dest": "/index.html"
+    },
+    { "src": "/dashboard-titulo-capitalizacao", "dest": "/index.html" },
+    { "src": "/dashboard-efetivacao-seguro-fianca", "dest": "/index.html" },
+    { "src": "/painel-adm-imobiliarias", "dest": "/index.html" },
+    { "src": "/boletos-imobiliaria-upload", "dest": "/index.html" },
+    { "src": "/historico-de-envio-de-boletos", "dest": "/index.html" }
+  ]
+}
