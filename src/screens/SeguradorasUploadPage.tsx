@@ -4,13 +4,13 @@ import { SearchSection } from "@/components/search-section";
 import { InsuranceGrid } from "@/components/insurance-grid";
 import { FileList } from "@/components/file-list";
 import { Button } from "@/components/ui/button";
-import { UploadedFile } from "@/types/insurance";
+import { UploadedFile } from "@/types/Insurance";
 import { Toaster } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { SummaryDialog } from "@/components/summary-dialog";
 import { UploadInstructions } from "@/components/upload-instructions";
 import { ConfirmationModal } from "@/components/confirmation-modal";
-import { ErrorModal } from "@/components/error-modal"; // Importe o novo modal de erro
+import { ErrorModal } from "@/components/error-modal"; 
 import { Imobiliaria } from "@/types/Imobiliarias";
 
 import { Mail, User } from "lucide-react";
@@ -23,19 +23,22 @@ export default function SeguradorasUploadPage() {
   const [files, setFiles] = useState<UploadedFile[]>([]);
   const [showSummary, setShowSummary] = useState(false);
 
-  // Modal de sucesso
+  // Estados para modais de sucesso e erro
   const [showConfirmation, setShowConfirmation] = useState(false);
-
-  // Modal de erro
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  /**
+   * Novo estado que controla se o envio está em progresso.
+   * Assim, podemos desabilitar botões e mostrar animações de loading.
+   */
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleRealEstateSelect = (company: Imobiliaria) => {
     setSelectedRealEstate(company);
     setFiles([]);
   };
 
-  // Soma o total de boletos exigidos
   const getTotalRequiredFiles = (imobiliaria: Imobiliaria | null) => {
     if (!imobiliaria) return 0;
 
@@ -81,8 +84,11 @@ export default function SeguradorasUploadPage() {
   const handleSubmit = async () => {
     if (!selectedImobiliaria) return;
 
+    // Ativa o estado de carregamento
+    setIsSubmitting(true);
+
     try {
-      // Preparar os arquivos como uma lista de File
+      // Preparar os arquivos para envio
       const arquivos = files.map((file) => file.file);
 
       // Dados regulares do envio
@@ -95,24 +101,22 @@ export default function SeguradorasUploadPage() {
       const response = await createEnvioDeBoletos(envioData, arquivos);
       console.log("Envio de boletos criado com sucesso:", response);
 
-      // Fecha o sumário, abre o modal de sucesso
       setShowSummary(false);
       setShowConfirmation(true);
-
-      // NÃO limpamos o estado aqui, para não sumir o selectedImobiliaria
-      // Senão, o modal de sucesso não aparece (por causa do render condicional)
     } catch (error) {
       console.error("Erro ao criar o envio de boletos:", error);
 
-      // Abre o modal de erro
       setErrorMessage(
         "Houve um erro ao criar o envio de boletos. Tente novamente."
       );
       setShowError(true);
+    } finally {
+      // Independente do resultado (erro ou sucesso), desligamos o loading
+      setIsSubmitting(false);
     }
   };
 
-  // Fecha modal de sucesso e, agora sim, limpa a imobiliária e arquivos
+  // Fecha modal de sucesso e limpa os dados
   const handleConfirmationClose = () => {
     setShowConfirmation(false);
     setSelectedRealEstate(null);
@@ -137,7 +141,6 @@ export default function SeguradorasUploadPage() {
       <SearchSection onSelect={handleRealEstateSelect} />
 
       <div className="p-8">
-        {/* Renderiza o card de dados da imobiliária */}
         {selectedImobiliaria && (
           <Card className="w-full max-w-3xl mx-auto mb-8">
             <CardContent className="p-4">
@@ -145,8 +148,7 @@ export default function SeguradorasUploadPage() {
                 <div className="flex items-center">
                   <div className="flex flex-col">
                     <span className="font-semibold">
-                      {selectedImobiliaria?.nome ||
-                        "Imobiliária não encontrada"}
+                      {selectedImobiliaria?.nome || "Imobiliária não encontrada"}
                     </span>
                   </div>
                 </div>
@@ -193,10 +195,11 @@ export default function SeguradorasUploadPage() {
                 <Button
                   size="lg"
                   onClick={() => setShowSummary(true)}
-                  disabled={!allFilesUploaded}
-                  className={`bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl transition-shadow ${
-                    !allFilesUploaded ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
+                  disabled={!allFilesUploaded || isSubmitting}
+                  className={`bg-gradient-to-r from-green-600 to-green-700 
+                    hover:from-green-700 hover:to-green-800 text-white 
+                    shadow-lg hover:shadow-xl transition-shadow
+                    ${!allFilesUploaded ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
                   Enviar Boletos
                 </Button>
@@ -209,9 +212,11 @@ export default function SeguradorasUploadPage() {
                 onConfirm={handleSubmit}
                 files={files}
                 realEstateName={selectedImobiliaria?.nome || ""}
+                // Passamos o estado de isSubmitting
+                isSubmitting={isSubmitting}
               />
 
-              {/* Modal de sucesso (fica no mesmo bloco, pois depende de selectedImobiliaria) */}
+              {/* Modal de sucesso */}
               <ConfirmationModal
                 isOpen={showConfirmation}
                 onClose={handleConfirmationClose}
@@ -221,9 +226,7 @@ export default function SeguradorasUploadPage() {
           )}
         </AnimatePresence>
 
-        {/* Modais de Erro e Sucesso podem ficar fora do bloco condicional também,
-            caso queira que fiquem sempre montados. Neste exemplo, o de erro fica fora,
-            pois não depende de selectedImobiliaria. */}
+        {/* Modal de erro */}
         <ErrorModal
           isOpen={showError}
           onClose={handleErrorClose}

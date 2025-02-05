@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { FileIcon, CheckCircle } from "lucide-react";
+import { FileIcon, CheckCircle, Loader2 } from "lucide-react"; // Adicione o Loader2 para o spinner
 import { UploadedFile } from "@/types/insurance";
 
 interface SummaryDialogProps {
@@ -17,6 +17,11 @@ interface SummaryDialogProps {
   onConfirm: () => void;
   files: UploadedFile[];
   realEstateName: string;
+  /**
+   * Adicione esta prop para saber se está enviando no momento.
+   * Assim conseguimos bloquear o botão e exibir um loading.
+   */
+  isSubmitting?: boolean;
 }
 
 export function SummaryDialog({
@@ -25,6 +30,7 @@ export function SummaryDialog({
   onConfirm,
   files,
   realEstateName,
+  isSubmitting = false, // valor default caso não seja passado
 }: SummaryDialogProps) {
   const groupedFiles = files.reduce((acc, file) => {
     if (!acc[file.insuranceCompany]) {
@@ -75,15 +81,27 @@ export function SummaryDialog({
           <Button
             variant="outline"
             onClick={onClose}
+            disabled={isSubmitting}
             className="text-black bg-white border border-black hover:text-white hover:bg-black"
           >
             Cancelar
           </Button>
+
+          {/* Botão de confirmar envio */}
           <Button
             onClick={onConfirm}
-            className="text-white bg-green-800 hover:bg-green-600"
+            disabled={isSubmitting}
+            className={`text-white bg-green-800 hover:bg-green-600 
+              ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
           >
-            Confirmar Envio
+            {isSubmitting ? (
+              <div className="flex items-center gap-2">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Enviando...
+              </div>
+            ) : (
+              "Confirmar Envio"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

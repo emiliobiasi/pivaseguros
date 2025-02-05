@@ -18,6 +18,7 @@ import {
 } from "@/utils/api/ImobiliariasService" // Importando as funções de serviço
 import { Alert } from "./ui/alert"
 import { AlertCircle } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
 interface ProfileEditDialogProps {
   open: boolean
@@ -36,14 +37,15 @@ export function ProfileEditDialog({
   const [companyName, setCompanyName] = useState("")
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false) // Estado para gerenciar o carregamento
-  const [error, setError] = useState<string | null>(null) // Estado para erros
-
-  // Componente ProfileEditDialog atualizado
+  const [emailErrors, setEmailErrors] = useState<string[]>([])
+  const [nameErrors, setNameErrors] = useState<string[]>([])
+  const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    setError(null)
+    setEmailErrors([])
+    setNameErrors([])
 
     try {
       if (editType === "email") {
@@ -54,6 +56,7 @@ export function ProfileEditDialog({
           description:
             "Enviamos um link de confirmação para o novo email. Verifique sua caixa postal.",
         })
+        navigate("/imobiliaria/entrar")
       } else if (editType === "companyName") {
         await updateImobiliariaName(imobiliariaId, companyName)
         toast({
@@ -70,13 +73,38 @@ export function ProfileEditDialog({
     } catch (err) {
       const errorMessage = (err as Error).message
       console.error("Erro ao atualizar:", errorMessage)
-      setError(errorMessage)
+
+      if (editType === "email") {
+        const newErrors = []
+        if (
+          errorMessage.includes(
+            "Something went wrong while processing your request."
+          )
+        ) {
+          newErrors.push(
+            "Este email já está cadastrado ou é inválido. Por favor, use um email diferente."
+          )
+        } else if (errorMessage.includes("Failed to authenticate.")) {
+          newErrors.push("Senha incorreta. Tente novamente.")
+        } else {
+          newErrors.push("Algo deu errado ao processar sua solicitação.")
+        }
+        setEmailErrors(newErrors)
+      } else if (editType === "companyName") {
+        const newErrors = []
+        if (errorMessage.includes("Erro ao atualizar o nome da Imobiliária.")) {
+          newErrors.push(
+            "Este nome de imobiliária já está cadastrado. Por favor, use um nome diferente."
+          )
+        } else {
+          newErrors.push("Algo deu errado ao processar sua solicitação.")
+        }
+        setNameErrors(newErrors)
+      }
 
       toast({
         title: "Erro",
-        description: errorMessage.includes("senha")
-          ? "Senha incorreta. Tente novamente."
-          : "Falha ao atualizar. Verifique os dados e tente novamente.",
+        description: emailErrors.join(" "),
         variant: "destructive",
       })
     } finally {
@@ -95,7 +123,7 @@ export function ProfileEditDialog({
         </DialogHeader>
         {!editType ? (
           <div className="flex justify-center space-x-4">
-            <Button onClick={() => setEditType("email")} >Alterar Email</Button>
+            <Button onClick={() => setEditType("email")}>Alterar Email</Button>
             <Button onClick={() => setEditType("companyName")}>
               Alterar Nome da Imobiliária
             </Button>
@@ -104,38 +132,51 @@ export function ProfileEditDialog({
           <form onSubmit={handleSubmit} className="space-y-4">
             {editType === "email" ? (
               <div className="space-y-2">
-                <div className="bg-yellow-50 p-3 rounded-lg mt-2 mb-6 border border-yellow-400">
+                <div>
+                  <Label htmlFor="email">Novo Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="seu@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    style={{ marginBottom: "15px" }}
+                  />
+                  <Label htmlFor="password" className="">
+                    Senha Atual
+                  </Label>
+                  <Input
+                    className="mb-8"
+                    id="password"
+                    type="password"
+                    placeholder="Digite sua senha atual"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="bg-yellow-50 p-3 rounded-lg mt-6 mb-6 border border-yellow-400">
                   <div className="flex items-center text-sm text-gray-600">
                     <AlertCircle className="text-yellow-600 mr-2" />
                     <p>
-                      Após clicar em "Salvar Alterações", confira sua caixa de entrada para confirmar a alteração.
-                      Se não encontrar o email, verifique a caixa de spam.
+                      Após clicar em "<strong>Salvar Alterações</strong>",
+                      confira a caixa de entrada do novo email para confirmar a
+                      alteração. Se não encontrar o email, verifique a caixa de
+                      spam. Após confirmar o email, será necessário fazer o
+                      login com o novo email.
                     </p>
                   </div>
                 </div>
 
-                <Label htmlFor="email">Novo Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="seu@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  style={{ marginBottom: "15px" }}
-                />
-                <Label htmlFor="password" className="">
-                  Senha Atual
-                </Label>
-                <Input
-                  className=""
-                  id="password"
-                  type="password"
-                  placeholder="Digite sua senha atual"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
+                {emailErrors.length > 0 && (
+                  <div className="text-red-500 text-sm py-3">
+                    {emailErrors.map((error, index) => (
+                      <div key={index}>{error}</div>
+                    ))}
+                  </div>
+                )}
               </div>
             ) : (
               <div className="space-y-2">
@@ -147,9 +188,11 @@ export function ProfileEditDialog({
                   onChange={(e) => setCompanyName(e.target.value)}
                   required
                 />
+
+                <div className="text-red-500 text-sm py-3">{nameErrors}</div>
               </div>
             )}
-            {error && <div className="text-red-500 text-sm">{error}</div>}
+
             <DialogFooter>
               <Button
                 type="button"
@@ -159,13 +202,30 @@ export function ProfileEditDialog({
               >
                 Voltar
               </Button>
-              <Button type="submit" disabled={isLoading} className="bg-green-700 hover:bg-green-800">
-                {isLoading ? "Salvando..." : "Salvar Alterações"}
-              </Button>
+              {editType === "email" ? (
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="bg-green-700 hover:bg-green-800"
+                >
+                  {isLoading ? "Salvando..." : "Salvar Alterações"}
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="bg-green-700 hover:bg-green-800"
+                >
+                  {isLoading ? "Salvando..." : "Salvar Alterações"}
+                </Button>
+              )}
             </DialogFooter>
           </form>
         )}
       </DialogContent>
     </Dialog>
+
+    // /imobiliaria/entrar
+    // aaaaaaaaaaa
   )
 }

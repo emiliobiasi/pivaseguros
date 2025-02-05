@@ -23,7 +23,7 @@ export function BoletoCard({ children }: { children: React.ReactNode }) {
   const canAccessHistory = !hasBoletosToDownload || isProcessFinalized;
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center p-4">
       <Card className="w-full max-w-4xl mx-auto overflow-hidden bg-white shadow-xl">
         <div className="p-6 border-b flex flex-col items-center gap-6 md:items-start md:gap-4">
           <h1 className="text-2xl font-bold text-center md:text-left">
