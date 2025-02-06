@@ -51,10 +51,6 @@ const RoutesComponent = () => {
                 element={<ResetPasswordForm />}
               />
               <Route
-                path="imobiliaria/cadastrar"
-                element={<CadastrarImobiliarias />}
-              />
-              <Route
                 path="/imobiliaria"
                 element={
                   <PrivateRouteImobiliarias>
@@ -233,6 +229,14 @@ const RoutesComponent = () => {
                   element={
                     <PrivateRoute>
                       <PainelAdmImobiliarias />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="imobiliaria/cadastrar"
+                  element={
+                    <PrivateRoute>
+                      <CadastrarImobiliarias />
                     </PrivateRoute>
                   }
                 />

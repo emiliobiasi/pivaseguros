@@ -15,6 +15,7 @@ import {
   Search,
   ChevronLeft,
   ChevronRight,
+  Plus,
 } from "lucide-react";
 import {
   AlertDialog,
@@ -216,9 +217,19 @@ export default function PainelAdmImobiliarias() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">
-        Lista de Imobiliárias
-      </h1>
+      <div className="flex flex-col md:flex-row items-center justify-between mb-6 mt-2">
+        <h1 className="text-3xl font-bold mb-6 text-gray-800">
+          Lista de Imobiliárias
+        </h1>
+        <Button
+          onClick={() => {
+            navigate("/imobiliaria/cadastrar");
+          }}
+          className="bg-green-600 hover:bg-green-700 text-white"
+        >
+          <Plus className="mr-2 h-4 w-4" /> Cadastrar Nova Imobiliária
+        </Button>
+      </div>
 
       {/* Barra de Pesquisa e Ordenação */}
       <div className="flex flex-col md:flex-row gap-4 mb-4">

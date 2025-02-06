@@ -97,7 +97,7 @@ export function LoginImobiliariaFormCard() {
               >
                 Esqueci minha senha
               </a>
-              <p>
+              {/* <p>
                 Não possui uma conta?{" "}
                 <a
                   href="/imobiliaria/cadastrar"
@@ -105,7 +105,7 @@ export function LoginImobiliariaFormCard() {
                 >
                   Cadastre-se aqui
                 </a>
-              </p>
+              </p> */}
             </div>
           </CardContent>
           <CardFooter className="flex justify-end">

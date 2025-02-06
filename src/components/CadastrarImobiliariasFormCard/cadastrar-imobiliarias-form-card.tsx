@@ -119,7 +119,7 @@ function CadastrarImobiliariasFormCard() {
       <div className="flex-1">
         <CardHeader className="space-y-4 text-center lg:text-left">
           <CardTitle className="text-xl sm:text-2xl font-bold">
-            Crie sua conta
+            Crie a conta da imobiliaria desejada
           </CardTitle>
           <CardDescription>
             Preencha as informações abaixo para criar a conta da sua
@@ -249,7 +249,7 @@ function CadastrarImobiliariasFormCard() {
             </Button>
 
             {/* Link para Login */}
-            <p className="text-sm text-gray-600">
+            {/* <p className="text-sm text-gray-600">
               Já possui uma conta?{" "}
               <a
                 href="c"
@@ -257,7 +257,7 @@ function CadastrarImobiliariasFormCard() {
               >
                 Entre aqui.
               </a>
-            </p>
+            </p> */}
           </CardFooter>
         </form>
       </div>
