@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { DayPicker } from "react-day-picker"
 
@@ -60,12 +58,14 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        IconLeft: ({ className, ...props }) => (
-          <ChevronLeftIcon className={cn("h-4 w-4", className)} {...props} />
-        ),
-        IconRight: ({ className, ...props }) => (
-          <ChevronRightIcon className={cn("h-4 w-4", className)} {...props} />
-        ),
+        IconLeft: ({ className, ...props }) => {
+          const { children, ...rest } = props;
+          return <ChevronLeftIcon className={cn("h-4 w-4", className)} {...rest} />;
+        },
+        IconRight: ({ className, ...props }) => {
+          const { children, ...rest } = props;
+          return <ChevronRightIcon className={cn("h-4 w-4", className)} {...rest} />;
+        },
       }}
       {...props}
     />

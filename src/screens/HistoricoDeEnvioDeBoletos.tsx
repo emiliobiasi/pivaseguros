@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { CalendarIcon, Search, Filter, ChevronDown } from "lucide-react";
+import { CalendarIcon, Filter, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -22,7 +22,7 @@ import {
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
+  // PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -43,7 +43,7 @@ const ITEMS_PER_PAGE = 5; // Definindo o número de itens por página
 export default function HistoricoEnvios() {
   const [date, setDate] = useState<Date>(new Date());
   const [envios, setEnvios] = useState<EnvioDeBoletos[]>([]);
-  const [filteredEnvios, setFilteredEnvios] = useState<EnvioDeBoletos[]>([]);
+  // const [filteredEnvios, setFilteredEnvios] = useState<EnvioDeBoletos[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");

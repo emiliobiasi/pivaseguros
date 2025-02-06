@@ -7,7 +7,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -16,7 +15,6 @@ import {
   updateImobiliariaEmail,
   updateImobiliariaName,
 } from "@/utils/api/ImobiliariasService" // Importando as funções de serviço
-import { Alert } from "./ui/alert"
 import { AlertCircle } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 

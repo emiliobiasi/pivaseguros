@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { FileIcon, CheckCircle, Loader2 } from "lucide-react"; // Adicione o Loader2 para o spinner
-import { UploadedFile } from "@/types/insurance";
+import { UploadedFile } from "@/types/Insurance";
 
 interface SummaryDialogProps {
   isOpen: boolean;

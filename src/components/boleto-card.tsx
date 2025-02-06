@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -7,7 +7,7 @@ import { useBoletosContext } from "@/contexts/boletos/boletos-context";
 export function BoletoCard({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { allBoletosDownloaded, hasBoletosToDownload, isProcessFinalized } =
+  const { hasBoletosToDownload, isProcessFinalized } =
     useBoletosContext();
 
   useEffect(() => {

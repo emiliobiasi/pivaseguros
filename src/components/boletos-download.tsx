@@ -70,10 +70,10 @@ export default function BoletosDownload() {
   const [downloadedBoletos, setDownloadedBoletos] = useState<Set<string>>(
     new Set()
   );
-  const [isDownloading, setIsDownloading] = useState(false);
-  const [currentDownloadId, setCurrentDownloadId] = useState<string | null>(
-    null
-  );
+  // const [isDownloading, setIsDownloading] = useState(false);
+  // const [currentDownloadId, setCurrentDownloadId] = useState<string | null>(
+  //   null
+  // );
   const [showCelebration, setShowCelebration] = useState(false);
   const [showExitAlert, setShowExitAlert] = useState(false);
   const navigate = useNavigate();
@@ -145,8 +145,8 @@ export default function BoletosDownload() {
 
   // Função de "download"
   const handleDownload = async (arquivo: string, recordId: string) => {
-    setIsDownloading(true);
-    setCurrentDownloadId(arquivo);
+    // setIsDownloading(true);
+    // setCurrentDownloadId(arquivo);
 
     try {
       await downloadBoleto("envios_de_boletos", recordId, arquivo);
@@ -165,28 +165,28 @@ export default function BoletosDownload() {
     } catch (error) {
       console.error(`Erro ao baixar o arquivo ${arquivo}:`, error);
     } finally {
-      setIsDownloading(false);
-      setCurrentDownloadId(null);
+      // setIsDownloading(false);
+      // setCurrentDownloadId(null);
     }
   };
 
   // Função para baixar todos os boletos
-  const handleDownloadAll = async () => {
-    setIsDownloading(true);
+  // const handleDownloadAll = async () => {
+  //   // setIsDownloading(true);
 
-    for (const boleto of boletos) {
-      try {
-        await handleDownload(boleto.arquivo, boleto.id);
-      } catch (error) {
-        console.error(
-          `Erro ao baixar o arquivo ${boleto.arquivo} do registro ${boleto.id}:`,
-          error
-        );
-      }
-    }
+  //   for (const boleto of boletos) {
+  //     try {
+  //       await handleDownload(boleto.arquivo, boleto.id);
+  //     } catch (error) {
+  //       console.error(
+  //         `Erro ao baixar o arquivo ${boleto.arquivo} do registro ${boleto.id}:`,
+  //         error
+  //       );
+  //     }
+  //   }
 
-    setIsDownloading(false);
-  };
+  //   // setIsDownloading(false);
+  // };
 
   // Finaliza o processo e redireciona
   const handleFinalize = async () => {

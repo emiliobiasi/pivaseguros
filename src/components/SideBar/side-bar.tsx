@@ -10,8 +10,6 @@ import {
   CaptionsIcon,
   Coins,
   ChartBar,
-  PanelTopCloseIcon,
-  ShieldAlertIcon,
   DockIcon,
   User,
   FileClock,
