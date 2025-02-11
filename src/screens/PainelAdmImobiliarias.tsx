@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   Building2,
   Edit3,
@@ -16,156 +16,162 @@ import {
   ChevronLeft,
   ChevronRight,
   Plus,
-} from "lucide-react"
+} from "lucide-react";
 import {
   AlertDialog,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
   AlertDialogCancel,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { useNavigate } from "react-router-dom"
-import pb from "@/utils/backend/pb"
-
+} from "@/components/ui/select";
+import { useNavigate } from "react-router-dom";
+import pb from "@/utils/backend/pb";
+import { Pencil } from "lucide-react";
+import { ProfileEditDialog } from "@/components/profile-edit-dialog";
 // Importar o tipo Imobiliaria
-import { Imobiliaria } from "@/types/Imobiliarias"
+import { Imobiliaria } from "@/types/Imobiliarias";
 
 // Importar as funções do service
 import {
   fetchImobiliariaList,
   updateImobiliaria,
   subscribeToImobiliariaUpdates,
-} from "@/utils/api/ImobiliariasService"
+} from "@/utils/api/ImobiliariasService";
 
 // Importar tipos do PocketBase para RecordSubscription
-import { RecordSubscription } from "pocketbase"
+import { RecordSubscription } from "pocketbase";
 
 export default function PainelAdmImobiliarias() {
-  const navigate = useNavigate()
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+
+  const navigate = useNavigate();
 
   // Definição dos usuários autorizados
   const authorizedUsers = [
     { id: "g6f27sjx3kjqktf", email: "comercial@pivaseguros.com.br" },
     { id: "bdq7guk6qiwyggd", email: "teste@email.com" },
-  ]
+  ];
 
   // Obter o usuário atual do authStore
-  const currentUser = pb.authStore.model
-  const currentUserId = currentUser?.id
-  const currentUserEmail = currentUser?.email
+  const currentUser = pb.authStore.model;
+  const currentUserId = currentUser?.id;
+  const currentUserEmail = currentUser?.email;
 
   // Verificar se o usuário está autorizado
   const isAuthorized = authorizedUsers.some(
     (user) => user.id === currentUserId && user.email === currentUserEmail
-  )
+  );
 
   // useEffect para verificar autorização ao montar o componente
   useEffect(() => {
     if (!isAuthorized) {
-      navigate("/inicio")
+      navigate("/inicio");
     }
-  }, [isAuthorized, navigate])
+  }, [isAuthorized, navigate]);
 
   // Estados para gerenciamento de imobiliárias
-  const [imobiliarias, setImobiliarias] = useState<Imobiliaria[]>([])
-  const [, setTotalItems] = useState(0)
-  const [totalPages, setTotalPages] = useState(1)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [imobiliarias, setImobiliarias] = useState<Imobiliaria[]>([]);
+
+  const [, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const [selectedImobiliaria, setSelectedImobiliaria] =
-    useState<Imobiliaria | null>(null)
+    useState<Imobiliaria | null>(null);
   const [editedValues, setEditedValues] = useState({
     qtd_boleto_porto: 0,
     qtd_boleto_tokio: 0,
     qtd_boleto_too: 0,
     qtd_boleto_potencial: 0,
-  })
-  const [showConfirmation, setShowConfirmation] = useState(false)
-  const [savedImobiliaria, setSavedImobiliaria] = useState<string | null>(null)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [currentPage, setCurrentPage] = useState(1)
-  const [itemsPerPage] = useState(12)
-  const [sortBy, setSortBy] = useState<"nome" | "created">("nome")
+  });
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [savedImobiliaria, setSavedImobiliaria] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(12);
+  const [sortBy, setSortBy] = useState<"nome" | "created">("nome");
 
   // useEffect para buscar imobiliárias do backend
   useEffect(() => {
     const loadImobiliarias = async () => {
-      setLoading(true)
-      setError(null)
+      setLoading(true);
+      setError(null);
       try {
         const response = await fetchImobiliariaList(
           currentPage,
           itemsPerPage,
           searchTerm,
           {} // Adicione filtros conforme necessário
-        )
-        setImobiliarias(response.items)
-        setTotalItems(response.totalItems)
-        setTotalPages(response.totalPages)
+        );
+        setImobiliarias(response.items);
+        setTotalItems(response.totalItems);
+        setTotalPages(response.totalPages);
       } catch (err) {
-        setError("Erro ao carregar as imobiliárias.")
-        console.error(err)
+        setError("Erro ao carregar as imobiliárias.");
+        console.error(err);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    loadImobiliarias()
-  }, [currentPage, itemsPerPage, searchTerm, sortBy])
+    loadImobiliarias();
+  }, [currentPage, itemsPerPage, searchTerm, sortBy]);
 
   // useEffect para gerenciar assinaturas em tempo real
   useEffect(() => {
-    let unsubscribe: () => void
+    let unsubscribe: () => void;
 
     const setupSubscription = async () => {
       try {
-        unsubscribe = await subscribeToImobiliariaUpdates(handleRecordChange)
+        unsubscribe = await subscribeToImobiliariaUpdates(handleRecordChange);
       } catch (error) {
-        console.error("Erro ao assinar atualizações de Imobiliárias:", error)
+        console.error("Erro ao assinar atualizações de Imobiliárias:", error);
       }
-    }
+    };
 
-    setupSubscription()
+    setupSubscription();
 
     return () => {
       if (unsubscribe) {
-        unsubscribe()
+        unsubscribe();
       }
-    }
-  }, [])
+    };
+  }, []);
 
   const handleRecordChange = (data: RecordSubscription<Imobiliaria>) => {
-    console.log("Mudança detectada:", data)
+    console.log("Mudança detectada:", data);
     if (data.action === "create") {
-      setImobiliarias((prev) => [data.record, ...prev])
-      setTotalItems((prev) => prev + 1)
+      setImobiliarias((prev) => [data.record, ...prev]);
+      setTotalItems((prev) => prev + 1);
     } else if (data.action === "update") {
       setImobiliarias((prev) =>
         prev.map((imo) => (imo.id === data.record.id ? data.record : imo))
-      )
+      );
     } else if (data.action === "delete") {
-      setImobiliarias((prev) => prev.filter((imo) => imo.id !== data.record.id))
-      setTotalItems((prev) => prev - 1)
+      setImobiliarias((prev) =>
+        prev.filter((imo) => imo.id !== data.record.id)
+      );
+      setTotalItems((prev) => prev - 1);
     }
-  }
+  };
 
   const handleEdit = (imobiliaria: Imobiliaria) => {
-    setSelectedImobiliaria(imobiliaria)
+    setSelectedImobiliaria(imobiliaria);
     setEditedValues({
       qtd_boleto_porto: imobiliaria.qtd_boleto_porto || 0,
       qtd_boleto_tokio: imobiliaria.qtd_boleto_tokio || 0,
       qtd_boleto_too: imobiliaria.qtd_boleto_too || 0,
       qtd_boleto_potencial: imobiliaria.qtd_boleto_potencial || 0,
-    })
-  }
+    });
+  };
 
   const handleSave = async () => {
     if (selectedImobiliaria) {
@@ -175,43 +181,43 @@ export default function PainelAdmImobiliarias() {
           qtd_boleto_tokio: editedValues.qtd_boleto_tokio,
           qtd_boleto_too: editedValues.qtd_boleto_too,
           qtd_boleto_potencial: editedValues.qtd_boleto_potencial,
-        }
+        };
         const updatedImobiliaria = await updateImobiliaria(
           selectedImobiliaria.id,
           updatedData
-        )
-        console.log("Imobiliária atualizada com sucesso:", updatedImobiliaria)
-        setSavedImobiliaria(updatedImobiliaria.nome)
-        setShowConfirmation(true)
-        setSelectedImobiliaria(null)
+        );
+        console.log("Imobiliária atualizada com sucesso:", updatedImobiliaria);
+        setSavedImobiliaria(updatedImobiliaria.nome);
+        setShowConfirmation(true);
+        setSelectedImobiliaria(null);
         // Atualizar a lista localmente sem recarregar a página
         setImobiliarias((prev) =>
           prev.map((imo) =>
             imo.id === updatedImobiliaria.id ? updatedImobiliaria : imo
           )
-        )
+        );
       } catch (err) {
-        console.error("Erro ao atualizar a imobiliária:", err)
-        setError("Erro ao atualizar a imobiliária.")
+        console.error("Erro ao atualizar a imobiliária:", err);
+        setError("Erro ao atualizar a imobiliária.");
       }
     }
-  }
+  };
 
   const handleConfirmationClose = () => {
-    setShowConfirmation(false)
+    setShowConfirmation(false);
     // Opcional: Remover a recarga da página
     // window.location.reload();
-  }
+  };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value)
-    setCurrentPage(1) // Reinicia a página ao pesquisar
-  }
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reinicia a página ao pesquisar
+  };
 
   const handleSortChange = (value: "nome" | "created") => {
-    setSortBy(value)
-    setCurrentPage(1) // Reinicia a página ao ordenar
-  }
+    setSortBy(value);
+    setCurrentPage(1); // Reinicia a página ao ordenar
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -221,7 +227,7 @@ export default function PainelAdmImobiliarias() {
         </h1>
         <Button
           onClick={() => {
-            navigate("/imobiliaria/cadastrar")
+            navigate("/imobiliaria/cadastrar");
           }}
           className="bg-green-600 hover:bg-green-700 text-white"
         >
@@ -299,7 +305,7 @@ export default function PainelAdmImobiliarias() {
                 </DialogTrigger>
 
                 {/* MODAL DA IMOBILIÁRIA */}
-                <DialogContent className="sm:max-w-[425px]">
+                <DialogContent className="sm:max-w-[40rem]">
                   <DialogHeader>
                     <DialogTitle>{imobiliaria.nome}</DialogTitle>
                   </DialogHeader>
@@ -316,6 +322,25 @@ export default function PainelAdmImobiliarias() {
                     <p>
                       <strong>Contato:</strong> {imobiliaria.contato}
                     </p>
+
+                    <div className=" my-4 flex flex-col items-start">
+                      <Button
+                        onClick={() => setIsEditingProfile(true)}
+                        variant="outline"
+                        className="text-[1.02rem] text-white bg-green-800 hover:bg-green-600 hover:text-white"
+                      >
+                        <Pencil className="mr-2 h-5 w-5" /> EDITAR INFORMAÇÕES
+                        DE{" "}
+                        <span className="font-bold ">
+                          <em>{imobiliaria.nome.toLocaleUpperCase()}</em>
+                        </span>
+                      </Button>
+                      <ProfileEditDialog
+                        open={isEditingProfile}
+                        onOpenChange={setIsEditingProfile}
+                        imobiliariaId={imobiliaria.id} // Exemplo
+                      />
+                    </div>
                   </div>
                   <p className="text-sm text-gray-600 mb-4">
                     Atualize aqui o número de boletos (referente a cada
@@ -329,13 +354,10 @@ export default function PainelAdmImobiliarias() {
                       { field: "qtd_boleto_too", label: "Too" },
                       { field: "qtd_boleto_potencial", label: "Potencial" },
                     ].map(({ field, label }) => (
-                      <div
-                        key={field}
-                        className="grid grid-cols-4 items-center gap-4"
-                      >
+                      <div key={field} className="flex items-center gap-4">
                         <label
                           htmlFor={field}
-                          className="text-right capitalize"
+                          className="text-left capitalize w-1/4"
                         >
                           {label}
                         </label>
@@ -351,7 +373,7 @@ export default function PainelAdmImobiliarias() {
                               [field]: Number(e.target.value),
                             })
                           }
-                          className="col-span-3"
+                          className="flex-grow"
                         />
                       </div>
                     ))}
@@ -363,7 +385,6 @@ export default function PainelAdmImobiliarias() {
                     Salvar Alterações
                   </Button>
                 </DialogContent>
-                
               </Dialog>
             </CardContent>
           </Card>
@@ -407,5 +428,5 @@ export default function PainelAdmImobiliarias() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

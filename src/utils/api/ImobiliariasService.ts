@@ -112,9 +112,7 @@ export async function updateImobiliaria(
  * Função para excluir uma Imobiliária.
  * @param id ID da imobiliária a ser excluída.
  */
-export async function deleteImobiliaria(
-  imobiliariaId: string
-): Promise<void> {
+export async function deleteImobiliaria(imobiliariaId: string): Promise<void> {
   try {
     // Primeiro, buscamos todos os registros que dependem da imobiliária
     const dependentRecords = await pb
@@ -191,21 +189,27 @@ export async function subscribeToImobiliariaUpdates(
 }
 
 /**
- * Função para atualizar o email de uma Imobiliária.
- * @param id ID da imobiliária a ser atualizada.
+ * Atualiza diretamente o email de uma imobiliária como Administrador.
+ * @param imobiliariaId ID da imobiliária a ser atualizada.
  * @param newEmail Novo email da imobiliária.
- * @returns A imobiliária atualizada.
  */
-// src/services/imobiliariaService.ts - Função atualizada
-
-export async function updateImobiliariaEmail(
-  newEmail: string,
-  password: string
+export async function updateImobiliariaEmailAsAdmin(
+  imobiliariaId: string,
+  newEmail: string
 ): Promise<void> {
   try {
-    if (!pb.authStore.model) {
-      throw new Error("Usuário não autenticado.");
+    // Obter credenciais do .env
+    const adminEmail = import.meta.env.VITE_POCKETBASE_ADMIN_EMAIL;
+    const adminPassword = import.meta.env.VITE_POCKETBASE_ADMIN_PASSWORD;
+
+    console.log(adminEmail, adminPassword, imobiliariaId);
+
+    if (!adminEmail || !adminPassword) {
+      throw new Error("Credenciais do administrador não configuradas.");
     }
+
+    // Login como Administrador
+    await pb.admins.authWithPassword(adminEmail, adminPassword);
 
     // Validação do email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -213,17 +217,15 @@ export async function updateImobiliariaEmail(
       throw new Error("Formato de email inválido.");
     }
 
-    // Autenticar com a senha atual
-    await pb
-      .collection("imobiliarias")
-      .authWithPassword(pb.authStore.model.email, password);
+    // Atualiza o email diretamente sem verificação
+    await pb.collection("imobiliarias").update(imobiliariaId, {
+      email: newEmail,
+    });
 
-    // Solicitar mudança de email
-    await pb.collection("imobiliarias").requestEmailChange(newEmail);
+    console.log("Email atualizado com sucesso!");
   } catch (error) {
-    const err = error as ClientResponseError;
-    console.error("Erro ao atualizar email:", err);
-    throw new Error(err.message || "Falha ao solicitar alteração de email");
+    console.error("Erro ao atualizar email:", error);
+    throw new Error("Falha ao atualizar email.");
   }
 }
 
