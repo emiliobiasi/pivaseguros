@@ -1,8 +1,9 @@
 // src/services/imobiliariaService.ts
 
 import pb, { PocketBaseError } from "@/utils/backend/pb";
+import axios from "axios";
 import { Imobiliaria } from "@/types/Imobiliarias";
-import { ClientResponseError, RecordSubscription } from "pocketbase";
+import Client, { ClientResponseError, RecordSubscription } from "pocketbase";
 
 /**
  * Função para criar uma nova Imobiliária.
@@ -189,27 +190,32 @@ export async function subscribeToImobiliariaUpdates(
 }
 
 /**
- * Atualiza diretamente o email de uma imobiliária como Administrador.
+ * Atualiza diretamente o email de uma imobiliária como Administrador via requisição manual.
  * @param imobiliariaId ID da imobiliária a ser atualizada.
  * @param newEmail Novo email da imobiliária.
  */
-export async function updateImobiliariaEmailAsAdmin(
-  imobiliariaId: string,
-  newEmail: string
-): Promise<void> {
+export async function updateImobiliariaEmailAsAdmin(imobiliariaId: string, newEmail: string): Promise<void> {
   try {
     // Obter credenciais do .env
     const adminEmail = import.meta.env.VITE_POCKETBASE_ADMIN_EMAIL;
     const adminPassword = import.meta.env.VITE_POCKETBASE_ADMIN_PASSWORD;
+    const pocketBaseURL = import.meta.env.VITE_POCKETBASE_URL;
 
-    console.log(adminEmail, adminPassword, imobiliariaId);
-
-    if (!adminEmail || !adminPassword) {
-      throw new Error("Credenciais do administrador não configuradas.");
+    if (!adminEmail || !adminPassword || !pocketBaseURL) {
+      throw new Error("Credenciais do administrador ou URL do PocketBase não configuradas.");
     }
 
-    // Login como Administrador
-    await pb.admins.authWithPassword(adminEmail, adminPassword);
+    // Login manual para obter o token de admin sem afetar a sessão do SDK
+    const authResponse = await axios.post<{ token: string }>(`${pocketBaseURL}/api/admins/auth-with-password`, {
+      identity: adminEmail,
+      password: adminPassword,
+    });
+
+    const adminToken = authResponse.data.token;
+
+    if (!adminToken) {
+      throw new Error("Falha ao obter token de autenticação do administrador.");
+    }
 
     // Validação do email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -217,10 +223,17 @@ export async function updateImobiliariaEmailAsAdmin(
       throw new Error("Formato de email inválido.");
     }
 
-    // Atualiza o email diretamente sem verificação
-    await pb.collection("imobiliarias").update(imobiliariaId, {
-      email: newEmail,
-    });
+    // Atualiza o email diretamente via requisição HTTP sem afetar o authStore
+    await axios.patch(
+      `${pocketBaseURL}/api/collections/imobiliarias/records/${imobiliariaId}`,
+      { email: newEmail },
+      {
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     console.log("Email atualizado com sucesso!");
   } catch (error) {
@@ -228,6 +241,7 @@ export async function updateImobiliariaEmailAsAdmin(
     throw new Error("Falha ao atualizar email.");
   }
 }
+
 
 /**
  * Função para atualizar o nome de uma Imobiliária.

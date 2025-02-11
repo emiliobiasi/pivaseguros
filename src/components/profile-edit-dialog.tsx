@@ -15,7 +15,7 @@ import {
   updateImobiliariaEmailAsAdmin,
   updateImobiliariaName,
 } from "@/utils/api/ImobiliariasService";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, CheckCircle } from "lucide-react";
 // import { useNavigate } from "react-router-dom";
 
 interface ProfileEditDialogProps {
@@ -38,6 +38,11 @@ export function ProfileEditDialog({
   const [isLoading, setIsLoading] = useState(false);
   const [emailErrors, setEmailErrors] = useState<string[]>([]);
   const [nameErrors, setNameErrors] = useState<string[]>([]);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successModalContent, setSuccessModalContent] = useState({
+    title: "",
+    description: "",
+  });
   // const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -51,19 +56,18 @@ export function ProfileEditDialog({
         // Chamada corrigida com ID da imobiliária
         await updateImobiliariaEmailAsAdmin(imobiliariaId, email);
 
-        toast({
+        setSuccessModalContent({
           title: "Email atualizado com sucesso!",
           description: "O email da imobiliária foi alterado.",
         });
-
-        // navigate("/imobiliaria/entrar");
-        // navigate("/painel-adm-imobiliarias");
+        setShowSuccessModal(true);
       } else if (editType === "companyName") {
         await updateImobiliariaName(imobiliariaId, companyName);
-        toast({
-          title: "Perfil Atualizado",
-          description: "O nome da imobiliária foi atualizado com sucesso.",
+        setSuccessModalContent({
+          title: "Nome atualizado com sucesso!",
+          description: "O nome da imobiliária foi atualizado.",
         });
+        setShowSuccessModal(true);
       }
 
       // Resetando estados
@@ -107,96 +111,118 @@ export function ProfileEditDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Editar Perfil</DialogTitle>
-          <DialogDescription className="text-md text-gray-700">
-            Escolha o que deseja alterar no perfil da imobiliária.
-          </DialogDescription>
-        </DialogHeader>
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Editar Perfil</DialogTitle>
+            <DialogDescription className="text-md text-gray-700">
+              Escolha o que deseja alterar no perfil da imobiliária.
+            </DialogDescription>
+          </DialogHeader>
 
-        {!editType ? (
-          <div className="flex justify-center space-x-4">
-            <Button onClick={() => setEditType("email")}>Alterar Email</Button>
-            <Button onClick={() => setEditType("companyName")}>
-              Alterar Nome da Imobiliária
-            </Button>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {editType === "email" ? (
-              <div className="space-y-2">
-                <Label htmlFor="email">Novo Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="seu@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
+          {!editType ? (
+            <div className="flex justify-center space-x-4">
+              <Button onClick={() => setEditType("email")}>
+                Alterar Email
+              </Button>
+              <Button onClick={() => setEditType("companyName")}>
+                Alterar Nome da Imobiliária
+              </Button>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {editType === "email" ? (
+                <div className="space-y-2">
+                  <Label htmlFor="email">Novo Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="seu@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
 
-                <div className="bg-yellow-50 p-3 rounded-lg mt-6 mb-6 border border-yellow-400">
-                  <div className="flex items-center text-sm text-gray-600">
-                    <AlertCircle className="text-yellow-600 mr-2" />
-                    <p>
-                      Após clicar em "<strong>Salvar Alterações</strong>", o
-                      email será alterado. Caso tenha problemas para acessar a
-                      conta com o novo email, entre em contato com o suporte.
-                    </p>
+                  <div className="bg-yellow-50 p-3 rounded-lg mt-6 mb-6 border border-yellow-400">
+                    <div className="flex items-center text-sm text-gray-600">
+                      <AlertCircle className="text-yellow-600 mr-2" />
+                      <p>
+                        Após clicar em "<strong>Salvar Alterações</strong>", o
+                        email será alterado. Caso tenha problemas para acessar a
+                        conta com o novo email, entre em contato com o suporte.
+                      </p>
+                    </div>
                   </div>
+
+                  {emailErrors.length > 0 && (
+                    <div className="text-red-500 text-sm py-3">
+                      {emailErrors.map((error, index) => (
+                        <div key={index}>{error}</div>
+                      ))}
+                    </div>
+                  )}
                 </div>
+              ) : (
+                <div className="space-y-2">
+                  <Label htmlFor="companyName">Novo Nome da Imobiliária</Label>
+                  <Input
+                    id="companyName"
+                    placeholder="Nome da imobiliária"
+                    value={companyName}
+                    onChange={(e) => setCompanyName(e.target.value)}
+                    required
+                  />
 
-                {emailErrors.length > 0 && (
-                  <div className="text-red-500 text-sm py-3">
-                    {emailErrors.map((error, index) => (
-                      <div key={index}>{error}</div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="space-y-2">
-                <Label htmlFor="companyName">Novo Nome da Imobiliária</Label>
-                <Input
-                  id="companyName"
-                  placeholder="Nome da imobiliária"
-                  value={companyName}
-                  onChange={(e) => setCompanyName(e.target.value)}
-                  required
-                />
+                  {nameErrors.length > 0 && (
+                    <div className="text-red-500 text-sm py-3">
+                      {nameErrors.map((error, index) => (
+                        <div key={index}>{error}</div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
 
-                {nameErrors.length > 0 && (
-                  <div className="text-red-500 text-sm py-3">
-                    {nameErrors.map((error, index) => (
-                      <div key={index}>{error}</div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
+              <DialogFooter>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setEditType(null)}
+                  disabled={isLoading}
+                >
+                  Voltar
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="bg-green-700 hover:bg-green-800"
+                >
+                  {isLoading ? "Salvando..." : "Salvar Alterações"}
+                </Button>
+              </DialogFooter>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
 
-            <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setEditType(null)}
-                disabled={isLoading}
-              >
-                Voltar
-              </Button>
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="bg-green-700 hover:bg-green-800"
-              >
-                {isLoading ? "Salvando..." : "Salvar Alterações"}
-              </Button>
-            </DialogFooter>
-          </form>
-        )}
-      </DialogContent>
-    </Dialog>
+      {/* Modal de Sucesso */}
+      <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center">
+              <CheckCircle className="w-6 h-6 text-green-500 mr-2" />
+              {successModalContent.title}
+            </DialogTitle>
+            <DialogDescription>
+              {successModalContent.description}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button onClick={() => setShowSuccessModal(false)}>Fechar</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
