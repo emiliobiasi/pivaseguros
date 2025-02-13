@@ -478,6 +478,42 @@ export function EfetivacaoSeguroFiancaForms() {
                               placeholder="Digite o email do outro inquilino"
                             />
                           </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="profissao_inquilino_1">
+                              Profissão do inquilino (1)
+                            </Label>
+                            <Input
+                              id="profissao_inquilino_1"
+                              name="profissao_inquilino_1"
+                              type="text"
+                              value={formData.profissao_inquilino_1}
+                              onChange={handleInputChange}
+                              placeholder="Digite o email do outro inquilino"
+                            />
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="data_nascimento_inquilino_1">
+                              Data de Nascimento do Inquilino (1){" "}
+                              <RequiredAsterisk />
+                            </Label>
+                            <Input
+                              id="data_nascimento_inquilino_1"
+                              name="data_nascimento_inquilino_1"
+                              type="date"
+                              value={
+                                formData.data_nascimento_inquilino_1 instanceof
+                                Date
+                                  ? formData.data_nascimento_inquilino_1
+                                      .toISOString()
+                                      .split("T")[0]
+                                  : formData.data_nascimento_inquilino_1
+                              }
+                              onChange={handleInputChange}
+                              required
+                              placeholder="Selecione a data de nascimento"
+                            />
+                          </div>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -529,6 +565,42 @@ export function EfetivacaoSeguroFiancaForms() {
                               value={formData.email_inquilino_2}
                               onChange={handleInputChange}
                               placeholder="Digite o email do outro inquilino"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="profissao_inquilino_2">
+                              Profissão do inquilino (2)
+                            </Label>
+                            <Input
+                              id="profissao_inquilino_2"
+                              name="profissao_inquilino_2"
+                              type="text"
+                              value={formData.profissao_inquilino_2}
+                              onChange={handleInputChange}
+                              placeholder="Digite o email do outro inquilino"
+                            />
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="data_nascimento_inquilino_1">
+                              Data de Nascimento do Inquilino (2){" "}
+                              <RequiredAsterisk />
+                            </Label>
+                            <Input
+                              id="data_nascimento_inquilino_2"
+                              name="data_nascimento_inquilino_2"
+                              type="date"
+                              value={
+                                formData.data_nascimento_inquilino_2 instanceof
+                                Date
+                                  ? formData.data_nascimento_inquilino_2
+                                      .toISOString()
+                                      .split("T")[0]
+                                  : formData.data_nascimento_inquilino_2
+                              }
+                              onChange={handleInputChange}
+                              required
+                              placeholder="Selecione a data de nascimento"
                             />
                           </div>
                         </div>

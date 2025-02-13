@@ -86,6 +86,18 @@ export function EfetivacaoSeguroFiancaModal({
                         {efetivacao.telefone_inquilino_1}
                       </p>
                     )}
+                    {efetivacao.profissao_inquilino_1 && (
+                      <p>
+                        <strong>Profissão do Inquilino:</strong>{" "}
+                        {efetivacao.profissao_inquilino_1}
+                      </p>
+                    )}
+                    {efetivacao.data_nascimento_inquilino_1 && (
+                      <p>
+                        <strong>Data de Nascimento:</strong>{" "}
+                        {efetivacao.data_nascimento_inquilino_1}
+                      </p>
+                    )}
                   </>
                 )}
 
@@ -112,6 +124,18 @@ export function EfetivacaoSeguroFiancaModal({
                       <p>
                         <strong>Telefone:</strong>{" "}
                         {efetivacao.telefone_inquilino_2}
+                      </p>
+                    )}
+                    {efetivacao.profissao_inquilino_2 && (
+                      <p>
+                        <strong>Profissão do Inquilino:</strong>{" "}
+                        {efetivacao.profissao_inquilino_2}
+                      </p>
+                    )}
+                    {efetivacao.data_nascimento_inquilino_2 && (
+                      <p>
+                        <strong>Data de Nascimento:</strong>{" "}
+                        {efetivacao.data_nascimento_inquilino_2}
                       </p>
                     )}
                   </>

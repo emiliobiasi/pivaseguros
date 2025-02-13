@@ -11,10 +11,15 @@ export type EfetivacaoSeguroFianca = {
   cpf_inquilino_1?: string;
   email_inquilino_1?: string;
   telefone_inquilino_1?: string;
+  profissao_inquilino_1?: string;
+  data_nascimento_inquilino_1?: Date;
+
   nome_inquilino_2?: string;
   cpf_inquilino_2?: string;
   email_inquilino_2?: string;
   telefone_inquilino_2?: string;
+  profissao_inquilino_2?: string;
+  data_nascimento_inquilino_2?: Date;
 
   nome_inquilino_3?: string;
   cnpj_inquilino_3?: string;
@@ -32,7 +37,7 @@ export type EfetivacaoSeguroFianca = {
   telefone_empresa?: string;
   atividade_empresa?: string;
 
-  proprietario_documento?: "PESSOA FÍSICA" | "PESSOA JURÍDICA"
+  proprietario_documento?: "PESSOA FÍSICA" | "PESSOA JURÍDICA";
 
   nome_proprietario?: string;
   profissao_proprietario?: string;

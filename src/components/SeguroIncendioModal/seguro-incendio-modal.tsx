@@ -118,6 +118,10 @@ export function SeguroIncendioModal({
             <p>
               <strong>Tipo do Imóvel:</strong> {seguro.tipo_imovel}
             </p>
+            <p>
+              <strong>Vigência do seguro:</strong>{" "}
+              {seguro.vigencia_seguro_inicio} a {seguro.vigencia_seguro_termino}
+            </p>
           </div>
 
           {/* Terceira Coluna */}

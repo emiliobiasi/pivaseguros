@@ -16,6 +16,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Plus,
+  Pencil,
 } from "lucide-react";
 import {
   AlertDialog,
@@ -33,7 +34,6 @@ import {
 } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
 import pb from "@/utils/backend/pb";
-import { Pencil } from "lucide-react";
 import { ProfileEditDialog } from "@/components/profile-edit-dialog";
 // Importar o tipo Imobiliaria
 import { Imobiliaria } from "@/types/Imobiliarias";
@@ -50,7 +50,6 @@ import { RecordSubscription } from "pocketbase";
 
 export default function PainelAdmImobiliarias() {
   const [isEditingProfile, setIsEditingProfile] = useState(false);
-
   const navigate = useNavigate();
 
   // Definição dos usuários autorizados
@@ -78,7 +77,6 @@ export default function PainelAdmImobiliarias() {
 
   // Estados para gerenciamento de imobiliárias
   const [imobiliarias, setImobiliarias] = useState<Imobiliaria[]>([]);
-
   const [, setTotalItems] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -86,12 +84,20 @@ export default function PainelAdmImobiliarias() {
 
   const [selectedImobiliaria, setSelectedImobiliaria] =
     useState<Imobiliaria | null>(null);
+
+  // Substitua os campos antigos pelos novos campos aqui:
   const [editedValues, setEditedValues] = useState({
-    qtd_boleto_porto: 0,
-    qtd_boleto_tokio: 0,
-    qtd_boleto_too: 0,
-    qtd_boleto_potencial: 0,
+    porto_boleto_fianca_essencial: 0,
+    porto_boleto_fianca_tradicional: 0,
+    porto_boleto_incendio_residencial: 0,
+    porto_boleto_incendio_comercial: 0,
+    potencial_boleto_fianca: 0,
+    tokio_boleto_fianca: 0,
+    tokio_relatorio_fianca: 0,
+    too_boleto_fianca: 0,
+    too_relatorio_fianca: 0,
   });
+
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [savedImobiliaria, setSavedImobiliaria] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -138,7 +144,6 @@ export default function PainelAdmImobiliarias() {
     };
 
     setupSubscription();
-
     return () => {
       if (unsubscribe) {
         unsubscribe();
@@ -165,31 +170,39 @@ export default function PainelAdmImobiliarias() {
 
   const handleEdit = (imobiliaria: Imobiliaria) => {
     setSelectedImobiliaria(imobiliaria);
+
+    // Ao editar, copiamos os valores para o estado editedValues:
     setEditedValues({
-      qtd_boleto_porto: imobiliaria.qtd_boleto_porto || 0,
-      qtd_boleto_tokio: imobiliaria.qtd_boleto_tokio || 0,
-      qtd_boleto_too: imobiliaria.qtd_boleto_too || 0,
-      qtd_boleto_potencial: imobiliaria.qtd_boleto_potencial || 0,
+      porto_boleto_fianca_essencial:
+        imobiliaria.porto_boleto_fianca_essencial || 0,
+      porto_boleto_fianca_tradicional:
+        imobiliaria.porto_boleto_fianca_tradicional || 0,
+      porto_boleto_incendio_residencial:
+        imobiliaria.porto_boleto_incendio_residencial || 0,
+      porto_boleto_incendio_comercial:
+        imobiliaria.porto_boleto_incendio_comercial || 0,
+      potencial_boleto_fianca: imobiliaria.potencial_boleto_fianca || 0,
+      tokio_boleto_fianca: imobiliaria.tokio_boleto_fianca || 0,
+      tokio_relatorio_fianca: imobiliaria.tokio_relatorio_fianca || 0,
+      too_boleto_fianca: imobiliaria.too_boleto_fianca || 0,
+      too_relatorio_fianca: imobiliaria.too_relatorio_fianca || 0,
     });
   };
 
   const handleSave = async () => {
     if (selectedImobiliaria) {
       try {
-        const updatedData = {
-          qtd_boleto_porto: editedValues.qtd_boleto_porto,
-          qtd_boleto_tokio: editedValues.qtd_boleto_tokio,
-          qtd_boleto_too: editedValues.qtd_boleto_too,
-          qtd_boleto_potencial: editedValues.qtd_boleto_potencial,
-        };
+        // Basta enviar o objeto editedValues diretamente
         const updatedImobiliaria = await updateImobiliaria(
           selectedImobiliaria.id,
-          updatedData
+          editedValues
         );
         console.log("Imobiliária atualizada com sucesso:", updatedImobiliaria);
+
         setSavedImobiliaria(updatedImobiliaria.nome);
         setShowConfirmation(true);
         setSelectedImobiliaria(null);
+
         // Atualizar a lista localmente sem recarregar a página
         setImobiliarias((prev) =>
           prev.map((imo) =>
@@ -205,8 +218,6 @@ export default function PainelAdmImobiliarias() {
 
   const handleConfirmationClose = () => {
     setShowConfirmation(false);
-    // Opcional: Remover a recarga da página
-    // window.location.reload();
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -218,6 +229,31 @@ export default function PainelAdmImobiliarias() {
     setSortBy(value);
     setCurrentPage(1); // Reinicia a página ao ordenar
   };
+
+  // Array de campos que vamos renderizar dinamicamente
+  const boletoFields = [
+    {
+      field: "porto_boleto_fianca_essencial",
+      label: "Porto: Fiança Essencial",
+    },
+    {
+      field: "porto_boleto_fianca_tradicional",
+      label: "Porto: Fiança Tradicional",
+    },
+    {
+      field: "porto_boleto_incendio_residencial",
+      label: "Porto: Incêndio Residencial",
+    },
+    {
+      field: "porto_boleto_incendio_comercial",
+      label: "Porto: Incêndio Comercial",
+    },
+    { field: "potencial_boleto_fianca", label: "Potencial: Fiança" },
+    { field: "tokio_boleto_fianca", label: "Tokio: Fiança" },
+    { field: "tokio_relatorio_fianca", label: "Tokio: Relatório de Fiança" },
+    { field: "too_boleto_fianca", label: "Too: Fiança" },
+    { field: "too_relatorio_fianca", label: "Too: Relatório de Fiança" },
+  ];
 
   return (
     <div className="container mx-auto p-4">
@@ -330,9 +366,9 @@ export default function PainelAdmImobiliarias() {
                         className="text-[1.02rem] text-white bg-green-800 hover:bg-green-600 hover:text-white"
                       >
                         <Pencil className="mr-2 h-5 w-5" /> EDITAR INFORMAÇÕES
-                        DE{" "}
+                        DE {" "}
                         <span className="font-bold ">
-                          <em>{imobiliaria.nome.toLocaleUpperCase()}</em>
+                          <em> {imobiliaria.nome.toLocaleUpperCase()}</em>
                         </span>
                       </Button>
                       <ProfileEditDialog
@@ -342,23 +378,18 @@ export default function PainelAdmImobiliarias() {
                       />
                     </div>
                   </div>
+
                   <p className="text-sm text-gray-600 mb-4">
-                    Atualize aqui o número de boletos (referente a cada
-                    seguradora) que serão enviados para a{" "}
+                    Atualize aqui a quantidade de boletos/relações de cada
+                    seguradora que serão enviados para a{" "}
                     {selectedImobiliaria?.nome}
                   </p>
+
+                  {/* Renderização dinâmica dos novos campos */}
                   <div className="grid gap-4 py-4">
-                    {[
-                      { field: "qtd_boleto_porto", label: "Porto" },
-                      { field: "qtd_boleto_tokio", label: "Tokio" },
-                      { field: "qtd_boleto_too", label: "Too" },
-                      { field: "qtd_boleto_potencial", label: "Potencial" },
-                    ].map(({ field, label }) => (
+                    {boletoFields.map(({ field, label }) => (
                       <div key={field} className="flex items-center gap-4">
-                        <label
-                          htmlFor={field}
-                          className="text-left capitalize w-1/4"
-                        >
+                        <label htmlFor={field} className="text-left w-1/4">
                           {label}
                         </label>
                         <Input
@@ -378,6 +409,7 @@ export default function PainelAdmImobiliarias() {
                       </div>
                     ))}
                   </div>
+
                   <Button
                     onClick={handleSave}
                     className="w-full bg-green-600 hover:bg-green-700 text-white"

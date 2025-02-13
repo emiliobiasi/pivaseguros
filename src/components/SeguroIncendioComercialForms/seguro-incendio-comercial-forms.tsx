@@ -588,6 +588,50 @@ export function SeguroIncendioComercialForms() {
 
               <TabsContent value="property">
                 <div className="grid gap-4 py-4">
+                  <>
+                    <h3 className="font-bold">VIGENCIA DO SEGURO</h3>
+                    <div className="space-y-2">
+                      <Label htmlFor="vigencia_seguro_inicio">
+                        Data de início <RequiredAsterisk />
+                      </Label>
+                      <Input
+                        id="vigencia_seguro_inicio"
+                        name="vigencia_seguro_inicio"
+                        type="date"
+                        value={
+                          formData.vigencia_seguro_inicio instanceof Date
+                            ? formData.vigencia_seguro_inicio
+                                .toISOString()
+                                .split("T")[0]
+                            : formData.vigencia_seguro_inicio
+                        }
+                        onChange={handleInputChange}
+                        required
+                        placeholder="Selecione a data de início"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="vigencia_seguro_termino">
+                        Data de término <RequiredAsterisk />
+                      </Label>
+                      <Input
+                        id="vigencia_seguro_termino"
+                        name="vigencia_seguro_termino"
+                        type="date"
+                        value={
+                          formData.vigencia_seguro_termino instanceof Date
+                            ? formData.vigencia_seguro_termino
+                                .toISOString()
+                                .split("T")[0]
+                            : formData.vigencia_seguro_termino
+                        }
+                        onChange={handleInputChange}
+                        required
+                        placeholder="Selecione a data de término"
+                      />
+                    </div>
+                  </>
+
                   <div className="space-y-2">
                     <Label htmlFor="atividade">
                       Atividade da Empresa <RequiredAsterisk />
