@@ -1,12 +1,12 @@
 // src/components/insurance-grid.tsx
-import { useDropzone } from "react-dropzone";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { useState, useCallback } from "react";
-import { toast } from "sonner";
-import { Upload } from "lucide-react";
-import { Imobiliaria } from "@/types/Imobiliarias";
+import { useDropzone } from "react-dropzone"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Progress } from "@/components/ui/progress"
+import { useState, useCallback } from "react"
+import { toast } from "sonner"
+import { Upload } from "lucide-react"
+import { Imobiliaria } from "@/types/Imobiliarias"
 
 /**
  * 1) Aqui definimos a estrutura das seguradoras e subcategorias:
@@ -48,7 +48,7 @@ const insuranceStructure = [
       { label: "Relatório Fiança", field: "too_relatorio_fianca" },
     ],
   },
-];
+]
 
 /**
  * 2) Cores das seguradoras, para estilizar os cartões de upload.
@@ -57,7 +57,7 @@ const insuranceColors = {
   PORTO: {
     bg: "bg-[#01a0fb]",
     border: "border-[#01a0fb]",
-    text: "text-[#01a0fb]",
+    text: "text-[#004a75]",
     hover: "hover:bg-[#01a0fb]/10",
   },
   POTENCIAL: {
@@ -75,21 +75,21 @@ const insuranceColors = {
   TOO: {
     bg: "bg-[#6AB5B9]",
     border: "border-[#6AB5B9]",
-    text: "text-[#6AB5B9]",
+    text: "text-[#064d4f]",
     hover: "hover:bg-[#6AB5B9]/10",
   },
-} as const;
+} as const
 
 /**
  * 3) Props que o InsuranceGrid vai receber de fora (da sua página).
  */
 interface InsuranceGridProps {
   // Chamado quando arquivos são "dropados" no subcampo
-  onFileUpload: (newFiles: File[], subField: string) => void;
+  onFileUpload: (newFiles: File[], subField: string) => void
   // Contagem de quantos arquivos já foram enviados para cada subcampo
-  uploadedFiles: { [field: string]: number };
+  uploadedFiles: { [field: string]: number }
   // Dados da imobiliária selecionada (para saber quantos arquivos são exigidos em cada subcampo)
-  imobiliaria: Imobiliaria;
+  imobiliaria: Imobiliaria
 }
 
 /**
@@ -106,7 +106,7 @@ export function InsuranceGrid({
   return (
     <div className="grid grid-cols-1 gap-6 w-full max-w-7xl mx-auto">
       {insuranceStructure.map((insurance) => {
-        const { name, colorKey, subcategories } = insurance;
+        const { name, colorKey, subcategories } = insurance
 
         return (
           <Card key={name} className={`overflow-hidden border`}>
@@ -120,11 +120,11 @@ export function InsuranceGrid({
             <CardContent className="p-6 bg-white">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {subcategories.map((subcat) => {
-                  const fieldName = subcat.field as keyof Imobiliaria;
+                  const fieldName = subcat.field as keyof Imobiliaria
                   // Quantos arquivos essa imobiliária exige nesse subcampo
-                  const totalNeeded = Number(imobiliaria[fieldName]) || 0;
+                  const totalNeeded = Number(imobiliaria[fieldName]) || 0
                   // Quantos já foram enviados
-                  const uploadedCount = uploadedFiles[subcat.field] || 0;
+                  const uploadedCount = uploadedFiles[subcat.field] || 0
 
                   return (
                     <SubUploadCard
@@ -137,15 +137,15 @@ export function InsuranceGrid({
                       onUpload={(files) => onFileUpload(files, subcat.field)}
                       colorKey={colorKey}
                     />
-                  );
+                  )
                 })}
               </div>
             </CardContent>
           </Card>
-        );
+        )
       })}
     </div>
-  );
+  )
 }
 
 /**
@@ -153,61 +153,61 @@ export function InsuranceGrid({
  *    - Reaproveitando o código que você já postou.
  */
 interface SubUploadCardProps {
-  company: string; // "PORTO", "TOKIO", etc.
-  label: string; // Ex: "Fiança Essencial"
-  field: string; // Ex: "porto_boleto_fianca_essencial"
-  totalExpectedDocs: number; // Quantos documentos esse subcampo exige
-  uploadedCount: number; // Quantos já foram enviados p/ esse subcampo
-  onUpload: (files: File[]) => void;
-  colorKey: string; // Ex: "PORTO", "TOKIO"
+  company: string // "PORTO", "TOKIO", etc.
+  label: string // Ex: "Fiança Essencial"
+  field: string // Ex: "porto_boleto_fianca_essencial"
+  totalExpectedDocs: number // Quantos documentos esse subcampo exige
+  uploadedCount: number // Quantos já foram enviados p/ esse subcampo
+  onUpload: (files: File[]) => void
+  colorKey: string // Ex: "PORTO", "TOKIO"
 }
 
 function SubUploadCard({
   company,
   label,
-  field,
+  // field,
   totalExpectedDocs,
   uploadedCount,
   onUpload,
   colorKey,
 }: SubUploadCardProps) {
-  const [uploading, setUploading] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [uploading, setUploading] = useState(false)
+  const [progress, setProgress] = useState(0)
 
   const colors = insuranceColors[colorKey as keyof typeof insuranceColors] || {
     bg: "bg-gray-200",
     border: "border-gray-300",
     text: "text-gray-700",
     hover: "hover:bg-gray-100",
-  };
+  }
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       if (uploadedCount >= totalExpectedDocs) {
-        toast.error("Limite de boletos para este subcampo já foi atingido!");
-        return;
+        toast.error("Limite de boletos para este subcampo já foi atingido!")
+        return
       }
 
-      if (acceptedFiles.length === 0) return;
+      if (acceptedFiles.length === 0) return
 
-      setUploading(true);
+      setUploading(true)
       const timer = setInterval(() => {
         setProgress((oldProgress) => {
           if (oldProgress >= 100) {
-            clearInterval(timer);
-            setUploading(false);
-            onUpload(acceptedFiles);
+            clearInterval(timer)
+            setUploading(false)
+            onUpload(acceptedFiles)
             toast.success(
               `${acceptedFiles.length} arquivo(s) enviado(s) para "${label}" em ${company}`
-            );
-            return 0;
+            )
+            return 0
           }
-          return oldProgress + 20;
-        });
-      }, 200);
+          return oldProgress + 20
+        })
+      }, 200)
     },
     [uploadedCount, totalExpectedDocs, onUpload, company, label]
-  );
+  )
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -218,7 +218,7 @@ function SubUploadCard({
         ".xlsx",
       ],
     },
-  });
+  })
 
   return (
     <div className={`border-2 rounded-lg overflow-hidden ${colors.border}`}>
@@ -278,5 +278,5 @@ function SubUploadCard({
         </div>
       </div>
     </div>
-  );
+  )
 }

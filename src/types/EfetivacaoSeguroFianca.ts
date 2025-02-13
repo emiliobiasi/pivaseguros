@@ -21,6 +21,7 @@ export type EfetivacaoSeguroFianca = {
   profissao_inquilino_2?: string;
   data_nascimento_inquilino_2?: Date;
 
+  
   nome_inquilino_3?: string;
   cnpj_inquilino_3?: string;
   email_inquilino_3?: string;

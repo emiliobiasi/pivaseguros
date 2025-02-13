@@ -120,7 +120,7 @@ export function SeguroIncendioModal({
             </p>
             <p>
               <strong>Vigência do seguro:</strong>{" "}
-              {seguro.vigencia_seguro_inicio} a {seguro.vigencia_seguro_termino}
+              {seguro.vigencia_seguro_inicio ? formatarData(seguro.vigencia_seguro_inicio) : "N/A"} a {seguro.vigencia_seguro_termino ? formatarData(seguro.vigencia_seguro_termino) : "N/A"}
             </p>
           </div>
 

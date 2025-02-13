@@ -19,8 +19,8 @@ export type SeguroIncendioComercial = {
   estado: string;
   // tipo_imovel: "CASA" | "APARTAMENTO";
 
-  vigencia_seguro_inicio: Date;
-  vigencia_seguro_termino: Date;
+  vigencia_seguro_inicio?: Date;
+  vigencia_seguro_termino?: Date;
 
   incendio?: number;
   vendaval?: number;

@@ -257,7 +257,7 @@ function CadastrarImobiliariasFormCard() {
               onClick={() => navigate("/painel-adm-imobiliarias")}
             >
               <FaArrowLeft className="mr-2" />
-              Voltar para o Painel ADM
+              Cancelar e voltar para o Painel ADM
             </Button>
 
             <Button

@@ -1,9 +1,10 @@
 // src/services/imobiliariaService.ts
 
-import pb, { PocketBaseError } from "@/utils/backend/pb";
-import axios from "axios";
-import { Imobiliaria } from "@/types/Imobiliarias";
-import Client, { ClientResponseError, RecordSubscription } from "pocketbase";
+import pb, { PocketBaseError } from "@/utils/backend/pb"
+import axios from "axios"
+import { Imobiliaria } from "@/types/Imobiliarias"
+// import Client, { ClientResponseError, RecordSubscription } from "pocketbase";
+import { ClientResponseError, RecordSubscription } from "pocketbase"
 
 /**
  * Função para criar uma nova Imobiliária.
@@ -18,14 +19,14 @@ export async function createImobiliaria(
     const record = await pb.collection("imobiliarias").create<Imobiliaria>({
       ...data,
       created: new Date(), // Define a data de criação
-    });
+    })
 
-    console.log("Imobiliária criada com sucesso:", record);
-    return record;
+    console.log("Imobiliária criada com sucesso:", record)
+    return record
   } catch (error) {
-    const err = error as PocketBaseError;
-    console.error("Erro ao criar a Imobiliária:", err);
-    throw new Error("Erro ao criar a Imobiliária");
+    const err = error as PocketBaseError
+    console.error("Erro ao criar a Imobiliária:", err)
+    throw new Error("Erro ao criar a Imobiliária")
   }
 }
 
@@ -43,26 +44,26 @@ export async function fetchImobiliariaList(
   searchTerm: string = "",
   filter: Partial<Imobiliaria> = {}
 ): Promise<{
-  items: Imobiliaria[];
-  totalItems: number;
-  totalPages: number;
+  items: Imobiliaria[]
+  totalItems: number
+  totalPages: number
 }> {
   try {
     // Construir filtros de busca
     const searchFilter = searchTerm
       ? `(nome ~ "${searchTerm}" || email ~ "${searchTerm}" || username ~ "${searchTerm}")`
-      : "";
+      : ""
 
     // Construir filtros adicionais
     const additionalFilters = Object.entries(filter)
       .filter(([_, value]) => value !== undefined && value !== "")
       .map(([key, value]) => `${key} = "${value}"`)
-      .join(" && ");
+      .join(" && ")
 
     // Combinar filtros
     const combinedFilter = [searchFilter, additionalFilters]
       .filter(Boolean)
-      .join(" && ");
+      .join(" && ")
 
     // Buscar a lista na coleção "imobiliarias"
     const response = await pb
@@ -70,17 +71,17 @@ export async function fetchImobiliariaList(
       .getList<Imobiliaria>(page, limit, {
         sort: "-created", // Ordena por data de criação decrescente
         filter: combinedFilter,
-      });
+      })
 
     return {
       items: response.items,
       totalItems: response.totalItems,
       totalPages: response.totalPages,
-    };
+    }
   } catch (error) {
-    const err = error as ClientResponseError;
-    console.error("Erro ao buscar a lista de Imobiliárias:", err);
-    throw new Error("Erro ao buscar a lista de Imobiliárias");
+    const err = error as ClientResponseError
+    console.error("Erro ao buscar a lista de Imobiliárias:", err)
+    throw new Error("Erro ao buscar a lista de Imobiliárias")
   }
 }
 
@@ -98,14 +99,14 @@ export async function updateImobiliaria(
     // Atualiza o registro na coleção "imobiliarias"
     const updatedRecord = await pb
       .collection("imobiliarias")
-      .update<Imobiliaria>(id, data);
+      .update<Imobiliaria>(id, data)
 
-    console.log(`Imobiliária ${id} atualizada com sucesso:`, updatedRecord);
-    return updatedRecord;
+    console.log(`Imobiliária ${id} atualizada com sucesso:`, updatedRecord)
+    return updatedRecord
   } catch (error) {
-    const err = error as PocketBaseError;
-    console.error(`Erro ao atualizar a Imobiliária ${id}:`, err);
-    throw new Error("Erro ao atualizar a Imobiliária");
+    const err = error as PocketBaseError
+    console.error(`Erro ao atualizar a Imobiliária ${id}:`, err)
+    throw new Error("Erro ao atualizar a Imobiliária")
   }
 }
 
@@ -118,25 +119,25 @@ export async function deleteImobiliaria(imobiliariaId: string): Promise<void> {
     // Primeiro, buscamos todos os registros que dependem da imobiliária
     const dependentRecords = await pb
       .collection("envios_de_boletos")
-      .getFullList({ filter: `imobiliaria = "${imobiliariaId}"` });
+      .getFullList({ filter: `imobiliaria = "${imobiliariaId}"` })
 
     // Excluímos cada um deles
     for (const record of dependentRecords) {
-      await pb.collection("envios_de_boletos").delete(record.id);
+      await pb.collection("envios_de_boletos").delete(record.id)
     }
 
     // Agora podemos excluir a imobiliária sem erros
-    await pb.collection("imobiliarias").delete(imobiliariaId);
+    await pb.collection("imobiliarias").delete(imobiliariaId)
 
     console.log(
       `Imobiliária ${imobiliariaId} e registros relacionados foram excluídos.`
-    );
+    )
   } catch (error) {
     console.error(
       "Erro ao excluir a imobiliária e registros relacionados:",
       error
-    );
-    throw new Error("Falha ao excluir a imobiliária");
+    )
+    throw new Error("Falha ao excluir a imobiliária")
   }
 }
 
@@ -147,11 +148,11 @@ export async function deleteImobiliaria(imobiliariaId: string): Promise<void> {
 export async function fetchImobiliariaLastMonth(): Promise<Imobiliaria[]> {
   try {
     // Calcula a data do último mês
-    const lastMonthDate = new Date();
-    lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
+    const lastMonthDate = new Date()
+    lastMonthDate.setMonth(lastMonthDate.getMonth() - 1)
 
     // Formata a data para ser usada no filtro
-    const lastMonthFilter = `created >= "${lastMonthDate.toISOString()}"`;
+    const lastMonthFilter = `created >= "${lastMonthDate.toISOString()}"`
 
     // Busca os registros na coleção "imobiliarias"
     const response = await pb
@@ -159,13 +160,13 @@ export async function fetchImobiliariaLastMonth(): Promise<Imobiliaria[]> {
       .getFullList<Imobiliaria>({
         sort: "-created",
         filter: lastMonthFilter,
-      });
+      })
 
-    return response;
+    return response
   } catch (error) {
-    const err = error as ClientResponseError;
-    console.error("Erro ao buscar Imobiliárias do último mês:", err);
-    throw new Error("Erro ao buscar Imobiliárias do último mês");
+    const err = error as ClientResponseError
+    console.error("Erro ao buscar Imobiliárias do último mês:", err)
+    throw new Error("Erro ao buscar Imobiliárias do último mês")
   }
 }
 
@@ -180,12 +181,12 @@ export async function subscribeToImobiliariaUpdates(
   try {
     const unsubscribe = await pb
       .collection("imobiliarias")
-      .subscribe("*", onRecordChange);
-    console.log("Subscrição para atualizações de Imobiliárias iniciada.");
-    return unsubscribe;
+      .subscribe("*", onRecordChange)
+    console.log("Subscrição para atualizações de Imobiliárias iniciada.")
+    return unsubscribe
   } catch (error) {
-    console.error("Erro ao assinar atualizações de Imobiliárias:", error);
-    throw new Error("Erro ao assinar atualizações de Imobiliárias");
+    console.error("Erro ao assinar atualizações de Imobiliárias:", error)
+    throw new Error("Erro ao assinar atualizações de Imobiliárias")
   }
 }
 
@@ -194,33 +195,41 @@ export async function subscribeToImobiliariaUpdates(
  * @param imobiliariaId ID da imobiliária a ser atualizada.
  * @param newEmail Novo email da imobiliária.
  */
-export async function updateImobiliariaEmailAsAdmin(imobiliariaId: string, newEmail: string): Promise<void> {
+export async function updateImobiliariaEmailAsAdmin(
+  imobiliariaId: string,
+  newEmail: string
+): Promise<void> {
   try {
     // Obter credenciais do .env
-    const adminEmail = import.meta.env.VITE_POCKETBASE_ADMIN_EMAIL;
-    const adminPassword = import.meta.env.VITE_POCKETBASE_ADMIN_PASSWORD;
-    const pocketBaseURL = import.meta.env.VITE_POCKETBASE_URL;
+    const adminEmail = import.meta.env.VITE_POCKETBASE_ADMIN_EMAIL
+    const adminPassword = import.meta.env.VITE_POCKETBASE_ADMIN_PASSWORD
+    const pocketBaseURL = import.meta.env.VITE_POCKETBASE_URL
 
     if (!adminEmail || !adminPassword || !pocketBaseURL) {
-      throw new Error("Credenciais do administrador ou URL do PocketBase não configuradas.");
+      throw new Error(
+        "Credenciais do administrador ou URL do PocketBase não configuradas."
+      )
     }
 
     // Login manual para obter o token de admin sem afetar a sessão do SDK
-    const authResponse = await axios.post<{ token: string }>(`${pocketBaseURL}/api/admins/auth-with-password`, {
-      identity: adminEmail,
-      password: adminPassword,
-    });
+    const authResponse = await axios.post<{ token: string }>(
+      `${pocketBaseURL}/api/admins/auth-with-password`,
+      {
+        identity: adminEmail,
+        password: adminPassword,
+      }
+    )
 
-    const adminToken = authResponse.data.token;
+    const adminToken = authResponse.data.token
 
     if (!adminToken) {
-      throw new Error("Falha ao obter token de autenticação do administrador.");
+      throw new Error("Falha ao obter token de autenticação do administrador.")
     }
 
     // Validação do email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(newEmail)) {
-      throw new Error("Formato de email inválido.");
+      throw new Error("Formato de email inválido.")
     }
 
     // Atualiza o email diretamente via requisição HTTP sem afetar o authStore
@@ -233,15 +242,14 @@ export async function updateImobiliariaEmailAsAdmin(imobiliariaId: string, newEm
           "Content-Type": "application/json",
         },
       }
-    );
+    )
 
-    console.log("Email atualizado com sucesso!");
+    console.log("Email atualizado com sucesso!")
   } catch (error) {
-    console.error("Erro ao atualizar email:", error);
-    throw new Error("Falha ao atualizar email.");
+    console.error("Erro ao atualizar email:", error)
+    throw new Error("Falha ao atualizar email.")
   }
 }
-
 
 /**
  * Função para atualizar o nome de uma Imobiliária.
@@ -256,23 +264,23 @@ export async function updateImobiliariaName(
   try {
     // Validação básica do nome
     if (newName.trim().length === 0) {
-      throw new Error("O nome não pode estar vazio.");
+      throw new Error("O nome não pode estar vazio.")
     }
 
     // Atualiza o campo nome na coleção "imobiliarias"
     const updatedRecord = await pb
       .collection("imobiliarias")
-      .update<Imobiliaria>(id, { nome: newName });
+      .update<Imobiliaria>(id, { nome: newName })
 
     console.log(
       `Nome da Imobiliária ${id} atualizado com sucesso:`,
       updatedRecord
-    );
-    return updatedRecord;
+    )
+    return updatedRecord
   } catch (error) {
-    const err = error as PocketBaseError;
-    console.error(`Erro ao atualizar o nome da Imobiliária ${id}:`, err);
-    throw new Error("Erro ao atualizar o nome da Imobiliária.");
+    const err = error as PocketBaseError
+    console.error(`Erro ao atualizar o nome da Imobiliária ${id}:`, err)
+    throw new Error("Erro ao atualizar o nome da Imobiliária.")
   }
 }
 
@@ -290,31 +298,31 @@ export async function changeImobiliariaPassword(
   try {
     // Validações básicas
     if (newPassword !== confirmPassword) {
-      throw new Error("As novas senhas não coincidem.");
+      throw new Error("As novas senhas não coincidem.")
     }
 
     if (!pb.authStore.model) {
-      throw new Error("Usuário não autenticado.");
+      throw new Error("Usuário não autenticado.")
     }
 
     // Autenticar com a senha atual
     await pb
       .collection("imobiliarias")
-      .authWithPassword(pb.authStore.model.email, currentPassword);
+      .authWithPassword(pb.authStore.model.email, currentPassword)
 
     // Atualizar a senha
     await pb.collection("imobiliarias").update(pb.authStore.model.id, {
       password: newPassword,
       passwordConfirm: newPassword,
-    });
+    })
 
     // Reautenticar com a nova senha
     await pb
       .collection("imobiliarias")
-      .authWithPassword(pb.authStore.model.email, newPassword);
+      .authWithPassword(pb.authStore.model.email, newPassword)
   } catch (error) {
-    const err = error as ClientResponseError;
-    console.error("Erro ao alterar senha:", err);
-    throw new Error(err.message || "Falha ao alterar a senha");
+    const err = error as ClientResponseError
+    console.error("Erro ao alterar senha:", err)
+    throw new Error(err.message || "Falha ao alterar a senha")
   }
 }

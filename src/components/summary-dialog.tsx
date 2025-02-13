@@ -1,3 +1,4 @@
+// import React from "react"
 import {
   Dialog,
   DialogContent,
@@ -5,23 +6,35 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { FileIcon, CheckCircle, Loader2 } from "lucide-react"; // Adicione o Loader2 para o spinner
-import { UploadedFile } from "@/types/Insurance";
+} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { FileIcon, CheckCircle, Loader2 } from "lucide-react" // Adicione o Loader2 para o spinner
+import { UploadedFile } from "@/types/Insurance"
 
 interface SummaryDialogProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  files: UploadedFile[];
-  realEstateName: string;
+  isOpen: boolean
+  onClose: () => void
+  onConfirm: () => void
+  files: UploadedFile[]
+  realEstateName: string
   /**
    * Adicione esta prop para saber se está enviando no momento.
    * Assim conseguimos bloquear o botão e exibir um loading.
    */
-  isSubmitting?: boolean;
+  isSubmitting?: boolean
+}
+
+const boletosTypes = {
+  Porto: [
+    "porto_boleto_fianca_essencial",
+    "porto_boleto_fianca_tradicional",
+    "porto_boleto_incendio_residencial",
+    "porto_boleto_incendio_comercial",
+  ],
+  Potencial: ["potencial_boleto_fianca"],
+  Tokio: ["tokio_boleto_fianca", "tokio_relatorio_fianca"],
+  Too: ["too_boleto_fianca", "too_relatorio_fianca"],
 }
 
 export function SummaryDialog({
@@ -34,11 +47,20 @@ export function SummaryDialog({
 }: SummaryDialogProps) {
   const groupedFiles = files.reduce((acc, file) => {
     if (!acc[file.insuranceCompany]) {
-      acc[file.insuranceCompany] = [];
+      acc[file.insuranceCompany] = []
     }
-    acc[file.insuranceCompany].push(file);
-    return acc;
-  }, {} as Record<string, UploadedFile[]>);
+    acc[file.insuranceCompany].push(file)
+    return acc
+  }, {} as Record<string, UploadedFile[]>)
+
+  const getBoletoType = (company: string) => {
+    for (const [key, value] of Object.entries(boletosTypes)) {
+      if (value.includes(company)) {
+        return key
+      }
+    }
+    return null
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -55,10 +77,14 @@ export function SummaryDialog({
             {Object.entries(groupedFiles).map(([company, companyFiles]) => (
               <div key={company} className="space-y-3">
                 <h3 className="font-semibold text-lg flex items-center gap-2 text-green-700">
-                  {company}
+                  {getBoletoType(company)}
                   <span className="text-sm text-green-600 font-normal">
-                    ({companyFiles.length} arquivos)
+                    ({companyFiles.length}{" "}
+                    {companyFiles.length === 1 ? "arquivo" : "arquivos"})
                   </span>
+                  {getBoletoType(company) && (
+                    <span className="text-sm text-green-600 font-normal"></span>
+                  )}
                 </h3>
                 <div className="space-y-2">
                   {companyFiles.map((file) => (
@@ -106,5 +132,5 @@ export function SummaryDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
+  )
 }
