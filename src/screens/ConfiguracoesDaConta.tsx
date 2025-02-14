@@ -8,20 +8,20 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { AlertCircle, Pencil } from "lucide-react"
-import { ProfileEditDialog } from "@/components/profile-edit-dialog"
 import { PasswordForm } from "@/components/password-form"
 import { DeleteAccountDialog } from "@/components/delete-account-dialog"
-import pb from "@/utils/backend/pb"
+// import { ProfileEditDialog } from "@/components/profile-edit-dialog"
+// import pb from "@/utils/backend/pb"
 
 export default function ConfiguracoesDaConta() {
-  const [isEditingProfile, setIsEditingProfile] = useState(false)
+  // const [isEditingProfile, setIsEditingProfile] = useState(false)
   const [isEditingPassword, setIsEditingPassword] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
-  const currentUser = pb.authStore.model
-  const currentUserId = currentUser?.id
-  const currentUserEmail = currentUser?.email
-  const currentUserName = currentUser?.nome
+  // const currentUser = pb.authStore.model
+  // const currentUserId = currentUser?.id
+  // const currentUserEmail = currentUser?.email
+  // const currentUserName = currentUser?.nome
 
   return (
     <div className="container mx-auto p-4 space-y-6 ">
@@ -30,13 +30,14 @@ export default function ConfiguracoesDaConta() {
       </h1>
 
       {/* ALTERAR EMAIL OU NOME */}
-      <Card>
+      {/* <Card>
         <CardHeader>
           <CardTitle>Configurações do Usuário</CardTitle>
           <CardDescription>
             Gerencie suas informações pessoais e da imobiliária
           </CardDescription>
         </CardHeader>
+        
         <CardContent>
           <div className="flex justify-between items-center">
             <div>
@@ -57,7 +58,7 @@ export default function ConfiguracoesDaConta() {
             imobiliariaId={currentUserId} // Exemplo
           />
         </CardContent>
-      </Card>
+      </Card> */}
 
       {/* ALTERAR SENHA */}
       <Card>
