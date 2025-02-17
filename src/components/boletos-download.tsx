@@ -34,6 +34,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
+import { formatFileName } from "@/utils/formatFileName/formatFileName";
 
 // Tipos auxiliares (se necessário você pode adaptar)
 interface BoletoFetched extends EnvioDeBoletos {
@@ -313,11 +314,11 @@ export default function BoletosDownload() {
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <span className="font-semibold text-gray-800 text-md truncate max-w-full sm:max-w-xs cursor-pointer">
-                                Arquivo: {boleto.arquivo}
+                                {formatFileName(boleto.arquivo)}
                               </span>
                             </TooltipTrigger>
                             <TooltipContent>
-                              <p>{boleto.arquivo}</p>
+                              <p>{formatFileName(boleto.arquivo)}</p>
                             </TooltipContent>
                           </Tooltip>
                         </TooltipProvider>
