@@ -1,22 +1,22 @@
-import { EfetivacaoSeguroFianca } from "@/types/EfetivacaoSeguroFianca";
-import { XCircle } from "lucide-react";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { formatValor } from "@/utils/regex/regexValor";
-import { formatarData } from "@/utils/dateformater/dateFormater";
+import { EfetivacaoSeguroFianca } from "@/types/EfetivacaoSeguroFianca"
+import { XCircle } from "lucide-react"
+import { motion } from "framer-motion"
+import { Button } from "@/components/ui/button"
+import { formatValor } from "@/utils/regex/regexValor"
+import { formatarData } from "@/utils/dateformater/dateFormater"
 
 type EfetivacaoSeguroFiancaModalProps = {
-  efetivacao: EfetivacaoSeguroFianca;
-  isOpen: boolean;
-  onClose: () => void;
-};
+  efetivacao: EfetivacaoSeguroFianca
+  isOpen: boolean
+  onClose: () => void
+}
 
 export function EfetivacaoSeguroFiancaModal({
   efetivacao,
   isOpen,
   onClose,
 }: EfetivacaoSeguroFiancaModalProps) {
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   return (
     <motion.div
@@ -86,6 +86,18 @@ export function EfetivacaoSeguroFiancaModal({
                         {efetivacao.telefone_inquilino_1}
                       </p>
                     )}
+
+                    <p>
+                      <strong>Profissão do Inquilino:</strong>{" "}
+                      {efetivacao.profissao_inquilino_1}
+                    </p>
+
+                    <p>
+                      <strong>Data de Nascimento:</strong>{" "}
+                      {efetivacao.data_nascimento_inquilino_1
+                        ? formatarData(efetivacao.data_nascimento_inquilino_1)
+                        : "Data não disponível"}
+                    </p>
                   </>
                 )}
 
@@ -112,6 +124,18 @@ export function EfetivacaoSeguroFiancaModal({
                       <p>
                         <strong>Telefone:</strong>{" "}
                         {efetivacao.telefone_inquilino_2}
+                      </p>
+                    )}
+                    {efetivacao.profissao_inquilino_2 && (
+                      <p>
+                        <strong>Profissão do Inquilino:</strong>{" "}
+                        {efetivacao.profissao_inquilino_2}
+                      </p>
+                    )}
+                    {efetivacao.data_nascimento_inquilino_2 && (
+                      <p>
+                        <strong>Data de Nascimento:</strong>{" "}
+                        {formatarData(efetivacao.data_nascimento_inquilino_2)}
                       </p>
                     )}
                   </>
@@ -397,5 +421,5 @@ export function EfetivacaoSeguroFiancaModal({
         </div>
       </motion.div>
     </motion.div>
-  );
+  )
 }

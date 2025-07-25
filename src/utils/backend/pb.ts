@@ -21,11 +21,11 @@ class CustomPocketBase extends PocketBase {
     return path || fallback;
   }
 
-  logout(redirect = true) {
+  logout() {
     this.authStore.clear();
-    if (redirect) {
-      window.location.replace("/entrar");
-    }
+    // if (redirect) {
+    //   window.location.replace("/entrar");
+    // }
   }
 
   handleError(err: PocketBaseError) {

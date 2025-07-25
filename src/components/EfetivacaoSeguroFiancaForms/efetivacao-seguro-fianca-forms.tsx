@@ -1,8 +1,8 @@
-import { EfetivacaoSeguroFianca } from "@/types/EfetivacaoSeguroFianca";
-import { createEfetivacaoSeguroFianca } from "../../utils/api/EfetivacaoSeguroFiancaService";
-import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { EfetivacaoSeguroFianca } from "@/types/EfetivacaoSeguroFianca"
+import { createEfetivacaoSeguroFianca } from "../../utils/api/EfetivacaoSeguroFiancaService"
+import { useState, useRef } from "react"
+import { useNavigate } from "react-router-dom"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -10,50 +10,44 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  ArrowLeft,
-  ArrowRight,
-  CheckCircle,
-  Send,
-  Loader2,
-} from "lucide-react";
-import { formatCPF } from "@/utils/regex/regexCPF";
-import { formatCNPJ } from "@/utils/regex/regexCNPJ";
-import { formatRG } from "@/utils/regex/regexRG";
-import { formatTelefone } from "@/utils/regex/regexTelefone";
-import { formatCEP } from "@/utils/regex/regexCEP";
+} from "@/components/ui/select"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Checkbox } from "@/components/ui/checkbox"
+import { ArrowLeft, ArrowRight, CheckCircle, Send, Loader2 } from "lucide-react"
+import { formatCPF } from "@/utils/regex/regexCPF"
+import { formatCNPJ } from "@/utils/regex/regexCNPJ"
+import { formatRG } from "@/utils/regex/regexRG"
+import { formatTelefone } from "@/utils/regex/regexTelefone"
+import { formatCEP } from "@/utils/regex/regexCEP"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import pivaLogo from "@/assets/logo.png";
-import { buscaEnderecoPorCEP, EnderecoViaCep } from "@/utils/api/Cep";
+} from "@/components/ui/dialog"
+import pivaLogo from "@/assets/logo.png"
+import { buscaEnderecoPorCEP, EnderecoViaCep } from "@/utils/api/Cep"
 
 export function EfetivacaoSeguroFiancaForms() {
-  const [currentTab, setCurrentTab] = useState("personal");
-  const [agreedToTerms, setAgreedToTerms] = useState(false);
-  const [snCheck, setSnCheck] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [currentTab, setCurrentTab] = useState("personal")
+  const [agreedToTerms, setAgreedToTerms] = useState(false)
+  const [snCheck, setSnCheck] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
 
-  const navigate = useNavigate();
-  const formRef = useRef<HTMLFormElement>(null);
+  const navigate = useNavigate()
+  const formRef = useRef<HTMLFormElement>(null)
 
   // Updated formData initialization with all fields, including optional ones
   const [formData, setFormData] = useState<EfetivacaoSeguroFianca>({
@@ -90,27 +84,27 @@ export function EfetivacaoSeguroFiancaForms() {
     indice_reajuste: "",
     vencimento_aluguel: 0,
     created: new Date(),
-  });
+  })
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    let formattedValue = value;
+    const { name, value } = e.target
+    let formattedValue = value
 
     if (
       name === "cpf_inquilino_1" ||
       name === "cpf_inquilino_2" ||
       name === "cpf_proprietario"
     ) {
-      formattedValue = formatCPF(value);
+      formattedValue = formatCPF(value)
     } else if (
       name === "cnpj_empresa" ||
       name === "cnpj_proprietario" ||
       name === "cnpj_inquilino_3" ||
       name === "cnpj_inquilino_4"
     ) {
-      formattedValue = formatCNPJ(value);
+      formattedValue = formatCNPJ(value)
     } else if (name === "rg_proprietario") {
-      formattedValue = formatRG(value);
+      formattedValue = formatRG(value)
     } else if (
       name === "telefone_inquilino_1" ||
       name === "telefone_inquilino_2" ||
@@ -120,19 +114,19 @@ export function EfetivacaoSeguroFiancaForms() {
       name === "telefone_empresa" ||
       name === "telefone_imobiliaria"
     ) {
-      formattedValue = formatTelefone(value);
+      formattedValue = formatTelefone(value)
     } else if (name === "cep") {
-      formattedValue = formatCEP(value);
+      formattedValue = formatCEP(value)
 
-      const cepNumeros = formattedValue.replace(/\D/g, "");
+      const cepNumeros = formattedValue.replace(/\D/g, "")
 
       if (cepNumeros.length === 8) {
         try {
-          setIsLoading(true);
-          setErrorMessage(""); // Limpa mensagens de erro anteriores
+          setIsLoading(true)
+          setErrorMessage("") // Limpa mensagens de erro anteriores
 
           // Chama a função importada para buscar o endereço
-          const data: EnderecoViaCep = await buscaEnderecoPorCEP(cepNumeros);
+          const data: EnderecoViaCep = await buscaEnderecoPorCEP(cepNumeros)
 
           // Atualiza os campos de endereço com os dados retornados
           setFormData((prevState) => ({
@@ -143,14 +137,14 @@ export function EfetivacaoSeguroFiancaForms() {
             estado: data.uf || "",
             complemento: data.complemento || "",
             [name]: formattedValue, // Atualiza o campo CEP também
-          }));
+          }))
         } catch (error: unknown) {
-          console.error("Erro ao buscar o CEP:", error);
+          console.error("Erro ao buscar o CEP:", error)
           setErrorMessage(
             error instanceof Error
               ? error.message
               : "Erro ao buscar o CEP. Tente novamente."
-          );
+          )
 
           // Limpa os campos de endereço em caso de erro
           setFormData((prevState) => ({
@@ -161,11 +155,11 @@ export function EfetivacaoSeguroFiancaForms() {
             estado: "",
             complemento: "",
             [name]: formattedValue,
-          }));
+          }))
         } finally {
-          setIsLoading(false);
+          setIsLoading(false)
         }
-        return; // Saia da função após lidar com o CEP
+        return // Saia da função após lidar com o CEP
       } else {
         // Se o CEP tiver menos de 8 dígitos, limpa os campos de endereço
         setFormData((prevState) => ({
@@ -176,8 +170,8 @@ export function EfetivacaoSeguroFiancaForms() {
           estado: "",
           complemento: "",
           [name]: formattedValue,
-        }));
-        return; // Saia da função
+        }))
+        return // Saia da função
       }
     }
 
@@ -185,8 +179,8 @@ export function EfetivacaoSeguroFiancaForms() {
     setFormData((prevState) => ({
       ...prevState,
       [name]: formattedValue,
-    }));
-  };
+    }))
+  }
 
   const handleSelectChange = (
     name: keyof EfetivacaoSeguroFianca,
@@ -195,101 +189,100 @@ export function EfetivacaoSeguroFiancaForms() {
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
-    }));
-  };
+    }))
+  }
 
   const handleNext = () => {
-    const tabs = ["personal", "address", "property", "payment"];
-    const currentIndex = tabs.indexOf(currentTab);
+    const tabs = ["personal", "address", "property", "payment"]
+    const currentIndex = tabs.indexOf(currentTab)
     if (currentIndex < tabs.length - 1) {
-      setCurrentTab(tabs[currentIndex + 1]);
+      setCurrentTab(tabs[currentIndex + 1])
     }
-  };
+  }
 
   const handlePrevious = () => {
-    const tabs = ["personal", "address", "property", "payment"];
-    const currentIndex = tabs.indexOf(currentTab);
+    const tabs = ["personal", "address", "property", "payment"]
+    const currentIndex = tabs.indexOf(currentTab)
     if (currentIndex > 0) {
-      setCurrentTab(tabs[currentIndex - 1]);
+      setCurrentTab(tabs[currentIndex - 1])
     }
-  };
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
 
     // Verifique se o handleSubmit está sendo acionado
-    console.log("handleSubmit acionado com dados:", formData);
+    console.log("handleSubmit acionado com dados:", formData)
 
     // Função de validação
     const validateForm = () => {
-      const errors: string[] = [];
-      if (!formData.acao) errors.push("Ação");
-      if (!formData.nome_imobiliaria) errors.push("Nome da Imobiliária");
-      if (!formData.telefone_imobiliaria)
-        errors.push("Telefone da Imobiliária");
+      const errors: string[] = []
+      if (!formData.acao) errors.push("Ação")
+      if (!formData.nome_imobiliaria) errors.push("Nome da Imobiliária")
+      if (!formData.telefone_imobiliaria) errors.push("Telefone da Imobiliária")
       // if (!formData.nome_proprietario) errors.push("Nome do Proprietário");
       // if (!formData.profissao_proprietario)
       //   errors.push("Profissão do Proprietário");
       if (!formData.data_nascimento_proprietario)
-        errors.push("Data de Nascimento do Proprietário");
+        errors.push("Data de Nascimento do Proprietário")
       // if (!formData.rg_proprietario) errors.push("RG do Proprietário");
       if (!formData.estado_civil_proprietario)
-        errors.push("Estado Civil do Proprietário");
-      if (!formData.reside_brasil) errors.push("Reside no Brasil");
+        errors.push("Estado Civil do Proprietário")
+      if (!formData.reside_brasil) errors.push("Reside no Brasil")
       // if (!formData.email_proprietario) errors.push("Email do Proprietário");
       // if (!formData.telefone_proprietario)
       //   errors.push("Telefone do Proprietário");
-      if (!formData.finalidade) errors.push("Finalidade");
-      if (!formData.cep) errors.push("CEP");
-      if (!formData.endereco) errors.push("Endereço");
+      if (!formData.finalidade) errors.push("Finalidade")
+      if (!formData.cep) errors.push("CEP")
+      if (!formData.endereco) errors.push("Endereço")
       // if (!formData.numero) errors.push("Número");
-      if (!formData.bairro) errors.push("Bairro");
-      if (!formData.cidade) errors.push("Cidade");
-      if (!formData.estado) errors.push("Estado");
-      if (!formData.tipo_residencia) errors.push("Tipo de Residência");
-      if (!formData.inicio_contrato) errors.push("Início do Contrato");
-      if (!formData.termino_contrato) errors.push("Término do Contrato");
-      if (!formData.pintura_interna) errors.push("Pintura Interna");
-      if (!formData.pintura_externa) errors.push("Pintura Externa");
-      if (!formData.danos_imovel) errors.push("Danos ao Imóvel");
-      if (!formData.multa_rescisao) errors.push("Multa por Rescisão");
-      if (!formData.valor_parcela) errors.push("Valor da Parcela");
-      if (!formData.seguradora) errors.push("Seguradora");
-      if (!formData.indice_reajuste) errors.push("Índice de Reajuste");
-      if (!formData.vencimento_aluguel) errors.push("Vencimento do Aluguel");
+      if (!formData.bairro) errors.push("Bairro")
+      if (!formData.cidade) errors.push("Cidade")
+      if (!formData.estado) errors.push("Estado")
+      if (!formData.tipo_residencia) errors.push("Tipo de Residência")
+      if (!formData.inicio_contrato) errors.push("Início do Contrato")
+      if (!formData.termino_contrato) errors.push("Término do Contrato")
+      if (!formData.pintura_interna) errors.push("Pintura Interna")
+      if (!formData.pintura_externa) errors.push("Pintura Externa")
+      if (!formData.danos_imovel) errors.push("Danos ao Imóvel")
+      if (!formData.multa_rescisao) errors.push("Multa por Rescisão")
+      if (!formData.valor_parcela) errors.push("Valor da Parcela")
+      if (!formData.seguradora) errors.push("Seguradora")
+      if (!formData.indice_reajuste) errors.push("Índice de Reajuste")
+      if (!formData.vencimento_aluguel) errors.push("Vencimento do Aluguel")
       if (!snCheck && !formData.numero) {
-        errors.push("Número da Locação");
+        errors.push("Número da Locação")
       }
-      return errors;
-    };
+      return errors
+    }
 
-    const validationErrors = validateForm();
+    const validationErrors = validateForm()
     if (validationErrors.length > 0) {
       setErrorMessage(
         `Os seguintes campos são obrigatórios: ${validationErrors.join(", ")}`
-      );
-      return;
+      )
+      return
     }
 
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      await createEfetivacaoSeguroFianca(formData); // Certifique-se de que está chamando a função correta
-      console.log("Dados enviados para criação:", formData);
+      await createEfetivacaoSeguroFianca(formData) // Certifique-se de que está chamando a função correta
+      console.log("Dados enviados para criação:", formData)
 
       // Reseta o formulário e abre o modal de sucesso
-      formRef.current?.reset();
-      setIsSuccessModalOpen(true);
+      formRef.current?.reset()
+      setIsSuccessModalOpen(true)
     } catch (error) {
-      console.error("Erro ao enviar o formulário:", error);
+      console.error("Erro ao enviar o formulário:", error)
       setErrorMessage(
         "Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios, e se digitou campos de email corretamente. Tente novamente."
-      );
+      )
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
-  const RequiredAsterisk = () => <span className="text-red-500">*</span>;
+  const RequiredAsterisk = () => <span className="text-red-500">*</span>
 
   return (
     <div className="mb-40 flex justify-center">
@@ -427,7 +420,10 @@ export function EfetivacaoSeguroFiancaForms() {
 
                     {formData.inquilino_documento === "PESSOA FÍSICA" && (
                       <>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <h2 className="font-bold mt-3">
+                          Informações do Inquilino (1)
+                        </h2>{" "}
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                           <div className="space-y-2">
                             <Label htmlFor="nome_inquilino_1">
                               Nome do Inquilino (1)
@@ -478,9 +474,45 @@ export function EfetivacaoSeguroFiancaForms() {
                               placeholder="Digite o email do outro inquilino"
                             />
                           </div>
-                        </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="profissao_inquilino_1">
+                              Profissão do inquilino (1)
+                            </Label>
+                            <Input
+                              id="profissao_inquilino_1"
+                              name="profissao_inquilino_1"
+                              type="text"
+                              value={formData.profissao_inquilino_1}
+                              onChange={handleInputChange}
+                              placeholder="Digite a profissão do inquilino (1)"
+                            />
+                          </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="data_nascimento_inquilino_1">
+                              Data de Nascimento do Inquilino (1){" "}
+                            </Label>
+                            <Input
+                              id="data_nascimento_inquilino_1"
+                              name="data_nascimento_inquilino_1"
+                              type="date"
+                              value={
+                                formData.data_nascimento_inquilino_1 instanceof
+                                Date
+                                  ? formData.data_nascimento_inquilino_1
+                                      .toISOString()
+                                      .split("T")[0]
+                                  : formData.data_nascimento_inquilino_1
+                              }
+                              onChange={handleInputChange}
+                              placeholder="Selecione a data de nascimento"
+                            />
+                          </div>
+                        </div>
+                        <h2 className="font-bold mt-3">
+                          Informações do Inquilino (2)
+                        </h2>{" "}
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                           <div className="space-y-2">
                             <Label htmlFor="nome_inquilino_2">
                               Nome do Inquilino (2)
@@ -531,13 +563,50 @@ export function EfetivacaoSeguroFiancaForms() {
                               placeholder="Digite o email do outro inquilino"
                             />
                           </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="profissao_inquilino_2">
+                              Profissão do inquilino (2)
+                            </Label>
+                            <Input
+                              id="profissao_inquilino_2"
+                              name="profissao_inquilino_2"
+                              type="text"
+                              value={formData.profissao_inquilino_2}
+                              onChange={handleInputChange}
+                              placeholder="Digite a profissão do inquilino (2)"
+                            />
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="data_nascimento_inquilino_1">
+                              Data de Nascimento do Inquilino (2){" "}
+                            </Label>
+                            <Input
+                              id="data_nascimento_inquilino_2"
+                              name="data_nascimento_inquilino_2"
+                              type="date"
+                              value={
+                                formData.data_nascimento_inquilino_2 instanceof
+                                Date
+                                  ? formData.data_nascimento_inquilino_2
+                                      .toISOString()
+                                      .split("T")[0]
+                                  : formData.data_nascimento_inquilino_2
+                              }
+                              onChange={handleInputChange}
+                              placeholder="Selecione a data de nascimento"
+                            />
+                          </div>
                         </div>
                       </>
                     )}
 
                     {formData.inquilino_documento === "PESSOA JURÍDICA" && (
                       <>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <h2 className="font-bold mt-3">
+                          Informações do Inquilino (1)
+                        </h2>{" "}
+                        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                           <div className="space-y-2">
                             <Label htmlFor="nome_inquilino_3">
                               Nome do Inquilino (1)
@@ -589,65 +658,69 @@ export function EfetivacaoSeguroFiancaForms() {
                             />
                           </div>
                         </div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <Label htmlFor="nome_inquilino_4">
-                              Nome do Inquilino (2)
-                            </Label>
-                            <Input
-                              id="nome_inquilino_4"
-                              name="nome_inquilino_4"
-                              value={formData.nome_inquilino_4}
-                              onChange={handleInputChange}
-                              placeholder="Digite o nome do outro inquilino"
-                            />
+                        <>
+                          <h2 className="font-bold mt-3">
+                            Informações do Inquilino (1)
+                          </h2>{" "}
+                          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                            <div className="space-y-2">
+                              <Label htmlFor="nome_inquilino_4">
+                                Nome do Inquilino (2)
+                              </Label>
+                              <Input
+                                id="nome_inquilino_4"
+                                name="nome_inquilino_4"
+                                value={formData.nome_inquilino_4}
+                                onChange={handleInputChange}
+                                placeholder="Digite o nome do outro inquilino"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor="cnpj_inquilino_4">
+                                CNPJ do Inquilino (2)
+                              </Label>
+                              <Input
+                                id="cnpj_inquilino_4"
+                                name="cnpj_inquilino_4"
+                                value={formData.cnpj_inquilino_4}
+                                onChange={handleInputChange}
+                                placeholder="Digite o CNPJ do outro inquilino"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor="telefone_inquilino_4">
+                                Telefone do Inquilino (2)
+                              </Label>
+                              <Input
+                                id="telefone_inquilino_4"
+                                name="telefone_inquilino_4"
+                                value={formData.telefone_inquilino_4}
+                                onChange={handleInputChange}
+                                type="tel"
+                                placeholder="Digite o telefone do Inquilino (2)"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor="email_inquilino_4">
+                                Email do inquilino (2)
+                              </Label>
+                              <Input
+                                id="email_inquilino_4"
+                                name="email_inquilino_4"
+                                type="email"
+                                value={formData.email_inquilino_4}
+                                onChange={handleInputChange}
+                                placeholder="Digite o email do outro inquilino"
+                              />
+                            </div>
                           </div>
-                          <div className="space-y-2">
-                            <Label htmlFor="cnpj_inquilino_4">
-                              CNPJ do Inquilino (2)
-                            </Label>
-                            <Input
-                              id="cnpj_inquilino_4"
-                              name="cnpj_inquilino_4"
-                              value={formData.cnpj_inquilino_4}
-                              onChange={handleInputChange}
-                              placeholder="Digite o CNPJ do outro inquilino"
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <Label htmlFor="telefone_inquilino_4">
-                              Telefone do Inquilino (2)
-                            </Label>
-                            <Input
-                              id="telefone_inquilino_4"
-                              name="telefone_inquilino_4"
-                              value={formData.telefone_inquilino_4}
-                              onChange={handleInputChange}
-                              type="tel"
-                              placeholder="Digite o telefone do Inquilino (2)"
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <Label htmlFor="email_inquilino_4">
-                              Email do inquilino (2)
-                            </Label>
-                            <Input
-                              id="email_inquilino_4"
-                              name="email_inquilino_4"
-                              type="email"
-                              value={formData.email_inquilino_4}
-                              onChange={handleInputChange}
-                              placeholder="Digite o email do outro inquilino"
-                            />
-                          </div>
-                        </div>
+                        </>
                       </>
                     )}
                   </>
 
                   <>
-                    <div className="space-y-2">
+                    <div className="space-y-2 mt-3">
                       <Label htmlFor="proprietario_documento">
                         Proprietário é Pessoa Física ou Jurídica?{" "}
                         <RequiredAsterisk />
@@ -996,13 +1069,13 @@ export function EfetivacaoSeguroFiancaForms() {
                         id="sn"
                         checked={snCheck}
                         onCheckedChange={(checked) => {
-                          setSnCheck(checked === true);
+                          setSnCheck(checked === true)
 
                           if (checked === true) {
                             setFormData((prevState) => ({
                               ...prevState,
                               numero: 0,
-                            }));
+                            }))
                           }
                         }}
                       />
@@ -1014,7 +1087,8 @@ export function EfetivacaoSeguroFiancaForms() {
                       </label>
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="bairro">
                         Bairro <RequiredAsterisk />
@@ -1029,19 +1103,7 @@ export function EfetivacaoSeguroFiancaForms() {
                         disabled={isLoading}
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="complemento">Complemento</Label>
-                      <Input
-                        id="complemento"
-                        name="complemento"
-                        value={formData.complemento || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite o complemento (opcional)"
-                        disabled={isLoading}
-                      />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
                     <div className="space-y-2">
                       <Label htmlFor="cidade">
                         Cidade <RequiredAsterisk />
@@ -1070,13 +1132,24 @@ export function EfetivacaoSeguroFiancaForms() {
                         disabled={isLoading}
                       />
                     </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="complemento">Complemento</Label>
+                      <Input
+                        id="complemento"
+                        name="complemento"
+                        value={formData.complemento || ""}
+                        onChange={handleInputChange}
+                        placeholder="Digite o complemento (opcional)"
+                        disabled={isLoading}
+                      />
+                    </div>
                   </div>
                 </div>
               </TabsContent>
 
               <TabsContent value="property">
                 <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="tipo_residencia">
                         Tipo de Residencia <RequiredAsterisk />
@@ -1102,19 +1175,21 @@ export function EfetivacaoSeguroFiancaForms() {
                       </Select>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="tipo_residencia_outros">
-                        Caso a opcão acima seja OUTROS:
-                      </Label>
-                      <Input
-                        id="tipo_residencia_outros"
-                        name="tipo_residencia_outros"
-                        type="text"
-                        value={formData.tipo_residencia_outros || ""}
-                        onChange={handleInputChange}
-                        placeholder="Outro tipo de residência"
-                      />
-                    </div>
+                    {formData.tipo_residencia === "OUTROS" && (
+                      <div className="space-y-2">
+                        <Label htmlFor="tipo_residencia_outros">
+                          Caso a opcão acima seja OUTROS:
+                        </Label>
+                        <Input
+                          id="tipo_residencia_outros"
+                          name="tipo_residencia_outros"
+                          type="text"
+                          value={formData.tipo_residencia_outros || ""}
+                          onChange={handleInputChange}
+                          placeholder="Outro tipo de residência"
+                        />
+                      </div>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1315,7 +1390,7 @@ export function EfetivacaoSeguroFiancaForms() {
 
               <TabsContent value="payment">
                 <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {/* <div className="space-y-2">
                       <Label htmlFor="fatura_mensal">
                         Fatura Mensal <RequiredAsterisk />
@@ -1479,8 +1554,8 @@ export function EfetivacaoSeguroFiancaForms() {
           </DialogDescription>
           <Button
             onClick={() => {
-              setIsSuccessModalOpen(false);
-              navigate("/formulario");
+              setIsSuccessModalOpen(false)
+              navigate("/imobiliaria/formulario")
             }}
             className="w-full mt-4 bg-green-700 hover:bg-green-600"
           >
@@ -1489,5 +1564,5 @@ export function EfetivacaoSeguroFiancaForms() {
         </DialogContent>
       </Dialog>
     </div>
-  );
+  )
 }

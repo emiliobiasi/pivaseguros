@@ -1,7 +1,7 @@
-import { SeguroFiancaEmpresarialMenos2Anos } from "@/types/SeguroFiancaEmpresarialMenos2Anos";
-import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { SeguroFiancaEmpresarialMenos2Anos } from "@/types/SeguroFiancaEmpresarialMenos2Anos"
+import { useState, useRef } from "react"
+import { useNavigate } from "react-router-dom"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -9,50 +9,44 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  ArrowLeft,
-  ArrowRight,
-  CheckCircle,
-  Send,
-  Loader2,
-} from "lucide-react";
-import { formatCPF } from "@/utils/regex/regexCPF";
-import { formatCNPJ } from "@/utils/regex/regexCNPJ";
-import { formatCEP } from "@/utils/regex/regexCEP";
-import { formatRG } from "@/utils/regex/regexRG";
-import { formatTelefone } from "@/utils/regex/regexTelefone";
-import { createSeguroFiancaEmpresarialMenos2Anos } from "@/utils/api/SeguroFiancaEmpresarialMenos2AnosService";
+} from "@/components/ui/select"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Checkbox } from "@/components/ui/checkbox"
+import { ArrowLeft, ArrowRight, CheckCircle, Send, Loader2 } from "lucide-react"
+import { formatCPF } from "@/utils/regex/regexCPF"
+import { formatCNPJ } from "@/utils/regex/regexCNPJ"
+import { formatCEP } from "@/utils/regex/regexCEP"
+import { formatRG } from "@/utils/regex/regexRG"
+import { formatTelefone } from "@/utils/regex/regexTelefone"
+import { createSeguroFiancaEmpresarialMenos2Anos } from "@/utils/api/SeguroFiancaEmpresarialMenos2AnosService"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import pivaLogo from "@/assets/logo.png";
-import { buscaEnderecoPorCEP, EnderecoViaCep } from "@/utils/api/Cep";
+} from "@/components/ui/dialog"
+import pivaLogo from "@/assets/logo.png"
+import { buscaEnderecoPorCEP, EnderecoViaCep } from "@/utils/api/Cep"
 
 export function SeguroFiancaEmpresarialMenos2AnosForms() {
-  const [currentTab, setCurrentTab] = useState("dadosPretendente");
-  const [agreedToTerms, setAgreedToTerms] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [currentTab, setCurrentTab] = useState("dadosPretendente")
+  const [agreedToTerms, setAgreedToTerms] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
 
-  const navigate = useNavigate();
-  const formRef = useRef<HTMLFormElement>(null);
+  const navigate = useNavigate()
+  const formRef = useRef<HTMLFormElement>(null)
 
   const [formData, setFormData] = useState<SeguroFiancaEmpresarialMenos2Anos>({
     id: "",
@@ -95,11 +89,11 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
     pintura_interna: "SIM",
     pintura_externa: "SIM",
     created: new Date(),
-  });
+  })
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    let formattedValue = value;
+    const { name, value } = e.target
+    let formattedValue = value
 
     if (
       name === "fone_residencial" ||
@@ -109,7 +103,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
       name === "telefone_contato" ||
       name === "telefone_pretendente"
     ) {
-      formattedValue = formatTelefone(value);
+      formattedValue = formatTelefone(value)
     } else if (
       name === "cpf" ||
       name === "cpf_conjuge" ||
@@ -118,24 +112,24 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
       name === "cpf_socio_3" ||
       name === "cpf_morador"
     ) {
-      formattedValue = formatCPF(value);
+      formattedValue = formatCPF(value)
     } else if (name === "rg" || name === "rg_conjuge") {
-      formattedValue = formatRG(value);
+      formattedValue = formatRG(value)
     } else if (
       name === "cep" ||
       name === "cep_imovel_alugado" ||
       name === "cep_pessoa_fisica_nao_residencial"
     ) {
-      formattedValue = formatCEP(value);
+      formattedValue = formatCEP(value)
 
-      const cepNumeros = formattedValue.replace(/\D/g, "");
+      const cepNumeros = formattedValue.replace(/\D/g, "")
 
       if (cepNumeros.length === 8) {
         try {
-          setIsLoading(true);
-          setErrorMessage("");
+          setIsLoading(true)
+          setErrorMessage("")
 
-          const data: EnderecoViaCep = await buscaEnderecoPorCEP(cepNumeros);
+          const data: EnderecoViaCep = await buscaEnderecoPorCEP(cepNumeros)
 
           if (name === "cep") {
             setFormData((prevState) => ({
@@ -145,7 +139,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
               cidade: data.localidade || "",
               estado: data.uf || "",
               [name]: formattedValue,
-            }));
+            }))
           } else if (name === "cep_imovel_alugado") {
             setFormData((prevState) => ({
               ...prevState,
@@ -154,7 +148,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
               cidade_imovel_alugado: data.localidade || "",
               estado_imovel_alugado: data.uf || "",
               [name]: formattedValue,
-            }));
+            }))
           } else if (name === "cep_pessoa_fisica_nao_residencial") {
             setFormData((prevState) => ({
               ...prevState,
@@ -163,15 +157,15 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
               cidade_pessoa_fisica_nao_residencial: data.localidade || "",
               estado_pessoa_fisica_nao_residencial: data.uf || "",
               [name]: formattedValue,
-            }));
+            }))
           }
         } catch (error: unknown) {
-          console.error("Erro ao buscar o CEP:", error);
+          console.error("Erro ao buscar o CEP:", error)
           setErrorMessage(
             error instanceof Error
               ? error.message
               : "Erro ao buscar o CEP. Tente novamente."
-          );
+          )
 
           if (name === "cep") {
             setFormData((prevState) => ({
@@ -181,7 +175,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
               cidade: "",
               estado: "",
               [name]: formattedValue,
-            }));
+            }))
           } else if (name === "cep_imovel_alugado") {
             setFormData((prevState) => ({
               ...prevState,
@@ -190,7 +184,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
               cidade_imovel_alugado: "",
               estado_imovel_alugado: "",
               [name]: formattedValue,
-            }));
+            }))
           } else if (name === "cep_pessoa_fisica_nao_residencial") {
             setFormData((prevState) => ({
               ...prevState,
@@ -199,10 +193,10 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
               cidade_pessoa_fisica_nao_residencial: "",
               estado_pessoa_fisica_nao_residencial: "",
               [name]: formattedValue,
-            }));
+            }))
           }
         } finally {
-          setIsLoading(false);
+          setIsLoading(false)
         }
       } else {
         if (name === "cep") {
@@ -213,7 +207,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
             cidade: "",
             estado: "",
             [name]: formattedValue,
-          }));
+          }))
         } else if (name === "cep_imovel_alugado") {
           setFormData((prevState) => ({
             ...prevState,
@@ -222,7 +216,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
             cidade_imovel_alugado: "",
             estado_imovel_alugado: "",
             [name]: formattedValue,
-          }));
+          }))
         } else if (name === "cep_pessoa_fisica_nao_residencial") {
           setFormData((prevState) => ({
             ...prevState,
@@ -231,11 +225,11 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
             cidade_pessoa_fisica_nao_residencial: "",
             estado_pessoa_fisica_nao_residencial: "",
             [name]: formattedValue,
-          }));
+          }))
         }
       }
     } else if (name === "cnpj_pessoa_fisica_nao_residencial") {
-      formattedValue = formatCNPJ(value);
+      formattedValue = formatCNPJ(value)
     } else if (
       [
         "salario",
@@ -290,14 +284,14 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
         "data_emissao_conjuge",
       ].includes(name)
     ) {
-      formattedValue = value;
+      formattedValue = value
     }
 
     setFormData((prevState) => ({
       ...prevState,
       [name]: formattedValue,
-    }));
-  };
+    }))
+  }
 
   const handleSelectChange = (
     name: keyof SeguroFiancaEmpresarialMenos2Anos,
@@ -306,8 +300,8 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
-    }));
-  };
+    }))
+  }
 
   const handleNext = () => {
     const tabs = [
@@ -318,12 +312,12 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
       "informacoesEmpresa",
       "informacoesFinanceiras",
       "dadosImovelAlugado",
-    ];
-    const currentIndex = tabs.indexOf(currentTab);
+    ]
+    const currentIndex = tabs.indexOf(currentTab)
     if (currentIndex < tabs.length - 1) {
-      setCurrentTab(tabs[currentIndex + 1]);
+      setCurrentTab(tabs[currentIndex + 1])
     }
-  };
+  }
 
   const handlePrevious = () => {
     const tabs = [
@@ -334,82 +328,117 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
       "informacoesEmpresa",
       "informacoesFinanceiras",
       "dadosImovelAlugado",
-    ];
-    const currentIndex = tabs.indexOf(currentTab);
+    ]
+    const currentIndex = tabs.indexOf(currentTab)
     if (currentIndex > 0) {
-      setCurrentTab(tabs[currentIndex - 1]);
+      setCurrentTab(tabs[currentIndex - 1])
     }
-  };
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
 
     // Verifique se o handleSubmit está sendo acionado
-    console.log("handleSubmit acionado com dados:", formData);
+    console.log("handleSubmit acionado com dados:", formData)
 
     // Função de validação
     const validateForm = () => {
-      const errors: string[] = [];
-      if (!formData.nome_imobiliaria) errors.push("Nome da Imobiliária");
-      if (!formData.nome_pretendente) errors.push("Nome do Pretendente");
-      if (!formData.sexo_pretendente) errors.push("Sexo do Pretendente");
-      if (!formData.telefone_pretendente)
-        errors.push("Telefone do Pretendente");
-      if (!formData.cpf) errors.push("CPF");
-      if (!formData.rg) errors.push("RG");
-      if (!formData.data_expedicao_rg) errors.push("Data de Expedição do RG");
-      if (!formData.data_nascimento) errors.push("Data de Nascimento");
-      if (!formData.orgao_emissor_rg) errors.push("Órgão Emissor do RG");
-      if (!formData.estado_civil_locatario)
-        errors.push("Estado Civil do Locatário");
-      if (!formData.email) errors.push("Email");
-      if (!formData.tipo_residencia) errors.push("Tipo de Residência");
-      if (!formData.condicao_imovel) errors.push("Condição do Imóvel");
-      if (!formData.arca_com_aluguel) errors.push("Arca com Aluguel");
-      if (!formData.vinculo_empregaticio) errors.push("Vínculo Empregatício");
-      if (!formData.profissao) errors.push("Profissão");
-      if (!formData.salario) errors.push("Salário / Rendimentos");
+      const errors: string[] = []
+      if (!formData.nome_imobiliaria) errors.push("Nome da Imobiliária")
+      if (!formData.nome_pretendente) errors.push("Nome do Pretendente")
+      if (!formData.sexo_pretendente) errors.push("Sexo do Pretendente")
+      if (!formData.telefone_pretendente) errors.push("Telefone do Pretendente")
+      if (!formData.cpf) errors.push("CPF")
+      if (!formData.rg) errors.push("RG")
+      if (!formData.data_expedicao_rg) errors.push("Data de Expedição do RG")
+      if (!formData.data_nascimento) errors.push("Data de Nascimento")
+      if (!formData.orgao_emissor_rg) errors.push("Órgão Emissor do RG")
+
+      if (
+        formData.estado_civil_locatario == "CASADO" &&
+        !formData.nome_conjuge
+      ) {
+        errors.push("Nome do Cônjuge")
+      }
+
+      if (
+        formData.estado_civil_locatario == "CASADO" &&
+        !formData.cpf_conjuge
+      ) {
+        errors.push("CPF do Cônjuge")
+      }
+
+      if (!formData.email) errors.push("Email")
+
+      if (!formData.cep) errors.push("CEP do Endereço")
+
+      if (!formData.tipo_residencia) errors.push("Tipo de Residência")
+      if (!formData.condicao_imovel) errors.push("Condição do Imóvel")
+      if (!formData.arca_com_aluguel) errors.push("Arca com Aluguel")
+      if (!formData.vinculo_empregaticio) errors.push("Vínculo Empregatício")
+      if (!formData.profissao) errors.push("Profissão")
+      if (!formData.salario) errors.push("Salário / Rendimentos")
       if (!formData.alocacao_pretendida_constituida)
-        errors.push("Alocação Pretendida Constituída");
-      if (!formData.franquia) errors.push("Franquia");
-      if (!formData.onus) errors.push("Ônus");
+        errors.push("Alocação Pretendida Constituída")
+
+      if (
+        formData.alocacao_pretendida_constituida === "SIM" &&
+        !formData.cnpj_pessoa_fisica_nao_residencial
+      ) {
+        errors.push("CNPJ da empresa já constituida")
+      }
+
+      if (formData.franquia === "SIM" && !formData.nome_franqueadora) {
+        errors.push("Nome da Franqueadora")
+      }
+
+      if (!formData.franquia) errors.push("Franquia")
+      if (!formData.onus) errors.push("Ônus")
       if (!formData.investimento_abertura)
-        errors.push("Investimento para Abertura");
-      if (!formData.motivo_locacao) errors.push("Motivo da Locação");
-      if (!formData.aluguel_imovel_alugado) errors.push("Valor do Aluguel");
+        errors.push("Investimento para Abertura")
+      if (!formData.motivo_locacao) errors.push("Motivo da Locação")
 
-      return errors;
-    };
+      if (
+        formData.motivo_locacao === "LOCAÇÃO PARA MORADIA" &&
+        !formData.cpf_morador
+      ) {
+        errors.push("CPF do Morador")
+      }
 
-    const validationErrors = validateForm();
+      if (!formData.aluguel_imovel_alugado) errors.push("Valor do Aluguel")
+
+      return errors
+    }
+
+    const validationErrors = validateForm()
     if (validationErrors.length > 0) {
       setErrorMessage(
         `Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou os campos. Campos obrigatórios que faltam: ${validationErrors.join(
           ", "
         )}`
-      );
-      return;
+      )
+      return
     }
 
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      await createSeguroFiancaEmpresarialMenos2Anos(formData); // Certifique-se de que está chamando a função correta
-      console.log("Dados enviados para criação:", formData);
+      await createSeguroFiancaEmpresarialMenos2Anos(formData) // Certifique-se de que está chamando a função correta
+      console.log("Dados enviados para criação:", formData)
 
       // Reseta o formulário e abre o modal de sucesso
-      formRef.current?.reset();
-      setIsSuccessModalOpen(true);
+      formRef.current?.reset()
+      setIsSuccessModalOpen(true)
     } catch (error) {
-      console.error("Erro ao enviar o formulário:", error);
+      console.error("Erro ao enviar o formulário:", error)
       setErrorMessage(
         "Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou campos de email corretamente. Tente novamente."
-      );
+      )
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
-  const RequiredAsterisk = () => <span className="text-red-500">*</span>;
+  const RequiredAsterisk = () => <span className="text-red-500">*</span>
 
   return (
     <div className="mb-40 flex justify-center">
@@ -1914,7 +1943,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                     {formData.motivo_locacao === "LOCAÇÃO PARA MORADIA" && (
                       <>
                         <div className="space-y-2">
-                          <Label htmlFor="cpf">
+                          <Label htmlFor="cpf_morador">
                             CPF do Morador <RequiredAsterisk />
                           </Label>
                           <Input
@@ -2297,8 +2326,8 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
           </DialogDescription>
           <Button
             onClick={() => {
-              setIsSuccessModalOpen(false);
-              navigate("/formulario");
+              setIsSuccessModalOpen(false)
+              navigate("/imobiliaria/formulario")
             }}
             className="w-full mt-4 bg-green-700 hover:bg-green-600"
           >
@@ -2307,5 +2336,5 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
         </DialogContent>
       </Dialog>
     </div>
-  );
+  )
 }

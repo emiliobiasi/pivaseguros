@@ -1,12 +1,12 @@
 import { Outlet } from "react-router-dom";
-import Footer from "@/components/Footer/footer";
 import { FormsHeader } from "@/components/FormsHeader/forms-header";
-import { HeaderFormMenu } from "@/components/HeaderFormMenu/header-form-menu";
+// import { HeaderFormMenu } from "@/components/HeaderFormMenu/header-form-menu";
+// import Footer from "@/components/Footer/footer";
 
 const FormsLayout = () => {
   return (
     <div className="flex flex-col min-h-screen bg-neutral-100">
-      <HeaderFormMenu />
+      {/* <HeaderFormMenu /> */}
       {/* Header */}
       <FormsHeader />
 
@@ -16,9 +16,9 @@ const FormsLayout = () => {
       </main>
 
       {/* Footer */}
-      <footer className="mt-auto">
+      {/* <footer className="mt-auto">
         <Footer />
-      </footer>
+      </footer> */}
     </div>
   );
 };

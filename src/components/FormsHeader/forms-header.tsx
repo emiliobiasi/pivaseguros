@@ -1,40 +1,48 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/ui/select"
+import pb from "@/utils/backend/pb"
 
 export function FormsHeader() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+
+  const currentUser = pb.authStore.model
+  const imobilariaName = currentUser?.nome // Pega o nome da imobiliária autenticada
 
   function handleFormSelection(value: string) {
     switch (value) {
       case "seguro-incendio":
-        navigate("/formulario/seguro-incendio");
-        break;
+        navigate("/imobiliaria/formulario/seguro-incendio")
+        break
       case "seguro-incendio-comercial":
-        navigate("/formulario/seguro-incendio-comercial");
-        break;
+        navigate("/imobiliaria/formulario/seguro-incendio-comercial")
+        break
       case "seguro-fianca-residencial":
-        navigate("/formulario/seguro-fianca-residencial");
-        break;
+        navigate("/imobiliaria/formulario/seguro-fianca-residencial")
+        break
       case "efetivacao-seguro-fianca":
-        navigate("/formulario/efetivacao-seguro-fianca");
-        break;
+        navigate("/imobiliaria/formulario/efetivacao-seguro-fianca")
+        break
       case "seguro-fianca-empresarial-mais-2-anos":
-        navigate("/formulario/seguro-fianca-empresarial-mais-2-anos");
-        break;
+        navigate(
+          "/imobiliaria/formulario/seguro-fianca-empresarial-mais-2-anos"
+        )
+        break
       case "seguro-fianca-empresarial-menos-2-anos":
-        navigate("/formulario/seguro-fianca-empresarial-menos-2-anos");
-        break;
+        navigate(
+          "/imobiliaria/formulario/seguro-fianca-empresarial-menos-2-anos"
+        )
+        break
       case "titulo-capitalizacao":
-        navigate("/formulario/titulo-capitalizacao");
-        break;
+        navigate("/imobiliaria/formulario/titulo-capitalizacao")
+        break
       default:
-        break;
+        break
     }
   }
 
@@ -44,9 +52,8 @@ export function FormsHeader() {
         <section className="py-12 md:py-20 bg-green-700">
           <div className="container mx-auto text-white px-6 text-center">
             <h1 className="font- font-bold tracking-tighter w-full text-4xl">
-              Bem vindo ao departamento de soluções para locação
+              Olá {imobilariaName}, suas soluções de locação estão aqui
             </h1>
-
           </div>
         </section>
 
@@ -85,7 +92,6 @@ export function FormsHeader() {
                     ANOS)
                   </SelectItem>
 
-
                   {/* Efetivação de Título de Capitalização */}
                   {/* EFETIVAÇÕES */}
                   <SelectItem
@@ -119,5 +125,5 @@ export function FormsHeader() {
         </section>
       </main>
     </div>
-  );
+  )
 }

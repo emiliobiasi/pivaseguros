@@ -1,5 +1,5 @@
-import React from "react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+import React from "react";
 import {
   FaFacebookF,
   FaInstagram,
@@ -9,6 +9,8 @@ import {
 } from "react-icons/fa";
 
 const Footer: React.FC = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
     <>
       {/* Rodapé */}
@@ -17,8 +19,29 @@ const Footer: React.FC = () => {
           {/* Seção de Direitos Reservados */}
           <div className="text-center md:text-left">
             <p className="text-sm text-gray-500">
-              © Copyright 2024 - Piva Corretora de Seguros - Todos os direitos
-              reservados
+              © Copyright {currentYear} - Piva Corretora de Seguros - Todos os
+              direitos reservados.
+            </p>
+            <p className="text-sm text-gray-500">
+              Desenvolvido por{" "}
+              <a
+                href="https://crzweb.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-green-600 hover:text-green-400"
+              >
+                CRZ
+              </a>{" "}
+              e{" "}
+              <a
+                href="https://emiliobiasi.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-green-600 hover:text-green-400"
+              >
+                Emílio Biasi
+              </a>
+              .
             </p>
           </div>
 

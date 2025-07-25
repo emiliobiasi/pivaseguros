@@ -17,6 +17,10 @@ export type SeguroIncendio = {
   complemento?: string;
   cidade: string;
   estado: string;
+
+  vigencia_seguro_inicio?: Date;
+  vigencia_seguro_termino?: Date;
+
   tipo_imovel: "CASA" | "APARTAMENTO";
   incendio?: number;
   vendaval?: number;
