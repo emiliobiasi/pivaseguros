@@ -1,14 +1,17 @@
-import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useBoletosContext } from "@/contexts/boletos/boletos-context";
+import { useEffect } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Link, useLocation, useNavigate } from "react-router-dom"
+import { useBoletosContext } from "@/contexts/boletos/boletos-context"
+import pb from "@/utils/backend/pb"
 
 export function BoletoCard({ children }: { children: React.ReactNode }) {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { hasBoletosToDownload, isProcessFinalized } =
-    useBoletosContext();
+  const currentUser = pb.authStore.model
+  const imobilariaName = currentUser?.nome // Pega o nome da imobiliária autenticada
+
+  const location = useLocation()
+  const navigate = useNavigate()
+  const { hasBoletosToDownload, isProcessFinalized } = useBoletosContext()
 
   useEffect(() => {
     if (
@@ -16,18 +19,18 @@ export function BoletoCard({ children }: { children: React.ReactNode }) {
       hasBoletosToDownload &&
       !isProcessFinalized
     ) {
-      navigate("/");
+      navigate("/")
     }
-  }, [location.pathname, hasBoletosToDownload, isProcessFinalized, navigate]);
+  }, [location.pathname, hasBoletosToDownload, isProcessFinalized, navigate])
 
-  const canAccessHistory = !hasBoletosToDownload || isProcessFinalized;
+  const canAccessHistory = !hasBoletosToDownload || isProcessFinalized
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center p-4">
       <Card className="w-full max-w-4xl mx-auto overflow-hidden bg-white shadow-xl">
         <div className="p-6 border-b flex flex-col items-center gap-6 md:items-start md:gap-4">
           <h1 className="text-2xl font-bold text-center md:text-left">
-            Portal de Boletos
+            Portal de Boletos - {imobilariaName}
           </h1>
           <div className="flex flex-col gap-3 w-full md:flex-row md:gap-4">
             <Button
@@ -56,7 +59,7 @@ export function BoletoCard({ children }: { children: React.ReactNode }) {
               disabled={!canAccessHistory}
               onClick={(e) => {
                 if (!canAccessHistory) {
-                  e.preventDefault();
+                  e.preventDefault()
                 }
               }}
               asChild
@@ -76,5 +79,5 @@ export function BoletoCard({ children }: { children: React.ReactNode }) {
         <CardContent className="p-6">{children}</CardContent>
       </Card>
     </div>
-  );
+  )
 }

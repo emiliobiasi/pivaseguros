@@ -1,20 +1,20 @@
 // import { useContext } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import { cn } from "@/lib/utils";
-import { ExitIcon } from "@radix-ui/react-icons";
-import { AnimatePresence, motion } from "framer-motion";
-import { CreditCard, FileText, Menu, Settings } from "lucide-react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+} from "@/components/ui/sheet"
+import { cn } from "@/lib/utils"
+import { ExitIcon } from "@radix-ui/react-icons"
+import { AnimatePresence, motion } from "framer-motion"
+import { CreditCard, FileText, Menu } from "lucide-react"
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 // import { AuthImobiliariaContext } from "@/contexts/auth/imobiliarias/AuthContextImobiliarias";
-import { useAuthImobiliarias } from "@/contexts/auth/imobiliarias/useAuthImobiliarias";
+import { useAuthImobiliarias } from "@/contexts/auth/imobiliarias/useAuthImobiliarias"
 
 const menuItems = [
   { icon: FileText, label: "Formulários", path: "/imobiliaria/formulario" },
@@ -23,27 +23,27 @@ const menuItems = [
     label: "Boletos",
     path: "/imobiliaria/download-boletos",
   },
-  { icon: Settings, label: "Configurações", path: "/imobiliaria/configuracoes" },
+  // { icon: Settings, label: "Configurações", path: "/imobiliaria/configuracoes" },
   { icon: ExitIcon, label: "Sair", action: "logout" },
-];
+]
 
 export function HamburguerMenu() {
-  const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
-  const { logout } = useAuthImobiliarias();
+  const [isOpen, setIsOpen] = useState(false)
+  const navigate = useNavigate()
+  const { logout } = useAuthImobiliarias()
 
   const handleNavigation = (path: string) => {
-    setIsOpen(false);
-    navigate(path);
-  };
+    setIsOpen(false)
+    navigate(path)
+  }
 
   const handleMenuClick = (item: (typeof menuItems)[0]) => {
     if (item.action === "logout") {
-      logout();
+      logout()
     } else if (item.path) {
-      handleNavigation(item.path);
+      handleNavigation(item.path)
     }
-  };
+  }
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -90,5 +90,5 @@ export function HamburguerMenu() {
         </nav>
       </SheetContent>
     </Sheet>
-  );
+  )
 }

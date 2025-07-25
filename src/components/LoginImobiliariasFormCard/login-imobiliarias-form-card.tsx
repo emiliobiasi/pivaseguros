@@ -90,14 +90,14 @@ export function LoginImobiliariaFormCard() {
               </div>
             </div>
             {error && <p className="text-red-600 text-sm">{error}</p>}
-            <div className="text-sm text-center space-y-2 mt-2">
+            {/* <div className="text-sm text-center space-y-2 mt-2">
               <a
                 href="/esqueci-minha-senha"
                 className="text-blue-500 hover:underline font-semibold"
               >
                 Esqueci minha senha
               </a>
-              {/* <p>
+              <p>
                 Não possui uma conta?{" "}
                 <a
                   href="/imobiliaria/cadastrar"
@@ -105,8 +105,8 @@ export function LoginImobiliariaFormCard() {
                 >
                   Cadastre-se aqui
                 </a>
-              </p> */}
-            </div>
+              </p>
+            </div> */}
           </CardContent>
           <CardFooter className="flex justify-end">
             <Button

@@ -7,21 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { AlertCircle, Pencil } from "lucide-react"
-import { PasswordForm } from "@/components/password-form"
+import { AlertCircle } from "lucide-react"
 import { DeleteAccountDialog } from "@/components/delete-account-dialog"
+// import { PasswordForm } from "@/components/password-form"
 // import { ProfileEditDialog } from "@/components/profile-edit-dialog"
-// import pb from "@/utils/backend/pb"
 
 export default function ConfiguracoesDaConta() {
   // const [isEditingProfile, setIsEditingProfile] = useState(false)
-  const [isEditingPassword, setIsEditingPassword] = useState(false)
+  // const [isEditingPassword, setIsEditingPassword] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-
-  // const currentUser = pb.authStore.model
-  // const currentUserId = currentUser?.id
-  // const currentUserEmail = currentUser?.email
-  // const currentUserName = currentUser?.nome
 
   return (
     <div className="container mx-auto p-4 space-y-6 ">
@@ -61,7 +55,7 @@ export default function ConfiguracoesDaConta() {
       </Card> */}
 
       {/* ALTERAR SENHA */}
-      <Card>
+      {/* <Card>
         <CardHeader>
           <CardTitle>Alterar Senha</CardTitle>
           <CardDescription>
@@ -75,13 +69,12 @@ export default function ConfiguracoesDaConta() {
             <Button
               onClick={() => setIsEditingPassword(true)}
               variant="outline"
-              
             >
               <Pencil className="mr-2 h-4 w-4" /> Alterar Senha
             </Button>
           )}
         </CardContent>
-      </Card>
+      </Card> */}
 
       {/* APAGAR CONTA */}
       <Card className="border-red-500">
