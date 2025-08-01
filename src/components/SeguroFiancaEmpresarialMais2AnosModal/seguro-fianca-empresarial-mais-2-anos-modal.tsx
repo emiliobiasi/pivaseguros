@@ -1,21 +1,21 @@
-import { SeguroFiancaEmpresarialMais2Anos } from "@/types/SeguroFiancaEmpresarialMais2Anos";
-import { XCircle } from "lucide-react";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { formatValor } from "@/utils/regex/regexValor";
+import { SeguroFiancaEmpresarialMais2Anos } from "@/types/SeguroFiancaEmpresarialMais2Anos"
+import { XCircle } from "lucide-react"
+import { motion } from "framer-motion"
+import { Button } from "@/components/ui/button"
+import { formatValor } from "@/utils/regex/regexValor"
 
 type SeguroFiancaEmpresarialMais2AnosModalProps = {
-  seguro: SeguroFiancaEmpresarialMais2Anos;
-  isOpen: boolean;
-  onClose: () => void;
-};
+  seguro: SeguroFiancaEmpresarialMais2Anos
+  isOpen: boolean
+  onClose: () => void
+}
 
 export function SeguroFiancaEmpresarialMais2AnosModal({
   seguro,
   isOpen,
   onClose,
 }: SeguroFiancaEmpresarialMais2AnosModalProps) {
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   return (
     <motion.div
@@ -124,7 +124,8 @@ export function SeguroFiancaEmpresarialMais2AnosModal({
 
           {/* Segunda Coluna */}
           <div className="space-y-4 bg-gray-100 p-4 rounded-lg">
-            <>
+            {/* Endereço da Sede */}
+            {/* <>
               <h3 className="text-lg font-semibold text-[#025d37]">
                 Endereço da Sede
               </h3>
@@ -151,8 +152,9 @@ export function SeguroFiancaEmpresarialMais2AnosModal({
               <p>
                 <strong>Estado:</strong> {seguro.estado_empresa}
               </p>
-            </>
+            </> */}
 
+            {/* Endereço da Locação */}
             <>
               <h3 className="text-lg font-semibold text-[#025d37]">
                 Endereço da Locação
@@ -183,31 +185,37 @@ export function SeguroFiancaEmpresarialMais2AnosModal({
             </>
 
             {/* Informações da Locação */}
-            <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
-              Informações da Locação
-            </h3>
-            <p>
-              <strong>Motivo da Locação:</strong> {seguro.motivo_locacao}
-            </p>
-            <p>
-              <strong>Tipo do Imóvel:</strong> {seguro.tipo_imovel}
-            </p>
-            {seguro.tipo_imovel === "ALUGADO" && (
-              <>
+            <>
+              <h3 className="text-lg font-semibold text-[#025d37]">
+                Informações da Locação
+              </h3>
+              <p>
+                <strong>Motivo da Locação:</strong> {seguro.motivo_locacao}
+              </p>
+
+              {seguro.tipo_imovel && (
                 <p>
-                  <strong>Valor do Aluguel (Imóvel Atual):</strong> R${" "}
-                  {seguro.valor_aluguel !== undefined &&
-                    formatValor(seguro.valor_aluguel.toFixed(2))}
+                  <strong>Tipo do Imóvel:</strong> {seguro.tipo_imovel}
                 </p>
-                <p>
-                  <strong>Nome do Locador/Imobiliária:</strong>{" "}
-                  {seguro.nome_locador_imobiliaria}
-                </p>
-                <p>
-                  <strong>Telefone:</strong> {seguro.telefone}
-                </p>
-              </>
-            )}
+              )}
+
+              {seguro.tipo_imovel === "ALUGADO" && (
+                <>
+                  <p>
+                    <strong>Valor do Aluguel (Imóvel Atual):</strong> R${" "}
+                    {seguro.valor_aluguel !== undefined &&
+                      formatValor(seguro.valor_aluguel.toFixed(2))}
+                  </p>
+                  <p>
+                    <strong>Nome do Locador/Imobiliária:</strong>{" "}
+                    {seguro.nome_locador_imobiliaria}
+                  </p>
+                  <p>
+                    <strong>Telefone:</strong> {seguro.telefone}
+                  </p>
+                </>
+              )}
+            </>
           </div>
 
           {/* Terceira Coluna */}
@@ -291,5 +299,5 @@ export function SeguroFiancaEmpresarialMais2AnosModal({
         </div>
       </motion.div>
     </motion.div>
-  );
+  )
 }
