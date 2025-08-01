@@ -97,7 +97,6 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
 
     if (
       name === "fone_residencial" ||
-      name === "fone_celular" ||
       name === "fone" ||
       name === "fone_conjuge" ||
       name === "telefone_contato" ||
@@ -116,7 +115,6 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
     } else if (name === "rg" || name === "rg_conjuge") {
       formattedValue = formatRG(value)
     } else if (
-      name === "cep" ||
       name === "cep_imovel_alugado" ||
       name === "cep_pessoa_fisica_nao_residencial"
     ) {
@@ -131,16 +129,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
 
           const data: EnderecoViaCep = await buscaEnderecoPorCEP(cepNumeros)
 
-          if (name === "cep") {
-            setFormData((prevState) => ({
-              ...prevState,
-              endereco: data.logradouro || "",
-              bairro: data.bairro || "",
-              cidade: data.localidade || "",
-              estado: data.uf || "",
-              [name]: formattedValue,
-            }))
-          } else if (name === "cep_imovel_alugado") {
+          if (name === "cep_imovel_alugado") {
             setFormData((prevState) => ({
               ...prevState,
               endereco_imovel_alugado: data.logradouro || "",
@@ -167,16 +156,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
               : "Erro ao buscar o CEP. Tente novamente."
           )
 
-          if (name === "cep") {
-            setFormData((prevState) => ({
-              ...prevState,
-              endereco: "",
-              bairro: "",
-              cidade: "",
-              estado: "",
-              [name]: formattedValue,
-            }))
-          } else if (name === "cep_imovel_alugado") {
+          if (name === "cep_imovel_alugado") {
             setFormData((prevState) => ({
               ...prevState,
               endereco_imovel_alugado: "",
@@ -199,16 +179,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
           setIsLoading(false)
         }
       } else {
-        if (name === "cep") {
-          setFormData((prevState) => ({
-            ...prevState,
-            endereco: "",
-            bairro: "",
-            cidade: "",
-            estado: "",
-            [name]: formattedValue,
-          }))
-        } else if (name === "cep_imovel_alugado") {
+        if (name === "cep_imovel_alugado") {
           setFormData((prevState) => ({
             ...prevState,
             endereco_imovel_alugado: "",
@@ -307,7 +278,6 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
     const tabs = [
       "dadosPretendente",
       "dadosConjuge",
-      "endereco",
       "dadosProfissionais",
       "informacoesEmpresa",
       "informacoesFinanceiras",
@@ -323,7 +293,6 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
     const tabs = [
       "dadosPretendente",
       "dadosConjuge",
-      "endereco",
       "dadosProfissionais",
       "informacoesEmpresa",
       "informacoesFinanceiras",
@@ -370,11 +339,6 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
 
       if (!formData.email) errors.push("Email")
 
-      if (!formData.cep) errors.push("CEP do Endereço")
-
-      if (!formData.tipo_residencia) errors.push("Tipo de Residência")
-      if (!formData.condicao_imovel) errors.push("Condição do Imóvel")
-      if (!formData.arca_com_aluguel) errors.push("Arca com Aluguel")
       if (!formData.vinculo_empregaticio) errors.push("Vínculo Empregatício")
       if (!formData.profissao) errors.push("Profissão")
       if (!formData.salario) errors.push("Salário / Rendimentos")
@@ -491,7 +455,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                 >
                   Dados do Cônjuge
                 </TabsTrigger>
-                <TabsTrigger
+                {/* <TabsTrigger
                   value="endereco"
                   className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
                     currentTab === "endereco" ? "" : "bg-gray-200"
@@ -503,7 +467,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                   }}
                 >
                   Endereço
-                </TabsTrigger>
+                </TabsTrigger> */}
                 <TabsTrigger
                   value="dadosProfissionais"
                   className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
@@ -1048,7 +1012,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
               </TabsContent>
 
               {/* Endereço */}
-              <TabsContent value="endereco">
+              {/* <TabsContent value="endereco">
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                     <div className="space-y-2">
@@ -1300,7 +1264,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                     </div>
                   </div>
                 </div>
-              </TabsContent>
+              </TabsContent> */}
 
               {/* Dados Profissionais */}
               <TabsContent value="dadosProfissionais">

@@ -221,7 +221,7 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
           {/* Segunda Coluna */}
           <div className="space-y-4 bg-gray-100 p-4 rounded-lg">
             {/* Endereço Residencial */}
-            <>
+            {/* <>
               <h3 className="text-lg font-semibold text-[#025d37]">
                 Endereço Residencial
               </h3>
@@ -261,7 +261,6 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                 </p>
               )}
 
-              {/* Informações sobre a Residência */}
               <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
                 Informações sobre a Residência
               </h3>
@@ -292,11 +291,11 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                   {seguro.telefone_contato}
                 </p>
               )}
-            </>
+            </> */}
 
             {/* Informações Profissionais */}
             <>
-              <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+              <h3 className="text-lg font-semibold text-[#025d37]">
                 Informações Profissionais
               </h3>
               <p>
@@ -411,7 +410,7 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
           </div>
 
           {/* Terceira Coluna */}
-          <div className="space-y-4 bg-gray-100 p-4 rounded-lg">
+          <div className="space-y-4 bg-gray-100 p-4 rounded-lg max-h-[100vh] overflow-y-auto">
             {/* Investimento Inicial */}
             <>
               <h3 className="text-lg font-semibold text-[#025d37]">
