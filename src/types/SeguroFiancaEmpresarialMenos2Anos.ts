@@ -86,7 +86,7 @@ export type SeguroFiancaEmpresarialMenos2Anos = {
   alocacao_pretendida_constituida: "SIM" | "NÃO"
   cnpj_pessoa_fisica_nao_residencial?: string
   cnae_empresa?: string
-  franquia: "SIM" | "NÃO"
+  franquia?: "SIM" | "NÃO"
   nome_franqueadora?: string
   principais_produtos_servicos?: string
   xp_ramo_pretendido?: string

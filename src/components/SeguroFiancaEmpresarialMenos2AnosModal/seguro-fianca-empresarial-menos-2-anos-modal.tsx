@@ -46,7 +46,6 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
           {/* Primeira Coluna */}
           <div className="space-y-4 bg-gray-100 p-4 rounded-lg">
             {/* Dados do Pretendente */}
@@ -169,9 +168,11 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                   <strong>CNAE da Empresa:</strong> {seguro.cnae_empresa}
                 </p>
               )}
-              <p>
-                <strong>Franquia:</strong> {seguro.franquia}
-              </p>
+              {seguro.franquia && (
+                <p>
+                  <strong>Franquia:</strong> {seguro.franquia}
+                </p>
+              )}
               {seguro.franquia === "SIM" && (
                 <p>
                   <strong>Nome da Franqueadora:</strong>{" "}

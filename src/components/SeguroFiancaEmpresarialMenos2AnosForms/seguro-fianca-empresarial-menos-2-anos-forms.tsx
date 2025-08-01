@@ -351,12 +351,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
       ) {
         errors.push("CNPJ da empresa já constituida")
       }
-
-      if (formData.franquia === "SIM" && !formData.nome_franqueadora) {
-        errors.push("Nome da Franqueadora")
-      }
-
-      if (!formData.franquia) errors.push("Franquia")
+    
       if (!formData.onus) errors.push("Ônus")
       if (!formData.investimento_abertura)
         errors.push("Investimento para Abertura")
@@ -1438,7 +1433,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       />
                     </div>
 
-                    <div className="space-y-2">
+                    {/* <div className="space-y-2">
                       <Label htmlFor="franquia">
                         Franquia? <RequiredAsterisk />
                       </Label>
@@ -1457,22 +1452,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                           <SelectItem value="NÃO">Não</SelectItem>
                         </SelectContent>
                       </Select>
-                    </div>
-
-                    {formData.franquia === "SIM" && (
-                      <div className="space-y-2">
-                        <Label htmlFor="nome_franqueadora">
-                          Nome da Franqueadora
-                        </Label>
-                        <Input
-                          id="nome_franqueadora"
-                          name="nome_franqueadora"
-                          value={formData.nome_franqueadora || ""}
-                          onChange={handleInputChange}
-                          placeholder="Digite o nome da franqueadora"
-                        />
-                      </div>
-                    )}
+                    </div> */}
 
                     <div className="space-y-2">
                       <Label htmlFor="principais_produtos_servicos">
@@ -1488,8 +1468,8 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         required
                       />
                     </div>
-
-                    <div className="space-y-2">
+ 
+                    {/* <div className="space-y-2">
                       <Label htmlFor="xp_ramo_pretendido">
                         Qual a experiência no ramo pretendido?{" "}
                         <RequiredAsterisk />
@@ -1502,7 +1482,9 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         placeholder="Descreva a experiência"
                         required
                       />
-                    </div>
+                    </div> */}
+
+
 
                     <div className="space-y-2">
                       <Label htmlFor="cpf_socio_1">CPF do Sócio 1</Label>
