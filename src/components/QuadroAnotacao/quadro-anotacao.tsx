@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
-import { Input } from "@/components/ui/input";
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react"
+import { Input } from "@/components/ui/input"
+import { motion } from "framer-motion"
 import {
   fetchQuadroAnotacao,
   updateQuadroAnotacao,
   subscribeToQuadroAnotacaoUpdates,
   unsubscribeFromQuadroAnotacaoUpdates,
-} from "@/utils/api/QuadroAnotacaoService";
+} from "@/utils/api/QuadroAnotacaoService"
 
 export function QuadroAnotacao() {
   const [values, setValues] = useState({
@@ -15,16 +15,16 @@ export function QuadroAnotacao() {
     acumuladoAnual: "",
     metaMensal: "",
     mesAtual: "",
-  });
+  })
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     // Função assíncrona para buscar dados do banco
     const fetchData = async () => {
       try {
-        const data = await fetchQuadroAnotacao();
+        const data = await fetchQuadroAnotacao()
 
         // Atualiza o estado com os dados recebidos e formata os valores
         setValues({
@@ -33,72 +33,72 @@ export function QuadroAnotacao() {
           acumuladoAnual: formatCurrency(data.acumulado_anual || ""),
           metaMensal: formatCurrency(data.meta_mensal || ""),
           mesAtual: data.mes_atual || "",
-        });
+        })
 
-        setLoading(false);
+        setLoading(false)
       } catch (err) {
-        console.error("Erro ao buscar dados do Quadro de Anotação:", err);
-        setError("Não foi possível carregar os dados.");
-        setLoading(false);
+        console.error("Erro ao buscar dados do Quadro de Anotação:", err)
+        setError("Não foi possível carregar os dados.")
+        setLoading(false)
       }
-    };
+    }
 
-    fetchData();
+    fetchData()
 
     // Subscrever para atualizações em tempo real
     const handleRealTimeUpdates = (e: any) => {
-      const updatedData = e.record;
+      const updatedData = e.record
       setValues({
         metaAnual: formatCurrency(updatedData.meta_anual || ""),
         faltaMeta: formatCurrency(updatedData.falta_para_meta || "", true),
         acumuladoAnual: formatCurrency(updatedData.acumulado_anual || ""),
         metaMensal: formatCurrency(updatedData.meta_mensal || ""),
         mesAtual: updatedData.mes_atual || "",
-      });
-    };
+      })
+    }
 
-    subscribeToQuadroAnotacaoUpdates(handleRealTimeUpdates);
+    subscribeToQuadroAnotacaoUpdates(handleRealTimeUpdates)
 
     // Cancelar a assinatura quando o componente for desmontado
     return () => {
-      unsubscribeFromQuadroAnotacaoUpdates();
-    };
-  }, []);
+      unsubscribeFromQuadroAnotacaoUpdates()
+    }
+  }, [])
 
   const formatCurrency = (value: string, isNegative = false) => {
-    let number = value.replace(/\D/g, "");
-    if (number === "") return isNegative ? "-R$ 0,00" : "R$ 0,00";
+    let number = value.replace(/\D/g, "")
+    if (number === "") return isNegative ? "-R$ 0,00" : "R$ 0,00"
 
-    number = number.replace(/^0+/, "");
+    number = number.replace(/^0+/, "")
     if (number.length === 0 || number.length === 1) {
-      number = "00" + number;
+      number = "00" + number
     } else if (number.length === 2) {
-      number = "0" + number;
+      number = "0" + number
     }
 
-    const integerPart = number.slice(0, -2);
-    const decimalPart = number.slice(-2);
+    const integerPart = number.slice(0, -2)
+    const decimalPart = number.slice(-2)
     const formattedIntegerPart = integerPart.replace(
       /\B(?=(\d{3})+(?!\d))/g,
       "."
-    );
-    const formattedValue = `R$ ${formattedIntegerPart},${decimalPart}`;
-    return isNegative ? `-${formattedValue}` : formattedValue;
-  };
+    )
+    const formattedValue = `R$ ${formattedIntegerPart},${decimalPart}`
+    return isNegative ? `-${formattedValue}` : formattedValue
+  }
 
   const removeCurrencyFormatting = (value: string) => {
-    return value.replace(/[R$\s.]/g, "").replace(",", ".");
-  };
+    return value.replace(/[R$\s.]/g, "").replace(",", ".")
+  }
 
   const handleInputChange = (field: keyof typeof values, value: string) => {
-    const isNegative = field === "faltaMeta";
-    const formattedValue = formatCurrency(value, isNegative);
-    const newValues = { ...values, [field]: formattedValue };
-    setValues(newValues);
-  };
+    const isNegative = field === "faltaMeta"
+    const formattedValue = formatCurrency(value, isNegative)
+    const newValues = { ...values, [field]: formattedValue }
+    setValues(newValues)
+  }
 
   const salvarDados = async () => {
-    console.log("Função salvarDados foi chamada");
+    // console.log("Função salvarDados foi chamada");
     try {
       const dataToUpdate = {
         meta_anual: removeCurrencyFormatting(values.metaAnual),
@@ -106,19 +106,19 @@ export function QuadroAnotacao() {
         acumulado_anual: removeCurrencyFormatting(values.acumuladoAnual),
         meta_mensal: removeCurrencyFormatting(values.metaMensal),
         mes_atual: values.mesAtual,
-      };
-      console.log(
-        "Dados a serem enviados para updateQuadroAnotacao:",
-        dataToUpdate
-      );
+      }
+      // console.log(
+      //   "Dados a serem enviados para updateQuadroAnotacao:",
+      //   dataToUpdate
+      // );
 
-      await updateQuadroAnotacao(dataToUpdate);
-      alert("Dados atualizados com sucesso!");
+      await updateQuadroAnotacao(dataToUpdate)
+      alert("Dados atualizados com sucesso!")
     } catch (error) {
-      console.error("Erro ao atualizar os dados:", error);
-      alert("Erro ao atualizar os dados.");
+      console.error("Erro ao atualizar os dados:", error)
+      alert("Erro ao atualizar os dados.")
     }
-  };
+  }
 
   const titles = [
     { key: "metaAnual", label: "META ANUAL" },
@@ -126,14 +126,14 @@ export function QuadroAnotacao() {
     { key: "acumuladoAnual", label: "ACUMULADO ANUAL" },
     { key: "metaMensal", label: "META MENSAL" },
     { key: "mesAtual", label: "MÊS ATUAL" },
-  ];
+  ]
 
   if (loading) {
-    return <div className="text-center text-white">Carregando...</div>;
+    return <div className="text-center text-white">Carregando...</div>
   }
 
   if (error) {
-    return <div className="text-center text-red-500">{error}</div>;
+    return <div className="text-center text-red-500">{error}</div>
   }
 
   return (
@@ -147,8 +147,8 @@ export function QuadroAnotacao() {
       <div className="absolute top-4 right-4 z-20">
         <button
           onClick={() => {
-            console.log("Botão Salvar clicado");
-            salvarDados();
+            // console.log("Botão Salvar clicado");
+            salvarDados()
           }}
           className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
         >
@@ -249,5 +249,5 @@ export function QuadroAnotacao() {
         }
       `}</style>
     </motion.div>
-  );
+  )
 }

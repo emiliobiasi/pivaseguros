@@ -70,20 +70,17 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
     vinculo_empregaticio: "AUTÔNOMO",
     profissao: "",
     alocacao_pretendida_constituida: "SIM",
-    franquia: "SIM",
-    onus: "SIM",
-    investimento_abertura: "SIM",
     motivo_locacao: "ABERTURA DE FILIAL",
     cpf_morador: "",
-    vinculo_empregaticio_conjuge: undefined,
+    vinculo_empregaticio_conjuge: "AUTÔNOMO",
     profissao_conjuge: "",
     nome_empresa_trabalho_conjuge: "",
-    data_emissao_conjuge: undefined,
+    data_emissao_conjuge: new Date(),
     fone_conjuge: "",
     ramal_conjuge: "",
-    salario_conjuge: undefined,
-    outros_rendimentos_conjuge: undefined,
-    total_rendimentos_mensais_conjuge: undefined,
+    salario_conjuge: 0,
+    outros_rendimentos_conjuge: 0,
+    total_rendimentos_mensais_conjuge: 0,
     danos_imovel: "SIM",
     multa_rescisao: "SIM",
     pintura_interna: "SIM",
@@ -97,7 +94,6 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
 
     if (
       name === "fone_residencial" ||
-      name === "fone_celular" ||
       name === "fone" ||
       name === "fone_conjuge" ||
       name === "telefone_contato" ||
@@ -116,7 +112,6 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
     } else if (name === "rg" || name === "rg_conjuge") {
       formattedValue = formatRG(value)
     } else if (
-      name === "cep" ||
       name === "cep_imovel_alugado" ||
       name === "cep_pessoa_fisica_nao_residencial"
     ) {
@@ -131,16 +126,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
 
           const data: EnderecoViaCep = await buscaEnderecoPorCEP(cepNumeros)
 
-          if (name === "cep") {
-            setFormData((prevState) => ({
-              ...prevState,
-              endereco: data.logradouro || "",
-              bairro: data.bairro || "",
-              cidade: data.localidade || "",
-              estado: data.uf || "",
-              [name]: formattedValue,
-            }))
-          } else if (name === "cep_imovel_alugado") {
+          if (name === "cep_imovel_alugado") {
             setFormData((prevState) => ({
               ...prevState,
               endereco_imovel_alugado: data.logradouro || "",
@@ -167,16 +153,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
               : "Erro ao buscar o CEP. Tente novamente."
           )
 
-          if (name === "cep") {
-            setFormData((prevState) => ({
-              ...prevState,
-              endereco: "",
-              bairro: "",
-              cidade: "",
-              estado: "",
-              [name]: formattedValue,
-            }))
-          } else if (name === "cep_imovel_alugado") {
+          if (name === "cep_imovel_alugado") {
             setFormData((prevState) => ({
               ...prevState,
               endereco_imovel_alugado: "",
@@ -199,16 +176,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
           setIsLoading(false)
         }
       } else {
-        if (name === "cep") {
-          setFormData((prevState) => ({
-            ...prevState,
-            endereco: "",
-            bairro: "",
-            cidade: "",
-            estado: "",
-            [name]: formattedValue,
-          }))
-        } else if (name === "cep_imovel_alugado") {
+        if (name === "cep_imovel_alugado") {
           setFormData((prevState) => ({
             ...prevState,
             endereco_imovel_alugado: "",
@@ -307,10 +275,8 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
     const tabs = [
       "dadosPretendente",
       "dadosConjuge",
-      "endereco",
       "dadosProfissionais",
       "informacoesEmpresa",
-      "informacoesFinanceiras",
       "dadosImovelAlugado",
     ]
     const currentIndex = tabs.indexOf(currentTab)
@@ -323,10 +289,8 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
     const tabs = [
       "dadosPretendente",
       "dadosConjuge",
-      "endereco",
       "dadosProfissionais",
       "informacoesEmpresa",
-      "informacoesFinanceiras",
       "dadosImovelAlugado",
     ]
     const currentIndex = tabs.indexOf(currentTab)
@@ -339,7 +303,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
     e.preventDefault()
 
     // Verifique se o handleSubmit está sendo acionado
-    console.log("handleSubmit acionado com dados:", formData)
+    // console.log("handleSubmit acionado com dados:", formData)
 
     // Função de validação
     const validateForm = () => {
@@ -370,11 +334,6 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
 
       if (!formData.email) errors.push("Email")
 
-      if (!formData.cep) errors.push("CEP do Endereço")
-
-      if (!formData.tipo_residencia) errors.push("Tipo de Residência")
-      if (!formData.condicao_imovel) errors.push("Condição do Imóvel")
-      if (!formData.arca_com_aluguel) errors.push("Arca com Aluguel")
       if (!formData.vinculo_empregaticio) errors.push("Vínculo Empregatício")
       if (!formData.profissao) errors.push("Profissão")
       if (!formData.salario) errors.push("Salário / Rendimentos")
@@ -388,14 +347,6 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
         errors.push("CNPJ da empresa já constituida")
       }
 
-      if (formData.franquia === "SIM" && !formData.nome_franqueadora) {
-        errors.push("Nome da Franqueadora")
-      }
-
-      if (!formData.franquia) errors.push("Franquia")
-      if (!formData.onus) errors.push("Ônus")
-      if (!formData.investimento_abertura)
-        errors.push("Investimento para Abertura")
       if (!formData.motivo_locacao) errors.push("Motivo da Locação")
 
       if (
@@ -422,8 +373,8 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
 
     setIsLoading(true)
     try {
-      await createSeguroFiancaEmpresarialMenos2Anos(formData) // Certifique-se de que está chamando a função correta
-      console.log("Dados enviados para criação:", formData)
+      await createSeguroFiancaEmpresarialMenos2Anos(formData)
+      // console.log("Dados enviados para criação:", formData)
 
       // Reseta o formulário e abre o modal de sucesso
       formRef.current?.reset()
@@ -491,19 +442,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                 >
                   Dados do Cônjuge
                 </TabsTrigger>
-                <TabsTrigger
-                  value="endereco"
-                  className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
-                    currentTab === "endereco" ? "" : "bg-gray-200"
-                  }`}
-                  style={{
-                    backgroundColor:
-                      currentTab === "endereco" ? "#16a34a" : undefined,
-                    color: currentTab === "endereco" ? "white" : undefined,
-                  }}
-                >
-                  Endereço
-                </TabsTrigger>
+
                 <TabsTrigger
                   value="dadosProfissionais"
                   className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
@@ -536,24 +475,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                 >
                   Informações da Empresa
                 </TabsTrigger>
-                <TabsTrigger
-                  value="informacoesFinanceiras"
-                  className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
-                    currentTab === "informacoesFinanceiras" ? "" : "bg-gray-200"
-                  }`}
-                  style={{
-                    backgroundColor:
-                      currentTab === "informacoesFinanceiras"
-                        ? "#16a34a"
-                        : undefined,
-                    color:
-                      currentTab === "informacoesFinanceiras"
-                        ? "white"
-                        : undefined,
-                  }}
-                >
-                  Informações Financeiras
-                </TabsTrigger>
+
                 <TabsTrigger
                   value="dadosImovelAlugado"
                   className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
@@ -1048,7 +970,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
               </TabsContent>
 
               {/* Endereço */}
-              <TabsContent value="endereco">
+              {/* <TabsContent value="endereco">
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                     <div className="space-y-2">
@@ -1300,7 +1222,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                     </div>
                   </div>
                 </div>
-              </TabsContent>
+              </TabsContent> */}
 
               {/* Dados Profissionais */}
               <TabsContent value="dadosProfissionais">
@@ -1474,7 +1396,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       />
                     </div>
 
-                    <div className="space-y-2">
+                    {/* <div className="space-y-2">
                       <Label htmlFor="franquia">
                         Franquia? <RequiredAsterisk />
                       </Label>
@@ -1493,22 +1415,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                           <SelectItem value="NÃO">Não</SelectItem>
                         </SelectContent>
                       </Select>
-                    </div>
-
-                    {formData.franquia === "SIM" && (
-                      <div className="space-y-2">
-                        <Label htmlFor="nome_franqueadora">
-                          Nome da Franqueadora
-                        </Label>
-                        <Input
-                          id="nome_franqueadora"
-                          name="nome_franqueadora"
-                          value={formData.nome_franqueadora || ""}
-                          onChange={handleInputChange}
-                          placeholder="Digite o nome da franqueadora"
-                        />
-                      </div>
-                    )}
+                    </div> */}
 
                     <div className="space-y-2">
                       <Label htmlFor="principais_produtos_servicos">
@@ -1525,7 +1432,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       />
                     </div>
 
-                    <div className="space-y-2">
+                    {/* <div className="space-y-2">
                       <Label htmlFor="xp_ramo_pretendido">
                         Qual a experiência no ramo pretendido?{" "}
                         <RequiredAsterisk />
@@ -1538,7 +1445,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         placeholder="Descreva a experiência"
                         required
                       />
-                    </div>
+                    </div> */}
 
                     <div className="space-y-2">
                       <Label htmlFor="cpf_socio_1">CPF do Sócio 1</Label>
@@ -1580,7 +1487,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
               </TabsContent>
 
               {/* Informações Financeiras */}
-              <TabsContent value="informacoesFinanceiras">
+              {/* <TabsContent value="informacoesFinanceiras">
                 <div className="grid gap-4 py-4">
                   <div className="space-y-2">
                     <Label htmlFor="onus">
@@ -1675,7 +1582,6 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                     </>
                   )}
 
-                  {/* Investimento Abertura */}
                   <div className="space-y-2">
                     <Label htmlFor="investimento_abertura">
                       Investimento para Abertura? <RequiredAsterisk />
@@ -1812,7 +1718,6 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         </div>
                       </div>
 
-                      {/* Capital de Giro */}
                       <div className="mt-4">
                         <h3 className="text-lg font-medium">Capital de Giro</h3>
                       </div>
@@ -1900,9 +1805,9 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                     </>
                   )}
                 </div>
-              </TabsContent>
+              </TabsContent> */}
 
-              {/* Dados do Imóvel Alugado */}
+              {/* Dados do Imóvel Pretendido */}
               <TabsContent value="dadosImovelAlugado">
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

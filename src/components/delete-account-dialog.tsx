@@ -29,7 +29,7 @@ export function DeleteAccountDialog({
   // Obtém o usuário logado
   const currentUser = pb.authStore.model;
   const imobiliariaId = currentUser?.id; // Pega o ID do usuário autenticado
-  console.log("ID da imobiliária:", imobiliariaId);
+  // console.log("ID da imobiliária:", imobiliariaId);
 
   const handleDeleteAccount = async () => {
     if (!imobiliariaId) {

@@ -46,7 +46,6 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
           {/* Primeira Coluna */}
           <div className="space-y-4 bg-gray-100 p-4 rounded-lg">
             {/* Dados do Pretendente */}
@@ -169,9 +168,11 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                   <strong>CNAE da Empresa:</strong> {seguro.cnae_empresa}
                 </p>
               )}
-              <p>
-                <strong>Franquia:</strong> {seguro.franquia}
-              </p>
+              {seguro.franquia && (
+                <p>
+                  <strong>Franquia:</strong> {seguro.franquia}
+                </p>
+              )}
               {seguro.franquia === "SIM" && (
                 <p>
                   <strong>Nome da Franqueadora:</strong>{" "}
@@ -221,7 +222,7 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
           {/* Segunda Coluna */}
           <div className="space-y-4 bg-gray-100 p-4 rounded-lg">
             {/* Endereço Residencial */}
-            <>
+            {/* <>
               <h3 className="text-lg font-semibold text-[#025d37]">
                 Endereço Residencial
               </h3>
@@ -261,7 +262,6 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                 </p>
               )}
 
-              {/* Informações sobre a Residência */}
               <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
                 Informações sobre a Residência
               </h3>
@@ -292,11 +292,11 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                   {seguro.telefone_contato}
                 </p>
               )}
-            </>
+            </> */}
 
             {/* Informações Profissionais */}
             <>
-              <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+              <h3 className="text-lg font-semibold text-[#025d37]">
                 Informações Profissionais
               </h3>
               <p>
@@ -411,9 +411,9 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
           </div>
 
           {/* Terceira Coluna */}
-          <div className="space-y-4 bg-gray-100 p-4 rounded-lg">
+          <div className="space-y-4 bg-gray-100 p-4 rounded-lg ">
             {/* Investimento Inicial */}
-            <>
+            {/* <>
               <h3 className="text-lg font-semibold text-[#025d37]">
                 Investimento Inicial
               </h3>
@@ -424,7 +424,6 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
 
               {seguro.investimento_abertura === "SIM" && (
                 <>
-                  {/* ******************* */}
                   {seguro.compra_produto_cap_inicial !== undefined && (
                     <p>
                       <strong>Compra de Produto (Capital Inicial):</strong> R${" "}
@@ -480,7 +479,6 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                     </p>
                   )}
 
-                  {/* Capital de Giro */}
                   <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
                     Capital de Giro
                   </h3>
@@ -528,11 +526,11 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                   )}
                 </>
               )}
-            </>
+            </> */}
 
             {/* Endereço do Imóvel Alugado */}
             <>
-              <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+              <h3 className="text-lg font-semibold text-[#025d37]">
                 Endereço do Imóvel Alugado
               </h3>
               {seguro.cep_imovel_alugado && (
@@ -664,13 +662,17 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
             </>
 
             {/* Ônus */}
-            <>
-              <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
-                Ônus (Dívidas)
-              </h3>
-              <p>
-                <strong>Possui Ônus:</strong> {seguro.onus}
-              </p>
+            {/* <>
+              {seguro.onus && (
+                <>
+                  <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+                    Ônus (Dívidas)
+                  </h3>
+                  <p>
+                    <strong>Possui Ônus:</strong> {seguro.onus}
+                  </p>
+                </>
+              )}
 
               {seguro.onus === "SIM" && (
                 <>
@@ -715,7 +717,7 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                   )}
                 </>
               )}
-            </>
+            </> */}
           </div>
         </div>
 

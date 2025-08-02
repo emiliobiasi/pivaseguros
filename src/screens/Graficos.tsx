@@ -73,7 +73,7 @@ const Graficos = () => {
   // Função para buscar e combinar os seguros de incêndio
   const fetchIncendioDataAndCombine = async () => {
     try {
-      console.log("Buscando dados de seguros de incêndio...");
+      // console.log("Buscando dados de seguros de incêndio...");
 
       const [incendioData, incendioComercialData] = await Promise.all([
         fetchSeguroIncendioLastMonth(),
@@ -125,7 +125,7 @@ const Graficos = () => {
   // Função para buscar e combinar os seguros de fiança, verificando o status de cada form
   const fetchFiancaDataAndCombine = async () => {
     try {
-      console.log("Buscando dados de seguros de fiança...");
+      // console.log("Buscando dados de seguros de fiança...");
 
       const [
         fiancaEmpresarialMais2AnosData,
@@ -219,7 +219,7 @@ const Graficos = () => {
   // Função para buscar e combinar os dados de efetivação de seguros de fiança
   const fetchEfetivacaoDataAndCombine = async () => {
     try {
-      console.log("Buscando dados de efetivação de seguros de fiança...");
+      // console.log("Buscando dados de efetivação de seguros de fiança...");
 
       const efetivacaoData = await fetchEfetivacaoSeguroFiancaLastMonth();
 

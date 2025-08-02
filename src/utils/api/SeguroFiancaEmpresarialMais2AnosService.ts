@@ -40,10 +40,10 @@ export async function createSeguroFiancaEmpresarialMais2Anos(
         id_numero: nextIdNumero,
       });
 
-    console.log(
-      "Seguro Fiança Empresarial Acima de 2 Anos criado com sucesso:",
-      record
-    );
+    // console.log(
+    //   "Seguro Fiança Empresarial Acima de 2 Anos criado com sucesso:",
+    //   record
+    // );
     return record;
   } catch (error) {
     const err = error as PocketBaseError;
@@ -116,10 +116,10 @@ export async function updateSeguroFiancaEmpresarialMais2AnosToPending(
       .update<SeguroFiancaEmpresarialMais2Anos>(id, {
         acao: "PENDENTE",
       });
-    console.log(
-      `Seguro Fiança Residencial ${id} atualizado para PENDENTE:`,
-      updatedRecord
-    );
+    // console.log(
+    //   `Seguro Fiança Residencial ${id} atualizado para PENDENTE:`,
+    //   updatedRecord
+    // );
     return updatedRecord;
   } catch (error) {
     const err = error as PocketBaseError;
@@ -144,10 +144,10 @@ export async function updateSeguroFiancaEmpresarialMais2AnosToFinalized(
       .update<SeguroFiancaEmpresarialMais2Anos>(id, {
         acao: "FINALIZADO",
       });
-    console.log(
-      `Seguro Fiança Residencial ${id} atualizado para FINALIZADO:`,
-      updatedRecord
-    );
+    // console.log(
+    //   `Seguro Fiança Residencial ${id} atualizado para FINALIZADO:`,
+    //   updatedRecord
+    // );
     return updatedRecord;
   } catch (error) {
     const err = error as PocketBaseError;
@@ -172,10 +172,10 @@ export async function updateSeguroFiancaEmpresarialMais2AnosStatus(
       .update<SeguroFiancaEmpresarialMais2Anos>(id, {
         status: status,
       });
-    console.log(
-      `Seguro Fiança Empresarial Acima de 2 Anos ${id} atualizado para ${status}:`,
-      updatedRecord
-    );
+    // console.log(
+    //   `Seguro Fiança Empresarial Acima de 2 Anos ${id} atualizado para ${status}:`,
+    //   updatedRecord
+    // );
     return updatedRecord;
   } catch (error) {
     const err = error as PocketBaseError;
@@ -237,5 +237,5 @@ export function subscribeToSeguroFiancaEmpresarialMais2AnosUpdates(
 // Função para cancelar a subscription
 export function unsubscribeFromSeguroFiancaEmpresarialMais2AnosUpdates() {
   pb.collection("seguro_fianca_empresarial_mais_2_anos").unsubscribe("*");
-  console.log("Subscrição cancelada.");
+  // console.log("Subscrição cancelada.");
 }

@@ -94,7 +94,7 @@ export default function BoletosDownload() {
 
     const currentUserId = currentUser.id;
 
-    console.log("Buscando boletos para o usuário:", currentUserId);
+    // console.log("Buscando boletos para o usuário:", currentUserId);
 
     // Busca apenas registros onde:
     // - imobiliaria == currentUserId
@@ -162,7 +162,7 @@ export default function BoletosDownload() {
         return newSet;
       });
 
-      console.log(`Download do arquivo "${arquivo}" concluído.`);
+      // console.log(`Download do arquivo "${arquivo}" concluído.`);
     } catch (error) {
       console.error(`Erro ao baixar o arquivo ${arquivo}:`, error);
     } finally {
@@ -202,7 +202,7 @@ export default function BoletosDownload() {
       // Aguarda todas as atualizações
       await Promise.all(updates);
 
-      console.log("Todos os envios foram marcados como finalizados.");
+      // console.log("Todos os envios foram marcados como finalizados.");
 
       // Redirecionar para o histórico após a atualização
       setIsProcessFinalized(true);

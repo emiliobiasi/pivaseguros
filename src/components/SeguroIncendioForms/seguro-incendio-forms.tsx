@@ -203,7 +203,7 @@ export function SeguroIncendioForms() {
     e.preventDefault()
 
     // Verifique se o handleSubmit está sendo acionado
-    console.log("handleSubmit acionado com dados:", formData)
+    // console.log("handleSubmit acionado com dados:", formData)
 
     // Função de validação
     const validateForm = () => {
@@ -243,7 +243,7 @@ export function SeguroIncendioForms() {
     setIsLoading(true)
     try {
       await createSeguroIncendio(formData) // Certifique-se de que está chamando a função correta
-      console.log("Dados enviados para criação:", formData)
+      // console.log("Dados enviados para criação:", formData)
 
       // Reseta o formulário e abre o modal de sucesso
       formRef.current?.reset()
