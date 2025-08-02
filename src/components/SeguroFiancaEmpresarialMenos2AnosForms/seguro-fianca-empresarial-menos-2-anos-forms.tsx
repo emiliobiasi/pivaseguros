@@ -70,20 +70,17 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
     vinculo_empregaticio: "AUTÔNOMO",
     profissao: "",
     alocacao_pretendida_constituida: "SIM",
-    franquia: "SIM",
-    onus: "SIM",
-    investimento_abertura: "SIM",
     motivo_locacao: "ABERTURA DE FILIAL",
     cpf_morador: "",
-    vinculo_empregaticio_conjuge: undefined,
+    vinculo_empregaticio_conjuge: "AUTÔNOMO",
     profissao_conjuge: "",
     nome_empresa_trabalho_conjuge: "",
-    data_emissao_conjuge: undefined,
+    data_emissao_conjuge: new Date(),
     fone_conjuge: "",
     ramal_conjuge: "",
-    salario_conjuge: undefined,
-    outros_rendimentos_conjuge: undefined,
-    total_rendimentos_mensais_conjuge: undefined,
+    salario_conjuge: 0,
+    outros_rendimentos_conjuge: 0,
+    total_rendimentos_mensais_conjuge: 0,
     danos_imovel: "SIM",
     multa_rescisao: "SIM",
     pintura_interna: "SIM",
@@ -280,7 +277,6 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
       "dadosConjuge",
       "dadosProfissionais",
       "informacoesEmpresa",
-      "informacoesFinanceiras",
       "dadosImovelAlugado",
     ]
     const currentIndex = tabs.indexOf(currentTab)
@@ -295,7 +291,6 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
       "dadosConjuge",
       "dadosProfissionais",
       "informacoesEmpresa",
-      "informacoesFinanceiras",
       "dadosImovelAlugado",
     ]
     const currentIndex = tabs.indexOf(currentTab)
@@ -351,10 +346,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
       ) {
         errors.push("CNPJ da empresa já constituida")
       }
-    
-      if (!formData.onus) errors.push("Ônus")
-      if (!formData.investimento_abertura)
-        errors.push("Investimento para Abertura")
+
       if (!formData.motivo_locacao) errors.push("Motivo da Locação")
 
       if (
@@ -450,19 +442,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                 >
                   Dados do Cônjuge
                 </TabsTrigger>
-                {/* <TabsTrigger
-                  value="endereco"
-                  className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
-                    currentTab === "endereco" ? "" : "bg-gray-200"
-                  }`}
-                  style={{
-                    backgroundColor:
-                      currentTab === "endereco" ? "#16a34a" : undefined,
-                    color: currentTab === "endereco" ? "white" : undefined,
-                  }}
-                >
-                  Endereço
-                </TabsTrigger> */}
+
                 <TabsTrigger
                   value="dadosProfissionais"
                   className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
@@ -495,24 +475,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                 >
                   Informações da Empresa
                 </TabsTrigger>
-                <TabsTrigger
-                  value="informacoesFinanceiras"
-                  className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
-                    currentTab === "informacoesFinanceiras" ? "" : "bg-gray-200"
-                  }`}
-                  style={{
-                    backgroundColor:
-                      currentTab === "informacoesFinanceiras"
-                        ? "#16a34a"
-                        : undefined,
-                    color:
-                      currentTab === "informacoesFinanceiras"
-                        ? "white"
-                        : undefined,
-                  }}
-                >
-                  Informações Financeiras
-                </TabsTrigger>
+
                 <TabsTrigger
                   value="dadosImovelAlugado"
                   className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
@@ -1468,7 +1431,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         required
                       />
                     </div>
- 
+
                     {/* <div className="space-y-2">
                       <Label htmlFor="xp_ramo_pretendido">
                         Qual a experiência no ramo pretendido?{" "}
@@ -1483,8 +1446,6 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         required
                       />
                     </div> */}
-
-
 
                     <div className="space-y-2">
                       <Label htmlFor="cpf_socio_1">CPF do Sócio 1</Label>
@@ -1526,7 +1487,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
               </TabsContent>
 
               {/* Informações Financeiras */}
-              <TabsContent value="informacoesFinanceiras">
+              {/* <TabsContent value="informacoesFinanceiras">
                 <div className="grid gap-4 py-4">
                   <div className="space-y-2">
                     <Label htmlFor="onus">
@@ -1621,7 +1582,6 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                     </>
                   )}
 
-                  {/* Investimento Abertura */}
                   <div className="space-y-2">
                     <Label htmlFor="investimento_abertura">
                       Investimento para Abertura? <RequiredAsterisk />
@@ -1758,7 +1718,6 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         </div>
                       </div>
 
-                      {/* Capital de Giro */}
                       <div className="mt-4">
                         <h3 className="text-lg font-medium">Capital de Giro</h3>
                       </div>
@@ -1846,9 +1805,9 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                     </>
                   )}
                 </div>
-              </TabsContent>
+              </TabsContent> */}
 
-              {/* Dados do Imóvel Alugado */}
+              {/* Dados do Imóvel Pretendido */}
               <TabsContent value="dadosImovelAlugado">
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

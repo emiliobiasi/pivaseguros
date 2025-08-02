@@ -93,7 +93,7 @@ export type SeguroFiancaEmpresarialMenos2Anos = {
   cpf_socio_1?: string
   cpf_socio_2?: string
   cpf_socio_3?: string
-  onus: "SIM" | "NÃO"
+  onus?: "SIM" | "NÃO"
   detalhamento_onus?: string
   tipo_qtd_parcela_a_1?: number
   tipo_qtd_parcela_a_2?: number
@@ -107,7 +107,7 @@ export type SeguroFiancaEmpresarialMenos2Anos = {
   valor_parcela_b_1?: number
   valor_parcela_b_2?: number
   valor_parcela_b_3?: number
-  investimento_abertura: "SIM" | "NÃO"
+  investimento_abertura?: "SIM" | "NÃO"
   compra_produto_cap_inicial?: number
   obras_reformas_cap_inicial?: number
   maquinas_cap_inicial?: number
