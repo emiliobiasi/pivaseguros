@@ -32,7 +32,7 @@ export async function createEnvioDeBoletos(
       .collection("envios_de_boletos")
       .create<EnvioDeBoletos>(formData);
 
-    console.log("Envio de boletos criado com sucesso:", record);
+    // console.log("Envio de boletos criado com sucesso:", record);
     return record;
   } catch (error) {
     const err = error as PocketBaseError;
@@ -117,10 +117,10 @@ export async function updateEnvioDeBoletos(
       .collection("envios_de_boletos")
       .update<EnvioDeBoletos>(id, data);
 
-    console.log(
-      `Envio de boletos ${id} atualizado com sucesso:`,
-      updatedRecord
-    );
+    // console.log(
+    //   `Envio de boletos ${id} atualizado com sucesso:`,
+    //   updatedRecord
+    // );
     return updatedRecord;
   } catch (error) {
     const err = error as PocketBaseError;
@@ -136,7 +136,7 @@ export async function updateEnvioDeBoletos(
 export async function deleteEnvioDeBoletos(id: string): Promise<void> {
   try {
     await pb.collection("envios_de_boletos").delete(id);
-    console.log(`Envio de boletos ${id} excluído com sucesso.`);
+    // console.log(`Envio de boletos ${id} excluído com sucesso.`);
   } catch (error) {
     const err = error as PocketBaseError;
     console.error(`Erro ao excluir o envio de boletos ${id}:`, err);
@@ -184,7 +184,7 @@ export async function subscribeToEnvioDeBoletosUpdates(
     const unsubscribe = await pb
       .collection("envios_de_boletos")
       .subscribe("*", onRecordChange);
-    console.log("Subscrição para atualizações de envios de boletos iniciada.");
+    // console.log("Subscrição para atualizações de envios de boletos iniciada.");
     return unsubscribe;
   } catch (error) {
     console.error("Erro ao assinar atualizações de envios de boletos:", error);
@@ -220,7 +220,7 @@ export async function downloadBoleto(
     link.download = filename;
     link.click();
 
-    console.log(`Download iniciado para o arquivo: ${filename}`);
+    // console.log(`Download iniciado para o arquivo: ${filename}`);
   } catch (error) {
     console.error(`Erro ao realizar o download do arquivo ${filename}:`, error);
     throw new Error("Erro ao realizar o download do arquivo.");

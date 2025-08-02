@@ -303,7 +303,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
     e.preventDefault()
 
     // Verifique se o handleSubmit está sendo acionado
-    console.log("handleSubmit acionado com dados:", formData)
+    // console.log("handleSubmit acionado com dados:", formData)
 
     // Função de validação
     const validateForm = () => {
@@ -373,8 +373,8 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
 
     setIsLoading(true)
     try {
-      await createSeguroFiancaEmpresarialMenos2Anos(formData) // Certifique-se de que está chamando a função correta
-      console.log("Dados enviados para criação:", formData)
+      await createSeguroFiancaEmpresarialMenos2Anos(formData)
+      // console.log("Dados enviados para criação:", formData)
 
       // Reseta o formulário e abre o modal de sucesso
       formRef.current?.reset()

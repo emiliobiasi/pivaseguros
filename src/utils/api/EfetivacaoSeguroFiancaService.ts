@@ -1,13 +1,13 @@
-import pb, { PocketBaseError } from "@/utils/backend/pb";
-import { EfetivacaoSeguroFianca } from "@/types/EfetivacaoSeguroFianca";
-import { ClientResponseError, RecordSubscription } from "pocketbase";
+import pb, { PocketBaseError } from "@/utils/backend/pb"
+import { EfetivacaoSeguroFianca } from "@/types/EfetivacaoSeguroFianca"
+import { ClientResponseError, RecordSubscription } from "pocketbase"
 
 export async function createEfetivacaoSeguroFianca(
   data: EfetivacaoSeguroFianca
 ): Promise<EfetivacaoSeguroFianca> {
   try {
     // Inicializa lastRecord como nulo
-    let lastRecord: EfetivacaoSeguroFianca | null = null;
+    let lastRecord: EfetivacaoSeguroFianca | null = null
 
     try {
       // Tenta obter o último registro com base em "id_numero"
@@ -15,20 +15,20 @@ export async function createEfetivacaoSeguroFianca(
         .collection("efetivacao_seguro_fianca_tb")
         .getFirstListItem<EfetivacaoSeguroFianca>("", {
           sort: "-id_numero",
-        });
+        })
     } catch (error) {
-      const err = error as ClientResponseError;
+      const err = error as ClientResponseError
       if (err.status === 404) {
         // Nenhum registro encontrado, continua com lastRecord como nulo
-        console.log("Nenhum registro encontrado. Iniciando id_numero em 1.");
+        // console.log("Nenhum registro encontrado. Iniciando id_numero em 1.");
       } else {
         // Re-lança outros erros
-        throw err;
+        throw err
       }
     }
 
     // Determina o próximo valor para "id_numero"
-    const nextIdNumero = lastRecord ? (lastRecord.id_numero || 0) + 1 : 1;
+    const nextIdNumero = lastRecord ? (lastRecord.id_numero || 0) + 1 : 1
 
     // Cria o novo registro com o campo "id_numero" incrementado
     const record = await pb
@@ -36,14 +36,14 @@ export async function createEfetivacaoSeguroFianca(
       .create<EfetivacaoSeguroFianca>({
         ...data,
         id_numero: nextIdNumero,
-      });
+      })
 
-    console.log("Efetivação Seguro Fiança criado com sucesso:", record);
-    return record;
+    // console.log("Efetivação Seguro Fiança criado com sucesso:", record);
+    return record
   } catch (error) {
-    const err = error as PocketBaseError;
-    console.error("Erro ao criar o Efetivação Seguro Fiança:", err);
-    throw new Error("Erro ao criar o Efetivação Seguro Fiança");
+    const err = error as PocketBaseError
+    console.error("Erro ao criar o Efetivação Seguro Fiança:", err)
+    throw new Error("Erro ao criar o Efetivação Seguro Fiança")
   }
 }
 
@@ -53,39 +53,36 @@ export async function fetchEfetivacaoSeguroFiancaList(
   searchTerm: string = "",
   filter: "PENDENTE" | "FINALIZADO" | "" = ""
 ): Promise<{
-  items: EfetivacaoSeguroFianca[];
-  totalItems: number;
-  totalPages: number;
+  items: EfetivacaoSeguroFianca[]
+  totalItems: number
+  totalPages: number
 }> {
   try {
-    const actionFilter = filter ? `acao = "${filter}"` : "";
+    const actionFilter = filter ? `acao = "${filter}"` : ""
     const searchFilter = searchTerm
       ? `(nome_proprietario ~ "${searchTerm}" || nome_imobiliaria ~ "${searchTerm}" || id_numero ~ "${searchTerm}")`
-      : "";
+      : ""
 
     const combinedFilter = [actionFilter, searchFilter]
       .filter(Boolean)
-      .join(" && ");
+      .join(" && ")
 
     const response = await pb
       .collection("efetivacao_seguro_fianca_tb")
       .getList<EfetivacaoSeguroFianca>(page, limit, {
         sort: "-created",
         filter: combinedFilter,
-      });
+      })
 
     return {
       items: response.items,
       totalItems: response.totalItems,
       totalPages: response.totalPages,
-    };
+    }
   } catch (error) {
-    const err = error as ClientResponseError;
-    console.error(
-      "Erro ao buscar a lista de Efetivação do Seguro Fiança:",
-      err
-    );
-    throw new Error("Erro ao buscar a lista de Efetivação do Seguro Fiança");
+    const err = error as ClientResponseError
+    console.error("Erro ao buscar a lista de Efetivação do Seguro Fiança:", err)
+    throw new Error("Erro ao buscar a lista de Efetivação do Seguro Fiança")
   }
 }
 
@@ -97,21 +94,21 @@ export async function updateEfetivacaoSeguroFiancaToPending(
       .collection("efetivacao_seguro_fianca_tb")
       .update<EfetivacaoSeguroFianca>(id, {
         acao: "PENDENTE",
-      });
-    console.log(
-      `Efetivação do Seguro Fiança ${id} atualizado para PENDENTE:`,
-      updatedRecord
-    );
-    return updatedRecord;
+      })
+    // console.log(
+    //   `Efetivação do Seguro Fiança ${id} atualizado para PENDENTE:`,
+    //   updatedRecord
+    // );
+    return updatedRecord
   } catch (error) {
-    const err = error as PocketBaseError;
+    const err = error as PocketBaseError
     console.error(
       `Erro ao atualizar o Efetivação do Seguro Fiança ${id} para PENDENTE:`,
       err
-    );
+    )
     throw new Error(
       "Erro ao atualizar o Efetivação do Seguro Fiança para PENDENTE"
-    );
+    )
   }
 }
 
@@ -123,21 +120,21 @@ export async function updateEfetivacaoSeguroFiancaToFinalized(
       .collection("efetivacao_seguro_fianca_tb")
       .update<EfetivacaoSeguroFianca>(id, {
         acao: "FINALIZADO",
-      });
-    console.log(
-      `Efetivação do Seguro Fiança ${id} atualizado para FINALIZADO:`,
-      updatedRecord
-    );
-    return updatedRecord;
+      })
+    // console.log(
+    //   `Efetivação do Seguro Fiança ${id} atualizado para FINALIZADO:`,
+    //   updatedRecord
+    // )
+    return updatedRecord
   } catch (error) {
-    const err = error as PocketBaseError;
+    const err = error as PocketBaseError
     console.error(
       `Erro ao atualizar o Efetivação do Seguro Fiança ${id} para FINALIZADO:`,
       err
-    );
+    )
     throw new Error(
       "Erro ao atualizar o Efetivação do Seguro Fiança para FINALIZADO"
-    );
+    )
   }
 }
 
@@ -147,11 +144,11 @@ export async function fetchEfetivacaoSeguroFiancaLastMonth(): Promise<
 > {
   try {
     // Calcula a data do último mês
-    const lastMonthDate = new Date();
-    lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
+    const lastMonthDate = new Date()
+    lastMonthDate.setMonth(lastMonthDate.getMonth() - 1)
 
     // Formata a data para ser usada no filtro
-    const lastMonthFilter = `created >= "${lastMonthDate.toISOString()}"`;
+    const lastMonthFilter = `created >= "${lastMonthDate.toISOString()}"`
 
     // Faz a busca dos registros criados no último mês
     const response = await pb
@@ -159,27 +156,24 @@ export async function fetchEfetivacaoSeguroFiancaLastMonth(): Promise<
       .getFullList<EfetivacaoSeguroFianca>({
         sort: "-created",
         filter: lastMonthFilter, // Aplica o filtro para buscar registros do último mês
-      });
+      })
 
-    return response;
+    return response
   } catch (error) {
-    const err = error as ClientResponseError;
-    console.error(
-      "Erro ao buscar Efetivação Seguro Fiança do último mês:",
-      err
-    );
-    throw new Error("Erro ao buscar Efetivação Seguro Fiança do último mês");
+    const err = error as ClientResponseError
+    console.error("Erro ao buscar Efetivação Seguro Fiança do último mês:", err)
+    throw new Error("Erro ao buscar Efetivação Seguro Fiança do último mês")
   }
 }
 
 export function subscribeToEfetivacaoSeguroFiancaUpdates(
   onRecordChange: (data: RecordSubscription<EfetivacaoSeguroFianca>) => void
 ) {
-  pb.collection("efetivacao_seguro_fianca_tb").subscribe("*", onRecordChange);
+  pb.collection("efetivacao_seguro_fianca_tb").subscribe("*", onRecordChange)
 }
 
 // Função para cancelar a subscription
 export function unsubscribeFromEfetivacaoSeguroFiancaUpdates() {
-  pb.collection("efetivacao_seguro_fianca_tb").unsubscribe("*");
-  console.log("Subscrição cancelada.");
+  pb.collection("efetivacao_seguro_fianca_tb").unsubscribe("*")
+  // console.log("Subscrição cancelada.")
 }

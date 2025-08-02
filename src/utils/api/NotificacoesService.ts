@@ -28,7 +28,7 @@ export async function deleteNotifications(notifications: Notificacao[]): Promise
     for (const notification of notifications) {
       await pb.collection("notificacoes").delete(notification.id);
     }
-    console.log("Notificações deletadas com sucesso.");
+    // console.log("Notificações deletadas com sucesso.");
   } catch (error) {
     const err = error as ClientResponseError;
     console.error("Erro ao deletar as notificações:", err);

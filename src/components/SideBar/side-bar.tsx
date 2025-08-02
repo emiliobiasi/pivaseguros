@@ -167,7 +167,7 @@ function SidebarContent() {
 
     // Função para ouvir as mudanças em tempo real
     subscribeToNotificationsUpdates((e) => {
-      console.log("Real-time event:", e);
+      // console.log("Real-time event:", e);
 
       // Atualiza as notificações com base nos eventos em tempo real
       if (e.action === "create") {

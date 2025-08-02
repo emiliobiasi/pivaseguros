@@ -144,7 +144,7 @@ export default function SeguradorasUploadPage() {
       }
 
       const response = await createEnvioDeBoletos(envioData, arquivos)
-      console.log("Envio de boletos criado com sucesso:", response)
+      // console.log("Envio de boletos criado com sucesso:", response)
 
       setShowSummary(false)
       setShowConfirmation(true)

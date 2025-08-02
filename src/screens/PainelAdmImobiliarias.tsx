@@ -154,7 +154,7 @@ export default function PainelAdmImobiliarias() {
   }, [])
 
   const handleRecordChange = (data: RecordSubscription<Imobiliaria>) => {
-    console.log("Mudança detectada:", data)
+    // console.log("Mudança detectada:", data)
     if (data.action === "create") {
       setImobiliarias((prev) => [data.record, ...prev])
       setTotalItems((prev) => prev + 1)
@@ -197,7 +197,7 @@ export default function PainelAdmImobiliarias() {
           selectedImobiliaria.id,
           editedValues
         )
-        console.log("Imobiliária atualizada com sucesso:", updatedImobiliaria)
+        // console.log("Imobiliária atualizada com sucesso:", updatedImobiliaria)
 
         setSavedImobiliaria(updatedImobiliaria.nome)
         setShowConfirmation(true)

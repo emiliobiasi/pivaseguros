@@ -21,7 +21,7 @@ export async function createSeguroFiancaEmpresarialMenos2Anos(
       const err = error as ClientResponseError;
       if (err.status === 404) {
         // Nenhum registro encontrado, continua com lastRecord como nulo
-        console.log("Nenhum registro encontrado. Iniciando id_numero em 1.");
+        // console.log("Nenhum registro encontrado. Iniciando id_numero em 1.");
       } else {
         // Re-lança outros erros
         throw err;
@@ -39,10 +39,10 @@ export async function createSeguroFiancaEmpresarialMenos2Anos(
         id_numero: nextIdNumero,
       });
 
-    console.log(
-      "Seguro Fiança: Pessoa Jurídica Comercial (CNPJ Menos de 2 Anos) criado com sucesso:",
-      record
-    );
+    // console.log(
+    //   "Seguro Fiança: Pessoa Jurídica Comercial (CNPJ Menos de 2 Anos) criado com sucesso:",
+    //   record
+    // );
     return record;
   } catch (error) {
     const err = error as PocketBaseError;
@@ -112,10 +112,10 @@ export async function updateSeguroFiancaEmpresarialMenos2AnosToPending(
       .update<SeguroFiancaEmpresarialMenos2Anos>(id, {
         acao: "PENDENTE",
       });
-    console.log(
-      `Seguro Incêndio ${id} atualizado para PENDENTE:`,
-      updatedRecord
-    );
+    // console.log(
+    //   `Seguro Incêndio ${id} atualizado para PENDENTE:`,
+    //   updatedRecord
+    // );
     return updatedRecord;
   } catch (error) {
     const err = error as PocketBaseError;
@@ -139,10 +139,10 @@ export async function updateSeguroFiancaEmpresarialMenos2AnosToFinalized(
       .update<SeguroFiancaEmpresarialMenos2Anos>(id, {
         acao: "FINALIZADO",
       });
-    console.log(
-      `Seguro Fiança: Pessoa Jurídica Comercial (CNPJ Menos de 2 Anos) ${id} atualizado para FINALIZADO:`,
-      updatedRecord
-    );
+    // console.log(
+    //   `Seguro Fiança: Pessoa Jurídica Comercial (CNPJ Menos de 2 Anos) ${id} atualizado para FINALIZADO:`,
+    //   updatedRecord
+    // );
     return updatedRecord;
   } catch (error) {
     const err = error as PocketBaseError;
@@ -167,10 +167,10 @@ export async function updateSeguroFiancaEmpresarialMenos2AnosStatus(
       .update<SeguroFiancaEmpresarialMenos2Anos>(id, {
         status: status,
       });
-    console.log(
-      `Seguro Fiança: Pessoa Jurídica Comercial (CNPJ Menos de 2 Anos) ${id} atualizado para ${status}:`,
-      updatedRecord
-    );
+    // console.log(
+    //   `Seguro Fiança: Pessoa Jurídica Comercial (CNPJ Menos de 2 Anos) ${id} atualizado para ${status}:`,
+    //   updatedRecord
+    // );
     return updatedRecord;
   } catch (error) {
     const err = error as PocketBaseError;
@@ -232,5 +232,5 @@ export function subscribeToSeguroFiancaEmpresarialMenos2AnosUpdates(
 // Função para cancelar a subscription
 export function unsubscribeFromSeguroFiancaEmpresarialMenos2AnosUpdates() {
   pb.collection("seguro_fianca_empresarial_menos_2_anos").unsubscribe("*");
-  console.log("Subscrição cancelada.");
+  // console.log("Subscrição cancelada.");
 }

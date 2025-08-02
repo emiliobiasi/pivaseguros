@@ -21,7 +21,7 @@ export async function createImobiliaria(
       created: new Date(), // Define a data de criação
     })
 
-    console.log("Imobiliária criada com sucesso:", record)
+    // console.log("Imobiliária criada com sucesso:", record)
     return record
   } catch (error) {
     const err = error as PocketBaseError
@@ -101,7 +101,7 @@ export async function updateImobiliaria(
       .collection("imobiliarias")
       .update<Imobiliaria>(id, data)
 
-    console.log(`Imobiliária ${id} atualizada com sucesso:`, updatedRecord)
+    // console.log(`Imobiliária ${id} atualizada com sucesso:`, updatedRecord)
     return updatedRecord
   } catch (error) {
     const err = error as PocketBaseError
@@ -129,9 +129,9 @@ export async function deleteImobiliaria(imobiliariaId: string): Promise<void> {
     // Agora podemos excluir a imobiliária sem erros
     await pb.collection("imobiliarias").delete(imobiliariaId)
 
-    console.log(
-      `Imobiliária ${imobiliariaId} e registros relacionados foram excluídos.`
-    )
+    // console.log(
+    //   `Imobiliária ${imobiliariaId} e registros relacionados foram excluídos.`
+    // )
   } catch (error) {
     console.error(
       "Erro ao excluir a imobiliária e registros relacionados:",
@@ -182,7 +182,7 @@ export async function subscribeToImobiliariaUpdates(
     const unsubscribe = await pb
       .collection("imobiliarias")
       .subscribe("*", onRecordChange)
-    console.log("Subscrição para atualizações de Imobiliárias iniciada.")
+    // console.log("Subscrição para atualizações de Imobiliárias iniciada.")
     return unsubscribe
   } catch (error) {
     console.error("Erro ao assinar atualizações de Imobiliárias:", error)
@@ -244,7 +244,7 @@ export async function updateImobiliariaEmailAsAdmin(
       }
     )
 
-    console.log("Email atualizado com sucesso!")
+    // console.log("Email atualizado com sucesso!")
   } catch (error) {
     console.error("Erro ao atualizar email:", error)
     throw new Error("Falha ao atualizar email.")
@@ -272,10 +272,10 @@ export async function updateImobiliariaName(
       .collection("imobiliarias")
       .update<Imobiliaria>(id, { nome: newName })
 
-    console.log(
-      `Nome da Imobiliária ${id} atualizado com sucesso:`,
-      updatedRecord
-    )
+    // console.log(
+    //   `Nome da Imobiliária ${id} atualizado com sucesso:`,
+    //   updatedRecord
+    // )
     return updatedRecord
   } catch (error) {
     const err = error as PocketBaseError
