@@ -30,7 +30,10 @@ const insuranceStructure = [
   {
     name: "POTENCIAL",
     colorKey: "POTENCIAL",
-    subcategories: [{ label: "Fiança", field: "potencial_boleto_fianca" }],
+    subcategories: [
+      { label: "Fiança", field: "potencial_boleto_fianca" },
+      { label: "Relatório Fiança", field: "potencial_relatorio_fianca" },
+    ],
   },
   {
     name: "TOKIO",
@@ -48,7 +51,11 @@ const insuranceStructure = [
       { label: "Relatório Fiança", field: "too_relatorio_fianca" },
     ],
   },
-]
+] as const
+
+// Tipos derivados da estrutura (garante autocomplete e segurança)
+type InsuranceStructure = typeof insuranceStructure
+export type InsuranceCompanyName = InsuranceStructure[number]["name"]
 
 /**
  * 2) Cores das seguradoras, para estilizar os cartões de upload.
@@ -112,7 +119,8 @@ export function InsuranceGrid({
           <Card key={name} className={`overflow-hidden border`}>
             <CardHeader className="bg-opacity-10">
               <CardTitle className="flex items-center justify-between">
-                <span>{name}</span>
+                <span>{name === "POTENCIAL" ? "POTTENCIAL" : name}</span>
+
                 {/* Se quiser colocar alguma info geral de "total" aqui, pode somar subcampos */}
               </CardTitle>
             </CardHeader>
@@ -128,6 +136,7 @@ export function InsuranceGrid({
 
                   return (
                     <SubUploadCard
+                    
                       key={subcat.field}
                       company={name}
                       label={subcat.label}
@@ -137,6 +146,7 @@ export function InsuranceGrid({
                       onUpload={(files) => onFileUpload(files, subcat.field)}
                       colorKey={colorKey}
                     />
+                    
                   )
                 })}
               </div>
@@ -153,7 +163,7 @@ export function InsuranceGrid({
  *    - Reaproveitando o código que você já postou.
  */
 interface SubUploadCardProps {
-  company: string // "PORTO", "TOKIO", etc.
+  company: InsuranceCompanyName // Derivado de insuranceStructure
   label: string // Ex: "Fiança Essencial"
   field: string // Ex: "porto_boleto_fianca_essencial"
   totalExpectedDocs: number // Quantos documentos esse subcampo exige
@@ -173,6 +183,9 @@ function SubUploadCard({
 }: SubUploadCardProps) {
   const [uploading, setUploading] = useState(false)
   const [progress, setProgress] = useState(0)
+
+  // Nome exibido (apenas visual) para corrigir POTENCIAL -> POTTENCIAL
+  const companyDisplay = company === "POTENCIAL" ? "POTTENCIAL" : company
 
   const colors = insuranceColors[colorKey as keyof typeof insuranceColors] || {
     bg: "bg-gray-200",
@@ -198,7 +211,7 @@ function SubUploadCard({
             setUploading(false)
             onUpload(acceptedFiles)
             toast.success(
-              `${acceptedFiles.length} arquivo(s) enviado(s) para "${label}" em ${company}`
+              `${acceptedFiles.length} arquivo(s) enviado(s) para "${label}" em ${companyDisplay}`
             )
             return 0
           }

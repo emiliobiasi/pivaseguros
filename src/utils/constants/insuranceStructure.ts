@@ -31,6 +31,10 @@ export const insuranceStructure = [
         label: "Fiança",
         field: "potencial_boleto_fianca",
       },
+      {
+        label: "Relatório Fiança",
+        field: "potencial_relatorio_fianca",
+      },
     ],
   },
   {
@@ -61,4 +65,4 @@ export const insuranceStructure = [
       },
     ],
   },
-];
+]

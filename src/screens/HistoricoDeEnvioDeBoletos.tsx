@@ -1,16 +1,16 @@
-import { useState, useEffect } from "react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { CalendarIcon, Filter, ChevronDown } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Input } from "@/components/ui/input";
+import { useState, useEffect } from "react"
+import { format } from "date-fns"
+import { ptBR } from "date-fns/locale"
+import { CalendarIcon, Filter, ChevronDown } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import { Input } from "@/components/ui/input"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/components/ui/popover"
 import {
   Table,
   TableBody,
@@ -18,7 +18,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/components/ui/table"
 import {
   Pagination,
   PaginationContent,
@@ -27,37 +27,37 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
+} from "@/components/ui/pagination"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { EnvioDeBoletos } from "@/types/EnviosDeBoletos";
-import { fetchEnvioDeBoletosList } from "@/utils/api/EnvioDeBoletosService";
+} from "@/components/ui/dropdown-menu"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { EnvioDeBoletos } from "@/types/EnviosDeBoletos"
+import { fetchEnvioDeBoletosList } from "@/utils/api/EnvioDeBoletosService"
 
-const ITEMS_PER_PAGE = 5; // Definindo o número de itens por página
+const ITEMS_PER_PAGE = 7 // Definindo o número de itens por página
 
 export default function HistoricoEnvios() {
-  const [date, setDate] = useState<Date>(new Date());
-  const [envios, setEnvios] = useState<EnvioDeBoletos[]>([]);
+  const [date, setDate] = useState<Date>(new Date())
+  const [envios, setEnvios] = useState<EnvioDeBoletos[]>([])
   // const [filteredEnvios, setFilteredEnvios] = useState<EnvioDeBoletos[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState<
     "todos" | "finalizados" | "pendentes"
-  >("todos");
+  >("todos")
 
   useEffect(() => {
-    fetchEnvios();
-  }, [date, searchTerm, statusFilter, currentPage]);
+    fetchEnvios()
+  }, [date, searchTerm, statusFilter, currentPage])
 
   const fetchEnvios = async () => {
-    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1)
+    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0)
 
     try {
       const { items, totalPages } = await fetchEnvioDeBoletosList(
@@ -71,14 +71,14 @@ export default function HistoricoEnvios() {
               ? statusFilter === "finalizados"
               : undefined,
         }
-      );
+      )
 
-      setEnvios(items);
-      setTotalPages(totalPages);
+      setEnvios(items)
+      setTotalPages(totalPages)
     } catch (error) {
-      console.error("Erro ao buscar envios:", error);
+      console.error("Erro ao buscar envios:", error)
     }
-  };
+  }
 
   return (
     <Card className="w-full">
@@ -191,10 +191,11 @@ export default function HistoricoEnvios() {
             <PaginationItem>
               <PaginationPrevious
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                className="cursor-pointer"
               />
             </PaginationItem>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <PaginationItem key={page}>
+              <PaginationItem key={page} className="cursor-pointer">
                 <PaginationLink
                   onClick={() => setCurrentPage(page)}
                   isActive={currentPage === page}
@@ -208,11 +209,12 @@ export default function HistoricoEnvios() {
                 onClick={() =>
                   setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                 }
+                className="cursor-pointer"
               />
             </PaginationItem>
           </PaginationContent>
         </Pagination>
       </CardContent>
     </Card>
-  );
+  )
 }

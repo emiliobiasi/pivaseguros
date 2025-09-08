@@ -45,6 +45,7 @@ export default function SeguradorasUploadPage() {
     "porto_boleto_incendio_residencial",
     "porto_boleto_incendio_comercial",
     "potencial_boleto_fianca",
+    "potencial_relatorio_fianca",
     "tokio_boleto_fianca",
     "tokio_relatorio_fianca",
     "too_boleto_fianca",
