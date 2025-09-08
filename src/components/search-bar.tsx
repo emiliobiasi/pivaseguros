@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { Search } from "lucide-react"
 import {
   Command,
   CommandEmpty,
@@ -6,53 +6,53 @@ import {
   CommandItem,
   CommandList,
   CommandInput,
-} from "@/components/ui/command";
+} from "@/components/ui/command"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { fetchImobiliariaList } from "@/utils/api/ImobiliariasService";
-import { Imobiliaria } from "@/types/Imobiliarias";
+} from "@/components/ui/popover"
+import { useState, useEffect } from "react"
+import { Button } from "@/components/ui/button"
+import { fetchImobiliariaList } from "@/utils/api/ImobiliariasService"
+import { Imobiliaria } from "@/types/Imobiliarias"
 
 interface SearchBarProps {
-  onSelect: (company: Imobiliaria) => void;
+  onSelect: (company: Imobiliaria) => void
 }
 
 export function SearchBar({ onSelect }: SearchBarProps) {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [open, setOpen] = useState(false)
+  const [value, setValue] = useState("")
+  const [searchTerm, setSearchTerm] = useState("")
   const [realEstateCompanies, setRealEstateCompanies] = useState<Imobiliaria[]>(
     []
-  );
-  const [loading, setLoading] = useState(false);
+  )
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
       if (!searchTerm) {
-        setRealEstateCompanies([]);
-        return;
+        setRealEstateCompanies([])
+        return
       }
 
-      setLoading(true);
+      setLoading(true)
       try {
-        const response = await fetchImobiliariaList(1, 10, searchTerm);
-        setRealEstateCompanies(response.items);
+        const response = await fetchImobiliariaList(1, 10, searchTerm)
+        setRealEstateCompanies(response.items)
       } catch (error) {
-        console.error("Erro ao buscar imobiliárias:", error);
-        setRealEstateCompanies([]);
+        console.error("Erro ao buscar imobiliárias:", error)
+        setRealEstateCompanies([])
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
     // Debounce para evitar chamadas desnecessárias
-    const timeoutId = setTimeout(fetchData, 300);
-    return () => clearTimeout(timeoutId);
-  }, [searchTerm]);
+    const timeoutId = setTimeout(fetchData, 300)
+    return () => clearTimeout(timeoutId)
+  }, [searchTerm])
 
   return (
     // <div className="relative w-full max-w-2xl mx-auto">
@@ -86,11 +86,11 @@ export function SearchBar({ onSelect }: SearchBarProps) {
                   <CommandItem
                     key={company.id}
                     onSelect={() => {
-                      setValue(company.nome); // Ajuste para usar o campo correto
-                      onSelect(company);
-                      setOpen(false);
+                      setValue(company.nome) // Ajuste para usar o campo correto
+                      onSelect(company)
+                      setOpen(false)
                     }}
-                    className="text-black"
+                    className="text-black cursor-pointer"
                   >
                     {company.nome}
                   </CommandItem>
@@ -101,5 +101,5 @@ export function SearchBar({ onSelect }: SearchBarProps) {
         </PopoverContent>
       </Popover>
     </div>
-  );
+  )
 }

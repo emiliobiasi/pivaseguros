@@ -48,7 +48,7 @@ import {
 
 // Importar tipos do PocketBase para RecordSubscription
 import { RecordSubscription } from "pocketbase"
-import { formatTelefone } from '../utils/regex/regexTelefone';
+import { formatTelefone } from "../utils/regex/regexTelefone"
 
 export default function PainelAdmImobiliarias() {
   const [isEditingProfile, setIsEditingProfile] = useState(false)
@@ -94,6 +94,7 @@ export default function PainelAdmImobiliarias() {
     porto_boleto_incendio_residencial: 0,
     porto_boleto_incendio_comercial: 0,
     potencial_boleto_fianca: 0,
+    potencial_relatorio_fianca: 0,
     tokio_boleto_fianca: 0,
     tokio_relatorio_fianca: 0,
     too_boleto_fianca: 0,
@@ -182,6 +183,7 @@ export default function PainelAdmImobiliarias() {
       porto_boleto_incendio_comercial:
         imobiliaria.porto_boleto_incendio_comercial || 0,
       potencial_boleto_fianca: imobiliaria.potencial_boleto_fianca || 0,
+      potencial_relatorio_fianca: imobiliaria.potencial_relatorio_fianca || 0,
       tokio_boleto_fianca: imobiliaria.tokio_boleto_fianca || 0,
       tokio_relatorio_fianca: imobiliaria.tokio_relatorio_fianca || 0,
       too_boleto_fianca: imobiliaria.too_boleto_fianca || 0,
@@ -276,7 +278,10 @@ export default function PainelAdmImobiliarias() {
     },
     {
       title: "Potencial",
-      fields: [{ field: "potencial_boleto_fianca", label: "Fiança" }],
+      fields: [
+        { field: "potencial_boleto_fianca", label: "Fiança" },
+        { field: "potencial_relatorio_fianca", label: "Relatório de Fiança" },
+      ],
     },
     {
       title: "Tokio Marine",
@@ -382,7 +387,9 @@ export default function PainelAdmImobiliarias() {
                 {/* MODAL DA IMOBILIÁRIA */}
                 <DialogContent className="sm:max-w-[61rem] max-h-[85vh] overflow-y-auto">
                   <DialogHeader>
-                    <DialogTitle className="text-[2rem]">{imobiliaria.nome}</DialogTitle>
+                    <DialogTitle className="text-[2rem]">
+                      {imobiliaria.nome}
+                    </DialogTitle>
                     <DialogClose className="absolute top-3 right-3">
                       <Button
                         variant="ghost"
@@ -406,7 +413,8 @@ export default function PainelAdmImobiliarias() {
                         : "N/A"}
                     </p>
                     <p>
-                      <strong>Contato:</strong> {formatTelefone(imobiliaria.contato)}
+                      <strong>Contato:</strong>{" "}
+                      {formatTelefone(imobiliaria.contato)}
                     </p>
 
                     <div className="my-4 flex flex-col items-start">
@@ -460,7 +468,7 @@ export default function PainelAdmImobiliarias() {
                           style={bgColorStyle}
                         >
                           <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                            {title}
+                            {title === "Potencial" ? "Pottencial" : title}
                           </h3>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {fields.map(({ field, label }) => (

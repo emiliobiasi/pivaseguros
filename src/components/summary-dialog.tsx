@@ -32,7 +32,7 @@ const boletosTypes = {
     "porto_boleto_incendio_residencial",
     "porto_boleto_incendio_comercial",
   ],
-  Potencial: ["potencial_boleto_fianca"],
+  Potencial: ["potencial_boleto_fianca", "potencial_relatorio_fianca"],
   Tokio: ["tokio_boleto_fianca", "tokio_relatorio_fianca"],
   Too: ["too_boleto_fianca", "too_relatorio_fianca"],
 }
@@ -56,7 +56,7 @@ export function SummaryDialog({
   const getBoletoType = (company: string) => {
     for (const [key, value] of Object.entries(boletosTypes)) {
       if (value.includes(company)) {
-        return key
+        return key === "Potencial" ? "Pottencial" : key
       }
     }
     return null

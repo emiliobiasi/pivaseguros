@@ -1,4 +1,4 @@
-import { InsuranceRule } from '../types/insurance'
+import { InsuranceRule } from "../src/types/Insurance"
 
 export const insuranceRules: InsuranceRule[] = [
   {
@@ -6,56 +6,59 @@ export const insuranceRules: InsuranceRule[] = [
     rules: [
       {
         type: "PDF",
-        documentType: "Boleto Fiança"
-      }
-    ]
+        documentType: "Boleto Fiança",
+      },
+      {
+        type: "PDF",
+        documentType: "Relatório Fiança",
+      },
+    ],
   },
   {
     company: "TOO",
     rules: [
       {
         type: "PDF",
-        documentType: "Boleto Fiança"
+        documentType: "Boleto Fiança",
       },
       {
         type: "PDF",
-        documentType: "Relatório"
-      }
-    ]
+        documentType: "Relatório",
+      },
+    ],
   },
   {
     company: "TOKIO",
     rules: [
       {
         type: "PDF",
-        documentType: "Boleto Fiança"
+        documentType: "Boleto Fiança",
       },
       {
         type: "Excel",
-        documentType: "Relatório"
-      }
-    ]
+        documentType: "Relatório",
+      },
+    ],
   },
   {
     company: "PORTO",
     rules: [
       {
         type: "PDF",
-        documentType: "Fiança Tradicional"
+        documentType: "Fiança Tradicional",
       },
       {
         type: "PDF",
-        documentType: "Fiança Essencial"
+        documentType: "Fiança Essencial",
       },
       {
         type: "PDF",
-        documentType: "Incêndio Residencial"
+        documentType: "Incêndio Residencial",
       },
       {
         type: "PDF",
-        documentType: "Incêndio Comercial"
-      }
-    ]
-  }
+        documentType: "Incêndio Comercial",
+      },
+    ],
+  },
 ]
-

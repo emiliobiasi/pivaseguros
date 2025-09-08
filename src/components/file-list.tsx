@@ -23,7 +23,7 @@ const boletosTypes = {
     "porto_boleto_incendio_residencial",
     "porto_boleto_incendio_comercial",
   ],
-  Potencial: ["potencial_boleto_fianca"],
+  Potencial: ["potencial_boleto_fianca", "potencial_relatorio_fianca"],
   Tokio: ["tokio_boleto_fianca", "tokio_relatorio_fianca"],
   Too: ["too_boleto_fianca", "too_relatorio_fianca"],
 }
@@ -34,6 +34,7 @@ const friendlyNames = {
   porto_boleto_incendio_residencial: "Boleto Incêndio Residencial",
   porto_boleto_incendio_comercial: "Boleto Incêndio Comercial",
   potencial_boleto_fianca: "Boleto Fiança",
+  potencial_relatorio_fianca: "Relatório Fiança",
   tokio_boleto_fianca: "Boleto Fiança",
   tokio_relatorio_fianca: "Relatório Fiança",
   too_boleto_fianca: "Boleto Fiança",
@@ -46,7 +47,8 @@ export function FileList({ files, onDelete }: FileListProps) {
   const getInsuranceCompanyName = (insuranceCompany: string) => {
     for (const [company, types] of Object.entries(boletosTypes)) {
       if (types.includes(insuranceCompany)) {
-        return company
+        // Ajuste visual apenas
+        return company === "Potencial" ? "Pottencial" : company
       }
     }
     return null
