@@ -55,7 +55,7 @@ const Footer: React.FC = () => {
                 className="flex items-center"
               >
                 <FaWhatsapp className="mr-2 text-green-600" />
-                <span className="text-sm text-gray-500">11 4587-5550</span>
+                <span className="text-sm text-gray-500">(11) 4587-5550</span>
               </a>
             </div>
             <div className="flex items-center">
