@@ -1,38 +1,39 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "@/screens/Login";
-import PrivateRoute from "@/contexts/auth/PrivateRoute";
-import { AuthProvider } from "@/contexts/auth/AuthContext";
-import FormsLayout from "@/screens/FormsLayout";
-import SeguroIncendioScreen from "@/screens/SeguroIncendioScreen";
-import SeguroFiancaEmpresarialMais2AnosScreen from "@/screens/SeguroFiancaEmpresarialMais2AnosScreen";
-import SeguroFiancaEmpresarialMenos2AnosScreen from "@/screens/SeguroFiancaEmpresarialMenos2AnosScreen";
-import SeguroFiancaResidencialScreen from "@/screens/SeguroFiancaResidencialScreen";
-import EfetivacaoSeguroFiancaScreen from "@/screens/EfetivoSeguroFiancaScreen";
-import { SideBarLayout } from "@/screens/SideBarLayout";
-import { DashboardIncendio } from "@/screens/DashboardIncendio";
-import { DashboardIncendioComercial } from "@/screens/DashboardIncendioComercial";
-import { DashboardFiancaResidencial } from "@/screens/DashboardFiancaResidencial";
-import { DashboardFiancaEmpresarialMais2Anos } from "@/screens/DashboardFiancaEmpresarialMais2Anos";
-import Home from "@/screens/Home";
-import SeguroIncendioComercialScreen from "@/screens/SeguroIncendioComercialScreen";
-import TituloCapitalizacaoScreen from "@/screens/TituloCapitalizacaoScreen";
-import { DashboardTituloCapitalizacao } from "@/screens/DashboardTituloCapitalizacao";
-import { DashboardEfetivacaoSeguroFianca } from "@/screens/DashboardEfetivacaoSeguroFianca";
-import { DashboardFiancaEmpresarialMenos2Anos } from "@/screens/DashboardFiancaEmpresarialMenos2Anos";
-import Graficos from "@/screens/Graficos";
-import LoginImobiliarias from "@/screens/LoginImobiliarias";
-import { AuthImobiliariaProvider } from "@/contexts/auth/imobiliarias/AuthContextImobiliarias";
-import PrivateRouteImobiliarias from "@/contexts/auth/imobiliarias/PrivateRouteImobiliarias";
-import CadastrarImobiliarias from "@/screens/CadastrarImobiliarias";
-import ResetPasswordForm from "@/screens/ResetPasswordForm";
-import PainelAdmImobiliarias from "@/screens/PainelAdmImobiliarias";
-import SeguradorasUploadPage from "@/screens/SeguradorasUploadPage";
-import BoletoDownloadPage from "@/screens/BoletoDownloadPage";
-import { BoletosProvider } from "@/contexts/boletos/boletos-context";
-import ImobiliariaLayout from "@/screens/ImobiliariaLayout";
-import BoletoDownloadHistoricoPage from "@/screens/BoletoDownloadHistoricoPage";
-import HistoricoDeEnvioDeBoletos from "@/screens/HistoricoDeEnvioDeBoletos";
-import ConfiguracoesDaConta from "@/screens/ConfiguracoesDaConta";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import Login from "@/screens/Login"
+import PrivateRoute from "@/contexts/auth/PrivateRoute"
+import { AuthProvider } from "@/contexts/auth/AuthContext"
+import FormsLayout from "@/screens/FormsLayout"
+import SeguroIncendioScreen from "@/screens/SeguroIncendioScreen"
+import SeguroFiancaEmpresarialMais2AnosScreen from "@/screens/SeguroFiancaEmpresarialMais2AnosScreen"
+import SeguroFiancaEmpresarialMenos2AnosScreen from "@/screens/SeguroFiancaEmpresarialMenos2AnosScreen"
+import SeguroFiancaResidencialScreen from "@/screens/SeguroFiancaResidencialScreen"
+import EfetivacaoSeguroFiancaScreen from "@/screens/EfetivoSeguroFiancaScreen"
+import { SideBarLayout } from "@/screens/SideBarLayout"
+import { DashboardIncendio } from "@/screens/DashboardIncendio"
+import { DashboardIncendioComercial } from "@/screens/DashboardIncendioComercial"
+import { DashboardFiancaResidencial } from "@/screens/DashboardFiancaResidencial"
+import { DashboardFiancaEmpresarialMais2Anos } from "@/screens/DashboardFiancaEmpresarialMais2Anos"
+import Home from "@/screens/Home"
+import SeguroIncendioComercialScreen from "@/screens/SeguroIncendioComercialScreen"
+import TituloCapitalizacaoScreen from "@/screens/TituloCapitalizacaoScreen"
+import { DashboardTituloCapitalizacao } from "@/screens/DashboardTituloCapitalizacao"
+import { DashboardEfetivacaoSeguroFianca } from "@/screens/DashboardEfetivacaoSeguroFianca"
+import { DashboardFiancaEmpresarialMenos2Anos } from "@/screens/DashboardFiancaEmpresarialMenos2Anos"
+import Graficos from "@/screens/Graficos"
+import LoginImobiliarias from "@/screens/LoginImobiliarias"
+import { AuthImobiliariaProvider } from "@/contexts/auth/imobiliarias/AuthContextImobiliarias"
+import PrivateRouteImobiliarias from "@/contexts/auth/imobiliarias/PrivateRouteImobiliarias"
+import CadastrarImobiliarias from "@/screens/CadastrarImobiliarias"
+import ResetPasswordForm from "@/screens/ResetPasswordForm"
+import PainelAdmImobiliarias from "@/screens/PainelAdmImobiliarias"
+import SeguradorasUploadPage from "@/screens/SeguradorasUploadPage"
+import BoletoDownloadPage from "@/screens/BoletoDownloadPage"
+import { BoletosProvider } from "@/contexts/boletos/boletos-context"
+import ImobiliariaLayout from "@/screens/ImobiliariaLayout"
+import BoletoDownloadHistoricoPage from "@/screens/BoletoDownloadHistoricoPage"
+import HistoricoDeEnvioDeBoletos from "@/screens/HistoricoDeEnvioDeBoletos"
+import ConfiguracoesDaConta from "@/screens/ConfiguracoesDaConta"
+import CancelamentoSegurosScreen from "@/screens/CancelamentoSegurosScreen"
 
 const RoutesComponent = () => {
   return (
@@ -139,6 +140,14 @@ const RoutesComponent = () => {
                     element={
                       <PrivateRouteImobiliarias>
                         <TituloCapitalizacaoScreen />
+                      </PrivateRouteImobiliarias>
+                    }
+                  />
+                  <Route
+                    path="cancelamento-seguros"
+                    element={
+                      <PrivateRouteImobiliarias>
+                        <CancelamentoSegurosScreen />
                       </PrivateRouteImobiliarias>
                     }
                   />
@@ -262,7 +271,7 @@ const RoutesComponent = () => {
         </AuthImobiliariaProvider>
       </AuthProvider>
     </Router>
-  );
-};
+  )
+}
 
-export default RoutesComponent;
+export default RoutesComponent

@@ -41,6 +41,10 @@ export function FormsHeader() {
       case "titulo-capitalizacao":
         navigate("/imobiliaria/formulario/titulo-capitalizacao")
         break
+      case "cancelamento-seguros":
+        navigate("/imobiliaria/formulario/cancelamento-seguros")
+        break
+
       default:
         break
     }
@@ -117,6 +121,12 @@ export function FormsHeader() {
                     className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700"
                   >
                     Efetivação de Título de Capitalização
+                  </SelectItem>
+                  <SelectItem
+                    value="cancelamento-seguros"
+                    className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700"
+                  >
+                    Cancelamento de Seguros
                   </SelectItem>
                 </SelectContent>
               </Select>
