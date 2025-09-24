@@ -19,5 +19,6 @@ export type CancelamentoSeguros = {
   estado: string
 
   tipo_seguro: "SEGURO FIANÇA" | "SEGURO INCÊNDIO" | "RESGATE DE TÍTULO"
+  pdf_file: string[]
   created: Date
 }
