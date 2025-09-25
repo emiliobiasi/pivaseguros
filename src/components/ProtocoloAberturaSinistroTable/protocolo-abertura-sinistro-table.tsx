@@ -1,5 +1,4 @@
 import { AberturaSinistro } from "@/types/AberturaSinistro"
-// import { AberturaSinistroModal } from "../AberturaSinistroModal/protocolo-cancelamento-seguros-modal"
 import { useEffect, useState } from "react"
 import {
   Table,
@@ -31,6 +30,7 @@ import {
 } from "@/utils/api/AberturaSinistroService"
 import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
+import { AberturaSinistroModal } from "../AberturaSinistroModal/protocolo-abertura-sinistro-modal"
 
 // Props para o componente TableContent
 type TableContentProps = {
@@ -299,13 +299,13 @@ export function ProtocoloAberturaSinistroTable({ data }: TableContentProps) {
           )}
         </div>
       </div>
-      {/* {selectedSeguro && (
+      {selectedSeguro && (
         <AberturaSinistroModal
           titulo={selectedSeguro}
           isOpen={isModalOpen}
           onClose={closeModal}
         />
-      )} */}
+      )}
     </div>
   )
 }
