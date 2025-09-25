@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Dialog,
@@ -18,6 +18,11 @@ import {
   ChevronRight,
   Plus,
   Pencil,
+  Mail,
+  AtSign,
+  CalendarDays,
+  Phone,
+  X as CloseIcon,
 } from "lucide-react"
 import {
   AlertDialog,
@@ -50,6 +55,7 @@ import {
 import { RecordSubscription } from "pocketbase"
 import { formatTelefone } from "../utils/regex/regexTelefone"
 import { Users, Inbox, XCircle } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 export default function PainelAdmImobiliarias() {
@@ -84,6 +90,18 @@ export default function PainelAdmImobiliarias() {
   const [selectedImobiliaria, setSelectedImobiliaria] =
     useState<Imobiliaria | null>(null)
   const [editedValues, setEditedValues] = useState({
+    porto_boleto_fianca_essencial: 0,
+    porto_boleto_fianca_tradicional: 0,
+    porto_boleto_incendio_residencial: 0,
+    porto_boleto_incendio_comercial: 0,
+    potencial_boleto_fianca: 0,
+    potencial_relatorio_fianca: 0,
+    tokio_boleto_fianca: 0,
+    tokio_relatorio_fianca: 0,
+    too_boleto_fianca: 0,
+    too_relatorio_fianca: 0,
+  })
+  const [originalValues, setOriginalValues] = useState({
     porto_boleto_fianca_essencial: 0,
     porto_boleto_fianca_tradicional: 0,
     porto_boleto_incendio_residencial: 0,
@@ -176,7 +194,7 @@ export default function PainelAdmImobiliarias() {
 
   const handleEdit = (imobiliaria: Imobiliaria) => {
     setSelectedImobiliaria(imobiliaria)
-    setEditedValues({
+    const nextValues = {
       porto_boleto_fianca_essencial:
         imobiliaria.porto_boleto_fianca_essencial || 0,
       porto_boleto_fianca_tradicional:
@@ -191,7 +209,9 @@ export default function PainelAdmImobiliarias() {
       tokio_relatorio_fianca: imobiliaria.tokio_relatorio_fianca || 0,
       too_boleto_fianca: imobiliaria.too_boleto_fianca || 0,
       too_relatorio_fianca: imobiliaria.too_relatorio_fianca || 0,
-    })
+    }
+    setEditedValues(nextValues)
+    setOriginalValues(nextValues)
   }
 
   const handleSave = async () => {
@@ -207,11 +227,22 @@ export default function PainelAdmImobiliarias() {
         prev.map((imo) => (imo.id === updated.id ? updated : imo))
       )
       setSelectedImobiliaria(updated)
+      // Após salvar, alinhar baseline para que pareça "sem alterações"
+      setOriginalValues(editedValues)
     } catch (e) {
       console.error(e)
       setError("Erro ao salvar alterações da imobiliária.")
     }
   }
+
+  const isDirty = useMemo(() => {
+    const keys = Object.keys(originalValues) as Array<
+      keyof typeof originalValues
+    >
+    return keys.some(
+      (k) => Number(editedValues[k] ?? 0) !== Number(originalValues[k] ?? 0)
+    )
+  }, [editedValues, originalValues])
 
   const handleConfirmationClose = () => {
     setShowConfirmation(false)
@@ -415,6 +446,7 @@ export default function PainelAdmImobiliarias() {
                             ).toLocaleTimeString()}`
                           : "N/A"}
                       </p>
+
                       <Dialog>
                         <DialogTrigger asChild>
                           <Button
@@ -427,125 +459,221 @@ export default function PainelAdmImobiliarias() {
                         </DialogTrigger>
 
                         {/* MODAL DA IMOBILIÁRIA */}
-                        <DialogContent className="sm:max-w-[61rem] max-h-[85vh] overflow-y-auto">
-                          <DialogHeader>
-                            <DialogTitle className="text-[2rem]">
-                              {imobiliaria.nome}
-                            </DialogTitle>
-                            <DialogClose className="absolute top-3 right-3">
-                              <Button
-                                variant="ghost"
-                                className="text-gray-700 hover:text-black"
-                              >
-                                X
-                              </Button>
-                            </DialogClose>
+                        <DialogContent className="sm:max-w-[64rem] max-h-[85vh] overflow-y-auto">
+                          <DialogHeader className="pb-2">
+                            <div className="flex items-start justify-between gap-4">
+                              <div className="flex items-center gap-3">
+                                <div className="h-11 w-11 rounded-lg bg-green-50 border border-green-100 flex items-center justify-center">
+                                  <Building2 className="h-6 w-6 text-green-700" />
+                                </div>
+                                <div>
+                                  <DialogTitle className="text-2xl font-semibold leading-tight">
+                                    {imobiliaria.nome}
+                                  </DialogTitle>
+                                  <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+                                    <Badge variant="secondary">
+                                      Imobiliária
+                                    </Badge>
+                                    <span className="hidden md:inline">•</span>
+                                    <span className="truncate max-w-[38ch] md:max-w-none">
+                                      {imobiliaria.email}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              <DialogClose asChild>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  aria-label="Fechar"
+                                  className="text-gray-600"
+                                >
+                                  <CloseIcon className="h-5 w-5" />
+                                </Button>
+                              </DialogClose>
+                            </div>
                           </DialogHeader>
-                          <div>
-                            <p>
-                              <strong>Email:</strong> {imobiliaria.email}
-                            </p>
-                            <p>
-                              <strong>Nome de usuário:</strong>{" "}
-                              {imobiliaria.username}
-                            </p>
-                            <p>
-                              <strong>Data do Cadastro:</strong>{" "}
-                              {imobiliaria.created
-                                ? new Date(
-                                    imobiliaria.created
-                                  ).toLocaleDateString()
-                                : "N/A"}
-                            </p>
-                            <p>
-                              <strong>Contato:</strong>{" "}
-                              {formatTelefone(imobiliaria.contato)}
-                            </p>
 
-                            <div className="my-4 flex flex-col items-start">
+                          {/* Detalhes principais */}
+                          <div className="mb-4 rounded-lg border bg-muted/20 p-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="flex items-center gap-2 text-sm">
+                                <Mail className="h-4 w-4 text-muted-foreground" />
+                                <span className="font-medium">Email:</span>
+                                <span className="truncate">
+                                  {imobiliaria.email}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2 text-sm">
+                                <AtSign className="h-4 w-4 text-muted-foreground" />
+                                <span className="font-medium">Usuário:</span>
+                                <span className="truncate">
+                                  {imobiliaria.username}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2 text-sm">
+                                <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                                <span className="font-medium">Cadastro:</span>
+                                <span>
+                                  {imobiliaria.created
+                                    ? `${new Date(
+                                        imobiliaria.created
+                                      ).toLocaleDateString()} ${new Date(
+                                        imobiliaria.created
+                                      ).toLocaleTimeString()}`
+                                    : "N/A"}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2 text-sm">
+                                <Phone className="h-4 w-4 text-muted-foreground" />
+                                <span className="font-medium">Contato:</span>
+                                <span>
+                                  {formatTelefone(imobiliaria.contato)}
+                                </span>
+                              </div>
+                            </div>
+
+                            <div className="mt-3">
                               <Button
                                 onClick={() => setIsEditingProfile(true)}
                                 variant="outline"
-                                className="text-[1.02rem] text-white bg-green-800 hover:bg-green-600 hover:text-white"
+                                className="text-[0.95rem] bg-green-700 text-white hover:bg-green-600 hover:text-white"
                               >
-                                <Pencil className="mr-2 h-5 w-5" /> EDITAR
-                                INFORMAÇÕES DE{" "}
-                                {imobiliaria.nome.toLocaleUpperCase()}
+                                <Pencil className="mr-2 h-4 w-4" /> Editar
+                                informações
                               </Button>
                               <ProfileEditDialog
                                 open={isEditingProfile}
                                 onOpenChange={setIsEditingProfile}
-                                imobiliariaId={imobiliaria.id} // Exemplo
+                                imobiliariaId={imobiliaria.id}
                               />
                             </div>
                           </div>
 
-                          <p className="text-lg mb-4">
-                            Atualize aqui a quantidade de boletos/relações de
-                            cada seguradora que serão enviados para{" "}
-                            {selectedImobiliaria?.nome}:
+                          <p className="text-sm text-muted-foreground mb-3">
+                            Atualize a quantidade de boletos/relações por
+                            seguradora que serão enviados para{" "}
+                            <span className="font-medium text-foreground">
+                              {selectedImobiliaria?.nome}
+                            </span>
+                            .
                           </p>
 
                           {/* Renderização dinâmica dos novos campos */}
-                          <div className="grid gap-6">
+                          <div className="grid gap-5">
                             {groupedBoletoFields.map(({ title, fields }) => {
-                              let bgColorStyle = {}
+                              let accentColor = "#16a34a" // default green
                               switch (title) {
                                 case "Porto Seguro":
-                                  bgColorStyle = { backgroundColor: "#f7fcff" }
+                                  accentColor = "#0ea5a4" // teal
                                   break
                                 case "Potencial":
-                                  bgColorStyle = { backgroundColor: "#fffdf7" }
+                                  accentColor = "#f59e0b" // amber
                                   break
                                 case "Tokio Marine":
-                                  bgColorStyle = { backgroundColor: "#fcfcf7" }
+                                  accentColor = "#84cc16" // lime
                                   break
                                 case "Too Seguros":
-                                  bgColorStyle = { backgroundColor: "#f7fdfd" }
+                                  accentColor = "#06b6d4" // cyan
                                   break
                                 default:
-                                  bgColorStyle = { backgroundColor: "#fdfdfd" }
+                                  accentColor = "#16a34a"
                               }
 
                               return (
                                 <div
                                   key={title}
-                                  className="border rounded-lg p-4 shadow-sm"
-                                  style={bgColorStyle}
+                                  className="relative rounded-lg p-4 shadow-sm border bg-background"
                                 >
-                                  <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                                    {title === "Potencial"
-                                      ? "Pottencial"
-                                      : title}
-                                  </h3>
-                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  <div
+                                    className="absolute left-0 top-0 h-full w-1"
+                                    style={{ backgroundColor: accentColor }}
+                                  />
+                                  <div className="flex items-center justify-between mb-3 pr-1">
+                                    <h3 className="text-base md:text-lg font-semibold text-gray-800 dark:text-gray-100">
+                                      {title === "Potencial"
+                                        ? "Pottencial"
+                                        : title}
+                                    </h3>
+                                  </div>
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                     {fields.map(({ field, label }) => (
                                       <div
                                         key={field}
-                                        className="flex flex-col gap-2"
+                                        className="flex flex-col gap-1.5"
                                       >
                                         <label
                                           htmlFor={field}
-                                          className="text-gray-700 font-medium"
+                                          className="text-xs text-muted-foreground"
                                         >
                                           {label}
                                         </label>
-                                        <Input
-                                          id={field}
-                                          type="number"
-                                          value={
-                                            editedValues[
-                                              field as keyof typeof editedValues
-                                            ]
-                                          }
-                                          onChange={(e) =>
-                                            setEditedValues({
-                                              ...editedValues,
-                                              [field]: Number(e.target.value),
-                                            })
-                                          }
-                                          className="border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                        />
+                                        <div className="flex items-center gap-2">
+                                          <Button
+                                            type="button"
+                                            variant="outline"
+                                            className="h-9 w-9 p-0"
+                                            onClick={() =>
+                                              setEditedValues((prev) => ({
+                                                ...prev,
+                                                [field]: Math.max(
+                                                  0,
+                                                  Number(
+                                                    prev[
+                                                      field as keyof typeof prev
+                                                    ] ?? 0
+                                                  ) - 1
+                                                ),
+                                              }))
+                                            }
+                                            aria-label={`Diminuir ${label}`}
+                                          >
+                                            -
+                                          </Button>
+                                          <Input
+                                            id={field}
+                                            inputMode="numeric"
+                                            type="number"
+                                            min={0}
+                                            step={1}
+                                            value={
+                                              editedValues[
+                                                field as keyof typeof editedValues
+                                              ]
+                                            }
+                                            onChange={(e) =>
+                                              setEditedValues({
+                                                ...editedValues,
+                                                [field]: Math.max(
+                                                  0,
+                                                  Number(e.target.value || 0)
+                                                ),
+                                              })
+                                            }
+                                            className="h-9 w-full border border-gray-300 rounded-md text-center"
+                                          />
+                                          <Button
+                                            type="button"
+                                            variant="outline"
+                                            className="h-9 w-9 p-0"
+                                            onClick={() =>
+                                              setEditedValues((prev) => ({
+                                                ...prev,
+                                                [field]: Math.max(
+                                                  0,
+                                                  Number(
+                                                    prev[
+                                                      field as keyof typeof prev
+                                                    ] ?? 0
+                                                  ) + 1
+                                                ),
+                                              }))
+                                            }
+                                            aria-label={`Aumentar ${label}`}
+                                          >
+                                            +
+                                          </Button>
+                                        </div>
                                       </div>
                                     ))}
                                   </div>
@@ -554,12 +682,43 @@ export default function PainelAdmImobiliarias() {
                             })}
                           </div>
 
-                          <Button
-                            onClick={handleSave}
-                            className="w-full bg-green-600 hover:bg-green-700 text-white"
+                          {/* Footer fixo no fundo do modal */}
+                          <div
+                            className={`sticky bottom-0 left-0 right-0 mt-4 p-3 z-20 border-t backdrop-blur-2xl rounded shadow-[0_-12px_28px_rgba(0,0,0,0.28),_0_-4px_12px_rgba(0,0,0,0.22)] ${
+                              isDirty
+                                ? "bg-amber-200/70 dark:bg-amber-900/60 supports-[backdrop-filter]:bg-background/50"
+                                : "bg-background/70 dark:bg-background/40 supports-[backdrop-filter]:bg-background/50"
+                            }`}
                           >
-                            Salvar Alterações
-                          </Button>
+                            <div className="flex items-center justify-between gap-3 text-xs text-muted-foreground">
+                              <span>
+                                {!isDirty
+                                  ? "Nenhuma alteração pendente"
+                                  : "Há alterações não salvas"}
+                              </span>
+                              <div className="flex items-center gap-2">
+                                {isDirty && (
+                                  <DialogClose asChild>
+                                    <Button
+                                      type="button"
+                                      variant="outline"
+                                      className="backdrop-blur-2xl "
+                                    >
+                                      Cancelar
+                                    </Button>
+                                  </DialogClose>
+                                )}
+                                {isDirty && (
+                                  <Button
+                                    onClick={handleSave}
+                                    className="bg-green-600 hover:bg-green-700 text-white shadow-lg"
+                                  >
+                                    Salvar Alterações
+                                  </Button>
+                                )}
+                              </div>
+                            </div>
+                          </div>
                         </DialogContent>
                       </Dialog>
                     </CardContent>

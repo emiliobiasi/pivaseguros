@@ -1507,7 +1507,7 @@ export function EfetivacaoSeguroFiancaForms() {
               <Button
                 type="button"
                 onClick={handleNext}
-                className="ml-auto bg-[#00612B] text-white shadow hover:bg-[#02693E] focus-visible:ring-[#02693E] hover:bg-green-500"
+                className="ml-auto bg-[#00612B] text-white shadow hover:bg-[#02693E] focus-visible:ring-[#02693E]"
               >
                 Próximo <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
