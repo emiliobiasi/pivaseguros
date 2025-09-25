@@ -61,7 +61,7 @@ export function FormsHeader() {
           </div>
         </section>
 
-        <section className="py-20 mb-20 md:py-20 bg-muted">
+        <section className="py-20 mb-6 md:py-20 bg-muted">
           <div className="max-w-7xl mx-auto px-4 md:px-6">
             <div className="mb-4">
               <h2 className="text-xl font-bold">
