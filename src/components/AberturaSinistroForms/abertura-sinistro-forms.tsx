@@ -1,4 +1,4 @@
-import { CancelamentoSeguros } from "@/types/CancelamentoSeguros"
+import { AberturaSinistro } from "@/types/AberturaSinistro"
 import { useState, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
@@ -34,7 +34,7 @@ import {
 } from "lucide-react"
 import { formatCPF } from "@/utils/regex/regexCPF"
 import { formatCEP } from "@/utils/regex/regexCEP"
-import { createCancelamentoSeguros } from "@/utils/api/CancelamentoSegurosService"
+import { createAberturaSinistro } from "@/utils/api/AberturaSinistroService"
 import {
   Dialog,
   DialogContent,
@@ -47,7 +47,7 @@ import { FileX } from "lucide-react"
 import { useDropzone } from "react-dropzone"
 import { buscaEnderecoPorCEP, EnderecoViaCep } from "@/utils/api/Cep"
 
-export function CancelamentoSegurosForms() {
+export function AberturaSinistroForms() {
   const [currentTab, setCurrentTab] = useState("identificacao")
   const [agreedToTerms, setAgreedToTerms] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -63,7 +63,7 @@ export function CancelamentoSegurosForms() {
   const navigate = useNavigate()
   const formRef = useRef<HTMLFormElement>(null)
 
-  const [formData, setFormData] = useState<CancelamentoSeguros>({
+  const [formData, setFormData] = useState<AberturaSinistro>({
     id: "",
     id_numero: 0,
     acao: "PENDENTE",
@@ -85,8 +85,8 @@ export function CancelamentoSegurosForms() {
     created: new Date(),
   })
 
-  // PDF é obrigatório somente quando o tipo NÃO é SEGURO INCÊNDIO
-  const requiresPdf = formData.tipo_seguro !== "SEGURO INCÊNDIO"
+  // PDF é obrigatório para todos os tipos de seguro
+  const requiresPdf = true
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -165,7 +165,7 @@ export function CancelamentoSegurosForms() {
   }
 
   const handleSelectChange = (
-    name: keyof CancelamentoSeguros,
+    name: keyof AberturaSinistro,
     value: string | number | Date
   ) => {
     setFormData((prevState) => ({
@@ -204,7 +204,7 @@ export function CancelamentoSegurosForms() {
     const validateForm = () => {
       const errors: string[] = []
 
-      // Validação baseada no tipo CancelamentoSeguros (excluindo created, acao, id, id_numero)
+      // Validação baseada no tipo AberturaSinistro (excluindo created, acao, id, id_numero)
       if (!formData.nome_imobiliaria) errors.push("Nome da Imobiliária")
       if (!formData.nome_inquilino) errors.push("Nome do Inquilino")
       if (!formData.cpf_inquilino) errors.push("CPF do Inquilino")
@@ -231,16 +231,15 @@ export function CancelamentoSegurosForms() {
       return
     }
 
-    // Validação: PDF é obrigatório apenas se não for SEGURO INCÊNDIO
-    if (requiresPdf && selectedFiles.length < 1) {
+    // Validação: PDF é obrigatório para todos os tipos
+    if (selectedFiles.length < 1) {
       setFileError("Anexe pelo menos 1 PDF para enviar.")
       setCurrentTab("confirmacao")
       return
     }
 
-    // Se anexou arquivos e o tipo exige PDF (SEGURO FIANÇA ou RESGATE DE TÍTULO),
-    // abre o modal de confirmação dos anexos antes de enviar.
-    if (requiresPdf && selectedFiles.length > 0) {
+    // Se anexou arquivos, abre o modal de confirmação dos anexos antes de enviar.
+    if (selectedFiles.length > 0) {
       setIsConfirmFilesModalOpen(true)
       return
     }
@@ -252,7 +251,7 @@ export function CancelamentoSegurosForms() {
   const submitForm = async () => {
     setIsLoading(true)
     try {
-      await createCancelamentoSeguros(formData, selectedFiles)
+      await createAberturaSinistro(formData, selectedFiles)
       // Reseta o formulário e abre o modal de sucesso
       formRef.current?.reset()
       setSelectedFiles([])
@@ -269,7 +268,7 @@ export function CancelamentoSegurosForms() {
 
   const RequiredAsterisk = () => <span className="text-red-500">*</span>
 
-  // Dropzone config for up to 3 PDFs with dedup by name+size
+  // Dropzone config for up to 12 PDFs with dedup by name+size
   const onDrop = (accepted: File[]) => {
     setFileError("")
     const onlyPDF = accepted.filter((f) => f.type === "application/pdf")
@@ -277,9 +276,9 @@ export function CancelamentoSegurosForms() {
       (f) => !selectedFiles.some((s) => s.name === f.name && s.size === f.size)
     )
     const combined = [...selectedFiles, ...deduped]
-    if (combined.length > 3) {
-      setFileError("Você pode anexar no máximo 3 PDFs.")
-      setSelectedFiles(combined.slice(0, 3))
+    if (combined.length > 12) {
+      setFileError("Você pode anexar no máximo 12 PDFs.")
+      setSelectedFiles(combined.slice(0, 12))
     } else {
       setSelectedFiles(combined)
     }
@@ -291,16 +290,16 @@ export function CancelamentoSegurosForms() {
     multiple: true,
     noClick: true,
     noKeyboard: true,
-    disabled: selectedFiles.length >= 3,
+    disabled: selectedFiles.length >= 12,
   })
 
   return (
     <div className="mb-40 flex justify-center">
       <Card className="w-full max-w-4xl md:mx-10 sm:mx-10">
         <CardHeader className="mb-5">
-          <CardTitle>Cancelamento de Seguros</CardTitle>
+          <CardTitle>Abertura de Sinistros</CardTitle>
           <CardDescription>
-            Para concluir o cancelamento de seguros, solicitamos o preenchimento
+            Para concluir a abertura de sinistro, solicitamos o preenchimento
             dos dados a seguir:
           </CardDescription>
           {showProtocolsBanner && (
@@ -311,11 +310,9 @@ export function CancelamentoSegurosForms() {
                   Novidade: acompanhe seus protocolos
                 </AlertTitle>
                 <AlertDescription className="text-green-900/90">
-                  Agora você pode visualizar seus Protocolos de Cancelamento de
-                  Seguros no menu lateral. Clique em{" "}
-                  <span className="font-medium">
-                    Protocolos de Cancelamento
-                  </span>{" "}
+                  Agora você pode visualizar seus Protocolos de Abertura de
+                  Sinistro no menu lateral. Clique em{" "}
+                  <span className="font-medium">Protocolos de Abertura</span>{" "}
                   para ver a lista.
                   <div className="mt-3">
                     <Button
@@ -366,7 +363,7 @@ export function CancelamentoSegurosForms() {
                     color: currentTab === "identificacao" ? "white" : undefined,
                   }}
                 >
-                  Identificação
+                  Identificação e Seguro
                 </TabsTrigger>
                 <TabsTrigger
                   value="locacao"
@@ -379,7 +376,7 @@ export function CancelamentoSegurosForms() {
                     color: currentTab === "locacao" ? "white" : undefined,
                   }}
                 >
-                  Locação
+                  Dados da Locação
                 </TabsTrigger>
                 <TabsTrigger
                   value="confirmacao"
@@ -612,109 +609,104 @@ export function CancelamentoSegurosForms() {
                 </div>
               </TabsContent>
 
-              {/* Dados do Proprietário */}
+              {/* ENVIO DE PDF */
+              /* Upload de PDF (sempre disponível e obrigatório para todos os tipos) */}
               <TabsContent value="confirmacao">
                 <div className="grid gap-4 py-4">
-                  {/* Upload de PDF (exibido apenas quando não é SEGURO INCÊNDIO) */}
-                  {requiresPdf && (
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <Label>
-                            Anexos PDF{" "}
-                            {requiresPdf && (
-                              <span className="text-red-500">*</span>
-                            )}
-                          </Label>
-                        </div>
-                        <span
-                          className={`text-xs ${
-                            requiresPdf && selectedFiles.length === 0
-                              ? "text-amber-700 font-medium"
-                              : "text-gray-500"
-                          }`}
-                          title={
-                            requiresPdf && selectedFiles.length === 0
-                              ? "Anexe pelo menos 1 PDF"
-                              : undefined
-                          }
-                        >
-                          {selectedFiles.length} arquivo(s)
-                        </span>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Label>
+                          Anexos PDF{" "}
+                          {requiresPdf && (
+                            <span className="text-red-500">*</span>
+                          )}
+                        </Label>
                       </div>
-                      {selectedFiles.length < 3 ? (
-                        <div
-                          {...getRootProps()}
-                          className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors cursor-pointer ${
-                            isDragActive
-                              ? "border-green-600 bg-green-50"
-                              : "border-gray-300"
-                          }`}
-                        >
-                          <input {...getInputProps()} />
-                          <div className="flex flex-col items-center justify-center gap-2">
-                            <Upload className="w-8 h-8 text-gray-500" />
-                            <p className="text-sm text-gray-700">
-                              {isDragActive
-                                ? "Solte os arquivos aqui"
-                                : "Arraste e solte seus PDFs aqui"}
-                            </p>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              onClick={open}
-                              className="mt-2"
-                            >
-                              Selecionar arquivos
-                            </Button>
-                            <p className="text-xs text-gray-500">
-                              {requiresPdf
-                                ? "Apenas PDF • Mín. 1 arquivo"
-                                : "Apenas PDF • Opcional"}
-                            </p>
-                            {requiresPdf && (
-                              <p className="text-xs text-gray-500">
-                                Anexe pelo menos 1 PDF para enviar.
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="rounded-lg border border-amber-500 bg-amber-50 p-4">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                              <Ban className="w-6 h-6 text-amber-600" />
-                              <div>
-                                <p className="text-sm font-medium text-amber-800">
-                                  Limite de anexos atingido
-                                </p>
-                                <p className="text-xs text-amber-700">
-                                  Remova um arquivo para adicionar outro.
-                                </p>
-                              </div>
-                            </div>
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              className="text-amber-700 hover:text-amber-800"
-                              onClick={() => setSelectedFiles([])}
-                            >
-                              Remover todos
-                            </Button>
-                          </div>
-                          <p className="mt-2 text-xs text-amber-700">
-                            {requiresPdf
-                              ? "Você já anexou o máximo permitido. Mínimo exigido: 1 PDF."
-                              : "Você já anexou o máximo permitido. Anexos são opcionais para SEGURO INCÊNDIO."}
-                          </p>
-                        </div>
-                      )}
-                      {fileError && (
-                        <p className="text-sm text-red-600">{fileError}</p>
-                      )}
+                      <span
+                        className={`text-xs ${
+                          requiresPdf && selectedFiles.length === 0
+                            ? "text-amber-700 font-medium"
+                            : "text-gray-500"
+                        }`}
+                        title={
+                          requiresPdf && selectedFiles.length === 0
+                            ? "Anexe pelo menos 1 PDF"
+                            : undefined
+                        }
+                      >
+                        {selectedFiles.length} arquivo(s)
+                      </span>
                     </div>
-                  )}
-                  {requiresPdf && selectedFiles.length > 0 && (
+                    {selectedFiles.length < 12 ? (
+                      <div
+                        {...getRootProps()}
+                        className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors cursor-pointer ${
+                          isDragActive
+                            ? "border-green-600 bg-green-50"
+                            : "border-gray-300"
+                        }`}
+                      >
+                        <input {...getInputProps()} />
+                        <div className="flex flex-col items-center justify-center gap-2">
+                          <Upload className="w-8 h-8 text-gray-500" />
+                          <p className="text-sm text-gray-700">
+                            {isDragActive
+                              ? "Solte os arquivos aqui"
+                              : "Arraste e solte seus PDFs aqui"}
+                          </p>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={open}
+                            className="mt-2"
+                          >
+                            Selecionar arquivos
+                          </Button>
+                          <p className="text-xs text-gray-500">
+                            Apenas PDF • Mín. 1 arquivo
+                          </p>
+                          {requiresPdf && (
+                            <p className="text-xs text-gray-500">
+                              Anexe pelo menos 1 PDF para enviar.
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="rounded-lg border border-amber-500 bg-amber-50 p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <Ban className="w-6 h-6 text-amber-600" />
+                            <div>
+                              <p className="text-sm font-medium text-amber-800">
+                                Limite de anexos atingido
+                              </p>
+                              <p className="text-xs text-amber-700">
+                                Remova um arquivo para adicionar outro.
+                              </p>
+                            </div>
+                          </div>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            className="text-amber-700 hover:text-amber-800"
+                            onClick={() => setSelectedFiles([])}
+                          >
+                            Remover todos
+                          </Button>
+                        </div>
+                        <p className="mt-2 text-xs text-amber-700">
+                          Você já anexou o máximo permitido. Mínimo exigido: 1
+                          PDF.
+                        </p>
+                      </div>
+                    )}
+                    {fileError && (
+                      <p className="text-sm text-red-600">{fileError}</p>
+                    )}
+                  </div>
+                  {selectedFiles.length > 0 && (
                     <div className="mt-3">
                       <div className="flex items-center justify-between mb-2">
                         <p className="text-sm text-gray-700">
@@ -791,7 +783,7 @@ export function CancelamentoSegurosForms() {
           )}
 
           <CardFooter className="flex justify-between">
-            {currentTab !== "locatario" && (
+            {currentTab !== "identificacao" && (
               <Button type="button" variant="outline" onClick={handlePrevious}>
                 <ArrowLeft className="mr-2 h-4 w-4" /> Anterior
               </Button>
@@ -808,12 +800,10 @@ export function CancelamentoSegurosForms() {
               <Button
                 type="submit"
                 disabled={
-                  !agreedToTerms ||
-                  isLoading ||
-                  (requiresPdf && selectedFiles.length < 1)
+                  !agreedToTerms || isLoading || selectedFiles.length < 1
                 }
                 title={
-                  requiresPdf && selectedFiles.length < 1
+                  selectedFiles.length < 1
                     ? "Anexe pelo menos 1 PDF para enviar"
                     : undefined
                 }
@@ -908,11 +898,7 @@ export function CancelamentoSegurosForms() {
               Formulário Enviado com Sucesso
             </DialogTitle>
           </DialogHeader>
-          {/* {/* <div className="flex justify-center my-4">
-            <div className="w-24 h-24 flex items-center justify-center my-5">
-              <img src={pivaLogo} alt="Piva" className="w-24 h-24 " />
-            </div>
-          </div> */}
+
           <DialogDescription>
             Seus dados foram enviados com sucesso. Nossa equipe entrará em
             contato em breve.
@@ -926,8 +912,7 @@ export function CancelamentoSegurosForms() {
               </AlertTitle>
               <AlertDescription className="text-green-900/90">
                 Acompanhe este envio na página de
-                <span className="font-medium"> Protocolos de Cancelamento</span>
-                .
+                <span className="font-medium"> Protocolos de Abertura</span>.
                 <div className="mt-3">
                   <Button
                     type="button"

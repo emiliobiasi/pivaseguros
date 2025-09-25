@@ -1,10 +1,9 @@
-import { CancelamentoSegurosForms } from "@/components/CancelamentoSegurosForms/cancelamento-seguros-forms"
+import { AberturaSinistroForms } from "@/components/AberturaSinistroForms/abertura-sinistro-forms"
 
 const AberturaSinistroScreen = () => {
   return (
     <>
-      {/* <CancelamentoSegurosForms /> */}
-      <h1>fdsaos</h1>
+      <AberturaSinistroForms />
     </>
   )
 }
