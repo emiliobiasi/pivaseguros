@@ -16,6 +16,7 @@ import {
   ChevronLeft,
   ChevronRight,
   FileX,
+  FilePlus2,
 } from "lucide-react"
 import { useNavigate, useLocation } from "react-router-dom"
 import logo from "@/assets/logo.png"
@@ -154,6 +155,7 @@ function SidebarContent({ collapsed }: { collapsed: boolean }) {
   const [notifications, setNotifications] = useState<Notificacao[]>([])
   const [cancelamentoRealtimeCount, setCancelamentoRealtimeCount] = useState(0)
   const [tituloRealtimeCount, setTituloRealtimeCount] = useState(0)
+  const [aberturaRealtimeCount, setAberturaRealtimeCount] = useState(0)
   // Some backends may use different field names for the same notification type.
   // For cancelamento de seguros, consider these alias keys when counting/clearing.
   const cancelamentoKeys = [
@@ -185,6 +187,32 @@ function SidebarContent({ collapsed }: { collapsed: boolean }) {
       return false
     }
   }
+
+  // Abertura de Sinistro alias detection (Notificacoes may vary keys)
+  const aberturaKeys = [
+    "form_abertura_sinistro",
+    "form_protocolo_abertura",
+    "form_protocolo_abertura_sinistro",
+    "protocolo_abertura",
+    "abertura_sinistro",
+  ] as const
+
+  const isAberturaNotification = (n: any) => {
+    if (aberturaKeys.some((k) => n?.[k])) return true
+    try {
+      const keys = Object.keys(n || {})
+      return keys.some((key) => {
+        const k = key.toLowerCase()
+        return (
+          k.includes("abertura_sinistro") ||
+          (k.includes("abertura") && k.includes("protocolo")) ||
+          (k.includes("protocolo") && k.includes("abertura"))
+        )
+      })
+    } catch {
+      return false
+    }
+  }
   const soundRef = useRef<HTMLAudioElement | null>(null)
   const [notificationsCount, setNotificationsCount] = useState({
     form_seguro_incendio: 0,
@@ -195,6 +223,7 @@ function SidebarContent({ collapsed }: { collapsed: boolean }) {
     form_efetivacao_seguro_fianca_tb: 0,
     form_titulo_capitalizacao: 0,
     form_cancelamento_seguros: 0,
+    form_protocolo_abertura_sinistro: 0,
   })
 
   const authorizedUsers = [
@@ -221,6 +250,7 @@ function SidebarContent({ collapsed }: { collapsed: boolean }) {
       form_efetivacao_seguro_fianca_tb: 0,
       form_titulo_capitalizacao: 0,
       form_cancelamento_seguros: 0,
+      form_protocolo_abertura_sinistro: 0,
     }
     for (const n of notifs) {
       if (n.form_seguro_incendio) counts.form_seguro_incendio++
@@ -236,6 +266,7 @@ function SidebarContent({ collapsed }: { collapsed: boolean }) {
         counts.form_efetivacao_seguro_fianca_tb++
       if (n.form_titulo_capitalizacao) counts.form_titulo_capitalizacao++
       if (isCancelamentoNotification(n)) counts.form_cancelamento_seguros++
+      if (isAberturaNotification(n)) counts.form_protocolo_abertura_sinistro++
     }
     return counts
   }
@@ -308,6 +339,27 @@ function SidebarContent({ collapsed }: { collapsed: boolean }) {
     }
   }, [])
 
+  // Realtime subscription specifically for abertura_sinistro
+  useEffect(() => {
+    const unsub = pb.collection("abertura_sinistro").subscribe("*", (e) => {
+      if (e.action === "create") {
+        setAberturaRealtimeCount((prev) => prev + 1)
+        // Play sound for newly created abertura as well
+        soundRef.current?.play().catch(() => {})
+      } else if (e.action === "delete") {
+        setAberturaRealtimeCount((prev) => Math.max(0, prev - 1))
+      }
+    })
+    return () => {
+      try {
+        pb.collection("abertura_sinistro").unsubscribe("*")
+      } catch {}
+      if (typeof unsub === "function") {
+        ;(unsub as any)()
+      }
+    }
+  }, [])
+
   // Seed initial unseen count for cancelamento using last seen timestamp
   useEffect(() => {
     ;(async () => {
@@ -322,6 +374,26 @@ function SidebarContent({ collapsed }: { collapsed: boolean }) {
           return createdAt > lastSeen
         }).length
         setCancelamentoRealtimeCount(unseen)
+      } catch {
+        // ignore errors
+      }
+    })()
+  }, [])
+
+  // Seed initial unseen count for abertura using last seen timestamp
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const lastSeenRaw = localStorage.getItem("last_seen_abertura")
+        const lastSeen = lastSeenRaw ? Number(lastSeenRaw) : 0
+        const res = await pb
+          .collection("abertura_sinistro")
+          .getList<any>(1, 50, { sort: "-created" })
+        const unseen = res.items.filter((it) => {
+          const createdAt = new Date((it as any).created).getTime()
+          return createdAt > lastSeen
+        }).length
+        setAberturaRealtimeCount(unseen)
       } catch {
         // ignore errors
       }
@@ -374,6 +446,8 @@ function SidebarContent({ collapsed }: { collapsed: boolean }) {
     const notificationsToDelete =
       formType === "form_cancelamento_seguros"
         ? notifications.filter((n) => isCancelamentoNotification(n))
+        : formType === "form_protocolo_abertura_sinistro"
+        ? notifications.filter((n) => isAberturaNotification(n))
         : notifications.filter((n) => (n as any)[formType])
 
     if (notificationsToDelete.length > 0) {
@@ -790,6 +864,56 @@ function SidebarContent({ collapsed }: { collapsed: boolean }) {
                     >
                       {notificationsCount.form_cancelamento_seguros +
                         cancelamentoRealtimeCount}
+                    </span>
+                  ))}
+              </span>
+            </button>
+          </ItemTooltip>
+        </li>
+
+        {/* Protocolo de Abertura de Sinistro */}
+        <li>
+          <ItemTooltip label="Protocolo de Abertura">
+            <button
+              onClick={async () => {
+                navigate("/dashboard-protocolo-abertura-sinistro")
+                await handledeleteNotifications(
+                  "form_protocolo_abertura_sinistro"
+                )
+                try {
+                  localStorage.setItem(
+                    "last_seen_abertura",
+                    Date.now().toString()
+                  )
+                } catch {}
+                setAberturaRealtimeCount(0)
+              }}
+              className={`flex items-center w-full px-3 py-2 text-left text-[13px] ${
+                location.pathname === "/dashboard-protocolo-abertura-sinistro"
+                  ? "bg-gray-200 dark:bg-gray-700 text-green-700 dark:text-white"
+                  : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+              } ${collapsed ? "justify-center" : ""}`}
+            >
+              <span className="flex items-center relative">
+                <FilePlus2
+                  className={`h-[18px] w-[18px] ${collapsed ? "" : "mr-2.5"}`}
+                />
+                {!collapsed && <span>Protocolo de Abertura</span>}
+                {notificationsCount.form_protocolo_abertura_sinistro +
+                  aberturaRealtimeCount >
+                  0 &&
+                  (collapsed ? (
+                    <span
+                      className="absolute -top-0.5 -right-0.5 inline-flex h-2 w-2 rounded-full bg-green-600"
+                      aria-label="Novas notificações de Protocolo de Abertura"
+                    />
+                  ) : (
+                    <span
+                      className="ml-2 text-[10px] text-white bg-green-800 flex items-center justify-center rounded-full flex-shrink-0"
+                      style={{ width: "0.85rem", height: "0.85rem" }}
+                    >
+                      {notificationsCount.form_protocolo_abertura_sinistro +
+                        aberturaRealtimeCount}
                     </span>
                   ))}
               </span>
