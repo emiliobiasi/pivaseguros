@@ -4,6 +4,8 @@ export type CancelamentoSeguros = {
   acao: "PENDENTE" | "FINALIZADO"
 
   nome_imobiliaria: string
+  // Relation to the imobiliaria (creator). PocketBase relation field id
+  imobiliaria?: string
 
   nome_inquilino: string
   cpf_inquilino?: string

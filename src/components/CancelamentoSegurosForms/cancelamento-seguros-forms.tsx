@@ -42,6 +42,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { FileX } from "lucide-react"
 import pivaLogo from "@/assets/logo.png"
 import { useDropzone } from "react-dropzone"
 import { buscaEnderecoPorCEP, EnderecoViaCep } from "@/utils/api/Cep"
@@ -54,6 +56,9 @@ export function CancelamentoSegurosForms() {
   const [errorMessage, setErrorMessage] = useState("")
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const [fileError, setFileError] = useState<string>("")
+  const [showProtocolsBanner, setShowProtocolsBanner] = useState(
+    () => !localStorage.getItem("protocolosBannerDismissed")
+  )
 
   const navigate = useNavigate()
   const formRef = useRef<HTMLFormElement>(null)
@@ -281,6 +286,46 @@ export function CancelamentoSegurosForms() {
             Para concluir o cancelamento de seguros, solicitamos o preenchimento
             dos dados a seguir:
           </CardDescription>
+          {showProtocolsBanner && (
+            <div className="mt-4 relative">
+              <Alert className="border-green-700/30 bg-green-50 pr-8">
+                <FileX className="h-4 w-4" />
+                <AlertTitle className="text-green-900">
+                  Novidade: acompanhe seus protocolos
+                </AlertTitle>
+                <AlertDescription className="text-green-900/90">
+                  Agora você pode visualizar seus Protocolos de Cancelamento de
+                  Seguros no menu lateral. Clique em{" "}
+                  <span className="font-medium">
+                    Protocolos de Cancelamento
+                  </span>{" "}
+                  para ver a lista.
+                  <div className="mt-3">
+                    <Button
+                      type="button"
+                      variant="piva"
+                      onClick={() =>
+                        navigate("/imobiliaria/protocolo-cancelamento")
+                      }
+                    >
+                      Ir para Protocolos
+                    </Button>
+                  </div>
+                </AlertDescription>
+                <button
+                  type="button"
+                  aria-label="Fechar aviso"
+                  className="absolute right-2 top-2 rounded p-1 text-green-900/70 hover:bg-green-100 hover:text-green-900"
+                  onClick={() => {
+                    localStorage.setItem("protocolosBannerDismissed", "1")
+                    setShowProtocolsBanner(false)
+                  }}
+                >
+                  ×
+                </button>
+              </Alert>
+            </div>
+          )}
           <h3 className="" style={{ marginTop: "1.5rem " }}>
             💡Os campos marcados com{" "}
             <strong>

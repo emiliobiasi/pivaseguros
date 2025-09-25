@@ -8,6 +8,12 @@ export async function createCancelamentoSeguros(
   files: File[] = []
 ): Promise<CancelamentoSeguros> {
   try {
+    // Captura informações da imobiliária autenticada, se houver
+    const authModel: any = pb.authStore.model
+    const isImobiliaria = authModel?.collectionName === "imobiliarias"
+    const imobiliariaId: string | undefined = isImobiliaria
+      ? authModel.id
+      : undefined
     // Inicializa lastRecord como nulo
     let lastRecord: CancelamentoSeguros | null = null
 
@@ -37,7 +43,12 @@ export async function createCancelamentoSeguros(
 
     // Campos básicos (converter números/datas para string quando necessário)
     formData.append("acao", data.acao)
+    // Mantém o nome informado no formulário (sem autofill do auth)
     formData.append("nome_imobiliaria", data.nome_imobiliaria)
+    // Relaciona o registro à imobiliária criadora, se disponível no schema
+    if (imobiliariaId) {
+      formData.append("imobiliaria", imobiliariaId)
+    }
 
     formData.append("nome_inquilino", data.nome_inquilino)
     if (data.cpf_inquilino) formData.append("cpf_inquilino", data.cpf_inquilino)
