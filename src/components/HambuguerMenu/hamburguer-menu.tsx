@@ -13,8 +13,8 @@ import { AnimatePresence, motion } from "framer-motion"
 import { CreditCard, FileText, Menu } from "lucide-react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-// import { AuthImobiliariaContext } from "@/contexts/auth/imobiliarias/AuthContextImobiliarias";
 import { useAuthImobiliarias } from "@/contexts/auth/imobiliarias/useAuthImobiliarias"
+// import { AuthImobiliariaContext } from "@/contexts/auth/imobiliarias/AuthContextImobiliarias";
 
 const menuItems = [
   { icon: FileText, label: "Formulários", path: "/imobiliaria/formulario" },
@@ -22,6 +22,11 @@ const menuItems = [
     icon: CreditCard,
     label: "Boletos",
     path: "/imobiliaria/download-boletos",
+  },
+  {
+    icon: CreditCard,
+    label: "Protocolo de Cancelamento",
+    path: "/imobiliaria/protocolo-cancelamento",
   },
   // { icon: Settings, label: "Configurações", path: "/imobiliaria/configuracoes" },
   { icon: ExitIcon, label: "Sair", action: "logout" },

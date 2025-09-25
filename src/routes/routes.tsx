@@ -34,6 +34,7 @@ import BoletoDownloadHistoricoPage from "@/screens/BoletoDownloadHistoricoPage"
 import HistoricoDeEnvioDeBoletos from "@/screens/HistoricoDeEnvioDeBoletos"
 import ConfiguracoesDaConta from "@/screens/ConfiguracoesDaConta"
 import CancelamentoSegurosScreen from "@/screens/CancelamentoSegurosScreen"
+import ProtocoloCancelamentoSegurosPage from "@/screens/ProtocoloCancelamentosSeguroPage"
 
 const RoutesComponent = () => {
   return (
@@ -64,6 +65,14 @@ const RoutesComponent = () => {
                   element={
                     <PrivateRouteImobiliarias>
                       <BoletoDownloadPage />
+                    </PrivateRouteImobiliarias>
+                  }
+                />
+                <Route
+                  path="protocolo-cancelamento"
+                  element={
+                    <PrivateRouteImobiliarias>
+                      <ProtocoloCancelamentoSegurosPage />
                     </PrivateRouteImobiliarias>
                   }
                 />
