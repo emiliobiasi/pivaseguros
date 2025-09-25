@@ -1,10 +1,9 @@
-// import { TituloCapitalizacaoForms } from '../components/TituloCapitalizacaoForms/titulo-capitalizacao-forms';
+import { CancelamentoSegurosForms } from "@/components/CancelamentoSegurosForms/cancelamento-seguros-forms"
 
 const CancelamentoSegurosScreen = () => {
   return (
     <>
-      {/* <TituloCapitalizacaoForms /> */}
-      HELLO WORLD
+      <CancelamentoSegurosForms />
     </>
   )
 }

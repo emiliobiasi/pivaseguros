@@ -1,4 +1,4 @@
-import { TituloCapitalizacao } from "@/types/TituloCapitalizacao"
+import { CancelamentoSeguros } from "@/types/CancelamentoSeguros"
 import { useState, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
@@ -21,12 +21,20 @@ import {
 } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Checkbox } from "@/components/ui/checkbox"
-import { ArrowLeft, ArrowRight, CheckCircle, Send, Loader2 } from "lucide-react"
+import {
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle,
+  Send,
+  Loader2,
+  FileText,
+  Upload,
+  Trash2,
+  Ban,
+} from "lucide-react"
 import { formatCPF } from "@/utils/regex/regexCPF"
-import { formatCNPJ } from "@/utils/regex/regexCNPJ"
-import { formatTelefone } from "@/utils/regex/regexTelefone"
 import { formatCEP } from "@/utils/regex/regexCEP"
-import { createTituloCapitalizacao } from "@/utils/api/TituloCapitalizacaoService"
+import { createCancelamentoSeguros } from "@/utils/api/CancelamentoSeguros"
 import {
   Dialog,
   DialogContent,
@@ -35,40 +43,40 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import pivaLogo from "@/assets/logo.png"
+import { useDropzone } from "react-dropzone"
 import { buscaEnderecoPorCEP, EnderecoViaCep } from "@/utils/api/Cep"
 
-export function TituloCapitalizacaoForms() {
+export function CancelamentoSegurosForms() {
   const [currentTab, setCurrentTab] = useState("locatario")
   const [agreedToTerms, setAgreedToTerms] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
+  const [fileError, setFileError] = useState<string>("")
 
   const navigate = useNavigate()
   const formRef = useRef<HTMLFormElement>(null)
 
-  const [formData, setFormData] = useState<TituloCapitalizacao>({
+  const [formData, setFormData] = useState<CancelamentoSeguros>({
     id: "",
     id_numero: 0,
     acao: "PENDENTE",
-    nome: "",
-    email: "",
-    telefone: "",
-    profissao: "",
-    valor_remuneracao: 0,
-    tipo_imovel: "RESIDENCIAL",
+    nome_imobiliaria: "",
+    nome_inquilino: "",
+    cpf_inquilino: "",
+    nome_proprietario: "",
+    cpf_proprietario: "",
+
     cep: "",
     endereco: "",
     bairro: "",
     numero_endereco: 0,
     cidade: "",
     estado: "",
-    valor_aluguel_mensal: 0,
-    valor_total_titulos: 0,
-    nome_proprietario: "",
-    email_proprietario: "",
-    telefone_proprietario: "",
-    imobiliaria: "",
+
+    tipo_seguro: "SEGURO FIANÇA",
+    pdf_field: [],
     created: new Date(),
   })
 
@@ -76,20 +84,8 @@ export function TituloCapitalizacaoForms() {
     const { name, value } = e.target
     let formattedValue = value
 
-    if (name === "cpf" || name === "cpf_proprietario") {
+    if (name === "cpf_inquilino" || name === "cpf_proprietario") {
       formattedValue = formatCPF(value)
-      setFormData((prevState) => ({
-        ...prevState,
-        [name]: formattedValue,
-      }))
-    } else if (name === "cnpj" || name === "cnpj_proprietario") {
-      formattedValue = formatCNPJ(value)
-      setFormData((prevState) => ({
-        ...prevState,
-        [name]: formattedValue,
-      }))
-    } else if (name === "telefone" || name === "telefone_proprietario") {
-      formattedValue = formatTelefone(value)
       setFormData((prevState) => ({
         ...prevState,
         [name]: formattedValue,
@@ -146,15 +142,7 @@ export function TituloCapitalizacaoForms() {
           [name]: formattedValue,
         }))
       }
-    } else if (
-      [
-        "valor_remuneracao",
-        "valor_aluguel_mensal",
-        "valor_total_titulos",
-        "numero_endereco",
-        "id_numero",
-      ].includes(name)
-    ) {
+    } else if (["numero_endereco", "id_numero"].includes(name)) {
       const numericValue = Number(value)
       setFormData((prevState) => ({
         ...prevState,
@@ -169,7 +157,7 @@ export function TituloCapitalizacaoForms() {
   }
 
   const handleSelectChange = (
-    name: keyof TituloCapitalizacao,
+    name: keyof CancelamentoSeguros,
     value: string | number | Date
   ) => {
     setFormData((prevState) => ({
@@ -203,26 +191,20 @@ export function TituloCapitalizacaoForms() {
     // Função de validação
     const validateForm = () => {
       const errors: string[] = []
-      if (!formData.acao) errors.push("Ação")
-      if (!formData.nome) errors.push("Nome")
-      if (!formData.email) errors.push("Email")
-      if (!formData.telefone) errors.push("Telefone")
-      if (!formData.profissao) errors.push("Profissão")
-      if (!formData.valor_remuneracao) errors.push("Valor da Remuneração")
-      if (!formData.tipo_imovel) errors.push("Tipo do Imóvel")
+
+      // Validação baseada no tipo CancelamentoSeguros (excluindo created, acao, id, id_numero)
+      if (!formData.nome_imobiliaria) errors.push("Nome da Imobiliária")
+      if (!formData.nome_inquilino) errors.push("Nome do Inquilino")
+      if (!formData.cpf_inquilino) errors.push("CPF do Inquilino")
+      if (!formData.nome_proprietario) errors.push("Nome do Proprietário")
+      if (!formData.cpf_proprietario) errors.push("CPF do Proprietário")
       if (!formData.cep) errors.push("CEP")
       if (!formData.endereco) errors.push("Endereço")
       if (!formData.bairro) errors.push("Bairro")
       if (!formData.numero_endereco) errors.push("Número")
       if (!formData.cidade) errors.push("Cidade")
       if (!formData.estado) errors.push("Estado")
-      if (!formData.valor_aluguel_mensal) errors.push("Valor do Aluguel Mensal")
-      if (!formData.valor_total_titulos) errors.push("Valor Total dos Títulos")
-      if (!formData.nome_proprietario) errors.push("Nome do Proprietário")
-      if (!formData.email_proprietario) errors.push("Email do Proprietário")
-      if (!formData.telefone_proprietario)
-        errors.push("Telefone do Proprietário")
-      if (!formData.imobiliaria) errors.push("Nome da Imobiliária")
+      if (!formData.tipo_seguro) errors.push("Tipo de Seguro")
 
       return errors
     }
@@ -237,13 +219,21 @@ export function TituloCapitalizacaoForms() {
       return
     }
 
+    // Validação: é obrigatório anexar pelo menos 1 PDF
+    if (selectedFiles.length < 1) {
+      setFileError("Anexe pelo menos 1 PDF para enviar.")
+      setCurrentTab("proprietario")
+      return
+    }
+
     setIsLoading(true)
     try {
-      await createTituloCapitalizacao(formData) // Certifique-se de que está chamando a função correta
+      await createCancelamentoSeguros(formData, selectedFiles) // Envia dados com PDFs
       // console.log("Dados enviados para criação:", formData);
 
       // Reseta o formulário e abre o modal de sucesso
       formRef.current?.reset()
+      setSelectedFiles([])
       setIsSuccessModalOpen(true)
     } catch (error) {
       console.error("Erro ao enviar o formulário:", error)
@@ -257,14 +247,39 @@ export function TituloCapitalizacaoForms() {
 
   const RequiredAsterisk = () => <span className="text-red-500">*</span>
 
+  // Dropzone config for up to 3 PDFs with dedup by name+size
+  const onDrop = (accepted: File[]) => {
+    setFileError("")
+    const onlyPDF = accepted.filter((f) => f.type === "application/pdf")
+    const deduped = onlyPDF.filter(
+      (f) => !selectedFiles.some((s) => s.name === f.name && s.size === f.size)
+    )
+    const combined = [...selectedFiles, ...deduped]
+    if (combined.length > 3) {
+      setFileError("Você pode anexar no máximo 3 PDFs.")
+      setSelectedFiles(combined.slice(0, 3))
+    } else {
+      setSelectedFiles(combined)
+    }
+  }
+
+  const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
+    onDrop,
+    accept: { "application/pdf": [".pdf"] },
+    multiple: true,
+    noClick: true,
+    noKeyboard: true,
+    disabled: selectedFiles.length >= 3,
+  })
+
   return (
     <div className="mb-40 flex justify-center">
       <Card className="w-full max-w-4xl md:mx-10 sm:mx-10">
         <CardHeader className="mb-5">
-          <CardTitle>Efetivação de Título de Capitalização</CardTitle>
+          <CardTitle>Cancelamento de Seguros</CardTitle>
           <CardDescription>
-            Para concluir a efetivação de Título de Capitalização, solicitamos o
-            preenchimento dos dados a seguir:
+            Para concluir o cancelamento de seguros, solicitamos o preenchimento
+            dos dados a seguir:
           </CardDescription>
           <h3 className="" style={{ marginTop: "1.5rem " }}>
             💡Os campos marcados com{" "}
@@ -289,7 +304,7 @@ export function TituloCapitalizacaoForms() {
                     color: currentTab === "locatario" ? "white" : undefined,
                   }}
                 >
-                  Dados do Locatário
+                  Identificação e Seguro
                 </TabsTrigger>
                 <TabsTrigger
                   value="locacao"
@@ -315,7 +330,7 @@ export function TituloCapitalizacaoForms() {
                     color: currentTab === "proprietario" ? "white" : undefined,
                   }}
                 >
-                  Dados do Proprietário
+                  Confirmação
                 </TabsTrigger>
               </TabsList>
 
@@ -323,95 +338,73 @@ export function TituloCapitalizacaoForms() {
               <TabsContent value="locatario">
                 <div className="grid gap-4 py-4">
                   <div className="space-y-2">
-                    <Label htmlFor="nome">
-                      Nome <RequiredAsterisk />
+                    <Label htmlFor="nome_imobiliaria">
+                      Nome da Imobiliária <RequiredAsterisk />
                     </Label>
                     <Input
-                      id="nome"
-                      name="nome"
-                      value={formData.nome}
+                      id="nome_imobiliaria"
+                      name="nome_imobiliaria"
+                      value={formData.nome_imobiliaria}
                       onChange={handleInputChange}
                       required
-                      placeholder="Digite o nome do locatário"
+                      placeholder="Digite o nome da imobiliária"
                     />
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="cpf">CPF</Label>
+                      <Label htmlFor="cpf_inquilino">
+                        CPF do Inquilino <RequiredAsterisk />
+                      </Label>
                       <Input
-                        id="cpf"
-                        name="cpf"
-                        value={formData.cpf || ""}
+                        id="cpf_inquilino"
+                        name="cpf_inquilino"
+                        value={formData.cpf_inquilino || ""}
                         onChange={handleInputChange}
-                        placeholder="Digite o CPF (opcional)"
+                        required
+                        placeholder="Digite o CPF"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="cnpj">CNPJ</Label>
+                      <Label htmlFor="nome_inquilino">
+                        Nome do Inquilino <RequiredAsterisk />
+                      </Label>
                       <Input
-                        id="cnpj"
-                        name="cnpj"
-                        value={formData.cnpj || ""}
+                        id="nome_inquilino"
+                        name="nome_inquilino"
+                        value={formData.nome_inquilino}
                         onChange={handleInputChange}
-                        placeholder="Digite o CNPJ (opcional)"
+                        required
+                        placeholder="Digite o nome do inquilino"
                       />
                     </div>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="email">
-                        Email <RequiredAsterisk />
+                      <Label htmlFor="cpf_proprietario">
+                        CPF do Proprietário <RequiredAsterisk />
                       </Label>
                       <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
+                        id="cpf_proprietario"
+                        name="cpf_proprietario"
+                        value={formData.cpf_proprietario || ""}
                         onChange={handleInputChange}
                         required
-                        placeholder="Digite o email"
+                        placeholder="Digite o CPF"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="telefone">
-                        Telefone <RequiredAsterisk />
+                      <Label htmlFor="nome_proprietario">
+                        Nome do Proprietário <RequiredAsterisk />
                       </Label>
                       <Input
-                        id="telefone"
-                        name="telefone"
-                        value={formData.telefone}
+                        id="nome_proprietario"
+                        name="nome_proprietario"
+                        value={formData.nome_proprietario}
                         onChange={handleInputChange}
                         required
-                        placeholder="Digite o telefone"
+                        placeholder="Digite o nome do proprietário"
                       />
                     </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="profissao">
-                      Profissão <RequiredAsterisk />
-                    </Label>
-                    <Input
-                      id="profissao"
-                      name="profissao"
-                      value={formData.profissao}
-                      onChange={handleInputChange}
-                      required
-                      placeholder="Digite a profissão"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="valor_remuneracao">
-                      Valor da Remuneração <RequiredAsterisk />
-                    </Label>
-                    <Input
-                      id="valor_remuneracao"
-                      name="valor_remuneracao"
-                      type="number"
-                      value={formData.valor_remuneracao || ""}
-                      onChange={handleInputChange}
-                      required
-                      placeholder="Digite o valor da remuneração"
-                    />
                   </div>
                 </div>
               </TabsContent>
@@ -419,38 +412,7 @@ export function TituloCapitalizacaoForms() {
               {/* Dados da Locação */}
               <TabsContent value="locacao">
                 <div className="grid gap-4 py-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="imobiliaria">
-                      Nome da Imobiliária <RequiredAsterisk />
-                    </Label>
-                    <Input
-                      id="imobiliaria"
-                      name="imobiliaria"
-                      value={formData.imobiliaria}
-                      onChange={handleInputChange}
-                      required
-                      placeholder="Digite o nome da imobiliária"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="tipo_imovel">
-                      Tipo do Imóvel <RequiredAsterisk />
-                    </Label>
-                    <Select
-                      value={formData.tipo_imovel}
-                      onValueChange={(value) =>
-                        handleSelectChange("tipo_imovel", value)
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione o tipo do imóvel" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="RESIDENCIAL">Residencial</SelectItem>
-                        <SelectItem value="COMERCIAL">Comercial</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                  {/* Nome da Imobiliária e Tipo de Seguro movidos para a primeira aba */}
                   <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="cep">
@@ -557,34 +519,7 @@ export function TituloCapitalizacaoForms() {
                       />
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="valor_aluguel_mensal">
-                      Valor do Aluguel Mensal <RequiredAsterisk />
-                    </Label>
-                    <Input
-                      id="valor_aluguel_mensal"
-                      name="valor_aluguel_mensal"
-                      type="number"
-                      value={formData.valor_aluguel_mensal || ""}
-                      onChange={handleInputChange}
-                      required
-                      placeholder="Digite o valor do aluguel mensal"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="valor_total_titulos">
-                      Valor Total dos Títulos <RequiredAsterisk />
-                    </Label>
-                    <Input
-                      id="valor_total_titulos"
-                      name="valor_total_titulos"
-                      type="number"
-                      value={formData.valor_total_titulos || ""}
-                      onChange={handleInputChange}
-                      required
-                      placeholder="Digite o valor total dos títulos"
-                    />
-                  </div>
+                  {/* Campos de valores removidos para alinhar ao tipo */}
                 </div>
               </TabsContent>
 
@@ -592,70 +527,168 @@ export function TituloCapitalizacaoForms() {
               <TabsContent value="proprietario">
                 <div className="grid gap-4 py-4">
                   <div className="space-y-2">
-                    <Label htmlFor="nome_proprietario">
-                      Nome do Proprietário <RequiredAsterisk />
+                    <Label htmlFor="tipo_seguro">
+                      Tipo de Seguro <RequiredAsterisk />
                     </Label>
-                    <Input
-                      id="nome_proprietario"
-                      name="nome_proprietario"
-                      value={formData.nome_proprietario}
-                      onChange={handleInputChange}
-                      required
-                      placeholder="Digite o nome do proprietário"
-                    />
+                    <Select
+                      value={formData.tipo_seguro}
+                      onValueChange={(value) =>
+                        handleSelectChange("tipo_seguro", value)
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione o tipo de seguro" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="SEGURO FIANÇA">
+                          SEGURO FIANÇA
+                        </SelectItem>
+                        <SelectItem value="SEGURO INCÊNDIO">
+                          SEGURO INCÊNDIO
+                        </SelectItem>
+                        <SelectItem value="RESGATE DE TÍTULO">
+                          RESGATE DE TÍTULO
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="cpf_proprietario">
-                        CPF do Proprietário
-                      </Label>
-                      <Input
-                        id="cpf_proprietario"
-                        name="cpf_proprietario"
-                        value={formData.cpf_proprietario || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite o CPF (opcional)"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="cnpj_proprietario">
-                        CNPJ do Proprietário
-                      </Label>
-                      <Input
-                        id="cnpj_proprietario"
-                        name="cnpj_proprietario"
-                        value={formData.cnpj_proprietario || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite o CNPJ (opcional)"
-                      />
-                    </div>
-                  </div>
+                  {/* Upload de PDF (dropzone com estado de limite) */}
                   <div className="space-y-2">
-                    <Label htmlFor="email_proprietario">
-                      Email do Proprietário <RequiredAsterisk />
-                    </Label>
-                    <Input
-                      id="email_proprietario"
-                      name="email_proprietario"
-                      type="email"
-                      value={formData.email_proprietario}
-                      onChange={handleInputChange}
-                      required
-                      placeholder="Digite o email do proprietário"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="telefone_proprietario">
-                      Telefone do Proprietário <RequiredAsterisk />
-                    </Label>
-                    <Input
-                      id="telefone_proprietario"
-                      name="telefone_proprietario"
-                      value={formData.telefone_proprietario}
-                      onChange={handleInputChange}
-                      required
-                      placeholder="Digite o telefone do proprietário"
-                    />
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Label>
+                          Anexos PDF <span className="text-red-500">*</span>
+                        </Label>
+                      </div>
+                      <span
+                        className={`text-xs ${
+                          selectedFiles.length === 0
+                            ? "text-amber-700 font-medium"
+                            : "text-gray-500"
+                        }`}
+                        title={
+                          selectedFiles.length === 0
+                            ? "Anexe pelo menos 1 PDF"
+                            : undefined
+                        }
+                      >
+                        {selectedFiles.length} arquivo(s)
+                      </span>
+                    </div>
+                    {selectedFiles.length < 3 ? (
+                      <div
+                        {...getRootProps()}
+                        className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors cursor-pointer ${
+                          isDragActive
+                            ? "border-green-600 bg-green-50"
+                            : "border-gray-300"
+                        }`}
+                      >
+                        <input {...getInputProps()} />
+                        <div className="flex flex-col items-center justify-center gap-2">
+                          <Upload className="w-8 h-8 text-gray-500" />
+                          <p className="text-sm text-gray-700">
+                            {isDragActive
+                              ? "Solte os arquivos aqui"
+                              : "Arraste e solte seus PDFs aqui"}
+                          </p>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={open}
+                            className="mt-2"
+                          >
+                            Selecionar arquivos
+                          </Button>
+                          <p className="text-xs text-gray-500">
+                            Apenas PDF • Mín. 1 arquivo
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            Anexe pelo menos 1 PDF para enviar.
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="rounded-lg border border-amber-500 bg-amber-50 p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <Ban className="w-6 h-6 text-amber-600" />
+                            <div>
+                              <p className="text-sm font-medium text-amber-800">
+                                Limite de anexos atingido
+                              </p>
+                              <p className="text-xs text-amber-700">
+                                Remova um arquivo para adicionar outro.
+                              </p>
+                            </div>
+                          </div>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            className="text-amber-700 hover:text-amber-800"
+                            onClick={() => setSelectedFiles([])}
+                          >
+                            Remover todos
+                          </Button>
+                        </div>
+                        <p className="mt-2 text-xs text-amber-700">
+                          Você já anexou o máximo permitido. Mínimo exigido: 1
+                          PDF.
+                        </p>
+                      </div>
+                    )}
+                    {fileError && (
+                      <p className="text-sm text-red-600">{fileError}</p>
+                    )}
+                    {selectedFiles.length > 0 && (
+                      <div className="mt-3">
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="text-sm text-gray-700">
+                            {selectedFiles.length} arquivo(s) selecionado(s)
+                          </p>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            className="text-red-600 hover:text-red-700"
+                            onClick={() => setSelectedFiles([])}
+                          >
+                            Remover todos
+                          </Button>
+                        </div>
+                        <ul className="space-y-2">
+                          {selectedFiles.map((file, idx) => (
+                            <li
+                              key={`${file.name}-${file.size}-${idx}`}
+                              className="flex items-center justify-between rounded-md border p-2"
+                            >
+                              <div className="flex items-center gap-2 min-w-0">
+                                <FileText className="w-5 h-5 text-green-700 shrink-0" />
+                                <div className="min-w-0">
+                                  <p className="text-sm font-medium truncate">
+                                    {file.name}
+                                  </p>
+                                  <p className="text-xs text-gray-500">
+                                    {(file.size / 1024 / 1024).toFixed(2)} MB
+                                  </p>
+                                </div>
+                              </div>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                className="text-red-600 hover:text-red-700"
+                                onClick={() =>
+                                  setSelectedFiles((prev) =>
+                                    prev.filter((_, i) => i !== idx)
+                                  )
+                                }
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
                   <div className="flex items-center space-x-2 mt-4">
                     <Checkbox

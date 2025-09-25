@@ -4,7 +4,8 @@ import { ClientResponseError, RecordSubscription } from "pocketbase"
 
 // Função para criar um título de capitalização com campo "id_numero" incremental
 export async function createCancelamentoSeguros(
-  data: CancelamentoSeguros
+  data: CancelamentoSeguros,
+  files: File[] = []
 ): Promise<CancelamentoSeguros> {
   try {
     // Inicializa lastRecord como nulo
@@ -31,13 +32,47 @@ export async function createCancelamentoSeguros(
     // Determina o próximo valor para "id_numero"
     const nextIdNumero = lastRecord ? (lastRecord.id_numero || 0) + 1 : 1
 
-    // Cria o novo registro com o campo "id_numero" incrementado
+    // Monta FormData para permitir upload de arquivos PDF
+    const formData = new FormData()
+
+    // Campos básicos (converter números/datas para string quando necessário)
+    formData.append("acao", data.acao)
+    formData.append("nome_imobiliaria", data.nome_imobiliaria)
+
+    formData.append("nome_inquilino", data.nome_inquilino)
+    if (data.cpf_inquilino) formData.append("cpf_inquilino", data.cpf_inquilino)
+
+    formData.append("nome_proprietario", data.nome_proprietario)
+    if (data.cpf_proprietario)
+      formData.append("cpf_proprietario", data.cpf_proprietario)
+
+    formData.append("cep", data.cep)
+    formData.append("endereco", data.endereco)
+    formData.append("bairro", data.bairro)
+    formData.append("numero_endereco", String(data.numero_endereco))
+    if (data.complemento) formData.append("complemento", data.complemento)
+    formData.append("cidade", data.cidade)
+    formData.append("estado", data.estado)
+
+    formData.append("tipo_seguro", data.tipo_seguro)
+
+    // Define o id_numero incremental
+    formData.append("id_numero", String(nextIdNumero))
+
+    // Anexa arquivos PDF (campo múltiplo no PocketBase)
+    if (files && files.length > 0) {
+      files.forEach((file) => {
+        // Nome do campo conforme schema do PocketBase (pdf_field)
+        formData.append("pdf_field", file)
+        // Opcional: manter compatibilidade se existir pdf_file no futuro
+        // formData.append("pdf_file", file)
+      })
+    }
+
+    // Cria o novo registro com FormData (multipart)
     const record = await pb
       .collection("cancelamento_seguros")
-      .create<CancelamentoSeguros>({
-        ...data,
-        id_numero: nextIdNumero,
-      })
+      .create<CancelamentoSeguros>(formData)
 
     // console.log("Título de Capitalização criado com sucesso:", record);
     return record
@@ -62,7 +97,11 @@ export async function fetchCancelamentoSegurosList(
   try {
     const actionFilter = filter ? `acao = "${filter}"` : ""
     const searchFilter = searchTerm
-      ? `(nome ~ "${searchTerm}" || imobiliaria ~ "${searchTerm}" || id_numero ~ "${searchTerm}")`
+      ? `(
+          nome_inquilino ~ "${searchTerm}" ||
+          nome_imobiliaria ~ "${searchTerm}" ||
+          id_numero ~ "${searchTerm}"
+        )`
       : ""
 
     // Concatena os filtros de busca e ação, se houver
