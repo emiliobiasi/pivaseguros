@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom"
+import { useState } from "react"
 import {
   Select,
   SelectContent,
@@ -7,12 +8,55 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import pb from "@/utils/backend/pb-imob"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Lightbulb } from "lucide-react"
 
 export function FormsHeader() {
   const navigate = useNavigate()
 
   const currentUser = pb.authStore.model as any
   const imobiliariaName = currentUser?.nome || ""
+
+  // Tip expira automaticamente em (25/09/2025 + 2 meses + 20 dias) = 15/12/2025 23:59:59
+  const TIP_BASE_DATE = new Date(2025, 8, 25, 0, 0, 0) // mês 8 = setembro
+  const addMonths = (date: Date, months: number) => {
+    const d = new Date(date)
+    d.setMonth(d.getMonth() + months)
+    return d
+  }
+  const addDays = (date: Date, days: number) => {
+    const d = new Date(date)
+    d.setDate(d.getDate() + days)
+    return d
+  }
+  const TIP_EXPIRY_MS = (() => {
+    const afterMonths = addMonths(TIP_BASE_DATE, 2)
+    const afterMonthsAndDays = addDays(afterMonths, 20)
+    afterMonthsAndDays.setHours(23, 59, 59, 999)
+    return afterMonthsAndDays.getTime()
+  })()
+
+  const [showTip, setShowTip] = useState<boolean>(() => {
+    try {
+      if (localStorage.getItem("formsHeaderNewFormsTipDismissed") === "1") {
+        return false
+      }
+      const now = Date.now()
+      const stored = localStorage.getItem("formsHeaderNewFormsTipExpiry")
+      const expiry = stored ? Number(stored) : TIP_EXPIRY_MS
+      if (!stored) {
+        try {
+          localStorage.setItem(
+            "formsHeaderNewFormsTipExpiry",
+            String(TIP_EXPIRY_MS)
+          )
+        } catch {}
+      }
+      return now < expiry
+    } catch {
+      return true
+    }
+  })
 
   function handleFormSelection(value: string) {
     switch (value) {
@@ -62,6 +106,41 @@ export function FormsHeader() {
               Olá {imobiliariaName || "imobiliária"}, suas soluções de locação
               estão aqui.
             </h1>
+          </div>
+        </section>
+
+        {/* ESPAÇO PARA A TIP */}
+        <section className="py-6 bg-white">
+          <div className="max-w-7xl mx-auto px-4 md:px-6">
+            {showTip && (
+              <div className="relative">
+                <Alert className="border-amber-300 bg-amber-50 pr-8">
+                  <Lightbulb className="h-4 w-4 text-amber-600" />
+                  <AlertTitle className="text-amber-900">Novidade</AlertTitle>
+                  <AlertDescription className="text-amber-900/90">
+                    Agora temos 2 novos formulários:{" "}
+                    <strong>Abertura de Sinistro</strong> e
+                    <strong> Cancelamento de Seguros</strong>.
+                  </AlertDescription>
+                  <button
+                    type="button"
+                    aria-label="Fechar aviso"
+                    className="absolute right-2 top-2 rounded p-1 text-amber-900/70 hover:bg-amber-100 hover:text-amber-900"
+                    onClick={() => {
+                      try {
+                        localStorage.setItem(
+                          "formsHeaderNewFormsTipDismissed",
+                          "1"
+                        )
+                      } catch {}
+                      setShowTip(false)
+                    }}
+                  >
+                    ×
+                  </button>
+                </Alert>
+              </div>
+            )}
           </div>
         </section>
 
