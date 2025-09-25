@@ -31,6 +31,7 @@ import {
   Upload,
   Trash2,
   Ban,
+  Lightbulb,
 } from "lucide-react"
 import { formatCPF } from "@/utils/regex/regexCPF"
 import { formatCEP } from "@/utils/regex/regexCEP"
@@ -614,6 +615,17 @@ export function AberturaSinistroForms() {
               <TabsContent value="confirmacao">
                 <div className="grid gap-4 py-4">
                   <div className="space-y-2">
+                    <div className="rounded-md border border-amber-300 bg-amber-50 p-3 text-amber-900">
+                      <div className="flex items-start gap-2">
+                        <Lightbulb className="h-4 w-4 mt-0.5 text-amber-600" />
+                        <p className="text-xs">
+                          Dica: Para evitar problemas ao processar seus anexos,
+                          use nomes de arquivos sem acentos (á, é, ã, ç) e sem
+                          caracteres especiais. Prefira letras, números, hífen
+                          (-) e sublinhado (_). Ex.: laudo_incendio_2025.pdf
+                        </p>
+                      </div>
+                    </div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Label>
