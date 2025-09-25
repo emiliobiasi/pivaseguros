@@ -36,6 +36,7 @@ import ConfiguracoesDaConta from "@/screens/ConfiguracoesDaConta"
 import CancelamentoSegurosScreen from "@/screens/CancelamentoSegurosScreen"
 import ProtocoloCancelamentoSegurosPage from "@/screens/ProtocoloCancelamentosSeguroPage"
 import { DashboardProtocoloCancelamentoSeguros } from "@/screens/DashboardProtocoloCancelamentoSeguros"
+import AberturaSinistroScreen from "@/screens/AberturaSinistroScreen"
 
 const RoutesComponent = () => {
   return (
@@ -158,6 +159,14 @@ const RoutesComponent = () => {
                     element={
                       <PrivateRouteImobiliarias>
                         <CancelamentoSegurosScreen />
+                      </PrivateRouteImobiliarias>
+                    }
+                  />
+                  <Route
+                    path="abertura-sinistro"
+                    element={
+                      <PrivateRouteImobiliarias>
+                        <AberturaSinistroScreen />
                       </PrivateRouteImobiliarias>
                     }
                   />
