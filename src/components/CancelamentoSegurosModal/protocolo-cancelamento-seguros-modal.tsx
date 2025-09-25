@@ -18,11 +18,10 @@ export function CancelamentoSegurosModal({
 }: CancelamentoSegurosModalProps) {
   if (!isOpen) return null
 
-  const getFileUrl = (recordId: string, filename: string) => {
-    return pb.files.getUrl(
-      { id: recordId, collectionId: "cancelamento_seguros" } as any,
-      filename
-    )
+  // Use o próprio record para o getUrl – isso permite ao cliente anexar
+  // automaticamente o token de arquivo quando a coleção é privada.
+  const getFileUrl = (record: CancelamentoSeguros, filename: string) => {
+    return pb.files.getUrl(record as any, filename)
   }
 
   const friendlyFileName = (fname: string) => {
@@ -160,7 +159,7 @@ export function CancelamentoSegurosModal({
                 {titulo.pdf_field.map((fname) => (
                   <div key={fname} className="flex items-center gap-2">
                     <a
-                      href={getFileUrl(titulo.id, fname)}
+                      href={getFileUrl(titulo, fname)}
                       target="_blank"
                       rel="noreferrer"
                       className="group inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm shadow-sm transition-colors hover:bg-accent hover:border-emerald-300/60 hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/50"

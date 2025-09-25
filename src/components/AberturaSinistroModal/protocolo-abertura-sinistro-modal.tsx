@@ -20,7 +20,7 @@ export function AberturaSinistroModal({
 
   const getFileUrl = (recordId: string, filename: string) => {
     return pb.files.getUrl(
-      { id: recordId, collectionId: "cancelamento_seguros" } as any,
+      { id: recordId, collectionId: "abertura_sinistro" } as any,
       filename
     )
   }
