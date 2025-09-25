@@ -2,15 +2,10 @@ import { useState, useEffect } from "react"
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
 import { QuadroAnotacao } from "@/components/QuadroAnotacao/quadro-anotacao"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
-import { FileX } from "lucide-react"
-import { useNavigate } from "react-router-dom"
 // import pb from "@/utils/backend/pb";
 
 const Home = () => {
   const [currentTime, setCurrentTime] = useState(new Date())
-  const navigate = useNavigate()
 
   // console.log("é adm pocketbase logado? ", pb.authStore.isAdmin);
   // console.log("login? ", pb.authStore.model);

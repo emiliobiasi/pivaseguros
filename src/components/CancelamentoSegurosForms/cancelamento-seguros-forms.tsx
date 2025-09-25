@@ -779,8 +779,15 @@ export function CancelamentoSegurosForms() {
             ) : (
               <Button
                 type="submit"
-                disabled={!agreedToTerms || isLoading}
-                className="ml-auto bg-green-700 hover:bg-green-600"
+                disabled={
+                  !agreedToTerms || isLoading || selectedFiles.length < 1
+                }
+                title={
+                  selectedFiles.length < 1
+                    ? "Anexe pelo menos 1 PDF para enviar"
+                    : undefined
+                }
+                className="ml-auto bg-green-700 hover:bg-green-600 disabled:opacity-60"
               >
                 {isLoading ? (
                   <>
