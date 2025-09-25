@@ -6,18 +6,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
-import { FileX } from "lucide-react"
 import pb from "@/utils/backend/pb"
-import { useState } from "react"
 
 export function FormsHeader() {
   const navigate = useNavigate()
-
-  const [showProtocolsBanner, setShowProtocolsBanner] = useState(
-    () => !localStorage.getItem("protocolosBannerDismissed")
-  )
 
   const currentUser = pb.authStore.model
   const imobilariaName = currentUser?.nome // Pega o nome da imobiliária autenticada
@@ -64,49 +56,10 @@ export function FormsHeader() {
         <section className="py-12 md:py-20 bg-green-700">
           <div className="container mx-auto text-white px-6 text-center">
             <h1 className="font- font-bold tracking-tighter w-full text-4xl">
-              Olá {imobilariaName}, suas soluções de locação estão aqui
+              Olá {imobilariaName}, suas soluções de locação estão aqui.
             </h1>
           </div>
         </section>
-
-        {showProtocolsBanner && (
-          <div className="mx-auto w-full max-w-6xl px-4 pt-4 relative">
-            <Alert className="border-green-700/30 bg-green-50 pr-8">
-              <FileX className="h-4 w-4" />
-              <AlertTitle className="text-green-900">
-                Novidade: acompanhe seus protocolos
-              </AlertTitle>
-              <AlertDescription className="text-green-900/90">
-                Agora você pode visualizar seus Protocolos de Cancelamento de
-                Seguros no menu lateral. Clique em{" "}
-                <span className="font-medium">Protocolos de Cancelamento</span>{" "}
-                para ver a lista.
-                <div className="mt-3">
-                  <Button
-                    type="button"
-                    variant="piva"
-                    onClick={() =>
-                      navigate("/imobiliaria/protocolo-cancelamento")
-                    }
-                  >
-                    Ir para Protocolos
-                  </Button>
-                </div>
-              </AlertDescription>
-              <button
-                type="button"
-                aria-label="Fechar aviso"
-                className="absolute right-2 top-2 rounded p-1 text-green-900/70 hover:bg-green-100 hover:text-green-900"
-                onClick={() => {
-                  localStorage.setItem("protocolosBannerDismissed", "1")
-                  setShowProtocolsBanner(false)
-                }}
-              >
-                ×
-              </button>
-            </Alert>
-          </div>
-        )}
 
         <section className="py-20 mb-20 md:py-20 bg-muted">
           <div className="max-w-7xl mx-auto px-4 md:px-6">
