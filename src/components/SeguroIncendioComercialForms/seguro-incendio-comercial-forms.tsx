@@ -806,7 +806,9 @@ export function SeguroIncendioComercialForms() {
                           <SelectItem value="11X FATURA MENSAL - SEM ENTRADA">
                             11X FATURA MENSAL - SEM ENTRADA
                           </SelectItem>
-                          {/* Adicione as demais opções aqui */}
+                          <SelectItem value="29X FATURA MENSAL - SEM ENTRADA">
+                            29X FATURA MENSAL - SEM ENTRADA
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
