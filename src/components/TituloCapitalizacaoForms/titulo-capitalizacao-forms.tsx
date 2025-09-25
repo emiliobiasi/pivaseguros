@@ -34,7 +34,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import pivaLogo from "@/assets/logo.png"
 import { buscaEnderecoPorCEP, EnderecoViaCep } from "@/utils/api/Cep"
 
 export function TituloCapitalizacaoForms() {
