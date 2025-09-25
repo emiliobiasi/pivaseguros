@@ -52,6 +52,7 @@ export function CancelamentoSegurosForms() {
   const [agreedToTerms, setAgreedToTerms] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
+  const [isConfirmFilesModalOpen, setIsConfirmFilesModalOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const [fileError, setFileError] = useState<string>("")
@@ -237,11 +238,21 @@ export function CancelamentoSegurosForms() {
       return
     }
 
+    // Se anexou arquivos e o tipo exige PDF (SEGURO FIANÇA ou RESGATE DE TÍTULO),
+    // abre o modal de confirmação dos anexos antes de enviar.
+    if (requiresPdf && selectedFiles.length > 0) {
+      setIsConfirmFilesModalOpen(true)
+      return
+    }
+
+    await submitForm()
+  }
+
+  // Envia efetivamente os dados para o backend
+  const submitForm = async () => {
     setIsLoading(true)
     try {
-      await createCancelamentoSeguros(formData, selectedFiles) // Envia dados com PDFs
-      // console.log("Dados enviados para criação:", formData);
-
+      await createCancelamentoSeguros(formData, selectedFiles)
       // Reseta o formulário e abre o modal de sucesso
       formRef.current?.reset()
       setSelectedFiles([])
@@ -823,6 +834,70 @@ export function CancelamentoSegurosForms() {
           </CardFooter>
         </form>
       </Card>
+
+      {/* Dialog de confirmação dos anexos (aparece antes do envio) */}
+      <Dialog
+        open={isConfirmFilesModalOpen}
+        onOpenChange={setIsConfirmFilesModalOpen}
+      >
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center">
+              <FileText className="w-6 h-6 text-green-600 mr-2" />
+              Confirmar anexos antes de enviar
+            </DialogTitle>
+            <DialogDescription>
+              Revise os arquivos anexados. Se estiver tudo certo, confirme para
+              enviar o formulário.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="max-h-64 overflow-auto rounded border">
+            {selectedFiles.length > 0 ? (
+              <ul className="divide-y">
+                {selectedFiles.map((file, idx) => (
+                  <li
+                    key={`${file.name}-${file.size}-${idx}`}
+                    className="p-3 flex items-center gap-3"
+                  >
+                    <FileText className="w-5 h-5 text-green-700 shrink-0" />
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium truncate">
+                        {file.name}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {(file.size / 1024 / 1024).toFixed(2)} MB
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="p-4 text-sm text-muted-foreground">
+                Nenhum arquivo anexado.
+              </div>
+            )}
+          </div>
+          <div className="mt-4 flex justify-end gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsConfirmFilesModalOpen(false)}
+            >
+              Voltar
+            </Button>
+            <Button
+              type="button"
+              className="bg-green-700 hover:bg-green-600 text-white"
+              onClick={async () => {
+                setIsConfirmFilesModalOpen(false)
+                await submitForm()
+              }}
+            >
+              Confirmar e enviar
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Dialog para o envio com sucesso */}
       <Dialog open={isSuccessModalOpen} onOpenChange={setIsSuccessModalOpen}>
