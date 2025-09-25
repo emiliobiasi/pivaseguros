@@ -814,15 +814,41 @@ export function CancelamentoSegurosForms() {
               Formulário Enviado com Sucesso
             </DialogTitle>
           </DialogHeader>
-          <div className="flex justify-center my-4">
+          {/* <div className="flex justify-center my-4">
             <div className="w-24 h-24 flex items-center justify-center my-5">
               <img src={pivaLogo} alt="Piva" className="w-24 h-24 " />
             </div>
-          </div>
+          </div> */}
           <DialogDescription>
             Seus dados foram enviados com sucesso. Nossa equipe entrará em
             contato em breve.
           </DialogDescription>
+          {/* Aviso simples para acessar a página de protocolos */}
+          <div className="mt-4">
+            <Alert className="border-green-700/30 bg-green-50">
+              <FileX className="h-4 w-4" />
+              <AlertTitle className="text-green-900">
+                Visualize o protocolo deste envio
+              </AlertTitle>
+              <AlertDescription className="text-green-900/90">
+                Acompanhe este envio na página de
+                <span className="font-medium"> Protocolos de Cancelamento</span>
+                .
+                <div className="mt-3">
+                  <Button
+                    type="button"
+                    className="bg-green-700 hover:bg-green-600 text-white"
+                    onClick={() => {
+                      setIsSuccessModalOpen(false)
+                      navigate("/imobiliaria/protocolo-cancelamento")
+                    }}
+                  >
+                    Ir para Protocolos
+                  </Button>
+                </div>
+              </AlertDescription>
+            </Alert>
+          </div>
           <Button
             onClick={() => {
               setIsSuccessModalOpen(false)
