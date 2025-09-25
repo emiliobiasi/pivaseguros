@@ -84,6 +84,9 @@ export function CancelamentoSegurosForms() {
     created: new Date(),
   })
 
+  // PDF é obrigatório somente quando o tipo NÃO é SEGURO INCÊNDIO
+  const requiresPdf = formData.tipo_seguro !== "SEGURO INCÊNDIO"
+
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     let formattedValue = value
@@ -168,6 +171,10 @@ export function CancelamentoSegurosForms() {
       ...prevState,
       [name]: value,
     }))
+    if (name === "tipo_seguro") {
+      // Ao trocar o tipo, limpa erro de arquivos e mantém seleção existente
+      setFileError("")
+    }
   }
 
   const handleNext = () => {
@@ -223,8 +230,8 @@ export function CancelamentoSegurosForms() {
       return
     }
 
-    // Validação: é obrigatório anexar pelo menos 1 PDF
-    if (selectedFiles.length < 1) {
+    // Validação: PDF é obrigatório apenas se não for SEGURO INCÊNDIO
+    if (requiresPdf && selectedFiles.length < 1) {
       setFileError("Anexe pelo menos 1 PDF para enviar.")
       setCurrentTab("proprietario")
       return
@@ -381,6 +388,33 @@ export function CancelamentoSegurosForms() {
               {/* Dados do Locatário */}
               <TabsContent value="locatario">
                 <div className="grid gap-4 py-4">
+                  {/* Tipo de Seguro movido para a primeira aba */}
+                  <div className="space-y-2">
+                    <Label htmlFor="tipo_seguro">
+                      Tipo de Seguro <RequiredAsterisk />
+                    </Label>
+                    <Select
+                      value={formData.tipo_seguro}
+                      onValueChange={(value) =>
+                        handleSelectChange("tipo_seguro", value)
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione o tipo de seguro" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="SEGURO FIANÇA">
+                          SEGURO FIANÇA
+                        </SelectItem>
+                        <SelectItem value="SEGURO INCÊNDIO">
+                          SEGURO INCÊNDIO
+                        </SelectItem>
+                        <SelectItem value="RESGATE DE TÍTULO">
+                          RESGATE DE TÍTULO
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                   <div className="space-y-2">
                     <Label htmlFor="nome_imobiliaria">
                       Nome da Imobiliária <RequiredAsterisk />
@@ -570,170 +604,154 @@ export function CancelamentoSegurosForms() {
               {/* Dados do Proprietário */}
               <TabsContent value="proprietario">
                 <div className="grid gap-4 py-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="tipo_seguro">
-                      Tipo de Seguro <RequiredAsterisk />
-                    </Label>
-                    <Select
-                      value={formData.tipo_seguro}
-                      onValueChange={(value) =>
-                        handleSelectChange("tipo_seguro", value)
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione o tipo de seguro" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="SEGURO FIANÇA">
-                          SEGURO FIANÇA
-                        </SelectItem>
-                        <SelectItem value="SEGURO INCÊNDIO">
-                          SEGURO INCÊNDIO
-                        </SelectItem>
-                        <SelectItem value="RESGATE DE TÍTULO">
-                          RESGATE DE TÍTULO
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  {/* Upload de PDF (dropzone com estado de limite) */}
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Label>
-                          Anexos PDF <span className="text-red-500">*</span>
-                        </Label>
-                      </div>
-                      <span
-                        className={`text-xs ${
-                          selectedFiles.length === 0
-                            ? "text-amber-700 font-medium"
-                            : "text-gray-500"
-                        }`}
-                        title={
-                          selectedFiles.length === 0
-                            ? "Anexe pelo menos 1 PDF"
-                            : undefined
-                        }
-                      >
-                        {selectedFiles.length} arquivo(s)
-                      </span>
-                    </div>
-                    {selectedFiles.length < 3 ? (
-                      <div
-                        {...getRootProps()}
-                        className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors cursor-pointer ${
-                          isDragActive
-                            ? "border-green-600 bg-green-50"
-                            : "border-gray-300"
-                        }`}
-                      >
-                        <input {...getInputProps()} />
-                        <div className="flex flex-col items-center justify-center gap-2">
-                          <Upload className="w-8 h-8 text-gray-500" />
-                          <p className="text-sm text-gray-700">
-                            {isDragActive
-                              ? "Solte os arquivos aqui"
-                              : "Arraste e solte seus PDFs aqui"}
-                          </p>
-                          <Button
-                            type="button"
-                            variant="outline"
-                            onClick={open}
-                            className="mt-2"
-                          >
-                            Selecionar arquivos
-                          </Button>
-                          <p className="text-xs text-gray-500">
-                            Apenas PDF • Mín. 1 arquivo
-                          </p>
-                          <p className="text-xs text-gray-500">
-                            Anexe pelo menos 1 PDF para enviar.
-                          </p>
+                  {/* Upload de PDF (exibido apenas quando não é SEGURO INCÊNDIO) */}
+                  {requiresPdf && (
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Label>
+                            Anexos PDF{" "}
+                            {requiresPdf && (
+                              <span className="text-red-500">*</span>
+                            )}
+                          </Label>
                         </div>
+                        <span
+                          className={`text-xs ${
+                            requiresPdf && selectedFiles.length === 0
+                              ? "text-amber-700 font-medium"
+                              : "text-gray-500"
+                          }`}
+                          title={
+                            requiresPdf && selectedFiles.length === 0
+                              ? "Anexe pelo menos 1 PDF"
+                              : undefined
+                          }
+                        >
+                          {selectedFiles.length} arquivo(s)
+                        </span>
                       </div>
-                    ) : (
-                      <div className="rounded-lg border border-amber-500 bg-amber-50 p-4">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <Ban className="w-6 h-6 text-amber-600" />
-                            <div>
-                              <p className="text-sm font-medium text-amber-800">
-                                Limite de anexos atingido
-                              </p>
-                              <p className="text-xs text-amber-700">
-                                Remova um arquivo para adicionar outro.
-                              </p>
-                            </div>
-                          </div>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            className="text-amber-700 hover:text-amber-800"
-                            onClick={() => setSelectedFiles([])}
-                          >
-                            Remover todos
-                          </Button>
-                        </div>
-                        <p className="mt-2 text-xs text-amber-700">
-                          Você já anexou o máximo permitido. Mínimo exigido: 1
-                          PDF.
-                        </p>
-                      </div>
-                    )}
-                    {fileError && (
-                      <p className="text-sm text-red-600">{fileError}</p>
-                    )}
-                    {selectedFiles.length > 0 && (
-                      <div className="mt-3">
-                        <div className="flex items-center justify-between mb-2">
-                          <p className="text-sm text-gray-700">
-                            {selectedFiles.length} arquivo(s) selecionado(s)
-                          </p>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            className="text-red-600 hover:text-red-700"
-                            onClick={() => setSelectedFiles([])}
-                          >
-                            Remover todos
-                          </Button>
-                        </div>
-                        <ul className="space-y-2">
-                          {selectedFiles.map((file, idx) => (
-                            <li
-                              key={`${file.name}-${file.size}-${idx}`}
-                              className="flex items-center justify-between rounded-md border p-2"
+                      {selectedFiles.length < 3 ? (
+                        <div
+                          {...getRootProps()}
+                          className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors cursor-pointer ${
+                            isDragActive
+                              ? "border-green-600 bg-green-50"
+                              : "border-gray-300"
+                          }`}
+                        >
+                          <input {...getInputProps()} />
+                          <div className="flex flex-col items-center justify-center gap-2">
+                            <Upload className="w-8 h-8 text-gray-500" />
+                            <p className="text-sm text-gray-700">
+                              {isDragActive
+                                ? "Solte os arquivos aqui"
+                                : "Arraste e solte seus PDFs aqui"}
+                            </p>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              onClick={open}
+                              className="mt-2"
                             >
-                              <div className="flex items-center gap-2 min-w-0">
-                                <FileText className="w-5 h-5 text-green-700 shrink-0" />
-                                <div className="min-w-0">
-                                  <p className="text-sm font-medium truncate">
-                                    {file.name}
-                                  </p>
-                                  <p className="text-xs text-gray-500">
-                                    {(file.size / 1024 / 1024).toFixed(2)} MB
-                                  </p>
-                                </div>
+                              Selecionar arquivos
+                            </Button>
+                            <p className="text-xs text-gray-500">
+                              {requiresPdf
+                                ? "Apenas PDF • Mín. 1 arquivo"
+                                : "Apenas PDF • Opcional"}
+                            </p>
+                            {requiresPdf && (
+                              <p className="text-xs text-gray-500">
+                                Anexe pelo menos 1 PDF para enviar.
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="rounded-lg border border-amber-500 bg-amber-50 p-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <Ban className="w-6 h-6 text-amber-600" />
+                              <div>
+                                <p className="text-sm font-medium text-amber-800">
+                                  Limite de anexos atingido
+                                </p>
+                                <p className="text-xs text-amber-700">
+                                  Remova um arquivo para adicionar outro.
+                                </p>
                               </div>
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                className="text-red-600 hover:text-red-700"
-                                onClick={() =>
-                                  setSelectedFiles((prev) =>
-                                    prev.filter((_, i) => i !== idx)
-                                  )
-                                }
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            </li>
-                          ))}
-                        </ul>
+                            </div>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              className="text-amber-700 hover:text-amber-800"
+                              onClick={() => setSelectedFiles([])}
+                            >
+                              Remover todos
+                            </Button>
+                          </div>
+                          <p className="mt-2 text-xs text-amber-700">
+                            {requiresPdf
+                              ? "Você já anexou o máximo permitido. Mínimo exigido: 1 PDF."
+                              : "Você já anexou o máximo permitido. Anexos são opcionais para SEGURO INCÊNDIO."}
+                          </p>
+                        </div>
+                      )}
+                      {fileError && (
+                        <p className="text-sm text-red-600">{fileError}</p>
+                      )}
+                    </div>
+                  )}
+                  {requiresPdf && selectedFiles.length > 0 && (
+                    <div className="mt-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <p className="text-sm text-gray-700">
+                          {selectedFiles.length} arquivo(s) selecionado(s)
+                        </p>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          className="text-red-600 hover:text-red-700"
+                          onClick={() => setSelectedFiles([])}
+                        >
+                          Remover todos
+                        </Button>
                       </div>
-                    )}
-                  </div>
+                      <ul className="space-y-2">
+                        {selectedFiles.map((file, idx) => (
+                          <li
+                            key={`${file.name}-${file.size}-${idx}`}
+                            className="flex items-center justify-between rounded-md border p-2"
+                          >
+                            <div className="flex items-center gap-2 min-w-0">
+                              <FileText className="w-5 h-5 text-green-700 shrink-0" />
+                              <div className="min-w-0">
+                                <p className="text-sm font-medium truncate">
+                                  {file.name}
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                  {(file.size / 1024 / 1024).toFixed(2)} MB
+                                </p>
+                              </div>
+                            </div>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              className="text-red-600 hover:text-red-700"
+                              onClick={() =>
+                                setSelectedFiles((prev) =>
+                                  prev.filter((_, i) => i !== idx)
+                                )
+                              }
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                   <div className="flex items-center space-x-2 mt-4">
                     <Checkbox
                       id="terms"
@@ -779,10 +797,12 @@ export function CancelamentoSegurosForms() {
               <Button
                 type="submit"
                 disabled={
-                  !agreedToTerms || isLoading || selectedFiles.length < 1
+                  !agreedToTerms ||
+                  isLoading ||
+                  (requiresPdf && selectedFiles.length < 1)
                 }
                 title={
-                  selectedFiles.length < 1
+                  requiresPdf && selectedFiles.length < 1
                     ? "Anexe pelo menos 1 PDF para enviar"
                     : undefined
                 }
