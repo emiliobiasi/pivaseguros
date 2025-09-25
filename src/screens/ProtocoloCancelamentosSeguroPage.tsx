@@ -128,6 +128,18 @@ export default function ProtocoloCancelamentoSegurosPage() {
     return `${HH}:${MM}:${SS}`
   }
 
+  // Remove o sufixo aleatório do PocketBase antes da extensão
+  // Ex.: "piva_2_xLqFjVdpsF.pdf" -> "piva_2.pdf"
+  const friendlyFileName = (fname: string) => {
+    const lastDot = fname.lastIndexOf(".")
+    if (lastDot <= 0) return fname
+    const base = fname.slice(0, lastDot)
+    const ext = fname.slice(lastDot) // inclui o ponto
+    // remove _<10 chars alfanuméricos> no fim do base
+    const cleanedBase = base.replace(/_[A-Za-z0-9]{10}$/u, "")
+    return `${cleanedBase}${ext}`
+  }
+
   return (
     <div className="mx-auto mb-16 w-full max-w-6xl p-4">
       <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -262,11 +274,12 @@ export default function ProtocoloCancelamentoSegurosPage() {
                             target="_blank"
                             rel="noreferrer"
                             className="inline-flex items-center gap-1 rounded border px-2 py-1 text-xs hover:bg-accent"
-                            title={fname}
+                            title={friendlyFileName(fname)}
+                            download={friendlyFileName(fname)}
                           >
                             <FileText className="h-3.5 w-3.5" />
                             <span className="max-w-[200px] truncate">
-                              {fname}
+                              {friendlyFileName(fname)}
                             </span>
                             <ExternalLink className="h-3.5 w-3.5" />
                           </a>

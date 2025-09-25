@@ -44,7 +44,6 @@ import {
 } from "@/components/ui/dialog"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { FileX } from "lucide-react"
-import pivaLogo from "@/assets/logo.png"
 import { useDropzone } from "react-dropzone"
 import { buscaEnderecoPorCEP, EnderecoViaCep } from "@/utils/api/Cep"
 
