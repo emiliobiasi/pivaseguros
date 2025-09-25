@@ -222,10 +222,12 @@ export default function ProtocoloCancelamentoSegurosPage() {
       </div>
 
       <div className="rounded-md border">
-        <Table>
+        <Table className="border-separate border-spacing-0">
           <TableHeader>
-            <TableRow>
+            <TableRow className="[&>th]:pl-4 md:[&>th]:pl-5 [&>th+th]:pl-6 md:[&>th+th]:pl-8 [&>th]:border-b [&>th]:border-border/30">
               <TableHead className="w-[11rem]">Protocolo (ID)</TableHead>
+              <TableHead className="min-w-[110px] text-center">Ação</TableHead>
+              <TableHead className="min-w-[160px]">Tipo do Seguro</TableHead>
               <TableHead className="min-w-[160px]">Criado em</TableHead>
               <TableHead>PDFs</TableHead>
             </TableRow>
@@ -233,7 +235,7 @@ export default function ProtocoloCancelamentoSegurosPage() {
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell colSpan={3}>
+                <TableCell colSpan={5}>
                   <div className="flex items-center gap-2 py-6 text-muted-foreground">
                     <Loader2 className="h-4 w-4 animate-spin" /> Carregando...
                   </div>
@@ -241,7 +243,7 @@ export default function ProtocoloCancelamentoSegurosPage() {
               </TableRow>
             ) : items.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={3}>
+                <TableCell colSpan={5}>
                   <div className="py-6 text-sm text-muted-foreground">
                     Nenhum protocolo encontrado.
                   </div>
@@ -249,9 +251,27 @@ export default function ProtocoloCancelamentoSegurosPage() {
               </TableRow>
             ) : (
               items.map((rec) => (
-                <TableRow key={rec.id}>
+                <TableRow
+                  key={rec.id}
+                  className="[&>td]:pl-4 md:[&>td]:pl-5 [&>td+td]:pl-6 md:[&>td+td]:pl-8 [&>td]:border-t [&>td]:border-border/30 first:[&>td]:border-t-0 hover:bg-muted/30 transition-colors"
+                >
                   <TableCell className="font-medium">
                     #{rec.id_numero}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <span
+                      className={
+                        "inline-flex items-center justify-center rounded-full px-2.5 py-0.5 text-xs font-medium " +
+                        (rec.acao === "FINALIZADO"
+                          ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                          : "bg-gray-100 text-gray-700 border border-gray-200")
+                      }
+                    >
+                      {rec.acao ?? "—"}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">{rec.tipo_seguro ?? "—"}</span>
                   </TableCell>
                   <TableCell>
                     <div className="flex flex-col">
@@ -266,7 +286,7 @@ export default function ProtocoloCancelamentoSegurosPage() {
                   <TableCell>
                     {Array.isArray(rec.pdf_field) &&
                     rec.pdf_field.length > 0 ? (
-                      <div className="flex flex-wrap items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-x-0 gap-y-2">
                         {rec.pdf_field.map((fname) => (
                           <a
                             key={fname}
