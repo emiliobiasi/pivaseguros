@@ -34,7 +34,7 @@ import {
 } from "lucide-react"
 import { formatCPF } from "@/utils/regex/regexCPF"
 import { formatCEP } from "@/utils/regex/regexCEP"
-import { createCancelamentoSeguros } from "@/utils/api/CancelamentoSeguros"
+import { createCancelamentoSeguros } from "@/utils/api/CancelamentoSegurosService"
 import {
   Dialog,
   DialogContent,

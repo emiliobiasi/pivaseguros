@@ -15,6 +15,7 @@ import {
   FileClock,
   ChevronLeft,
   ChevronRight,
+  FileX,
 } from "lucide-react"
 import { useNavigate, useLocation } from "react-router-dom"
 import logo from "@/assets/logo.png"
@@ -543,6 +544,26 @@ function SidebarContent({ collapsed }: { collapsed: boolean }) {
             >
               <CaptionsIcon className={`h-5 w-5 ${collapsed ? "" : "mr-3"}`} />
               {!collapsed && <span>Título de Capitalização</span>}
+            </button>
+          </ItemTooltip>
+        </li>
+
+        {/* Protocolo de Cancelamento */}
+        <li>
+          <ItemTooltip label="Protocolo de Cancelamento">
+            <button
+              onClick={() =>
+                navigate("/dashboard-protocolo-cancelamento")
+              }
+              className={`flex items-center w-full px-4 py-2 text-left text-sm ${
+                location.pathname ===
+                "/dashboard-protocolo-cancelamento"
+                  ? "bg-gray-200 dark:bg-gray-700 text-green-700 dark:text-white"
+                  : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+              } ${collapsed ? "justify-center" : ""}`}
+            >
+              <FileX className={`h-5 w-5 ${collapsed ? "" : "mr-3"}`} />
+              {!collapsed && <span>Protocolo de Cancelamento</span>}
             </button>
           </ItemTooltip>
         </li>

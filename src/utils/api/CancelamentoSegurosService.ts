@@ -1,5 +1,5 @@
-import pb, { PocketBaseError } from "@/utils/backend/pb"
 import { CancelamentoSeguros } from "@/types/CancelamentoSeguros"
+import pb, { PocketBaseError } from "@/utils/backend/pb-imob"
 import { ClientResponseError, RecordSubscription } from "pocketbase"
 
 // Função para criar um título de capitalização com campo "id_numero" incremental

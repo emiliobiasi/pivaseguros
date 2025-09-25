@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react"
-import pb from "@/utils/backend/pb"
+import pb from "@/utils/backend/pb-imob"
 import { CancelamentoSeguros } from "@/types/CancelamentoSeguros"
 import {
   Table,
@@ -286,22 +286,22 @@ export default function ProtocoloCancelamentoSegurosPage() {
                   <TableCell>
                     {Array.isArray(rec.pdf_field) &&
                     rec.pdf_field.length > 0 ? (
-                      <div className="flex flex-wrap items-center gap-x-0 gap-y-2">
+                      <div className="flex flex-wrap items-center gap-2">
                         {rec.pdf_field.map((fname) => (
                           <a
                             key={fname}
                             href={getFileUrl(rec.id, fname)}
                             target="_blank"
                             rel="noreferrer"
-                            className="inline-flex items-center gap-1 rounded border px-2 py-1 text-xs hover:bg-accent"
+                            className="group inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm shadow-sm transition-colors hover:bg-accent hover:border-emerald-300/60 hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/50"
                             title={friendlyFileName(fname)}
                             download={friendlyFileName(fname)}
                           >
-                            <FileText className="h-3.5 w-3.5" />
-                            <span className="max-w-[200px] truncate">
+                            <FileText className="h-4 w-4 text-muted-foreground group-hover:text-foreground" />
+                            <span className="max-w-[240px] truncate group-hover:underline">
                               {friendlyFileName(fname)}
                             </span>
-                            <ExternalLink className="h-3.5 w-3.5" />
+                            <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-foreground" />
                           </a>
                         ))}
                       </div>

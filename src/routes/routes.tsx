@@ -35,6 +35,7 @@ import HistoricoDeEnvioDeBoletos from "@/screens/HistoricoDeEnvioDeBoletos"
 import ConfiguracoesDaConta from "@/screens/ConfiguracoesDaConta"
 import CancelamentoSegurosScreen from "@/screens/CancelamentoSegurosScreen"
 import ProtocoloCancelamentoSegurosPage from "@/screens/ProtocoloCancelamentosSeguroPage"
+import { DashboardProtocoloCancelamentoSeguros } from "@/screens/DashboardProtocoloCancelamentoSeguros"
 
 const RoutesComponent = () => {
   return (
@@ -162,6 +163,8 @@ const RoutesComponent = () => {
                   />
                 </Route>
               </Route>
+
+              {/* INTERNO PIVA */}
               <Route
                 path="/"
                 element={
@@ -231,6 +234,14 @@ const RoutesComponent = () => {
                   element={
                     <PrivateRoute>
                       <DashboardTituloCapitalizacao />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="dashboard-protocolo-cancelamento"
+                  element={
+                    <PrivateRoute>
+                      <DashboardProtocoloCancelamentoSeguros />
                     </PrivateRoute>
                   }
                 />

@@ -6,13 +6,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import pb from "@/utils/backend/pb"
+import pb from "@/utils/backend/pb-imob"
 
 export function FormsHeader() {
   const navigate = useNavigate()
 
-  const currentUser = pb.authStore.model
-  const imobilariaName = currentUser?.nome // Pega o nome da imobiliária autenticada
+  const currentUser = pb.authStore.model as any
+  const imobiliariaName = currentUser?.nome || ""
 
   function handleFormSelection(value: string) {
     switch (value) {
@@ -56,7 +56,8 @@ export function FormsHeader() {
         <section className="py-12 md:py-20 bg-green-700">
           <div className="container mx-auto text-white px-6 text-center">
             <h1 className="font- font-bold tracking-tighter w-full text-4xl">
-              Olá {imobilariaName}, suas soluções de locação estão aqui.
+              Olá {imobiliariaName || "imobiliária"}, suas soluções de locação
+              estão aqui.
             </h1>
           </div>
         </section>
