@@ -122,6 +122,7 @@ export function FormsHeader() {
                   >
                     Efetivação de Título de Capitalização
                   </SelectItem>
+
                   <SelectItem
                     value="cancelamento-seguros"
                     className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700"

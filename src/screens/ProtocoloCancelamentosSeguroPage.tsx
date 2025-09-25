@@ -34,7 +34,7 @@ export default function ProtocoloCancelamentoSegurosPage() {
   const [searchInput, setSearchInput] = useState("")
   const [searchTerm, setSearchTerm] = useState("")
   const [refreshKey, setRefreshKey] = useState(0)
-  const limit = 10
+  const limit = 8
 
   const { imobiliariaId, imobiliariaNome } = useMemo(() => {
     const model: any = pb.authStore.model
@@ -129,12 +129,10 @@ export default function ProtocoloCancelamentoSegurosPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-6xl p-4">
+    <div className="mx-auto mb-16 w-full max-w-6xl p-4">
       <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="min-w-0">
-          <h1 className="text-xl font-semibold">
-            Protocolos de Cancelamentos
-          </h1>
+          <h1 className="text-xl font-semibold">Protocolos de Cancelamentos</h1>
           {imobiliariaNome && (
             <p className="text-sm text-muted-foreground">
               Imobiliária:{" "}
@@ -215,7 +213,7 @@ export default function ProtocoloCancelamentoSegurosPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px]">Protocolo (ID)</TableHead>
+              <TableHead className="w-[11rem]">Protocolo (ID)</TableHead>
               <TableHead className="min-w-[160px]">Criado em</TableHead>
               <TableHead>PDFs</TableHead>
             </TableRow>
