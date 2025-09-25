@@ -319,7 +319,7 @@ export function AberturaSinistroForms() {
                       type="button"
                       variant="piva"
                       onClick={() =>
-                        navigate("/imobiliaria/protocolo-cancelamento")
+                        navigate("/imobiliaria/protocolo-abertura-sinistro")
                       }
                     >
                       Ir para Protocolos
@@ -919,7 +919,7 @@ export function AberturaSinistroForms() {
                     className="bg-green-700 hover:bg-green-600 text-white"
                     onClick={() => {
                       setIsSuccessModalOpen(false)
-                      navigate("/imobiliaria/protocolo-cancelamento")
+                      navigate("/imobiliaria/protocolo-abertura-sinistro")
                     }}
                   >
                     Ir para Protocolos
