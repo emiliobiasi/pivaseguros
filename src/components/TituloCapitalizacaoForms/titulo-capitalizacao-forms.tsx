@@ -729,11 +729,11 @@ export function TituloCapitalizacaoForms() {
               Formulário Enviado com Sucesso
             </DialogTitle>
           </DialogHeader>
-          <div className="flex justify-center my-4">
+          {/* <div className="flex justify-center my-4">
             <div className="w-24 h-24 flex items-center justify-center my-5">
               <img src={pivaLogo} alt="Piva" className="w-24 h-24 " />
             </div>
-          </div>
+          </div> */}
           <DialogDescription>
             Seus dados foram enviados com sucesso. Nossa equipe entrará em
             contato em breve.
