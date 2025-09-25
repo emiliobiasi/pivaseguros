@@ -17,6 +17,7 @@ import {
   ChevronRight,
   FileX,
   FilePlus2,
+  Files,
 } from "lucide-react"
 import { useNavigate, useLocation } from "react-router-dom"
 import logo from "@/assets/logo.png"
@@ -284,6 +285,77 @@ function SidebarContent({ collapsed }: { collapsed: boolean }) {
       }
     }
   }, [])
+
+  // Auto-clear notifications when user navigates into the corresponding dashboard route
+  // This covers cases where navigation didn't happen via the sidebar button click
+  const lastClearedPathRef = useRef<string>("")
+  useEffect(() => {
+    const path = location.pathname
+    if (path === lastClearedPathRef.current) return
+    ;(async () => {
+      switch (path) {
+        // Incêndio
+        case "/dashboard-incendio":
+          await handledeleteNotifications("form_seguro_incendio")
+          break
+        case "/dashboard-incendio-comercial":
+          await handledeleteNotifications("form_seguro_incendio_comercial")
+          break
+
+        // Fiança
+        case "/dashboard-fianca-residencial":
+          await handledeleteNotifications("form_seguro_fianca_residencial")
+          break
+        case "/dashboard-fianca-empresarial-mais-2-anos":
+          await handledeleteNotifications(
+            "form_seguro_fianca_empresarial_mais_2_anos"
+          )
+          break
+        case "/dashboard-fianca-empresarial-menos-2-anos":
+          await handledeleteNotifications(
+            "form_seguro_fianca_empresarial_menos_2_anos"
+          )
+          break
+        case "/dashboard-efetivacao-seguro-fianca":
+          await handledeleteNotifications("form_efetivacao_seguro_fianca_tb")
+          break
+
+        // Protocolos
+        case "/dashboard-protocolo-cancelamento":
+          await handledeleteNotifications("form_cancelamento_seguros")
+          try {
+            localStorage.setItem(
+              "last_seen_cancelamento",
+              Date.now().toString()
+            )
+          } catch {}
+          setCancelamentoRealtimeCount(0)
+          break
+        case "/dashboard-protocolo-abertura-sinistro":
+          await handledeleteNotifications("form_protocolo_abertura_sinistro")
+          try {
+            localStorage.setItem("last_seen_abertura", Date.now().toString())
+          } catch {}
+          setAberturaRealtimeCount(0)
+          break
+
+        // Título de Capitalização
+        case "/dashboard-titulo-capitalizacao":
+          await handledeleteNotifications("form_titulo_capitalizacao")
+          try {
+            localStorage.setItem(
+              "last_seen_titulo_capitalizacao",
+              Date.now().toString()
+            )
+          } catch {}
+          setTituloRealtimeCount(0)
+          break
+        default:
+          break
+      }
+      lastClearedPathRef.current = path
+    })()
+  }, [location.pathname])
 
   useEffect(() => {
     async function fetchNotifications() {
@@ -775,7 +847,129 @@ function SidebarContent({ collapsed }: { collapsed: boolean }) {
           </Accordion>
         </li>
 
-        {/* Título de Capitalização */}
+        {/* Protocolos (Abertura + Cancelamento) */}
+        <li>
+          <Accordion type="single" collapsible>
+            <AccordionItem value="protocolos">
+              <AccordionTrigger
+                className={`flex items-center w-full px-3 py-2 text-left ${
+                  collapsed ? "justify-center" : ""
+                }`}
+              >
+                <ItemTooltip label="Protocolos">
+                  <span className="flex items-center relative">
+                    <Files
+                      className={`h-4.5 w-4.5 ${collapsed ? "" : "mr-2.5"}`}
+                    />
+                    {!collapsed && <span>Protocolos</span>}
+                    {notificationsCount.form_cancelamento_seguros +
+                      cancelamentoRealtimeCount +
+                      notificationsCount.form_protocolo_abertura_sinistro +
+                      aberturaRealtimeCount >
+                      0 && (
+                      <span
+                        className={`${
+                          collapsed ? "absolute -top-0.5 -right-0.5" : "ml-2"
+                        } inline-flex h-2 w-2 rounded-full bg-green-600`}
+                        aria-label="Novas notificações de Protocolos"
+                      />
+                    )}
+                  </span>
+                </ItemTooltip>
+              </AccordionTrigger>
+              <AccordionContent className={`${collapsed ? "pl-0" : "pl-3"}`}>
+                <ul className="space-y-2">
+                  <li>
+                    <button
+                      onClick={async () => {
+                        navigate("/dashboard-protocolo-cancelamento")
+                        await handledeleteNotifications(
+                          "form_cancelamento_seguros"
+                        )
+                        try {
+                          localStorage.setItem(
+                            "last_seen_cancelamento",
+                            Date.now().toString()
+                          )
+                        } catch {}
+                        setCancelamentoRealtimeCount(0)
+                      }}
+                      className={`flex items-center w-full px-3 py-2 text-left ${
+                        location.pathname ===
+                        "/dashboard-protocolo-cancelamento"
+                          ? "bg-gray-200 dark:bg-gray-700 text-green-700 dark:text-white"
+                          : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      } ${collapsed ? "justify-center" : ""}`}
+                    >
+                      <FileX
+                        className={`h-[18px] w-[18px] ${
+                          collapsed ? "" : "mr-2.5"
+                        }`}
+                      />
+                      {!collapsed && <span>Protocolo de Cancelamento</span>}
+                      {!collapsed &&
+                        notificationsCount.form_cancelamento_seguros +
+                          cancelamentoRealtimeCount >
+                          0 && (
+                          <span
+                            className="ml-2 text-[10px] text-white bg-green-800 flex items-center justify-center rounded-full flex-shrink-0"
+                            style={{ width: "0.85rem", height: "0.85rem" }}
+                          >
+                            {notificationsCount.form_cancelamento_seguros +
+                              cancelamentoRealtimeCount}
+                          </span>
+                        )}
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={async () => {
+                        navigate("/dashboard-protocolo-abertura-sinistro")
+                        await handledeleteNotifications(
+                          "form_protocolo_abertura_sinistro"
+                        )
+                        try {
+                          localStorage.setItem(
+                            "last_seen_abertura",
+                            Date.now().toString()
+                          )
+                        } catch {}
+                        setAberturaRealtimeCount(0)
+                      }}
+                      className={`flex items-center w-full px-3 py-2 text-left ${
+                        location.pathname ===
+                        "/dashboard-protocolo-abertura-sinistro"
+                          ? "bg-gray-200 dark:bg-gray-700 text-green-700 dark:text-white"
+                          : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      } ${collapsed ? "justify-center" : ""}`}
+                    >
+                      <FilePlus2
+                        className={`h-[18px] w-[18px] ${
+                          collapsed ? "" : "mr-2.5"
+                        }`}
+                      />
+                      {!collapsed && <span>Protocolo de Abertura</span>}
+                      {!collapsed &&
+                        notificationsCount.form_protocolo_abertura_sinistro +
+                          aberturaRealtimeCount >
+                          0 && (
+                          <span
+                            className="ml-2 text-[10px] text-white bg-green-800 flex items-center justify-center rounded-full flex-shrink-0"
+                            style={{ width: "0.85rem", height: "0.85rem" }}
+                          >
+                            {notificationsCount.form_protocolo_abertura_sinistro +
+                              aberturaRealtimeCount}
+                          </span>
+                        )}
+                    </button>
+                  </li>
+                </ul>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </li>
+
+        {/* Título de Capitalização (moved below Protocolos) */}
         <li>
           <ItemTooltip label="Título de Capitalização">
             <button
@@ -816,104 +1010,6 @@ function SidebarContent({ collapsed }: { collapsed: boolean }) {
                     >
                       {notificationsCount.form_titulo_capitalizacao +
                         tituloRealtimeCount}
-                    </span>
-                  ))}
-              </span>
-            </button>
-          </ItemTooltip>
-        </li>
-
-        {/* Protocolo de Cancelamento */}
-        <li>
-          <ItemTooltip label="Protocolo de Cancelamento">
-            <button
-              onClick={async () => {
-                navigate("/dashboard-protocolo-cancelamento")
-                await handledeleteNotifications("form_cancelamento_seguros")
-                try {
-                  localStorage.setItem(
-                    "last_seen_cancelamento",
-                    Date.now().toString()
-                  )
-                } catch {}
-                setCancelamentoRealtimeCount(0)
-              }}
-              className={`flex items-center w-full px-3 py-2 text-left text-[13px] ${
-                location.pathname === "/dashboard-protocolo-cancelamento"
-                  ? "bg-gray-200 dark:bg-gray-700 text-green-700 dark:text-white"
-                  : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-              } ${collapsed ? "justify-center" : ""}`}
-            >
-              <span className="flex items-center relative">
-                <FileX
-                  className={`h-[18px] w-[18px] ${collapsed ? "" : "mr-2.5"}`}
-                />
-                {!collapsed && <span>Protocolo de Cancelamento</span>}
-                {notificationsCount.form_cancelamento_seguros +
-                  cancelamentoRealtimeCount >
-                  0 &&
-                  (collapsed ? (
-                    <span
-                      className="absolute -top-0.5 -right-0.5 inline-flex h-2 w-2 rounded-full bg-green-600"
-                      aria-label="Novas notificações de Protocolo de Cancelamento"
-                    />
-                  ) : (
-                    <span
-                      className="ml-2 text-[10px] text-white bg-green-800 flex items-center justify-center rounded-full flex-shrink-0"
-                      style={{ width: "0.85rem", height: "0.85rem" }}
-                    >
-                      {notificationsCount.form_cancelamento_seguros +
-                        cancelamentoRealtimeCount}
-                    </span>
-                  ))}
-              </span>
-            </button>
-          </ItemTooltip>
-        </li>
-
-        {/* Protocolo de Abertura de Sinistro */}
-        <li>
-          <ItemTooltip label="Protocolo de Abertura">
-            <button
-              onClick={async () => {
-                navigate("/dashboard-protocolo-abertura-sinistro")
-                await handledeleteNotifications(
-                  "form_protocolo_abertura_sinistro"
-                )
-                try {
-                  localStorage.setItem(
-                    "last_seen_abertura",
-                    Date.now().toString()
-                  )
-                } catch {}
-                setAberturaRealtimeCount(0)
-              }}
-              className={`flex items-center w-full px-3 py-2 text-left text-[13px] ${
-                location.pathname === "/dashboard-protocolo-abertura-sinistro"
-                  ? "bg-gray-200 dark:bg-gray-700 text-green-700 dark:text-white"
-                  : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-              } ${collapsed ? "justify-center" : ""}`}
-            >
-              <span className="flex items-center relative">
-                <FilePlus2
-                  className={`h-[18px] w-[18px] ${collapsed ? "" : "mr-2.5"}`}
-                />
-                {!collapsed && <span>Protocolo de Abertura</span>}
-                {notificationsCount.form_protocolo_abertura_sinistro +
-                  aberturaRealtimeCount >
-                  0 &&
-                  (collapsed ? (
-                    <span
-                      className="absolute -top-0.5 -right-0.5 inline-flex h-2 w-2 rounded-full bg-green-600"
-                      aria-label="Novas notificações de Protocolo de Abertura"
-                    />
-                  ) : (
-                    <span
-                      className="ml-2 text-[10px] text-white bg-green-800 flex items-center justify-center rounded-full flex-shrink-0"
-                      style={{ width: "0.85rem", height: "0.85rem" }}
-                    >
-                      {notificationsCount.form_protocolo_abertura_sinistro +
-                        aberturaRealtimeCount}
                     </span>
                   ))}
               </span>
