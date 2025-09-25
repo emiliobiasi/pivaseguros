@@ -1,20 +1,20 @@
-import { CancelamentoSeguros } from "@/types/CancelamentoSeguros"
+import { AberturaSinistro } from "@/types/AberturaSinistro"
 import { useEffect, useState, useRef, useCallback } from "react"
 import {
-  fetchCancelamentoSegurosList,
-  subscribeToCancelamentoSegurosUpdates,
-  unsubscribeFromCancelamentoSegurosUpdates,
-} from "@/utils/api/CancelamentoSegurosService"
+  fetchAberturaSinistroList,
+  subscribeToAberturaSinistroUpdates,
+  unsubscribeFromAberturaSinistroUpdates,
+} from "@/utils/api/AberturaSinistroService"
 import { Slider } from "@/components/ui/slider" // Import Slider from shadcn ui
 import { TopBar } from "@/components/TopBar/top-bar"
 import { Button } from "@/components/ui/button"
 import { RecordSubscription } from "pocketbase"
 import { toast } from "sonner"
 import notificacao_som from "@/assets/notificacao_som.mp3"
-import { ProtocoloCancelamentoSegurosTable } from "@/components/ProtocoloCancelamentoSegurosTable/protocolo-cancelamento-seguros-table"
+import { ProtocoloAberturaSinistroTable } from "@/components/ProtocoloAberturaSinistroTable/protocolo-abertura-sinistro-table"
 
 export function DashboardAberturaSinitro() {
-  const [data, setData] = useState<CancelamentoSeguros[]>([])
+  const [data, setData] = useState<AberturaSinistro[]>([])
   const [page, setPage] = useState(1) // Controls the current page
   const [totalPages, setTotalPages] = useState(0) // Stores the total number of pages
   const [limit, setLimit] = useState(10) // Items per page limit, starts at 10
@@ -36,7 +36,7 @@ export function DashboardAberturaSinitro() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { items, totalPages } = await fetchCancelamentoSegurosList(
+        const { items, totalPages } = await fetchAberturaSinistroList(
           page,
           limit,
           searchTerm,
@@ -52,8 +52,8 @@ export function DashboardAberturaSinitro() {
   }, [page, limit, searchTerm, filter]) // Recarrega os dados ao alterar a página, limite, termo de busca ou filtro
 
   // Função para manipular eventos de mudança
-  const handleCancelamentoSegurosChange = useCallback(
-    (e: RecordSubscription<CancelamentoSeguros>) => {
+  const handleAberturaSinistroChange = useCallback(
+    (e: RecordSubscription<AberturaSinistro>) => {
       const { action, record } = e
 
       const currentFilter = filterRef.current
@@ -115,13 +115,13 @@ export function DashboardAberturaSinitro() {
 
   // Inicia a subscription quando o componente monta
   useEffect(() => {
-    subscribeToCancelamentoSegurosUpdates(handleCancelamentoSegurosChange)
+    subscribeToAberturaSinistroUpdates(handleAberturaSinistroChange)
 
     // Cancela a subscription quando o componente desmonta
     return () => {
-      unsubscribeFromCancelamentoSegurosUpdates()
+      unsubscribeFromAberturaSinistroUpdates()
     }
-  }, [handleCancelamentoSegurosChange])
+  }, [handleAberturaSinistroChange])
 
   // Functions to navigate between pages
   const handleNextPage = () => {
@@ -210,7 +210,7 @@ export function DashboardAberturaSinitro() {
         </div>
 
         {/* Table Component */}
-        <ProtocoloCancelamentoSegurosTable data={data} />
+        <ProtocoloAberturaSinistroTable data={data} />
 
         {/* Pagination Controls */}
         <div className="flex justify-center mt-6 space-x-4">
