@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils"
 import { ExitIcon } from "@radix-ui/react-icons"
 import { AnimatePresence, motion } from "framer-motion"
 import { CreditCard, FileText, FileX, FilePlus2, Menu } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuthImobiliarias } from "@/contexts/auth/imobiliarias/useAuthImobiliarias"
 import {
@@ -50,6 +50,9 @@ export function HamburguerMenu() {
   )
   const [showNewProtocolsAberturaBadge, setShowNewProtocolsAberturaBadge] =
     useState(() => !localStorage.getItem("protocolosAberturaFeatureSeen"))
+  const [showIntroPulse, setShowIntroPulse] = useState(
+    () => !localStorage.getItem("hamburguerMenuIntroSeen")
+  )
   const navigate = useNavigate()
   const { logout } = useAuthImobiliarias()
 
@@ -74,16 +77,44 @@ export function HamburguerMenu() {
     }
   }
 
+  // Marcar como visto quando abrir o menu
+  useEffect(() => {
+    if (isOpen) {
+      try {
+        localStorage.setItem("hamburguerMenuIntroSeen", "1")
+      } catch {}
+      setShowIntroPulse(false)
+    }
+  }, [isOpen])
+
+  // Caso o usuário não abra, mostrar o destaque por alguns segundos e esconder
+  useEffect(() => {
+    if (!showIntroPulse) return
+    const t = setTimeout(() => {
+      try {
+        localStorage.setItem("hamburguerMenuIntroSeen", "1")
+      } catch {}
+      setShowIntroPulse(false)
+    }, 5000)
+    return () => clearTimeout(t)
+  }, [showIntroPulse])
+
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
         <Button
-          variant="outline"
-          size="icon"
-          className="fixed top-4 left-4 z-50"
+          variant="default"
+          size="default"
+          className={cn(
+            "relative inline-flex items-center gap-2.5 rounded-full bg-white text-black shadow-md hover:shadow-lg hover:bg-white border border-green-700",
+            "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-piva-green-800 focus:ring-offset-transparent",
+            "h-11 md:h-12 px-4"
+          )}
+          aria-label="Abrir menu"
         >
-          <Menu className="h-6 w-6" />
-          <span className="sr-only">Abrir menu</span>
+          {/* Removido overlay de ping para não atrapalhar a legibilidade */}
+          <Menu className="h-7 w-7 drop-shadow-sm" strokeWidth={2.5} />
+          <span className="font-semibold leading-none">Menu</span>
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="p-0 w-[300px]">

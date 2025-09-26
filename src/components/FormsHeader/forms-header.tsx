@@ -224,72 +224,76 @@ export function FormsHeader() {
   return (
     <div className="flex flex-col">
       <main className="flex-1">
-        
         {/* HEADER */}
-        <section className="bg-green-700">
+        <section className="bg-gradient-to-b from-green-700 to-green-800">
           <div className="container mx-auto text-white px-4 md:px-6 pt-3 md:pt-4">
-            {/* Top bar with menu (left) and logo (right with white background) */}
-            <div className="flex items-center">
+            {/* Top bar with menu only (logo integrated with title below) */}
+            <div className="flex items-center mb-3 md:mb-4">
               <HamburguerMenu />
-              <div
-                onClick={() => navigate("/imobiliaria/formulario")}
-                className="ml-auto h-16 md:h-20 cursor-pointer rounded-lg bg-white px-4 shadow-sm select-none flex items-center justify-center"
-              >
-                <img
-                  src={pivaLogo}
-                  alt="Logo"
-                  className="h-full w-auto block"
-                />
-              </div>
             </div>
 
             {/* Title area */}
-            <div className="py-8 md:py-12 text-center bg-green-700">
-              <h1 className="font- font-bold tracking-tighter w-full text-4xl">
-                Olá {imobiliariaName || "imobiliária"}, suas soluções de locação
-                estão aqui.
-              </h1>
+            <div className="py-8 md:py-12">
+              <div className="grid items-center gap-4 md:gap-6 md:grid-cols-12">
+                <div className="md:col-span-8 text-center md:text-left">
+                  <h1 className="font-bold tracking-tight text-3xl md:text-4xl max-w-3xl md:mx-0 mx-auto">
+                    Olá {imobiliariaName || "imobiliária"}, suas soluções de
+                    locação estão aqui.
+                  </h1>
+                </div>
+                <div className="md:col-span-4 flex md:justify-end justify-center mt-4 md:mt-0">
+                  <div
+                    onClick={() => navigate("/imobiliaria/formulario")}
+                    className="h-16 md:h-20 cursor-pointer rounded-lg bg-white px-4 shadow-sm border border-white/30 ring-1 ring-black/5 select-none flex items-center justify-center"
+                    aria-label="Ir para a página inicial"
+                  >
+                    <img
+                      src={pivaLogo}
+                      alt="Logo"
+                      className="h-full w-auto block"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* ESPAÇO PARA A TIP */}
-        <section className="py-6 bg-white">
+        <section className="py-18 mb-6 md:py-12 bg-muted">
           <div className="max-w-7xl mx-auto px-4 md:px-6">
-            {showTip && (
-              <div className="relative">
-                <Alert className="border-amber-300 bg-amber-50 pr-8">
-                  <Lightbulb className="h-4 w-4 text-amber-600" />
-                  <AlertTitle className="text-amber-900">Novidade</AlertTitle>
-                  <AlertDescription className="text-amber-900/90">
-                    Agora temos 2 novos formulários:{" "}
-                    <strong>Abertura de Sinistro</strong> e
-                    <strong> Cancelamento de Seguros</strong>.
-                  </AlertDescription>
-                  <button
-                    type="button"
-                    aria-label="Fechar aviso"
-                    className="absolute right-2 top-2 rounded p-1 text-amber-900/70 hover:bg-amber-100 hover:text-amber-900"
-                    onClick={() => {
-                      try {
-                        localStorage.setItem(
-                          "formsHeaderNewFormsTipDismissed",
-                          "1"
-                        )
-                      } catch {}
-                      setShowTip(false)
-                    }}
-                  >
-                    ×
-                  </button>
-                </Alert>
-              </div>
-            )}
-          </div>
-        </section>
+            {/* TIP SPACE */}
+            <div className="mb-8">
+              {showTip && (
+                <div className="relative">
+                  <Alert className="border-amber-300 bg-amber-50 pr-8">
+                    <Lightbulb className="h-4 w-4 text-amber-600" />
+                    <AlertTitle className="text-amber-900">Novidade</AlertTitle>
+                    <AlertDescription className="text-amber-900/90">
+                      Agora temos 2 novos formulários:{" "}
+                      <strong>Abertura de Sinistro</strong> e
+                      <strong> Cancelamento de Seguros</strong>.
+                    </AlertDescription>
+                    <button
+                      type="button"
+                      aria-label="Fechar aviso"
+                      className="absolute right-2 top-2 rounded p-1 text-amber-900/70 hover:bg-amber-100 hover:text-amber-900"
+                      onClick={() => {
+                        try {
+                          localStorage.setItem(
+                            "formsHeaderNewFormsTipDismissed",
+                            "1"
+                          )
+                        } catch {}
+                        setShowTip(false)
+                      }}
+                    >
+                      ×
+                    </button>
+                  </Alert>
+                </div>
+              )}
+            </div>
 
-        <section className="py-20 mb-6 md:py-20 bg-muted">
-          <div className="max-w-7xl mx-auto px-4 md:px-6">
             <div className="mb-4">
               <h2 className="text-xl font-bold">
                 Selecione o tipo do formulário:
