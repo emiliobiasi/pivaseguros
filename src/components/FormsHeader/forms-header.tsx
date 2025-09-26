@@ -21,6 +21,8 @@ import {
   FileMinus,
   AlertTriangle,
 } from "lucide-react"
+import pivaLogo from "@/assets/logo.png"
+import { HamburguerMenu } from "../HambuguerMenu/hamburguer-menu"
 
 export function FormsHeader() {
   const navigate = useNavigate()
@@ -222,12 +224,32 @@ export function FormsHeader() {
   return (
     <div className="flex flex-col">
       <main className="flex-1">
-        <section className="py-12 md:py-20 bg-green-700">
-          <div className="container mx-auto text-white px-6 text-center">
-            <h1 className="font- font-bold tracking-tighter w-full text-4xl">
-              Olá {imobiliariaName || "imobiliária"}, suas soluções de locação
-              estão aqui.
-            </h1>
+        
+        {/* HEADER */}
+        <section className="bg-green-700">
+          <div className="container mx-auto text-white px-4 md:px-6 pt-3 md:pt-4">
+            {/* Top bar with menu (left) and logo (right with white background) */}
+            <div className="flex items-center">
+              <HamburguerMenu />
+              <div
+                onClick={() => navigate("/imobiliaria/formulario")}
+                className="ml-auto h-16 md:h-20 cursor-pointer rounded-lg bg-white px-4 shadow-sm select-none flex items-center justify-center"
+              >
+                <img
+                  src={pivaLogo}
+                  alt="Logo"
+                  className="h-full w-auto block"
+                />
+              </div>
+            </div>
+
+            {/* Title area */}
+            <div className="py-8 md:py-12 text-center bg-green-700">
+              <h1 className="font- font-bold tracking-tighter w-full text-4xl">
+                Olá {imobiliariaName || "imobiliária"}, suas soluções de locação
+                estão aqui.
+              </h1>
+            </div>
           </div>
         </section>
 
