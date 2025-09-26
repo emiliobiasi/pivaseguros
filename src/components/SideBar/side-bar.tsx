@@ -906,7 +906,7 @@ function SidebarContent({ collapsed }: { collapsed: boolean }) {
                           collapsed ? "" : "mr-2.5"
                         }`}
                       />
-                      {!collapsed && <span>Protocolo de Cancelamento</span>}
+                      {!collapsed && <span>Protocolos Cancelamento Apólices</span>}
                       {!collapsed &&
                         notificationsCount.form_cancelamento_seguros +
                           cancelamentoRealtimeCount >
@@ -948,7 +948,7 @@ function SidebarContent({ collapsed }: { collapsed: boolean }) {
                           collapsed ? "" : "mr-2.5"
                         }`}
                       />
-                      {!collapsed && <span>Protocolo de Abertura</span>}
+                      {!collapsed && <span>Protocolos Abertura Sinistros</span>}
                       {!collapsed &&
                         notificationsCount.form_protocolo_abertura_sinistro +
                           aberturaRealtimeCount >
