@@ -31,12 +31,12 @@ const menuItems = [
   },
   {
     icon: FileX,
-    label: "Protocolos de Cancelamento",
+    label: "Protocolos de Cancelamento de Apólices",
     path: "/imobiliaria/protocolo-cancelamento",
   },
   {
     icon: FilePlus2,
-    label: "Protocolos de Abertura",
+    label: "Protocolos de Abertura de Sinistros",
     path: "/imobiliaria/protocolo-abertura-sinistro",
   },
   // { icon: Settings, label: "Configurações", path: "/imobiliaria/configuracoes" },
@@ -120,7 +120,7 @@ export function HamburguerMenu() {
       <SheetContent side="left" className="p-0 w-[300px]">
         <SheetHeader className="p-6 text-left border-b">
           <SheetTitle className="text-2xl font-bold text-piva-green-800">
-            Piva Seguros
+            PMJ & Piva
           </SheetTitle>
         </SheetHeader>
         <nav className="space-y-2 p-4">
