@@ -192,7 +192,7 @@ export function FormsHeader() {
       items: [
         {
           value: "cancelamento-seguros",
-          label: "Cancelamento de Seguros",
+          label: "Cancelamento de Apólices / Títulos",
           Icon: FileMinus,
         },
       ],
