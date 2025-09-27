@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react"
+import { HamburguerMenu } from "@/components/HambuguerMenu/hamburguer-menu"
 import pb from "@/utils/backend/pb-imob"
 import { AberturaSinistro } from "@/types/AberturaSinistro"
 import {
@@ -302,6 +303,11 @@ export default function ProtocoloAberturaSinistroPage() {
 
   return (
     <div className="mx-auto mb-16 w-full max-w-6xl p-4">
+      <div className="mb-2 -mt-2">
+        <div className="flex justify-start">
+          <HamburguerMenu />
+        </div>
+      </div>
       <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="min-w-0">
           <h1 className="text-xl font-semibold">Protocolos de Abertura</h1>
