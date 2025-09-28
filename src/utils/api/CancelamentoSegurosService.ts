@@ -84,11 +84,20 @@ export async function createCancelamentoSeguros(
       .collection("cancelamento_seguros")
       .create<CancelamentoSeguros>(formData)
 
+<<<<<<< HEAD
     return record
   } catch (error) {
     const err = error as PocketBaseError
     console.error("Erro ao criar o Cancelamento de Seguro:", err)
     throw new Error("Erro ao criar o Cancelamento de Seguro")
+=======
+    // console.log("Cancelamento de Seguros criado com sucesso:", record);
+    return record
+  } catch (error) {
+    const err = error as PocketBaseError
+    console.error("Erro ao criar o Cancelamento de Seguros:", err)
+    throw new Error("Erro ao criar o Cancelamento de Seguros")
+>>>>>>> 81e1d48742bfd90dbcbb34f2a9235b3037dc4c1b
   }
 }
 
