@@ -85,12 +85,12 @@ export async function createCancelamentoSeguros(
       .collection("cancelamento_seguros")
       .create<CancelamentoSeguros>(formData)
 
-    // console.log("Título de Capitalização criado com sucesso:", record);
+    // console.log("Cancelamento de Seguros criado com sucesso:", record);
     return record
   } catch (error) {
     const err = error as PocketBaseError
-    console.error("Erro ao criar o Título de Capitalização:", err)
-    throw new Error("Erro ao criar o Título de Capitalização")
+    console.error("Erro ao criar o Cancelamento de Seguros:", err)
+    throw new Error("Erro ao criar o Cancelamento de Seguros")
   }
 }
 
