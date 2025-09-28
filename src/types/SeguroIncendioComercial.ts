@@ -1,39 +1,39 @@
 export type SeguroIncendioComercial = {
-  id: string;
-  id_numero: number;
-  acao: "PENDENTE" | "FINALIZADO";
-  nome_imobiliaria: string;
-  email_imobiliaria: string;
-  nome_locatario: string;
-  cpf_locatario?: string;
-  cnpj_locatario?: string;
-  data_nascimento_locatario: Date;
-  estado_civil: "SOLTEIRO" | "CASADO" | "VIÚVO" | "DIVORCIADO";
-  sexo_locatario: "MASCULINO" | "FEMININO";
-  cep: string;
-  endereco: string;
-  bairro: string;
-  numero_endereco: number;
-  complemento?: string;
-  cidade: string;
-  estado: string;
+  id: string
+  id_numero: number
+  acao: "PENDENTE" | "FINALIZADO"
+  nome_imobiliaria: string
+  email_imobiliaria: string
+  nome_locatario: string
+  cpf_locatario?: string
+  cnpj_locatario?: string
+  data_nascimento_locatario: Date
+  estado_civil: "SOLTEIRO" | "CASADO" | "VIÚVO" | "DIVORCIADO"
+  sexo_locatario: "MASCULINO" | "FEMININO"
+  cep: string
+  endereco: string
+  bairro: string
+  numero_endereco: number
+  complemento?: string
+  cidade: string
+  estado: string
   // tipo_imovel: "CASA" | "APARTAMENTO";
 
-  vigencia_seguro_inicio?: Date;
-  vigencia_seguro_termino?: Date;
+  vigencia_seguro_inicio?: Date
+  vigencia_seguro_termino?: Date
 
-  incendio?: number;
-  vendaval?: number;
-  danos_eletricos?: number;
-  impacto_veiculos?: number;
-  perda_aluguel?: number;
-  responsabilidade_civil?: number;
-  atividade: string;
+  incendio?: number
+  vendaval?: number
+  danos_eletricos?: number
+  impacto_veiculos?: number
+  perda_aluguel?: number
+  responsabilidade_civil?: number
+  atividade: string
   plano_escolhido:
     | "PLANO PADRÃO GRATUITO"
     | "PLANO INTERMEDIÁRIO"
-    | "PLANO DE REDE REFERENCIADA";
-  valor_seguro: number;
+    | "PLANO DE REDE REFERENCIADA"
+  valor_seguro: number
   forma_pagamento:
     | "1X FATURA MENSAL - SEM ENTRADA"
     | "2X FATURA MENSAL - SEM ENTRADA"
@@ -45,9 +45,10 @@ export type SeguroIncendioComercial = {
     | "8X FATURA MENSAL - SEM ENTRADA"
     | "9X FATURA MENSAL - SEM ENTRADA"
     | "10X FATURA MENSAL - SEM ENTRADA"
-    | "11X FATURA MENSAL - SEM ENTRADA";
-  inclusao_clausula_beneficiaria: "SIM" | "NÃO";
-  cpf_locador_opcional?: string;
-  nome_locador?: string;
-  created: Date;
-};
+    | "11X FATURA MENSAL - SEM ENTRADA"
+    | "29X FATURA MENSAL - SEM ENTRADA"
+  inclusao_clausula_beneficiaria: "SIM" | "NÃO"
+  cpf_locador_opcional?: string
+  nome_locador?: string
+  created: Date
+}

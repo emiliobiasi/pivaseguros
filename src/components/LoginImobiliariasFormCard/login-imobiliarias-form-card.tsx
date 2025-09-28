@@ -36,7 +36,7 @@ export function LoginImobiliariaFormCard() {
   }
 
   return (
-    <div className="flex items-center justify-center p-4">
+    <div className="flex items-center justify-center p-4 my-10 sm:my-12">
       <Card className="w-full max-w-lg sm:max-w-md shadow-lg lg:px-10">
         <CardHeader className="space-y-4 text-center">
           <div className="flex justify-center items-center">

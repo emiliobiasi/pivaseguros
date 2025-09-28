@@ -33,7 +33,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import pivaLogo from "@/assets/logo.png"
 import { buscaEnderecoPorCEP, EnderecoViaCep } from "@/utils/api/Cep"
 
 export function SeguroIncendioComercialForms() {
@@ -807,7 +806,9 @@ export function SeguroIncendioComercialForms() {
                           <SelectItem value="11X FATURA MENSAL - SEM ENTRADA">
                             11X FATURA MENSAL - SEM ENTRADA
                           </SelectItem>
-                          {/* Adicione as demais opções aqui */}
+                          <SelectItem value="29X FATURA MENSAL - SEM ENTRADA">
+                            29X FATURA MENSAL - SEM ENTRADA
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -918,7 +919,7 @@ export function SeguroIncendioComercialForms() {
               <Button
                 type="button"
                 onClick={handleNext}
-                className="ml-auto bg-[#00612B] text-white shadow hover:bg-[#02693E] focus-visible:ring-[#02693E] hover:bg-green-500"
+                className="ml-auto bg-[#00612B] text-white shadow hover:bg-[#02693E] focus-visible:ring-[#02693E]"
               >
                 Próximo <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
@@ -953,11 +954,11 @@ export function SeguroIncendioComercialForms() {
               Formulário Enviado com Sucesso
             </DialogTitle>
           </DialogHeader>
-          <div className="flex justify-center my-4">
+          {/* <div className="flex justify-center my-4">
             <div className="w-24 h-24 flex items-center justify-center my-5">
               <img src={pivaLogo} alt="Piva" className="w-24 h-24 " />
             </div>
-          </div>
+          </div> */}
           <DialogDescription>
             Seus dados foram enviados com sucesso. Nossa equipe entrará em
             contato em breve.

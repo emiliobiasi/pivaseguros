@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { ArrowUp } from "lucide-react"
-import { EfetivacaoSeguroFiancaForms } from "@/components/EfetivacaoSeguroFiancaForms/efetivacao-seguro-fianca-forms"
+import { CancelamentoSegurosForms } from "@/components/CancelamentoSegurosForms/cancelamento-seguros-forms"
 
-const EfetivacaoSeguroFiancaScreen = () => {
+const CancelamentoSegurosScreen = () => {
   const ref = useRef<HTMLDivElement | null>(null)
   const location = useLocation()
 
@@ -46,7 +46,7 @@ const EfetivacaoSeguroFiancaScreen = () => {
           : "")
       }
     >
-      <EfetivacaoSeguroFiancaForms />
+      <CancelamentoSegurosForms />
       {showTop && (
         <button
           type="button"
@@ -61,4 +61,4 @@ const EfetivacaoSeguroFiancaScreen = () => {
   )
 }
 
-export default EfetivacaoSeguroFiancaScreen
+export default CancelamentoSegurosScreen

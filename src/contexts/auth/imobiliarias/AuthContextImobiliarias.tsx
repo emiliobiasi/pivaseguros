@@ -1,6 +1,6 @@
 import { createContext, useState, ReactNode, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import pb, { PocketBaseError } from "@/utils/backend/pb"
+import pb, { PocketBaseError } from "@/utils/backend/pb-imob"
 import { Imobiliaria } from "@/types/Imobiliarias"
 
 interface AuthImobiliariaContextProps {

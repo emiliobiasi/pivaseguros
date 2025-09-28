@@ -1,29 +1,29 @@
-import { useState, useEffect } from "react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { QuadroAnotacao } from "@/components/QuadroAnotacao/quadro-anotacao";
+import { useState, useEffect } from "react"
+import { format } from "date-fns"
+import { ptBR } from "date-fns/locale"
+// import { QuadroAnotacao } from "@/components/QuadroAnotacao/quadro-anotacao"
 // import pb from "@/utils/backend/pb";
 
 const Home = () => {
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const [currentTime, setCurrentTime] = useState(new Date())
 
   // console.log("é adm pocketbase logado? ", pb.authStore.isAdmin);
   // console.log("login? ", pb.authStore.model);
 
   useEffect(() => {
     // Atualiza o horário a cada segundo
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000)
+    return () => clearInterval(timer)
+  }, [])
 
   // Calcula os ângulos para os ponteiros do relógio analógico
-  const seconds = currentTime.getSeconds();
-  const minutes = currentTime.getMinutes();
-  const hours = currentTime.getHours();
+  const seconds = currentTime.getSeconds()
+  const minutes = currentTime.getMinutes()
+  const hours = currentTime.getHours()
 
-  const secondDeg = seconds * 6; // 360 / 60
-  const minuteDeg = minutes * 6 + seconds * 0.1; // Movimento suave
-  const hourDeg = (hours % 12) * 30 + minutes * 0.5; // Movimento suave
+  const secondDeg = seconds * 6 // 360 / 60
+  const minuteDeg = minutes * 6 + seconds * 0.1 // Movimento suave
+  const hourDeg = (hours % 12) * 30 + minutes * 0.5 // Movimento suave
 
   return (
     <div
@@ -35,7 +35,7 @@ const Home = () => {
       </h1>
 
       <div className="flex flex-col items-center justify-center space-y-8 w-full max-w-7xl">
-        <QuadroAnotacao />
+        {/* <QuadroAnotacao /> */}
 
         {/* Componente do Relógio */}
         <div className="relative bg-gray-900 bg-opacity-50 text-white rounded-[40px] shadow-2xl p-6 w-full ">
@@ -126,7 +126,7 @@ const Home = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

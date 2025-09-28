@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { ArrowUp } from "lucide-react"
-import { EfetivacaoSeguroFiancaForms } from "@/components/EfetivacaoSeguroFiancaForms/efetivacao-seguro-fianca-forms"
+import { AberturaSinistroForms } from "@/components/AberturaSinistroForms/abertura-sinistro-forms"
 
-const EfetivacaoSeguroFiancaScreen = () => {
+const AberturaSinistroScreen = () => {
   const ref = useRef<HTMLDivElement | null>(null)
   const location = useLocation()
 
@@ -46,7 +46,7 @@ const EfetivacaoSeguroFiancaScreen = () => {
           : "")
       }
     >
-      <EfetivacaoSeguroFiancaForms />
+      <AberturaSinistroForms />
       {showTop && (
         <button
           type="button"
@@ -61,4 +61,4 @@ const EfetivacaoSeguroFiancaScreen = () => {
   )
 }
 
-export default EfetivacaoSeguroFiancaScreen
+export default AberturaSinistroScreen
