@@ -128,7 +128,6 @@ export function FormsHeader() {
 
   // UI state for the new visual selector
   const [query, setQuery] = useState("")
-  const [showClassic, setShowClassic] = useState(false)
   const [selected, setSelected] = useState<string | null>(null)
 
   // Grouped options with friendly descriptions to help new users
@@ -414,98 +413,6 @@ export function FormsHeader() {
                     </>
                   )
                 })()
-              )}
-            </div>
-
-            {/* Classic select toggle */}
-            <div className="mt-8">
-              <button
-                type="button"
-                onClick={() => setShowClassic((s) => !s)}
-                className="text-sm font-medium text-green-700 underline underline-offset-2 hover:text-green-800"
-              >
-                {showClassic
-                  ? "Ocultar lista clássica"
-                  : "Preferir a lista clássica?"}
-              </button>
-              {showClassic && (
-                <div className="mt-4 grid gap-4 md:grid-cols-1">
-                  <Select
-                    onValueChange={(value) => {
-                      setSelected(value)
-                      setTimeout(() => handleFormSelection(value), 150)
-                    }}
-                  >
-                    <SelectTrigger className="w-full h-12 px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-green-500 transition duration-150 ease-in-out">
-                      <SelectValue placeholder="Opções" />
-                    </SelectTrigger>
-                    <SelectContent className="w-full max-w-xl bg-white rounded-lg shadow-lg">
-                      {/* ANALISES */}
-                      <SelectItem
-                        value="seguro-fianca-residencial"
-                        className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700"
-                      >
-                        Análise Fiança Residencial
-                      </SelectItem>
-                      <SelectItem
-                        value="seguro-fianca-empresarial-mais-2-anos"
-                        className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700 whitespace-normal"
-                      >
-                        Análise Fiança Pessoa Jurídica Comercial (CNPJ ACIMA DE
-                        2 ANOS)
-                      </SelectItem>
-                      <SelectItem
-                        value="seguro-fianca-empresarial-menos-2-anos"
-                        className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700 whitespace-normal"
-                      >
-                        Análise Fiança Pessoa Física Comercial (CNPJ MENOS DE 2
-                        ANOS)
-                      </SelectItem>
-
-                      {/* EFETIVAÇÕES */}
-                      <SelectItem
-                        value="seguro-incendio"
-                        className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700"
-                      >
-                        Efetivação de Seguro Incêndio Residencial
-                      </SelectItem>
-                      <SelectItem
-                        value="seguro-incendio-comercial"
-                        className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700"
-                      >
-                        Efetivação de Seguro Incêndio Comercial
-                      </SelectItem>
-                      <SelectItem
-                        value="efetivacao-seguro-fianca"
-                        className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700"
-                      >
-                        Efetivação de Seguro Fiança
-                      </SelectItem>
-                      <SelectItem
-                        value="titulo-capitalizacao"
-                        className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700"
-                      >
-                        Efetivação de Título de Capitalização
-                      </SelectItem>
-
-                      {/* CANCELAMENTOS */}
-                      <SelectItem
-                        value="cancelamento-seguros"
-                        className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700"
-                      >
-                        Cancelamento de Seguros
-                      </SelectItem>
-
-                      {/* ABERTURA DE SINISTRO */}
-                      <SelectItem
-                        value="abertura-sinistro"
-                        className="w-full py-3 px-4 hover:bg-gray-100 text-lg text-gray-700"
-                      >
-                        Abertura de Sinistro
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
               )}
             </div>
           </div>
