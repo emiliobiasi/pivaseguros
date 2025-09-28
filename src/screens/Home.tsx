@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
-import { QuadroAnotacao } from "@/components/QuadroAnotacao/quadro-anotacao"
+// import { QuadroAnotacao } from "@/components/QuadroAnotacao/quadro-anotacao"
 // import pb from "@/utils/backend/pb";
 
 const Home = () => {
@@ -35,7 +35,7 @@ const Home = () => {
       </h1>
 
       <div className="flex flex-col items-center justify-center space-y-8 w-full max-w-7xl">
-        <QuadroAnotacao />
+        {/* <QuadroAnotacao /> */}
 
         {/* Componente do Relógio */}
         <div className="relative bg-gray-900 bg-opacity-50 text-white rounded-[40px] shadow-2xl p-6 w-full ">

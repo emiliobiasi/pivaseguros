@@ -137,21 +137,23 @@ export function HamburguerMenu() {
                 <button
                   onClick={() => handleMenuClick(item)}
                   className={cn(
-                    "flex items-center space-x-4 px-4 py-3 rounded-lg text-sm font-medium transition-colors",
+                    "flex w-full items-center px-4 py-3 rounded-lg text-sm font-medium transition-colors text-left",
                     "text-piva-green-800 hover:bg-piva-green-100 hover:text-piva-green-800",
                     "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-piva-green-800"
                   )}
                 >
-                  <item.icon className="h-5 w-5" />
-                  <span className="flex items-center gap-2">
-                    {item.label}
+                  <item.icon className="h-5 w-5 flex-shrink-0" />
+                  <div className="ml-4 flex items-center gap-2 text-left">
+                    <span className="leading-snug text-left whitespace-normal break-words">
+                      {item.label}
+                    </span>
                     {showNewBadge && (
                       <span className="inline-flex items-center gap-1 rounded-full bg-green-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
                         <span className="h-1.5 w-1.5 rounded-full bg-white/90 animate-pulse" />
                         Novo
                       </span>
                     )}
-                  </span>
+                  </div>
                 </button>
               )
 
