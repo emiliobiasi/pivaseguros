@@ -38,7 +38,7 @@ import ProtocoloCancelamentoSegurosPage from "@/screens/ProtocoloCancelamentosSe
 import { DashboardProtocoloCancelamentoSeguros } from "@/screens/DashboardProtocoloCancelamentoSeguros"
 import AberturaSinistroScreen from "@/screens/AberturaSinistroScreen"
 import ProtocoloAberturaSinistroPage from "@/screens/ProtocoloAberturaSinistroPage"
-import { DashboardAberturaSinitro } from "@/screens/DashboardProtocoloAberturaSinistro"
+import { DashboardAberturaSinistro } from "@/screens/DashboardProtocoloAberturaSinistro"
 
 const RoutesComponent = () => {
   return (
@@ -268,7 +268,7 @@ const RoutesComponent = () => {
                   path="dashboard-protocolo-abertura-sinistro"
                   element={
                     <PrivateRoute>
-                      <DashboardAberturaSinitro />
+                      <DashboardAberturaSinistro />
                     </PrivateRoute>
                   }
                 />

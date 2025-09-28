@@ -13,7 +13,7 @@ import { toast } from "sonner"
 import notificacao_som from "@/assets/notificacao_som.mp3"
 import { ProtocoloAberturaSinistroTable } from "@/components/ProtocoloAberturaSinistroTable/protocolo-abertura-sinistro-table"
 
-export function DashboardAberturaSinitro() {
+export function DashboardAberturaSinistro() {
   const [data, setData] = useState<AberturaSinistro[]>([])
   const [page, setPage] = useState(1) // Controls the current page
   const [totalPages, setTotalPages] = useState(0) // Stores the total number of pages

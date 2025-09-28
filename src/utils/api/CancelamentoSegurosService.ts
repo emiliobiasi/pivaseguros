@@ -2,7 +2,6 @@ import { CancelamentoSeguros } from "@/types/CancelamentoSeguros"
 import pb, { PocketBaseError } from "@/utils/backend/pb-imob"
 import { ClientResponseError, RecordSubscription } from "pocketbase"
 
-// Função para criar um título de capitalização com campo "id_numero" incremental
 export async function createCancelamentoSeguros(
   data: CancelamentoSeguros,
   files: File[] = []
@@ -85,12 +84,11 @@ export async function createCancelamentoSeguros(
       .collection("cancelamento_seguros")
       .create<CancelamentoSeguros>(formData)
 
-    // console.log("Título de Capitalização criado com sucesso:", record);
     return record
   } catch (error) {
     const err = error as PocketBaseError
-    console.error("Erro ao criar o Título de Capitalização:", err)
-    throw new Error("Erro ao criar o Título de Capitalização")
+    console.error("Erro ao criar o Cancelamento de Seguro:", err)
+    throw new Error("Erro ao criar o Cancelamento de Seguro")
   }
 }
 
