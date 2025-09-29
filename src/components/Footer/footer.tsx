@@ -32,7 +32,7 @@ const Footer: React.FC = () => {
                 loading="lazy"
               />
               <span className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-emerald-600 transition-colors">
-                PMJ & PIVA
+                PMJ & PIVA CORRETORA DE SEGUROS
               </span>
             </div>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
@@ -161,7 +161,7 @@ const Footer: React.FC = () => {
         <div className="mt-8 border-t border-zinc-200/60 pt-4 dark:border-zinc-800/60">
           <div className="flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
             <p className="text-xs text-zinc-500 dark:text-zinc-400">
-              © {currentYear} PMJ & PIVA — Todos os direitos
+              © {currentYear} PMJ & PIVA CORRETORA DE SEGUROS — Todos os direitos
               reservados.
             </p>
             <p className="text-xs text-zinc-500 dark:text-zinc-400">
