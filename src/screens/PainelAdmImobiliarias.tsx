@@ -23,6 +23,8 @@ import {
   CalendarDays,
   Phone,
   X as CloseIcon,
+  Hash,
+  Copy,
 } from "lucide-react"
 import {
   AlertDialog,
@@ -61,6 +63,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 export default function PainelAdmImobiliarias() {
   const [isEditingProfile, setIsEditingProfile] = useState(false)
   const navigate = useNavigate()
+  const [copiedId, setCopiedId] = useState(false)
 
   // Usuário autenticado (caso precise no futuro)
   // const currentUser = pb.authStore.model
@@ -84,7 +87,7 @@ export default function PainelAdmImobiliarias() {
 
   // Paginação
   const [currentPage, setCurrentPage] = useState(1)
-  const [itemsPerPage, setItemsPerPage] = useState(8)
+  const [itemsPerPage, setItemsPerPage] = useState(16)
 
   // Seleção e edição
   const [selectedImobiliaria, setSelectedImobiliaria] =
@@ -398,7 +401,7 @@ export default function PainelAdmImobiliarias() {
 
           {/* Lista de Imobiliárias com scroll interno */}
           <ScrollArea className="flex-1 min-h-0 pr-2">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 pr-3 md:pr-5">
               {loading ? (
                 Array.from({ length: itemsPerPage }).map((_, i) => (
                   <Card key={`skeleton-${i}`} className="p-4 animate-pulse">
@@ -422,7 +425,7 @@ export default function PainelAdmImobiliarias() {
                     key={imobiliaria.id}
                     className="bg-white/95 border shadow-sm hover:shadow-md transition-shadow duration-200"
                   >
-                    <CardHeader className="pb-2">
+                    <CardHeader className="pb-1">
                       <div className="flex items-center justify-between">
                         <CardTitle className="text-lg font-semibold truncate">
                           {imobiliaria.nome}
@@ -432,22 +435,8 @@ export default function PainelAdmImobiliarias() {
                         </div>
                       </div>
                     </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-gray-600 truncate">
-                        {imobiliaria.email}
-                      </p>
-                      <p className="text-xs text-gray-500 mb-4">
-                        Cadastro:{" "}
-                        {imobiliaria.created
-                          ? `${new Date(
-                              imobiliaria.created
-                            ).toLocaleDateString()} - ${new Date(
-                              imobiliaria.created
-                            ).toLocaleTimeString()}`
-                          : "N/A"}
-                      </p>
-
-                      <Dialog>
+                    <CardContent className="pt-1">
+                      <Dialog onOpenChange={() => setCopiedId(false)}>
                         <DialogTrigger asChild>
                           <Button
                             onClick={() => handleEdit(imobiliaria)}
@@ -497,6 +486,41 @@ export default function PainelAdmImobiliarias() {
                           {/* Detalhes principais */}
                           <div className="mb-4 rounded-lg border bg-muted/20 p-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="flex items-center gap-2 text-sm">
+                                <Hash className="h-4 w-4 text-muted-foreground" />
+                                <span className="font-medium">ID:</span>
+                                <span className="truncate font-mono">
+                                  {imobiliaria.id}
+                                </span>
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-6 w-6"
+                                  aria-label="Copiar ID"
+                                  onClick={async () => {
+                                    try {
+                                      await navigator.clipboard.writeText(
+                                        imobiliaria.id
+                                      )
+                                      setCopiedId(true)
+                                      setTimeout(() => setCopiedId(false), 1500)
+                                    } catch (e) {
+                                      console.error("Falha ao copiar ID", e)
+                                    }
+                                  }}
+                                >
+                                  <Copy className="h-4 w-4" />
+                                </Button>
+                                {copiedId && (
+                                  <span
+                                    className="text-xs text-green-700"
+                                    aria-live="polite"
+                                  >
+                                    Copiado!
+                                  </span>
+                                )}
+                              </div>
                               <div className="flex items-center gap-2 text-sm">
                                 <Mail className="h-4 w-4 text-muted-foreground" />
                                 <span className="font-medium">Email:</span>
