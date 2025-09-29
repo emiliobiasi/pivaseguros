@@ -261,7 +261,7 @@ export function FormsHeader() {
                     <Lightbulb className="h-4 w-4 text-amber-600" />
                     <AlertTitle className="text-amber-900">Novidade</AlertTitle>
                     <AlertDescription className="text-amber-900/90">
-                      Agora temos 2 novos formulários:{" "}
+                      Agora temos duas novas funcionalidades:{" "}
                       <strong>Abertura de Sinistro</strong> e
                       <strong> Cancelamento de Seguros</strong>.
                     </AlertDescription>
