@@ -20,8 +20,8 @@ export type CancelamentoSeguros = {
   cidade: string
   estado: string
 
-  observacao?: string
   tipo_seguro: "SEGURO FIANÇA" | "SEGURO INCÊNDIO" | "RESGATE DE TÍTULO"
   pdf_field?: string[]
+  observacao?: string
   created: Date
 }
