@@ -113,6 +113,17 @@ export function CancelamentoSegurosModal({
                 <strong>CPF do Proprietário:</strong> {titulo.cpf_proprietario}
               </p>
             )}
+
+            {titulo.observacao && (
+              <div className="pt-2">
+                <h3 className="text-lg font-semibold mt-6 text-[#025d37] dark:text-emerald-300">
+                  Observação
+                </h3>
+                <p className="whitespace-pre-wrap break-words">
+                  {titulo.observacao}
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Coluna 2: Endereço */}
