@@ -83,6 +83,7 @@ export function AberturaSinistroForms() {
 
     tipo_seguro: "SEGURO FIANÇA",
     pdf_field: [],
+    observacao: "",
     created: new Date(),
   })
 
@@ -424,19 +425,23 @@ export function AberturaSinistroForms() {
                       </SelectContent>
                     </Select>
                   </div>
+
                   <div className="space-y-2">
-                    <Label htmlFor="nome_imobiliaria">
-                      Nome da Imobiliária <RequiredAsterisk />
-                    </Label>
-                    <Input
-                      id="nome_imobiliaria"
-                      name="nome_imobiliaria"
-                      value={formData.nome_imobiliaria}
-                      onChange={handleInputChange}
-                      required
-                      placeholder="Digite o nome da imobiliária"
-                    />
+                    <>
+                      <Label htmlFor="nome_imobiliaria">
+                        Nome da Imobiliária
+                      </Label>
+                      <Input
+                        id="nome_imobiliaria"
+                        name="nome_imobiliaria"
+                        value={formData.nome_imobiliaria}
+                        onChange={handleInputChange}
+                        required
+                        placeholder="Digite o nome da imobiliária"
+                      />
+                    </>
                   </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="cpf_inquilino">
@@ -465,6 +470,7 @@ export function AberturaSinistroForms() {
                       />
                     </div>
                   </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="cpf_proprietario">
@@ -614,6 +620,26 @@ export function AberturaSinistroForms() {
               /* Upload de PDF (sempre disponível e obrigatório para todos os tipos) */}
               <TabsContent value="confirmacao">
                 <div className="grid gap-4 py-4">
+                  {/* Observação opcional - acima da área de upload */}
+                  <div className="space-y-2">
+                    <Label htmlFor="observacao">Observação (opcional)</Label>
+                    <textarea
+                      id="observacao"
+                      name="observacao"
+                      value={formData.observacao || ""}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          observacao: e.target.value,
+                        }))
+                      }
+                      rows={3}
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+                      placeholder="Escreva alguma observação relevante (opcional)"
+                    />
+                  </div>
+
+                  {/* Área de upload e dicas */}
                   <div className="space-y-2">
                     <div className="rounded-md border border-amber-300 bg-amber-50 p-3 text-amber-900">
                       <div className="flex items-start gap-2">

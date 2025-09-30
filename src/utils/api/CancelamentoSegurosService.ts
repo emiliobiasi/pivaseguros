@@ -66,6 +66,11 @@ export async function createCancelamentoSeguros(
 
     formData.append("tipo_seguro", data.tipo_seguro)
 
+    // Observação opcional
+    if (data.observacao) {
+      formData.append("observacao", data.observacao)
+    }
+
     // Define o id_numero incremental
     formData.append("id_numero", String(nextIdNumero))
 

@@ -83,6 +83,7 @@ export function CancelamentoSegurosForms() {
 
     tipo_seguro: "SEGURO FIANÇA",
     pdf_field: [],
+    observacao: "",
     created: new Date(),
   })
 
@@ -616,6 +617,25 @@ export function CancelamentoSegurosForms() {
               {/* Dados do Proprietário */}
               <TabsContent value="confirmacao">
                 <div className="grid gap-4 py-4">
+                  {/* Observação opcional (acima do upload) */}
+                  <div className="space-y-2">
+                    <Label htmlFor="observacao">Observação (opcional)</Label>
+                    <textarea
+                      id="observacao"
+                      name="observacao"
+                      value={formData.observacao || ""}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          observacao: e.target.value,
+                        }))
+                      }
+                      rows={3}
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+                      placeholder="Escreva alguma observação relevante (opcional)"
+                    />
+                  </div>
+
                   {/* Upload de PDF (exibido apenas quando não é SEGURO INCÊNDIO) */}
                   {requiresPdf && (
                     <div className="space-y-2">

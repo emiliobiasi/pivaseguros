@@ -22,5 +22,6 @@ export type AberturaSinistro = {
 
   tipo_seguro: "SEGURO FIANÇA" | "SEGURO INCÊNDIO" | "RESGATE DE TÍTULO"
   pdf_field?: string[]
+  observacao?: string
   created: Date
 }

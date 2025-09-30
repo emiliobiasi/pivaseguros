@@ -158,6 +158,9 @@ export function ProtocoloAberturaSinistroTable({ data }: TableContentProps) {
                     Nome da Imobiliária
                   </TableHead>
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
+                    Nome do Inquilino
+                  </TableHead>
+                  <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
                     Tipo do Seguro
                   </TableHead>
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
@@ -173,6 +176,9 @@ export function ProtocoloAberturaSinistroTable({ data }: TableContentProps) {
                     </TableCell>
                     <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
                       <Skeleton className="h-6 w-24" />
+                    </TableCell>
+                    <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
+                      <Skeleton className="h-6 w-32" />
                     </TableCell>
                     <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
                       <Skeleton className="h-6 w-32" />
@@ -208,6 +214,9 @@ export function ProtocoloAberturaSinistroTable({ data }: TableContentProps) {
                   </TableHead>
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
                     Nome da Imobiliária
+                  </TableHead>
+                  <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
+                    Nome do Inquilino
                   </TableHead>
                   <TableHead className="px-3 py-2 lg:px-6 lg:py-3">
                     Tipo do Seguro
@@ -284,6 +293,9 @@ export function ProtocoloAberturaSinistroTable({ data }: TableContentProps) {
                       >
                         {seguro.nome_imobiliaria}
                       </button>
+                    </TableCell>
+                    <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
+                      {seguro.nome_inquilino}
                     </TableCell>
                     <TableCell className="px-3 py-2 lg:px-6 lg:py-3">
                       {seguro.tipo_seguro}

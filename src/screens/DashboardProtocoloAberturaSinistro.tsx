@@ -8,6 +8,7 @@ import {
 import { Slider } from "@/components/ui/slider" // Import Slider from shadcn ui
 import { TopBar } from "@/components/TopBar/top-bar"
 import { Button } from "@/components/ui/button"
+import { RotateCw } from "lucide-react"
 import { RecordSubscription } from "pocketbase"
 import { toast } from "sonner"
 import notificacao_som from "@/assets/notificacao_som.mp3"
@@ -20,6 +21,7 @@ export function DashboardAberturaSinistro() {
   const [limit, setLimit] = useState(10) // Items per page limit, starts at 10
   const [searchTerm, setSearchTerm] = useState("") // Control search term
   const [filter, setFilter] = useState<"PENDENTE" | "FINALIZADO" | "">("") // Controla o filtro de ação
+  const [refreshing, setRefreshing] = useState(false)
 
   const filterRef = useRef(filter)
   const searchTermRef = useRef(searchTerm)
@@ -32,24 +34,28 @@ export function DashboardAberturaSinistro() {
     searchTermRef.current = searchTerm
   }, [filter, searchTerm])
 
+  const fetchData = useCallback(async () => {
+    try {
+      setRefreshing(true)
+      const { items, totalPages } = await fetchAberturaSinistroList(
+        page,
+        limit,
+        searchTerm,
+        filter
+      )
+      setData(items)
+      setTotalPages(totalPages)
+    } catch (error) {
+      console.error("Erro ao buscar os seguros de incêndio:", error)
+    } finally {
+      setRefreshing(false)
+    }
+  }, [page, limit, searchTerm, filter])
+
   // Fetch data when page, limit, searchTerm, or filter changes
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { items, totalPages } = await fetchAberturaSinistroList(
-          page,
-          limit,
-          searchTerm,
-          filter // Passa o filtro de ação para o serviço
-        )
-        setData(items)
-        setTotalPages(totalPages)
-      } catch (error) {
-        console.error("Erro ao buscar os seguros de incêndio:", error)
-      }
-    }
     fetchData()
-  }, [page, limit, searchTerm, filter]) // Recarrega os dados ao alterar a página, limite, termo de busca ou filtro
+  }, [fetchData])
 
   // Função para manipular eventos de mudança
   const handleAberturaSinistroChange = useCallback(
@@ -189,8 +195,8 @@ export function DashboardAberturaSinistro() {
             </Button>
           </div>
 
-          {/* Items per Page Slider Selection */}
-          <div className="flex items-center space-x-4 cursor-pointer">
+          {/* Items per Page Slider Selection + Refresh */}
+          <div className="flex items-center space-x-4">
             <label htmlFor="limit" className="text-gray-700">
               Itens por página:
             </label>
@@ -206,6 +212,16 @@ export function DashboardAberturaSinistro() {
               />
               <span className="text-gray-800 font-medium">{limit}</span>
             </div>
+            <Button
+              onClick={fetchData}
+              className="ml-2 px-3 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 border border-green-600 hover:border-green-700"
+              variant="secondary"
+            >
+              <RotateCw
+                className={`w-4 h-4 mr-2 ${refreshing ? "animate-spin" : ""}`}
+              />
+              {refreshing ? "Atualizando..." : "Atualizar"}
+            </Button>
           </div>
         </div>
 
