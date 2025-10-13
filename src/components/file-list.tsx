@@ -5,9 +5,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  TableFooter,
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { Trash2, CheckCircle, XCircle } from "lucide-react"
+import { Trash2, CheckCircle, XCircle, FileText } from "lucide-react"
 import { UploadedFile } from "../types/Insurance"
 import { AnimatePresence, motion } from "framer-motion"
 
@@ -114,6 +115,19 @@ export function FileList({ files, onDelete }: FileListProps) {
             ))}
           </AnimatePresence>
         </TableBody>
+        <TableFooter>
+          <TableRow className="bg-gradient-to-r from-green-50 to-green-100/50 hover:bg-gradient-to-r hover:from-green-50 hover:to-green-100/50">
+            <TableCell colSpan={5} className="font-bold text-gray-800">
+              <div className="flex items-center gap-2">
+                <FileText className="h-5 w-5 text-green-600" />
+                <span>Total de Arquivos Anexados</span>
+              </div>
+            </TableCell>
+            <TableCell className="text-center font-bold text-lg text-green-700">
+              {files.length}
+            </TableCell>
+          </TableRow>
+        </TableFooter>
       </Table>
     </div>
   )

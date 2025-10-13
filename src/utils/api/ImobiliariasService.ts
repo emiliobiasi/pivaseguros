@@ -49,9 +49,9 @@ export async function fetchImobiliariaList(
   totalPages: number
 }> {
   try {
-    // Construir filtros de busca
+    // Construir filtros de busca (case-insensitive)
     const searchFilter = searchTerm
-      ? `(nome ~ "${searchTerm}" || email ~ "${searchTerm}" || username ~ "${searchTerm}")`
+      ? `(nome ?~ "${searchTerm}" || email ?~ "${searchTerm}" || username ?~ "${searchTerm}")`
       : ""
 
     // Construir filtros adicionais

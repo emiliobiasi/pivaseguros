@@ -13,9 +13,10 @@ import { ConfirmationModal } from "@/components/confirmation-modal"
 import { ErrorModal } from "@/components/error-modal"
 import { Imobiliaria } from "@/types/Imobiliarias"
 
-import { Mail, User } from "lucide-react"
+import { Mail, User, CheckCircle2, AlertCircle, Send } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { createEnvioDeBoletos } from "@/utils/api/EnvioDeBoletosService"
+import { Progress } from "@/components/ui/progress"
 
 export default function SeguradorasUploadPage() {
   // Estado de qual imobiliária está selecionada
@@ -75,6 +76,14 @@ export default function SeguradorasUploadPage() {
   // ===============================================
   const handleRealEstateSelect = (company: Imobiliaria) => {
     setSelectedRealEstate(company)
+    setFiles([])
+  }
+
+  // ===============================================
+  // Função disparada quando limpamos a busca
+  // ===============================================
+  const handleClearSearch = () => {
+    setSelectedRealEstate(null)
     setFiles([])
   }
 
@@ -173,108 +182,255 @@ export default function SeguradorasUploadPage() {
   }
 
   // ===============================================
+  // Calcula o progresso total de upload
+  // ===============================================
+  const calculateProgress = (): number => {
+    if (!selectedImobiliaria) return 0
+
+    let totalRequired = 0
+    let totalUploaded = 0
+
+    for (const field of ALL_SUBFIELDS) {
+      const required = selectedImobiliaria[field] ?? 0
+      const uploaded = uploadedFilesCount[field] ?? 0
+      totalRequired += required
+      totalUploaded += Math.min(uploaded, required)
+    }
+
+    return totalRequired > 0
+      ? Math.round((totalUploaded / totalRequired) * 100)
+      : 0
+  }
+
+  const progress = calculateProgress()
+
+  // ===============================================
+  // Verifica se a imobiliária tem algum boleto para enviar
+  // ===============================================
+  const hasBoletos = (): boolean => {
+    if (!selectedImobiliaria) return false
+
+    for (const field of ALL_SUBFIELDS) {
+      const required = selectedImobiliaria[field] ?? 0
+      if (required > 0) return true
+    }
+    return false
+  }
+
+  const hasBoletosToSend = hasBoletos()
+
+  // ===============================================
   // Render
   // ===============================================
   return (
-    <div className="flex flex-col justfy-center overflow-y-auto max-h-screen">
+    <div className="flex flex-col h-screen bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
       <Header />
-      <SearchSection onSelect={handleRealEstateSelect} />
 
-      <div className="p-8">
-        {/* Exibe dados da imobiliária selecionada */}
-        {selectedImobiliaria && (
-          <Card className="w-full max-w-3xl mx-auto mb-8">
-            <CardContent className="p-4">
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="flex items-center">
-                  <div className="flex flex-col">
-                    <span className="font-semibold">
-                      {selectedImobiliaria?.nome ||
-                        "Imobiliária não encontrada"}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-sm">
-                      {selectedImobiliaria?.email ||
-                        "Imobiliária não encontrada"}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <User className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-sm">
-                      {selectedImobiliaria?.username ||
-                        "Imobiliária não encontrada"}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        <AnimatePresence mode="wait">
-          {selectedImobiliaria && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              className="container mx-auto py-8 space-y-8"
-            >
-              <UploadInstructions />
-
-              <InsuranceGrid
-                onFileUpload={handleFileUpload}
-                uploadedFiles={uploadedFilesCount}
-                imobiliaria={selectedImobiliaria}
-              />
-
-              <FileList files={files} onDelete={handleDelete} />
-
-              <div className="flex justify-center mt-4">
-                <Button
-                  size="lg"
-                  onClick={() => setShowSummary(true)}
-                  disabled={!canSendAll || isSubmitting}
-                  className={`bg-gradient-to-r from-green-600 to-green-700 
-                    hover:from-green-700 hover:to-green-800 text-white 
-                    shadow-lg hover:shadow-xl transition-shadow
-                    ${!canSendAll ? "opacity-50 cursor-not-allowed" : ""}`}
-                >
-                  Enviar Boletos
-                </Button>
-              </div>
-
-              {/* Modal de sumário antes do envio */}
-              <SummaryDialog
-                isOpen={showSummary}
-                onClose={() => setShowSummary(false)}
-                onConfirm={handleSubmit}
-                files={files}
-                realEstateName={selectedImobiliaria?.nome || ""}
-                isSubmitting={isSubmitting}
-              />
-
-              {/* Modal de sucesso */}
-              <ConfirmationModal
-                isOpen={showConfirmation}
-                onClose={handleConfirmationClose}
-                realEstateName={selectedImobiliaria?.nome || ""}
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Modal de erro */}
-        <ErrorModal
-          isOpen={showError}
-          onClose={handleErrorClose}
-          errorMessage={errorMessage}
+      <div className="flex-1 overflow-y-auto">
+        <SearchSection
+          onSelect={handleRealEstateSelect}
+          onClear={handleClearSearch}
         />
 
-        <Toaster />
+        <div className="flex-1 p-4 sm:p-6 lg:p-8 pb-24">
+          {/* Exibe dados da imobiliária selecionada */}
+          {selectedImobiliaria && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+            >
+              <Card className="w-full max-w-5xl mx-auto mb-6 shadow-lg border-2 border-green-100 bg-gradient-to-r from-white to-green-50/30">
+                <CardContent className="p-6">
+                  <div className="flex flex-col gap-6">
+                    {/* Informações da Imobiliária */}
+                    <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+                      <div className="flex items-center gap-4">
+                        <div className="hidden sm:flex h-12 w-12 rounded-full bg-gradient-to-br from-green-600 to-green-700 items-center justify-center text-white font-bold text-lg shadow-md">
+                          {selectedImobiliaria.nome.charAt(0).toUpperCase()}
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-xl font-bold text-gray-800">
+                            {selectedImobiliaria.nome}
+                          </span>
+                          <span className="text-sm text-muted-foreground">
+                            Envio de boletos
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6">
+                        <div className="flex items-center gap-2 px-3 py-2 bg-white rounded-lg shadow-sm border">
+                          <Mail className="w-4 h-4 text-green-600" />
+                          <span className="text-sm font-medium text-gray-700">
+                            {selectedImobiliaria.email}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 px-3 py-2 bg-white rounded-lg shadow-sm border">
+                          <User className="w-4 h-4 text-green-600" />
+                          <span className="text-sm font-medium text-gray-700">
+                            {selectedImobiliaria.username}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Barra de Progresso */}
+                    {hasBoletosToSend ? (
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            {canSendAll ? (
+                              <>
+                                <CheckCircle2 className="w-5 h-5 text-green-600" />
+                                <span className="text-sm font-semibold text-green-700">
+                                  Todos os arquivos estão anexados, prontos para
+                                  serem enviados!
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                <AlertCircle className="w-5 h-5 text-amber-600" />
+                                <span className="text-sm font-semibold text-gray-700">
+                                  Progresso de upload
+                                </span>
+                              </>
+                            )}
+                          </div>
+                          <span className="text-sm font-bold text-gray-800">
+                            {progress}%
+                          </span>
+                        </div>
+
+                        <Progress
+                          value={progress}
+                          className="h-3 bg-gray-200"
+                        />
+
+                        <p className="text-xs text-muted-foreground">
+                          {files.length} arquivo{files.length !== 1 ? "s" : ""}{" "}
+                          anexado{files.length !== 1 ? "s" : ""}
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-3 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg">
+                        <AlertCircle className="w-5 h-5 text-gray-500 flex-shrink-0" />
+                        <div className="flex flex-col gap-1">
+                          <span className="text-sm font-semibold text-gray-700">
+                            Nenhum boleto pendente
+                          </span>
+                          <span className="text-xs text-gray-500">
+                            Esta imobiliária não possui boletos para enviar no
+                            momento
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
+
+          <AnimatePresence mode="wait">
+            {selectedImobiliaria && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                className="container mx-auto pb-32 space-y-6 max-w-7xl"
+              >
+                <UploadInstructions />
+
+                <InsuranceGrid
+                  onFileUpload={handleFileUpload}
+                  uploadedFiles={uploadedFilesCount}
+                  imobiliaria={selectedImobiliaria}
+                />
+
+                {files.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="mb-32"
+                  >
+                    <FileList files={files} onDelete={handleDelete} />
+                  </motion.div>
+                )}
+
+                {/* Botão de Envio Fixo e Destacado */}
+                {files.length > 0 && (
+                  <motion.div
+                    className="fixed bottom-6 left-0 right-0 z-50 flex justify-center px-4"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                  >
+                    <div className="bg-white rounded-2xl shadow-2xl p-4 border-2 border-green-200">
+                      <div className="flex flex-col sm:flex-row items-center gap-4 justify-center">
+                        {!canSendAll && (
+                          <div className="flex items-center gap-2 text-sm text-amber-700 bg-amber-50 px-4 py-2 rounded-lg border border-amber-200">
+                            <AlertCircle className="w-4 h-4" />
+                            <span className="font-medium">
+                              Complete todos os uploads para enviar
+                            </span>
+                          </div>
+                        )}
+
+                        <Button
+                          size="lg"
+                          onClick={() => setShowSummary(true)}
+                          disabled={!canSendAll || isSubmitting}
+                          className={`
+                        bg-gradient-to-r from-green-600 to-green-700 
+                        hover:from-green-700 hover:to-green-800 
+                        text-white font-semibold text-lg
+                        shadow-xl hover:shadow-2xl 
+                        transition-all duration-300
+                        px-8 py-6 rounded-xl
+                        disabled:opacity-50 disabled:cursor-not-allowed
+                        disabled:hover:shadow-xl
+                        flex items-center gap-3
+                      `}
+                        >
+                          <Send className="w-5 h-5" />
+                          {isSubmitting ? "Enviando..." : "Enviar Boletos"}
+                        </Button>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Modal de sumário antes do envio */}
+                <SummaryDialog
+                  isOpen={showSummary}
+                  onClose={() => setShowSummary(false)}
+                  onConfirm={handleSubmit}
+                  files={files}
+                  realEstateName={selectedImobiliaria?.nome || ""}
+                  isSubmitting={isSubmitting}
+                />
+
+                {/* Modal de sucesso */}
+                <ConfirmationModal
+                  isOpen={showConfirmation}
+                  onClose={handleConfirmationClose}
+                  realEstateName={selectedImobiliaria?.nome || ""}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Modal de erro */}
+          <ErrorModal
+            isOpen={showError}
+            onClose={handleErrorClose}
+            errorMessage={errorMessage}
+          />
+
+          <Toaster />
+        </div>
       </div>
     </div>
   )
