@@ -661,6 +661,27 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
               )}
             </>
 
+            {seguro.observacao && (
+              <>
+                <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+                  Observações
+                </h3>
+                <p>{seguro.observacao}</p>
+              </>
+            )}
+
+            <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+              Observações
+            </h3>
+            {seguro.observacao ? (
+              <p>{seguro.observacao}</p>
+            ) : (
+              <p className="italic text-gray-500">
+                A imobiliária {seguro.nome_imobiliaria} não escreveu nenhuma
+                observação.
+              </p>
+            )}
+
             {/* Ônus */}
             {/* <>
               {seguro.onus && (

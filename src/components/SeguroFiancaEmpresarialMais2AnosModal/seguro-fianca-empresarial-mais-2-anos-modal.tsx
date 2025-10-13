@@ -278,13 +278,16 @@ export function SeguroFiancaEmpresarialMais2AnosModal({
               <strong>Pintura Externa:</strong> {seguro.pintura_externa}
             </p>
 
-            {seguro.observacao && (
-              <div>
-                <h3 className="text-lg font-semibold text-[#025d37]">
-                  Observações
-                </h3>
-                <p className="mt-2">{seguro.observacao}</p>
-              </div>
+            <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+              Observações
+            </h3>
+            {seguro.observacao ? (
+              <p>{seguro.observacao}</p>
+            ) : (
+              <p className="italic text-gray-500">
+                A imobiliária {seguro.nome_imobiliaria} não escreveu nenhuma
+                observação.
+              </p>
             )}
           </div>
         </div>
