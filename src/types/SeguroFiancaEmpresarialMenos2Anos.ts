@@ -24,7 +24,6 @@ export type SeguroFiancaEmpresarialMenos2Anos = {
   quadro_societario?: "SIM" | "NÃO"
   fone_residencial?: string
 
-  // DESABILITADO NA ATUALIZAÇÃO DO DIA 01/08/2025
   fone_celular?: string
   cep?: string
   endereco?: string
@@ -148,6 +147,8 @@ export type SeguroFiancaEmpresarialMenos2Anos = {
     | "TROCA LOCAL DE SEDE"
     | "REDUÇÃO DE CUSTOS"
     | "LOCAÇÃO PARA MORADIA"
+
+  observacao?: string
   cpf_morador?: string
   created: Date
 }
