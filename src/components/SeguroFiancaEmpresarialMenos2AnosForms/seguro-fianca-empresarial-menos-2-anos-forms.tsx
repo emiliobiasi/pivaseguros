@@ -84,6 +84,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
     multa_rescisao: "SIM",
     pintura_interna: "SIM",
     pintura_externa: "SIM",
+    observacao: "",
     created: new Date(),
   })
 
@@ -2143,6 +2144,22 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       o Laudo de Vistoria Inicial informar especificamente que o
                       imóvel foi entregue com Pintura NOVA.
                     </h2>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="observacao">Observação</Label>
+                    <div className="flex items-center">
+                      <Input
+                        id="observacao"
+                        name="observacao"
+                        value={formData.observacao || ""}
+                        onChange={handleInputChange}
+                        placeholder="Digite a Observação"
+                      />
+                      {isLoading && (
+                        <Loader2 className="ml-2 h-5 w-5 animate-spin" />
+                      )}
+                    </div>
                   </div>
 
                   <div className="grid gap-4 py-4">

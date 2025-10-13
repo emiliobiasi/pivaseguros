@@ -143,7 +143,7 @@ export default function ProtocoloCancelamentoSegurosPage() {
 
   return (
     <div className="mx-auto mb-16 w-full max-w-6xl p-4">
-      <div className="mb-2 -mt-2">
+      <div className="my-6">
         <div className="flex justify-start">
           <HamburguerMenu />
         </div>

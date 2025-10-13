@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { useState, useCallback } from "react"
 import { toast } from "sonner"
-import { Upload } from "lucide-react"
+import { Upload, Ban, Lock, CheckCircle2 } from "lucide-react"
 import { Imobiliaria } from "@/types/Imobiliarias"
 
 /**
@@ -58,32 +58,52 @@ type InsuranceStructure = typeof insuranceStructure
 export type InsuranceCompanyName = InsuranceStructure[number]["name"]
 
 /**
- * 2) Cores das seguradoras, para estilizar os cartões de upload.
+ * 2) Cores das seguradoras, para estilizar os cartões de upload - versão moderna com gradientes.
  */
 const insuranceColors = {
   PORTO: {
-    bg: "bg-[#01a0fb]",
-    border: "border-[#01a0fb]",
-    text: "text-[#004a75]",
-    hover: "hover:bg-[#01a0fb]/10",
+    gradient: "from-blue-500 to-blue-600",
+    gradientBg: "bg-gradient-to-br from-blue-50 to-blue-100/50",
+    border: "border-blue-300",
+    text: "text-blue-700",
+    iconBg: "bg-blue-100",
+    iconColor: "text-blue-600",
+    badge: "bg-gradient-to-r from-blue-500 to-blue-600",
+    hover: "hover:shadow-lg hover:shadow-blue-200/50",
+    ring: "focus:ring-blue-500",
   },
   POTENCIAL: {
-    bg: "bg-[#FD6414]",
-    border: "border-[#FD6414]",
-    text: "text-[#FD6414]",
-    hover: "hover:bg-[#FD6414]/10",
+    gradient: "from-orange-500 to-orange-600",
+    gradientBg: "bg-gradient-to-br from-orange-50 to-orange-100/50",
+    border: "border-orange-300",
+    text: "text-orange-700",
+    iconBg: "bg-orange-100",
+    iconColor: "text-orange-600",
+    badge: "bg-gradient-to-r from-orange-500 to-orange-600",
+    hover: "hover:shadow-lg hover:shadow-orange-200/50",
+    ring: "focus:ring-orange-500",
   },
   TOKIO: {
-    bg: "bg-[#01745B]",
-    border: "border-[#01745B]",
-    text: "text-[#01745B]",
-    hover: "hover:bg-[#01745B]/10",
+    gradient: "from-teal-600 to-teal-700",
+    gradientBg: "bg-gradient-to-br from-teal-50 to-teal-100/50",
+    border: "border-teal-300",
+    text: "text-teal-700",
+    iconBg: "bg-teal-100",
+    iconColor: "text-teal-600",
+    badge: "bg-gradient-to-r from-teal-600 to-teal-700",
+    hover: "hover:shadow-lg hover:shadow-teal-200/50",
+    ring: "focus:ring-teal-600",
   },
   TOO: {
-    bg: "bg-[#6AB5B9]",
-    border: "border-[#6AB5B9]",
-    text: "text-[#064d4f]",
-    hover: "hover:bg-[#6AB5B9]/10",
+    gradient: "from-cyan-500 to-cyan-600",
+    gradientBg: "bg-gradient-to-br from-cyan-50 to-cyan-100/50",
+    border: "border-cyan-300",
+    text: "text-cyan-700",
+    iconBg: "bg-cyan-100",
+    iconColor: "text-cyan-600",
+    badge: "bg-gradient-to-r from-cyan-500 to-cyan-600",
+    hover: "hover:shadow-lg hover:shadow-cyan-200/50",
+    ring: "focus:ring-cyan-500",
   },
 } as const
 
@@ -111,32 +131,46 @@ export function InsuranceGrid({
   imobiliaria,
 }: InsuranceGridProps) {
   return (
-    <div className="grid grid-cols-1 gap-6 w-full max-w-7xl mx-auto">
+    <div className="grid grid-cols-1 gap-8 w-full max-w-7xl mx-auto">
       {insuranceStructure.map((insurance) => {
         const { name, colorKey, subcategories } = insurance
+        const colors = insuranceColors[colorKey as keyof typeof insuranceColors]
 
         return (
-          <Card key={name} className={`overflow-hidden border`}>
-            <CardHeader className="bg-opacity-10">
+          <Card
+            key={name}
+            className="overflow-hidden border shadow-lg hover:shadow-xl transition-shadow duration-300"
+          >
+            {/* Header mais sutil e elegante */}
+            <CardHeader className="bg-white border-b-2 p-4">
               <CardTitle className="flex items-center justify-between">
-                <span>{name === "POTENCIAL" ? "POTTENCIAL" : name}</span>
-
-                {/* Se quiser colocar alguma info geral de "total" aqui, pode somar subcampos */}
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`p-2.5 bg-gradient-to-br ${colors.gradient} rounded-lg shadow-sm`}
+                  >
+                    <Upload className="h-5 w-5 text-white" />
+                  </div>
+                  <div className="flex flex-col gap-0.5">
+                    <span className={`text-xl font-bold ${colors.text}`}>
+                      {name === "POTENCIAL" ? "POTTENCIAL" : name}
+                    </span>
+                    <span className="text-xs text-gray-500 font-normal">
+                      Documentos da seguradora
+                    </span>
+                  </div>
+                </div>
               </CardTitle>
             </CardHeader>
 
-            <CardContent className="p-6 bg-white">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <CardContent className="p-6 bg-gradient-to-br from-gray-50 to-white">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                 {subcategories.map((subcat) => {
                   const fieldName = subcat.field as keyof Imobiliaria
-                  // Quantos arquivos essa imobiliária exige nesse subcampo
                   const totalNeeded = Number(imobiliaria[fieldName]) || 0
-                  // Quantos já foram enviados
                   const uploadedCount = uploadedFiles[subcat.field] || 0
 
                   return (
                     <SubUploadCard
-                    
                       key={subcat.field}
                       company={name}
                       label={subcat.label}
@@ -146,7 +180,6 @@ export function InsuranceGrid({
                       onUpload={(files) => onFileUpload(files, subcat.field)}
                       colorKey={colorKey}
                     />
-                    
                   )
                 })}
               </div>
@@ -188,10 +221,15 @@ function SubUploadCard({
   const companyDisplay = company === "POTENCIAL" ? "POTTENCIAL" : company
 
   const colors = insuranceColors[colorKey as keyof typeof insuranceColors] || {
-    bg: "bg-gray-200",
+    gradient: "from-gray-500 to-gray-600",
+    gradientBg: "bg-gradient-to-br from-gray-50 to-gray-100/50",
     border: "border-gray-300",
     text: "text-gray-700",
-    hover: "hover:bg-gray-100",
+    iconBg: "bg-gray-100",
+    iconColor: "text-gray-600",
+    badge: "bg-gradient-to-r from-gray-500 to-gray-600",
+    hover: "hover:shadow-lg hover:shadow-gray-200/50",
+    ring: "focus:ring-gray-500",
   }
 
   const onDrop = useCallback(
@@ -219,7 +257,7 @@ function SubUploadCard({
         })
       }, 200)
     },
-    [uploadedCount, totalExpectedDocs, onUpload, company, label]
+    [uploadedCount, totalExpectedDocs, onUpload, companyDisplay, label]
   )
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -231,64 +269,187 @@ function SubUploadCard({
         ".xlsx",
       ],
     },
+    disabled: totalExpectedDocs === 0 || uploadedCount >= totalExpectedDocs, // Desabilita quando não há boletos ou já está completo
   })
 
+  // Se não há documentos esperados, renderiza versão desabilitada
+  const isDisabled = totalExpectedDocs === 0
+  const isCompleted =
+    uploadedCount >= totalExpectedDocs && totalExpectedDocs > 0
+
   return (
-    <div className={`border-2 rounded-lg overflow-hidden ${colors.border}`}>
-      <div className={`bg-opacity-10 p-3 ${colors.bg}`}>
-        <div className="flex items-center justify-between">
-          <span className={`${colors.text} font-semibold`}>{label}</span>
+    <div
+      className={`group relative rounded-lg overflow-hidden transition-all duration-300 ${
+        isDisabled
+          ? "border border-gray-200 bg-gray-50/50 shadow-sm"
+          : isCompleted
+          ? "border-2 border-green-400 bg-gradient-to-br from-green-50 to-green-100/30 shadow-md shadow-green-200/30"
+          : `border ${colors.border} ${colors.gradientBg} shadow-sm ${colors.hover}`
+      }`}
+    >
+      {/* Header do card - compacto com fonte legível */}
+      <div
+        className={`px-3 py-1.5 backdrop-blur-sm ${
+          isDisabled
+            ? "bg-gray-100/80"
+            : isCompleted
+            ? "bg-green-100/80"
+            : `${colors.gradientBg} border-b ${colors.border}`
+        }`}
+      >
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            <div
+              className={`p-1 rounded ${
+                isDisabled
+                  ? "bg-gray-200"
+                  : isCompleted
+                  ? "bg-green-200"
+                  : colors.iconBg
+              }`}
+            >
+              {isCompleted ? (
+                <CheckCircle2
+                  className={`h-3.5 w-3.5 ${
+                    isCompleted ? "text-green-600" : colors.iconColor
+                  }`}
+                />
+              ) : (
+                <Upload
+                  className={`h-3.5 w-3.5 ${
+                    isDisabled ? "text-gray-400" : colors.iconColor
+                  }`}
+                />
+              )}
+            </div>
+            <span
+              className={`font-semibold text-sm truncate ${
+                isDisabled
+                  ? "text-gray-500"
+                  : isCompleted
+                  ? "text-green-700"
+                  : colors.text
+              }`}
+            >
+              {label}
+            </span>
+          </div>
           <Badge
             variant="secondary"
-            className={`${colors.bg} text-white font-bold px-3 py-1`}
+            className={`font-bold px-2.5 py-0.5 text-xs text-white shadow-sm whitespace-nowrap ${
+              isDisabled
+                ? "bg-gray-400"
+                : isCompleted
+                ? "bg-gradient-to-r from-green-500 to-green-600"
+                : colors.badge
+            }`}
           >
-            {uploadedCount} / {totalExpectedDocs} boletos
+            {uploadedCount}/{totalExpectedDocs}
           </Badge>
         </div>
       </div>
 
-      <div className="p-4 bg-white">
-        <div
-          {...getRootProps()}
-          className={`relative border-2 border-dashed rounded-lg p-6 transition-all cursor-pointer
-            ${
-              isDragActive
-                ? `${colors.bg}/10`
-                : `${colors.border} ${colors.hover}`
-            }
-          `}
-        >
-          <input {...getInputProps()} />
-          <div className="flex flex-col items-center justify-center gap-2 min-h-[100px]">
-            {!uploading && (
-              <>
-                <Upload className={`h-8 w-8 ${colors.text}`} />
-                <div className="text-center space-y-1">
-                  <p className={`font-medium ${colors.text}`}>
-                    Arraste arquivos aqui
+      {/* Área de drop - ainda mais compacta com fonte legível */}
+      <div className="p-2.5 bg-white/50 backdrop-blur-sm">
+        {isDisabled ? (
+          // Versão DESABILITADA (0/0)
+          <div className="relative border-2 border-dashed border-gray-300 rounded-lg p-3 bg-gradient-to-br from-gray-50 to-gray-100/50 cursor-not-allowed">
+            <div className="flex flex-col items-center justify-center gap-1.5 min-h-[70px] opacity-60">
+              <div className="relative p-1.5 bg-white rounded-full shadow-sm">
+                <Upload className="h-4 w-4 text-gray-400" />
+                <Ban className="h-3.5 w-3.5 text-red-500 absolute -top-0.5 -right-0.5 bg-white rounded-full shadow-sm" />
+              </div>
+              <div className="text-center space-y-0.5">
+                <p className="font-semibold text-gray-600 flex items-center gap-1.5 justify-center text-xs">
+                  <Lock className="h-3 w-3" />
+                  Upload Desabilitado
+                </p>
+                <p className="text-[10px] text-gray-400">
+                  Nenhum boleto necessário
+                </p>
+              </div>
+            </div>
+          </div>
+        ) : isCompleted ? (
+          // Versão COMPLETA (ex: 1/1, 2/2)
+          <div className="relative border-2 border-dashed border-green-400 rounded-lg p-3 bg-gradient-to-br from-green-50 to-green-100/50 cursor-not-allowed">
+            <div className="flex flex-col items-center justify-center gap-1.5 min-h-[70px]">
+              <div className="p-1.5 bg-green-100 rounded-full shadow-sm">
+                <CheckCircle2 className="h-5 w-5 text-green-600" />
+              </div>
+              <div className="text-center space-y-0.5">
+                <p className="font-bold text-green-700 text-sm">✓ Completo!</p>
+                <p className="text-xs text-green-600 font-medium">
+                  Arquivos anexados
+                </p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          // Versão NORMAL - moderna com animação, mais compacta
+          <div
+            {...getRootProps()}
+            className={`relative border-2 border-dashed rounded-lg p-3 transition-all duration-300 cursor-pointer group/drop
+              ${
+                isDragActive
+                  ? `${colors.border} bg-gradient-to-br ${colors.gradientBg} scale-[1.02] shadow-md`
+                  : `${colors.border} bg-white hover:bg-gradient-to-br ${colors.gradientBg} hover:scale-[1.01] ${colors.hover}`
+              }
+            `}
+          >
+            <input {...getInputProps()} />
+            <div className="flex flex-col items-center justify-center gap-1.5 min-h-[70px]">
+              {!uploading && (
+                <>
+                  <div
+                    className={`p-1.5 rounded-full transition-all duration-300 ${
+                      isDragActive
+                        ? `${colors.iconBg} scale-110 shadow-md`
+                        : `${colors.iconBg} group-hover/drop:scale-105`
+                    }`}
+                  >
+                    <Upload
+                      className={`h-4 w-4 ${colors.iconColor} ${
+                        isDragActive ? "animate-bounce" : ""
+                      }`}
+                    />
+                  </div>
+                  <div className="text-center space-y-0.5">
+                    <p className={`font-semibold ${colors.text} text-sm`}>
+                      {isDragActive ? "Solte os arquivos" : "Arraste arquivos"}
+                    </p>
+                    <p className={`text-xs ${colors.text} opacity-70`}>
+                      ou clique para selecionar
+                    </p>
+                    <p className="text-[10px] text-gray-500 mt-0.5">
+                      PDF • XLS • XLSX
+                    </p>
+                  </div>
+                </>
+              )}
+              {uploading && (
+                <div className="w-full space-y-1.5">
+                  <div
+                    className={`p-1.5 rounded-full mx-auto w-fit ${colors.iconBg}`}
+                  >
+                    <Upload
+                      className={`h-4 w-4 ${colors.iconColor} animate-pulse`}
+                    />
+                  </div>
+                  <p
+                    className={`text-sm ${colors.text} text-center font-medium`}
+                  >
+                    Enviando...
                   </p>
-                  <p className={`text-sm ${colors.text} opacity-75`}>
-                    ou clique para selecionar
+                  <Progress value={progress} className="w-full h-1.5" />
+                  <p className="text-xs text-gray-500 text-center">
+                    {progress}%
                   </p>
                 </div>
-              </>
-            )}
-            {uploading && (
-              <div className="w-full space-y-2">
-                <p className={`text-sm ${colors.text} text-center`}>
-                  Enviando arquivo...
-                </p>
-                <Progress
-                  value={progress}
-                  className={`w-full [&>div]:${colors.bg.replace(
-                    "bg-",
-                    "bg-"
-                  )}`}
-                />
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   )
