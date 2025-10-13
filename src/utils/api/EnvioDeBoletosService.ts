@@ -1,10 +1,10 @@
-import { EnvioDeBoletos } from "@/types/EnviosDeBoletos";
-import pb, { PocketBaseError } from "@/utils/backend/pb";
-import { ClientResponseError, RecordSubscription } from "pocketbase";
+import { EnvioDeBoletos } from "@/types/EnviosDeBoletos"
+import pb, { PocketBaseError } from "@/utils/backend/pb-imob"
+import { ClientResponseError, RecordSubscription } from "pocketbase"
 
 type FilterOptions = Omit<Partial<EnvioDeBoletos>, "created"> & {
-  created?: string | Date; // Permite filtros complexos como string
-};
+  created?: string | Date // Permite filtros complexos como string
+}
 
 /**
  * Função para criar um novo Envio de Boletos.
@@ -18,26 +18,26 @@ export async function createEnvioDeBoletos(
 ): Promise<EnvioDeBoletos> {
   try {
     // Criar o FormData para enviar os dados
-    const formData = new FormData();
+    const formData = new FormData()
 
     // Adicionar os campos regulares
-    formData.append("imobiliaria", data.imobiliaria);
+    formData.append("imobiliaria", data.imobiliaria)
 
     files.forEach((file) => {
-      formData.append("arquivos", file);
-    });
+      formData.append("arquivos", file)
+    })
 
     // Enviar a requisição para o PocketBase
     const record = await pb
       .collection("envios_de_boletos")
-      .create<EnvioDeBoletos>(formData);
+      .create<EnvioDeBoletos>(formData)
 
     // console.log("Envio de boletos criado com sucesso:", record);
-    return record;
+    return record
   } catch (error) {
-    const err = error as PocketBaseError;
-    console.error("Erro ao criar o envio de boletos:", err);
-    throw new Error("Erro ao criar o envio de boletos");
+    const err = error as PocketBaseError
+    console.error("Erro ao criar o envio de boletos:", err)
+    throw new Error("Erro ao criar o envio de boletos")
   }
 }
 
@@ -55,31 +55,30 @@ export async function fetchEnvioDeBoletosList(
   searchTerm: string = "",
   filter: FilterOptions = {}
 ): Promise<{
-  items: EnvioDeBoletos[];
-  totalItems: number;
-  totalPages: number;
+  items: EnvioDeBoletos[]
+  totalItems: number
+  totalPages: number
 }> {
   try {
-    const searchFilter = searchTerm ? `(imobiliaria ~ "${searchTerm}")` : "";
+    const searchFilter = searchTerm ? `(imobiliaria ~ "${searchTerm}")` : ""
 
     const additionalFilters = Object.entries(filter)
       .filter(([_, value]) => value !== undefined && value !== "")
       .map(([key, value]) => {
-        if (typeof value === "boolean") return `${key} = ${value}`;
+        if (typeof value === "boolean") return `${key} = ${value}`
 
         if (key === "created") {
-          if (typeof value === "string") return value;
-          if (value instanceof Date)
-            return `created = "${value.toISOString()}"`;
+          if (typeof value === "string") return value
+          if (value instanceof Date) return `created = "${value.toISOString()}"`
         }
 
-        return `${key} = "${value}"`;
+        return `${key} = "${value}"`
       })
-      .join(" && ");
+      .join(" && ")
 
     const combinedFilter = [searchFilter, additionalFilters]
       .filter(Boolean)
-      .join(" && ");
+      .join(" && ")
 
     const response = await pb
       .collection("envios_de_boletos")
@@ -87,18 +86,18 @@ export async function fetchEnvioDeBoletosList(
         sort: "-created",
         expand: "imobiliaria", // Adicione o expand aqui
         filter: combinedFilter,
-      });
+      })
 
     // A resposta já virá com os dados expandidos
     return {
       items: response.items,
       totalItems: response.totalItems,
       totalPages: response.totalPages,
-    };
+    }
   } catch (error) {
-    const err = error as ClientResponseError;
-    console.error("Erro ao buscar a lista de envios de boletos:", err);
-    throw new Error("Erro ao buscar a lista de envios de boletos");
+    const err = error as ClientResponseError
+    console.error("Erro ao buscar a lista de envios de boletos:", err)
+    throw new Error("Erro ao buscar a lista de envios de boletos")
   }
 }
 
@@ -115,17 +114,17 @@ export async function updateEnvioDeBoletos(
   try {
     const updatedRecord = await pb
       .collection("envios_de_boletos")
-      .update<EnvioDeBoletos>(id, data);
+      .update<EnvioDeBoletos>(id, data)
 
     // console.log(
     //   `Envio de boletos ${id} atualizado com sucesso:`,
     //   updatedRecord
     // );
-    return updatedRecord;
+    return updatedRecord
   } catch (error) {
-    const err = error as PocketBaseError;
-    console.error(`Erro ao atualizar o envio de boletos ${id}:`, err);
-    throw new Error("Erro ao atualizar o envio de boletos");
+    const err = error as PocketBaseError
+    console.error(`Erro ao atualizar o envio de boletos ${id}:`, err)
+    throw new Error("Erro ao atualizar o envio de boletos")
   }
 }
 
@@ -135,12 +134,12 @@ export async function updateEnvioDeBoletos(
  */
 export async function deleteEnvioDeBoletos(id: string): Promise<void> {
   try {
-    await pb.collection("envios_de_boletos").delete(id);
+    await pb.collection("envios_de_boletos").delete(id)
     // console.log(`Envio de boletos ${id} excluído com sucesso.`);
   } catch (error) {
-    const err = error as PocketBaseError;
-    console.error(`Erro ao excluir o envio de boletos ${id}:`, err);
-    throw new Error("Erro ao excluir o envio de boletos");
+    const err = error as PocketBaseError
+    console.error(`Erro ao excluir o envio de boletos ${id}:`, err)
+    throw new Error("Erro ao excluir o envio de boletos")
   }
 }
 
@@ -152,23 +151,23 @@ export async function fetchEnvioDeBoletosLastMonth(): Promise<
   EnvioDeBoletos[]
 > {
   try {
-    const lastMonthDate = new Date();
-    lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
+    const lastMonthDate = new Date()
+    lastMonthDate.setMonth(lastMonthDate.getMonth() - 1)
 
-    const lastMonthFilter = `created >= "${lastMonthDate.toISOString()}"`;
+    const lastMonthFilter = `created >= "${lastMonthDate.toISOString()}"`
 
     const response = await pb
       .collection("envios_de_boletos")
       .getFullList<EnvioDeBoletos>({
         sort: "-created",
         filter: lastMonthFilter,
-      });
+      })
 
-    return response;
+    return response
   } catch (error) {
-    const err = error as ClientResponseError;
-    console.error("Erro ao buscar envios de boletos do último mês:", err);
-    throw new Error("Erro ao buscar envios de boletos do último mês");
+    const err = error as ClientResponseError
+    console.error("Erro ao buscar envios de boletos do último mês:", err)
+    throw new Error("Erro ao buscar envios de boletos do último mês")
   }
 }
 
@@ -183,12 +182,12 @@ export async function subscribeToEnvioDeBoletosUpdates(
   try {
     const unsubscribe = await pb
       .collection("envios_de_boletos")
-      .subscribe("*", onRecordChange);
+      .subscribe("*", onRecordChange)
     // console.log("Subscrição para atualizações de envios de boletos iniciada.");
-    return unsubscribe;
+    return unsubscribe
   } catch (error) {
-    console.error("Erro ao assinar atualizações de envios de boletos:", error);
-    throw new Error("Erro ao assinar atualizações de envios de boletos");
+    console.error("Erro ao assinar atualizações de envios de boletos:", error)
+    throw new Error("Erro ao assinar atualizações de envios de boletos")
   }
 }
 
@@ -212,17 +211,17 @@ export async function downloadBoleto(
       },
       filename,
       { download: true }
-    );
+    )
 
     // Cria um link para iniciar o download
-    const link = document.createElement("a");
-    link.href = fileUrl;
-    link.download = filename;
-    link.click();
+    const link = document.createElement("a")
+    link.href = fileUrl
+    link.download = filename
+    link.click()
 
     // console.log(`Download iniciado para o arquivo: ${filename}`);
   } catch (error) {
-    console.error(`Erro ao realizar o download do arquivo ${filename}:`, error);
-    throw new Error("Erro ao realizar o download do arquivo.");
+    console.error(`Erro ao realizar o download do arquivo ${filename}:`, error)
+    throw new Error("Erro ao realizar o download do arquivo.")
   }
 }

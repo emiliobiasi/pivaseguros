@@ -1,66 +1,66 @@
-import { useState, useEffect } from "react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { useState, useEffect } from "react"
+import { format } from "date-fns"
+import { ptBR } from "date-fns/locale"
 import {
   Download,
   FileText,
   Calendar as CalendarIcon,
   ChevronDown,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import pb from "@/utils/backend/pb";
-import { EnvioDeBoletos } from "@/types/EnviosDeBoletos";
+} from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import { EnvioDeBoletos } from "@/types/EnviosDeBoletos"
 import {
   fetchEnvioDeBoletosList,
   downloadBoleto,
-} from "@/utils/api/EnvioDeBoletosService";
+} from "@/utils/api/EnvioDeBoletosService"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/components/ui/popover"
+import pb from "@/utils/backend/pb-imob"
 
 interface BoletoHistoricoItem {
-  id: string;
-  arquivo: string;
-  created?: string;
+  id: string
+  arquivo: string
+  created?: string
 }
 
 export default function BoletosHistorico() {
-  const [boletos, setBoletos] = useState<BoletoHistoricoItem[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [downloadedSet, setDownloadedSet] = useState<Set<string>>(new Set());
+  const [boletos, setBoletos] = useState<BoletoHistoricoItem[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
+  const [downloadedSet, setDownloadedSet] = useState<Set<string>>(new Set())
 
   useEffect(() => {
-    fetchBoletos();
-  }, [selectedDate]);
+    fetchBoletos()
+  }, [selectedDate])
 
   const fetchBoletos = async () => {
-    const currentUser = pb.authStore.model;
-    if (!currentUser) return;
+    const currentUser = pb.authStore.model
+    if (!currentUser) return
 
-    const currentUserId = currentUser.id;
+    const currentUserId = currentUser.id
 
     const firstDay = new Date(
       selectedDate.getFullYear(),
       selectedDate.getMonth(),
       1
-    );
+    )
     const lastDay = new Date(
       selectedDate.getFullYear(),
       selectedDate.getMonth() + 1,
       0
-    );
+    )
 
-    setIsLoading(true);
+    setIsLoading(true)
     try {
       const response = await fetchEnvioDeBoletosList(1, 50, "", {
         imobiliaria: currentUserId,
         finalizado: true,
         created: `created >= "${firstDay.toISOString()}" && created <= "${lastDay.toISOString()}"`,
-      });
+      })
 
       const expanded = response.items.flatMap((envio: EnvioDeBoletos) =>
         envio.arquivos.map((arquivo) => ({
@@ -70,32 +70,32 @@ export default function BoletosHistorico() {
             ? new Date(envio.created).toLocaleString()
             : undefined,
         }))
-      );
+      )
 
-      setBoletos(expanded);
+      setBoletos(expanded)
     } catch (error) {
-      console.error("Erro ao buscar boletos finalizados:", error);
+      console.error("Erro ao buscar boletos finalizados:", error)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const handleDownload = async (recordId: string, arquivo: string) => {
     try {
-      await downloadBoleto("envios_de_boletos", recordId, arquivo);
+      await downloadBoleto("envios_de_boletos", recordId, arquivo)
       setDownloadedSet((prev) => {
-        const newSet = new Set(prev);
-        newSet.add(arquivo);
+        const newSet = new Set(prev)
+        newSet.add(arquivo)
         localStorage.setItem(
           "historicoBoletosDownloadedSet",
           JSON.stringify(Array.from(newSet))
-        );
-        return newSet;
-      });
+        )
+        return newSet
+      })
     } catch (error) {
-      console.error("Erro ao baixar o boleto:", error);
+      console.error("Erro ao baixar o boleto:", error)
     }
-  };
+  }
 
   return (
     <div className="p-4">
@@ -142,7 +142,7 @@ export default function BoletosHistorico() {
       ) : (
         <div className="space-y-4">
           {boletos.map((boleto, index) => {
-            const alreadyDownloaded = downloadedSet.has(boleto.arquivo);
+            const alreadyDownloaded = downloadedSet.has(boleto.arquivo)
             return (
               <div
                 key={`${boleto.id}-${boleto.arquivo}-${index}`}
@@ -169,10 +169,10 @@ export default function BoletosHistorico() {
                   {alreadyDownloaded ? "Baixar Novamente" : "Baixar"}
                 </Button>
               </div>
-            );
+            )
           })}
         </div>
       )}
     </div>
-  );
+  )
 }

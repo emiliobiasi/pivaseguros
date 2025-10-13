@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useBoletosContext } from "@/contexts/boletos/boletos-context"
-import pb from "@/utils/backend/pb"
+import pb from "@/utils/backend/pb-imob"
 
 export function BoletoCard({ children }: { children: React.ReactNode }) {
   const currentUser = pb.authStore.model

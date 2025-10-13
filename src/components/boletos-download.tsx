@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"
 import {
   Download,
   CheckCircle,
@@ -6,11 +6,11 @@ import {
   PartyPopper,
   FileText,
   AlertTriangle,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { CircularProgress } from "./circular-progress";
-import { useNavigate } from "react-router-dom";
-import { useBoletosContext } from "@/contexts/boletos/boletos-context";
+} from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { CircularProgress } from "./circular-progress"
+import { useNavigate } from "react-router-dom"
+import { useBoletosContext } from "@/contexts/boletos/boletos-context"
 import {
   AlertDialog,
   AlertDialogContent,
@@ -19,22 +19,22 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogCancel,
-} from "@/components/ui/alert-dialog";
+} from "@/components/ui/alert-dialog"
 
-import pb from "@/utils/backend/pb";
-import { EnvioDeBoletos } from "@/types/EnviosDeBoletos";
+import { EnvioDeBoletos } from "@/types/EnviosDeBoletos"
 import {
   downloadBoleto,
   fetchEnvioDeBoletosList,
   updateEnvioDeBoletos,
-} from "@/utils/api/EnvioDeBoletosService";
+} from "@/utils/api/EnvioDeBoletosService"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "./ui/tooltip";
-import { formatFileName } from "@/utils/formatFileName/formatFileName";
+} from "./ui/tooltip"
+import { formatFileName } from "@/utils/formatFileName/formatFileName"
+import pbImob from "@/utils/backend/pb-imob"
 
 // Tipos auxiliares (se necessário você pode adaptar)
 interface BoletoFetched extends EnvioDeBoletos {
@@ -44,9 +44,9 @@ interface BoletoFetched extends EnvioDeBoletos {
 }
 
 interface ExpandedBoleto {
-  id: string;
-  arquivo: string;
-  created: string | undefined; // Pode usar Date, mas verifique se você está lidando com strings na API
+  id: string
+  arquivo: string
+  created: string | undefined // Pode usar Date, mas verifique se você está lidando com strings na API
 }
 
 // Lista de nomes de meses em Português
@@ -63,36 +63,36 @@ const monthNamesPtBr = [
   "Outubro",
   "Novembro",
   "Dezembro",
-];
+]
 
 export default function BoletosDownload() {
-  const [envios, setEnvios] = useState<BoletoFetched[]>([]);
-  const [boletos, setBoletos] = useState<ExpandedBoleto[]>([]);
+  const [envios, setEnvios] = useState<BoletoFetched[]>([])
+  const [boletos, setBoletos] = useState<ExpandedBoleto[]>([])
   const [downloadedBoletos, setDownloadedBoletos] = useState<Set<string>>(
     new Set()
-  );
+  )
   // const [isDownloading, setIsDownloading] = useState(false);
   // const [currentDownloadId, setCurrentDownloadId] = useState<string | null>(
   //   null
   // );
-  const [showCelebration, setShowCelebration] = useState(false);
-  const [showExitAlert, setShowExitAlert] = useState(false);
-  const navigate = useNavigate();
+  const [showCelebration, setShowCelebration] = useState(false)
+  const [showExitAlert, setShowExitAlert] = useState(false)
+  const navigate = useNavigate()
 
   const {
     setAllBoletosDownloaded,
     setHasBoletosToDownload,
     setIsProcessFinalized,
-  } = useBoletosContext();
+  } = useBoletosContext()
 
   // Carregar boletos do PocketBase
   useEffect(() => {
-    const currentUser = pb.authStore.model;
+    const currentUser = pbImob.authStore.model
     if (!currentUser) {
-      return;
+      return
     }
 
-    const currentUserId = currentUser.id;
+    const currentUserId = currentUser.id
 
     // console.log("Buscando boletos para o usuário:", currentUserId);
 
@@ -104,12 +104,12 @@ export default function BoletosDownload() {
       finalizado: false,
     })
       .then((response) => {
-        setEnvios(response.items);
+        setEnvios(response.items)
       })
       .catch((error) => {
-        console.error("Erro ao buscar boletos:", error);
-      });
-  }, []);
+        console.error("Erro ao buscar boletos:", error)
+      })
+  }, [])
 
   // Expandir envios para boletos
   useEffect(() => {
@@ -121,28 +121,28 @@ export default function BoletosDownload() {
           ? new Date(envio.created).toISOString()
           : undefined,
       }))
-    );
-    setBoletos(expandedBoletos);
-  }, [envios]);
+    )
+    setBoletos(expandedBoletos)
+  }, [envios])
 
   // Atualiza o contexto sobre a quantidade de boletos
   useEffect(() => {
-    setHasBoletosToDownload(boletos.length > 0);
-    setAllBoletosDownloaded(downloadedBoletos.size === boletos.length);
+    setHasBoletosToDownload(boletos.length > 0)
+    setAllBoletosDownloaded(downloadedBoletos.size === boletos.length)
   }, [
     boletos,
     downloadedBoletos,
     setHasBoletosToDownload,
     setAllBoletosDownloaded,
-  ]);
+  ])
 
   // Recupera do localStorage se já houver boletos baixados
   useEffect(() => {
-    const storedBoletos = localStorage.getItem("downloadedBoletos");
+    const storedBoletos = localStorage.getItem("downloadedBoletos")
     if (storedBoletos) {
-      setDownloadedBoletos(new Set(JSON.parse(storedBoletos)));
+      setDownloadedBoletos(new Set(JSON.parse(storedBoletos)))
     }
-  }, []);
+  }, [])
 
   // Função de "download"
   const handleDownload = async (arquivo: string, recordId: string) => {
@@ -150,26 +150,26 @@ export default function BoletosDownload() {
     // setCurrentDownloadId(arquivo);
 
     try {
-      await downloadBoleto("envios_de_boletos", recordId, arquivo);
+      await downloadBoleto("envios_de_boletos", recordId, arquivo)
 
       setDownloadedBoletos((prev) => {
-        const newSet = new Set(prev);
-        newSet.add(arquivo);
+        const newSet = new Set(prev)
+        newSet.add(arquivo)
         localStorage.setItem(
           "downloadedBoletos",
           JSON.stringify(Array.from(newSet))
-        );
-        return newSet;
-      });
+        )
+        return newSet
+      })
 
       // console.log(`Download do arquivo "${arquivo}" concluído.`);
     } catch (error) {
-      console.error(`Erro ao baixar o arquivo ${arquivo}:`, error);
+      console.error(`Erro ao baixar o arquivo ${arquivo}:`, error)
     } finally {
       // setIsDownloading(false);
       // setCurrentDownloadId(null);
     }
-  };
+  }
 
   // Função para baixar todos os boletos
   // const handleDownloadAll = async () => {
@@ -191,65 +191,65 @@ export default function BoletosDownload() {
 
   // Finaliza o processo e redireciona
   const handleFinalize = async () => {
-    if (!allDownloaded) return;
+    if (!allDownloaded) return
 
     try {
       // Atualizar todos os envios
       const updates = envios.map((envio) =>
         updateEnvioDeBoletos(envio.id, { finalizado: true })
-      );
+      )
 
       // Aguarda todas as atualizações
-      await Promise.all(updates);
+      await Promise.all(updates)
 
       // console.log("Todos os envios foram marcados como finalizados.");
 
       // Redirecionar para o histórico após a atualização
-      setIsProcessFinalized(true);
-      setShowCelebration(true);
+      setIsProcessFinalized(true)
+      setShowCelebration(true)
 
       setTimeout(() => {
-        setDownloadedBoletos(new Set());
-        setShowCelebration(false);
-        localStorage.removeItem("downloadedBoletos");
-        navigate("/imobiliaria/download-boletos/historico");
-      }, 3000);
+        setDownloadedBoletos(new Set())
+        setShowCelebration(false)
+        localStorage.removeItem("downloadedBoletos")
+        navigate("/imobiliaria/download-boletos/historico")
+      }, 3000)
     } catch (error) {
-      console.error("Erro ao finalizar os envios:", error);
-      alert("Houve um erro ao finalizar os envios. Tente novamente.");
+      console.error("Erro ao finalizar os envios:", error)
+      alert("Houve um erro ao finalizar os envios. Tente novamente.")
     }
-  };
+  }
 
   // Cálculo de progresso
-  const allDownloaded = downloadedBoletos.size === boletos.length;
+  const allDownloaded = downloadedBoletos.size === boletos.length
   const progress =
-    boletos.length > 0 ? (downloadedBoletos.size / boletos.length) * 100 : 0;
+    boletos.length > 0 ? (downloadedBoletos.size / boletos.length) * 100 : 0
 
   // Agrupa boletos por Mês/Ano
   const groupedBoletos = boletos.reduce((acc, boleto) => {
     if (boleto.created) {
-      const date = new Date(boleto.created);
-      const month = date.getMonth(); // 0 - 11
-      const year = date.getFullYear();
-      const key = `${month}-${year}`;
+      const date = new Date(boleto.created)
+      const month = date.getMonth() // 0 - 11
+      const year = date.getFullYear()
+      const key = `${month}-${year}`
       if (!acc[key]) {
         acc[key] = {
           month,
           year,
           boletos: [],
-        };
+        }
       }
-      acc[key].boletos.push(boleto);
+      acc[key].boletos.push(boleto)
     }
-    return acc;
-  }, {} as Record<string, { month: number; year: number; boletos: ExpandedBoleto[] }>);
+    return acc
+  }, {} as Record<string, { month: number; year: number; boletos: ExpandedBoleto[] }>)
 
   // Converte o objeto em um array para podermos ordenar (se quiser por data)
   const groupedBoletosArray = Object.values(groupedBoletos).sort(
     (a, b) =>
       // Ordena por ano e mês ascendente
       a.year - b.year || a.month - b.month
-  );
+  )
 
   // Se nenhum boleto está disponível
   if (boletos.length === 0) {
@@ -261,7 +261,7 @@ export default function BoletosDownload() {
         </p>
         <p className="mt-2">Volte mais tarde para verificar novos boletos.</p>
       </div>
-    );
+    )
   }
 
   // Animação de "parabéns" se todos foram baixados
@@ -277,7 +277,7 @@ export default function BoletosDownload() {
           Redirecionando para o histórico...
         </p>
       </div>
-    );
+    )
   }
 
   return (
@@ -290,7 +290,7 @@ export default function BoletosDownload() {
       <div className="max-h-[480px] overflow-y-auto">
         {/* Aqui fazemos o loop para cada grupo de mês/ano */}
         {groupedBoletosArray.map(({ month, year, boletos: boletosDoMes }) => {
-          const monthName = monthNamesPtBr[month];
+          const monthName = monthNamesPtBr[month]
 
           return (
             <div key={`${month}-${year}`} className="mb-8 ">
@@ -301,7 +301,7 @@ export default function BoletosDownload() {
               {/* Lista de boletos para aquele Mês/Ano */}
               <div className="space-y-4">
                 {boletosDoMes.map((boleto, index) => {
-                  const isDownloaded = downloadedBoletos.has(boleto.arquivo);
+                  const isDownloaded = downloadedBoletos.has(boleto.arquivo)
 
                   return (
                     <div
@@ -352,11 +352,11 @@ export default function BoletosDownload() {
                         )}
                       </div>
                     </div>
-                  );
+                  )
                 })}
               </div>
             </div>
-          );
+          )
         })}
       </div>
 
@@ -406,5 +406,5 @@ export default function BoletosDownload() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  );
+  )
 }
