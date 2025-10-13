@@ -302,8 +302,8 @@ export default function ProtocoloAberturaSinistroPage() {
   }
 
   return (
-    <div className="mx-auto mb-16 w-full max-w-6xl p-4">
-      <div className="mb-2 -mt-2">
+    <div className="mx-auto mb-16 w-full max-w-[86rem] px-4 py-4">
+      <div className="my-6">
         <div className="flex justify-start">
           <HamburguerMenu />
         </div>
@@ -411,6 +411,7 @@ export default function ProtocoloAberturaSinistroPage() {
               <TableHead className="w-[11rem]">Protocolo (ID)</TableHead>
               <TableHead className="min-w-[110px] text-center">Ação</TableHead>
               <TableHead className="min-w-[160px]">Tipo do Seguro</TableHead>
+              <TableHead className="min-w-[180px]">Nome do Inquilino</TableHead>
               <TableHead className="min-w-[160px]">Criado em</TableHead>
               <TableHead>PDFs</TableHead>
             </TableRow>
@@ -418,7 +419,7 @@ export default function ProtocoloAberturaSinistroPage() {
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell colSpan={5}>
+                <TableCell colSpan={6}>
                   <div className="flex items-center gap-2 py-6 text-muted-foreground">
                     <Loader2 className="h-4 w-4 animate-spin" /> Carregando...
                   </div>
@@ -426,7 +427,7 @@ export default function ProtocoloAberturaSinistroPage() {
               </TableRow>
             ) : items.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5}>
+                <TableCell colSpan={6}>
                   <div className="py-6 text-sm text-muted-foreground">
                     Nenhum protocolo encontrado.
                   </div>
@@ -455,6 +456,9 @@ export default function ProtocoloAberturaSinistroPage() {
                   </TableCell>
                   <TableCell>
                     <span className="text-sm">{rec.tipo_seguro ?? "—"}</span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">{rec.nome_inquilino ?? "—"}</span>
                   </TableCell>
                   <TableCell>
                     <div className="flex flex-col">
