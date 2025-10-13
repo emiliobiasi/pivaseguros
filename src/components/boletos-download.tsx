@@ -36,20 +36,14 @@ import {
 import { formatFileName } from "@/utils/formatFileName/formatFileName"
 import pbImob from "@/utils/backend/pb-imob"
 
-// Tipos auxiliares (se necessário você pode adaptar)
-interface BoletoFetched extends EnvioDeBoletos {
-  // Se quiser mapear mais campos específicos, adicione aqui
-  // nome?: string;
-  // vencimento?: string;
-}
+interface BoletoFetched extends EnvioDeBoletos {}
 
 interface ExpandedBoleto {
   id: string
   arquivo: string
-  created: string | undefined // Pode usar Date, mas verifique se você está lidando com strings na API
+  created: string | undefined
 }
 
-// Lista de nomes de meses em Português
 const monthNamesPtBr = [
   "Janeiro",
   "Fevereiro",
@@ -71,10 +65,6 @@ export default function BoletosDownload() {
   const [downloadedBoletos, setDownloadedBoletos] = useState<Set<string>>(
     new Set()
   )
-  // const [isDownloading, setIsDownloading] = useState(false);
-  // const [currentDownloadId, setCurrentDownloadId] = useState<string | null>(
-  //   null
-  // );
   const [showCelebration, setShowCelebration] = useState(false)
   const [showExitAlert, setShowExitAlert] = useState(false)
   const navigate = useNavigate()
@@ -85,7 +75,6 @@ export default function BoletosDownload() {
     setIsProcessFinalized,
   } = useBoletosContext()
 
-  // Carregar boletos do PocketBase
   useEffect(() => {
     const currentUser = pbImob.authStore.model
     if (!currentUser) {
@@ -94,11 +83,6 @@ export default function BoletosDownload() {
 
     const currentUserId = currentUser.id
 
-    // console.log("Buscando boletos para o usuário:", currentUserId);
-
-    // Busca apenas registros onde:
-    // - imobiliaria == currentUserId
-    // - finalizado == false
     fetchEnvioDeBoletosList(1, 50, "", {
       imobiliaria: currentUserId,
       finalizado: false,
@@ -115,7 +99,7 @@ export default function BoletosDownload() {
   useEffect(() => {
     const expandedBoletos = envios.flatMap((envio) =>
       envio.arquivos.map((arquivo) => ({
-        id: envio.id, // Certifique-se de incluir o ID do registro
+        id: envio.id,
         arquivo,
         created: envio.created
           ? new Date(envio.created).toISOString()
@@ -125,7 +109,6 @@ export default function BoletosDownload() {
     setBoletos(expandedBoletos)
   }, [envios])
 
-  // Atualiza o contexto sobre a quantidade de boletos
   useEffect(() => {
     setHasBoletosToDownload(boletos.length > 0)
     setAllBoletosDownloaded(downloadedBoletos.size === boletos.length)
@@ -136,7 +119,6 @@ export default function BoletosDownload() {
     setAllBoletosDownloaded,
   ])
 
-  // Recupera do localStorage se já houver boletos baixados
   useEffect(() => {
     const storedBoletos = localStorage.getItem("downloadedBoletos")
     if (storedBoletos) {
@@ -144,11 +126,7 @@ export default function BoletosDownload() {
     }
   }, [])
 
-  // Função de "download"
   const handleDownload = async (arquivo: string, recordId: string) => {
-    // setIsDownloading(true);
-    // setCurrentDownloadId(arquivo);
-
     try {
       await downloadBoleto("envios_de_boletos", recordId, arquivo)
 
@@ -161,50 +139,22 @@ export default function BoletosDownload() {
         )
         return newSet
       })
-
-      // console.log(`Download do arquivo "${arquivo}" concluído.`);
     } catch (error) {
       console.error(`Erro ao baixar o arquivo ${arquivo}:`, error)
     } finally {
-      // setIsDownloading(false);
-      // setCurrentDownloadId(null);
     }
   }
 
-  // Função para baixar todos os boletos
-  // const handleDownloadAll = async () => {
-  //   // setIsDownloading(true);
-
-  //   for (const boleto of boletos) {
-  //     try {
-  //       await handleDownload(boleto.arquivo, boleto.id);
-  //     } catch (error) {
-  //       console.error(
-  //         `Erro ao baixar o arquivo ${boleto.arquivo} do registro ${boleto.id}:`,
-  //         error
-  //       );
-  //     }
-  //   }
-
-  //   // setIsDownloading(false);
-  // };
-
-  // Finaliza o processo e redireciona
   const handleFinalize = async () => {
     if (!allDownloaded) return
 
     try {
-      // Atualizar todos os envios
       const updates = envios.map((envio) =>
         updateEnvioDeBoletos(envio.id, { finalizado: true })
       )
 
-      // Aguarda todas as atualizações
       await Promise.all(updates)
 
-      // console.log("Todos os envios foram marcados como finalizados.");
-
-      // Redirecionar para o histórico após a atualização
       setIsProcessFinalized(true)
       setShowCelebration(true)
 
@@ -220,12 +170,10 @@ export default function BoletosDownload() {
     }
   }
 
-  // Cálculo de progresso
   const allDownloaded = downloadedBoletos.size === boletos.length
   const progress =
     boletos.length > 0 ? (downloadedBoletos.size / boletos.length) * 100 : 0
 
-  // Agrupa boletos por Mês/Ano
   const groupedBoletos = boletos.reduce((acc, boleto) => {
     if (boleto.created) {
       const date = new Date(boleto.created)
@@ -244,14 +192,10 @@ export default function BoletosDownload() {
     return acc
   }, {} as Record<string, { month: number; year: number; boletos: ExpandedBoleto[] }>)
 
-  // Converte o objeto em um array para podermos ordenar (se quiser por data)
   const groupedBoletosArray = Object.values(groupedBoletos).sort(
-    (a, b) =>
-      // Ordena por ano e mês ascendente
-      a.year - b.year || a.month - b.month
+    (a, b) => a.year - b.year || a.month - b.month
   )
 
-  // Se nenhum boleto está disponível
   if (boletos.length === 0) {
     return (
       <div className="text-center text-gray-500 p-8">
@@ -264,7 +208,6 @@ export default function BoletosDownload() {
     )
   }
 
-  // Animação de "parabéns" se todos foram baixados
   if (showCelebration) {
     return (
       <div className="text-center mb-6 animate-fade-in p-8">
@@ -282,7 +225,6 @@ export default function BoletosDownload() {
 
   return (
     <div className="p-6 bg-gray-50">
-      {/* Cabeçalho do progresso */}
       <div className="mb-6 flex justify-center max-h-60 overflow-y-auto">
         <CircularProgress progress={progress} size={120} strokeWidth={8} />
       </div>
@@ -360,7 +302,6 @@ export default function BoletosDownload() {
         })}
       </div>
 
-      {/* Botão de finalização - visível apenas quando todos os arquivos foram baixados */}
       {allDownloaded && (
         <div className="mt-4 max-w-3xl mx-5">
           <Button
@@ -373,7 +314,6 @@ export default function BoletosDownload() {
         </div>
       )}
 
-      {/* Mensagem de atenção */}
       {!allDownloaded && boletos.length > 0 && (
         <div className="mt-4 bg-red-100 text-red-600 p-4 rounded-lg text-center">
           <AlertTriangle className="w-6 h-6 mx-auto mb-2" />
@@ -388,7 +328,6 @@ export default function BoletosDownload() {
         </div>
       )}
 
-      {/* Alerta de saída (quando tentar sair sem baixar tudo) */}
       <AlertDialog open={showExitAlert} onOpenChange={setShowExitAlert}>
         <AlertDialogContent>
           <AlertDialogHeader>
