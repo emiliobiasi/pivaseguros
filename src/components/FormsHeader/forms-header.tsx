@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import pb from "@/utils/backend/pb-imob"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import {
@@ -213,6 +213,34 @@ export function FormsHeader() {
     }))
     .filter((g) => g.items.length > 0)
 
+  // Relógio em tempo real
+  const [currentTime, setCurrentTime] = useState(new Date())
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date())
+    }, 1000)
+
+    return () => clearInterval(timer)
+  }, [])
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    })
+  }
+
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString("pt-BR", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+  }
+
   return (
     <div className="flex flex-col">
       <main className="flex-1">
@@ -232,6 +260,77 @@ export function FormsHeader() {
                     Olá {imobiliariaName || "imobiliária"}, suas soluções de
                     locação estão aqui.
                   </h1>
+
+                  {/* Relógio moderno com ponteiros animados */}
+                  <div className="mt-6 inline-flex items-center gap-4 px-4 py-3 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 shadow-lg">
+                    {/* Relógio analógico */}
+                    <div className="relative w-16 h-16 rounded-full bg-white/20 border-2 border-white/40 shadow-inner">
+                      {/* Marcadores das horas dentro do círculo */}
+                      {[...Array(12)].map((_, i) => {
+                        const angle = i * 30
+                        const radius = 24 // raio menor para ficar dentro
+                        const x = radius * Math.sin((angle * Math.PI) / 180)
+                        const y = -radius * Math.cos((angle * Math.PI) / 180)
+
+                        return (
+                          <div
+                            key={i}
+                            className="absolute w-1 h-1 bg-white/80 rounded-full"
+                            style={{
+                              left: `calc(50% + ${x}px)`,
+                              top: `calc(50% + ${y}px)`,
+                              transform: "translate(-50%, -50%)",
+                            }}
+                          />
+                        )
+                      })}
+
+                      {/* Ponteiro das horas */}
+                      <div
+                        className="absolute w-1 h-5 bg-white rounded-full left-1/2 bottom-1/2 -translate-x-1/2 origin-bottom shadow-lg transition-transform duration-1000 ease-linear"
+                        style={{
+                          transform: `translateX(-50%) rotate(${
+                            (currentTime.getHours() % 12) * 30 +
+                            currentTime.getMinutes() * 0.5
+                          }deg)`,
+                        }}
+                      />
+
+                      {/* Ponteiro dos minutos */}
+                      <div
+                        className="absolute w-0.5 h-7 bg-white rounded-full left-1/2 bottom-1/2 -translate-x-1/2 origin-bottom shadow-lg transition-transform duration-1000 ease-linear"
+                        style={{
+                          transform: `translateX(-50%) rotate(${
+                            currentTime.getMinutes() * 6 +
+                            currentTime.getSeconds() * 0.1
+                          }deg)`,
+                        }}
+                      />
+
+                      {/* Ponteiro dos segundos */}
+                      <div
+                        className="absolute w-0.5 h-8 bg-red-400 rounded-full left-1/2 bottom-1/2 -translate-x-1/2 origin-bottom shadow-lg transition-transform duration-1000 ease-linear"
+                        style={{
+                          transform: `translateX(-50%) rotate(${
+                            currentTime.getSeconds() * 6
+                          }deg)`,
+                        }}
+                      />
+
+                      {/* Centro do relógio */}
+                      <div className="absolute w-2 h-2 bg-white rounded-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-md z-10" />
+                    </div>
+
+                    {/* Informações digitais */}
+                    <div className="flex flex-col items-start">
+                      <div className="text-2xl font-bold text-white tabular-nums tracking-wide">
+                        {formatTime(currentTime)}
+                      </div>
+                      <div className="text-xs text-white/80 capitalize">
+                        {formatDate(currentTime)}
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div className="md:col-span-4 flex md:justify-end justify-center mt-4 md:mt-0">
                   <div
