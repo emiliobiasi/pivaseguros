@@ -1,27 +1,27 @@
 export type SeguroFiancaEmpresarialMenos2Anos = {
   id: string
   id_numero: number
-  status: "EM ANÁLISE" | "APROVADO" | "REPROVADO"
-  acao: "PENDENTE" | "FINALIZADO"
+  status: 'EM ANÁLISE' | 'APROVADO' | 'REPROVADO'
+  acao: 'PENDENTE' | 'FINALIZADO'
   nome_imobiliaria: string
   nome_pretendente: string
-  sexo_pretendente: "MASCULINO" | "FEMININO"
+  sexo_pretendente: 'MASCULINO' | 'FEMININO'
   cpf: string
   rg: string
   data_expedicao_rg: Date
   data_nascimento: Date
   orgao_emissor_rg: string
-  estado_civil_locatario: "SOLTEIRO" | "CASADO" | "DIVORCIADO" | "VIÚVO"
+  estado_civil_locatario: 'SOLTEIRO' | 'CASADO' | 'DIVORCIADO' | 'VIÚVO'
   email: string
   telefone_pretendente: string
   nome_conjuge?: string
   cpf_conjuge?: string
-  sexo_pretendente_conjuge?: "MASCULINO" | "FEMININO"
-  composicao_renda_conjuge?: "SIM" | "NÃO"
+  sexo_pretendente_conjuge?: 'MASCULINO' | 'FEMININO'
+  composicao_renda_conjuge?: 'SIM' | 'NÃO'
   data_expedicao_rg_conjuge?: Date
   data_nascimento_conjuge?: Date
   orgao_emissor_conjuge?: string
-  quadro_societario?: "SIM" | "NÃO"
+  quadro_societario?: 'SIM' | 'NÃO'
   fone_residencial?: string
 
   fone_celular?: string
@@ -33,31 +33,31 @@ export type SeguroFiancaEmpresarialMenos2Anos = {
   numero?: string
   complemento?: string
   tipo_residencia?:
-    | "MENOS DE 1 ANO"
-    | "1 A 2 ANOS"
-    | "3 A 4 ANOS"
-    | "5 A 6 ANOS"
-    | "7 A 9 ANOS"
-    | "ACIMA DE 10 ANOS"
+    | 'MENOS DE 1 ANO'
+    | '1 A 2 ANOS'
+    | '3 A 4 ANOS'
+    | '5 A 6 ANOS'
+    | '7 A 9 ANOS'
+    | 'ACIMA DE 10 ANOS'
   condicao_imovel?:
-    | "ALUGADO (EM NOME DO PRETENDENTE)"
-    | "ALUGADO (NOME DOS OUTROS)"
-    | "PRÓPRIO"
-    | "FINANCIADO (EM NOME PRÓPRIO)"
-    | "FINANCIADO (NOME DE OUTROS)"
-  arca_com_aluguel?: "SIM" | "NÃO"
+    | 'ALUGADO (EM NOME DO PRETENDENTE)'
+    | 'ALUGADO (NOME DOS OUTROS)'
+    | 'PRÓPRIO'
+    | 'FINANCIADO (EM NOME PRÓPRIO)'
+    | 'FINANCIADO (NOME DE OUTROS)'
+  arca_com_aluguel?: 'SIM' | 'NÃO'
   valor_aluguel_atual?: number
   nome_locator_proprietario_imobiliaria?: string
   telefone_contato?: string
 
   vinculo_empregaticio:
-    | "AUTÔNOMO"
-    | "EMPRESÁRIO"
-    | "ESTUDANTE"
-    | "FUNCIONÁRIO PÚBLICO"
-    | "FUNCIONÁRIO COM REGISTRO CLT"
-    | "PROFISSIONAL LIBERAL"
-    | "APOSENTADO"
+    | 'AUTÔNOMO'
+    | 'EMPRESÁRIO'
+    | 'ESTUDANTE'
+    | 'FUNCIONÁRIO PÚBLICO'
+    | 'FUNCIONÁRIO COM REGISTRO CLT'
+    | 'PROFISSIONAL LIBERAL'
+    | 'APOSENTADO'
   profissao: string
   nome_empresa_trabalho?: string
   data_emissao?: Date
@@ -67,13 +67,13 @@ export type SeguroFiancaEmpresarialMenos2Anos = {
   outros_rendimentos?: number
   total_rendimentos_mensais?: number
   vinculo_empregaticio_conjuge?:
-    | "AUTÔNOMO"
-    | "EMPRESÁRIO"
-    | "ESTUDANTE"
-    | "FUNCIONÁRIO PÚBLICO"
-    | "FUNCIONÁRIO COM REGISTRO CLT"
-    | "PROFISSIONAL LIBERAL"
-    | "APOSENTADO"
+    | 'AUTÔNOMO'
+    | 'EMPRESÁRIO'
+    | 'ESTUDANTE'
+    | 'FUNCIONÁRIO PÚBLICO'
+    | 'FUNCIONÁRIO COM REGISTRO CLT'
+    | 'PROFISSIONAL LIBERAL'
+    | 'APOSENTADO'
   profissao_conjuge?: string
   nome_empresa_trabalho_conjuge?: string
   data_emissao_conjuge?: Date
@@ -82,17 +82,17 @@ export type SeguroFiancaEmpresarialMenos2Anos = {
   salario_conjuge?: number
   outros_rendimentos_conjuge?: number
   total_rendimentos_mensais_conjuge?: number
-  alocacao_pretendida_constituida: "SIM" | "NÃO"
+  alocacao_pretendida_constituida: 'SIM' | 'NÃO'
   cnpj_pessoa_fisica_nao_residencial?: string
   cnae_empresa?: string
-  franquia?: "SIM" | "NÃO"
+  franquia?: 'SIM' | 'NÃO'
   nome_franqueadora?: string
   principais_produtos_servicos?: string
   xp_ramo_pretendido?: string
   cpf_socio_1?: string
   cpf_socio_2?: string
   cpf_socio_3?: string
-  onus?: "SIM" | "NÃO"
+  onus?: 'SIM' | 'NÃO'
   detalhamento_onus?: string
   tipo_qtd_parcela_a_1?: number
   tipo_qtd_parcela_a_2?: number
@@ -106,7 +106,7 @@ export type SeguroFiancaEmpresarialMenos2Anos = {
   valor_parcela_b_1?: number
   valor_parcela_b_2?: number
   valor_parcela_b_3?: number
-  investimento_abertura?: "SIM" | "NÃO"
+  investimento_abertura?: 'SIM' | 'NÃO'
   compra_produto_cap_inicial?: number
   obras_reformas_cap_inicial?: number
   maquinas_cap_inicial?: number
@@ -136,17 +136,19 @@ export type SeguroFiancaEmpresarialMenos2Anos = {
   energia_imovel_alugado?: number
   gas_canalizado_imovel_alugado?: number
 
-  danos_imovel: "SIM" | "NÃO"
-  multa_rescisao: "SIM" | "NÃO"
-  pintura_interna: "SIM" | "NÃO"
-  pintura_externa: "SIM" | "NÃO"
+  danos_imovel: 'SIM' | 'NÃO'
+  multa_rescisao: 'SIM' | 'NÃO'
+  pintura_interna: 'SIM' | 'NÃO'
+  pintura_externa: 'SIM' | 'NÃO'
 
   motivo_locacao:
-    | "ABERTURA DE FILIAL"
-    | "ABERTURA DE MATRIZ"
-    | "TROCA LOCAL DE SEDE"
-    | "REDUÇÃO DE CUSTOS"
-    | "LOCAÇÃO PARA MORADIA"
+    | 'ABERTURA DE FILIAL'
+    | 'ABERTURA DE MATRIZ'
+    | 'TROCA LOCAL DE SEDE'
+    | 'REDUÇÃO DE CUSTOS'
+    | 'LOCAÇÃO PARA MORADIA'
+
+  prazo_contrato?: '12 MESES' | '24 MESES' | '30 MESES' | '36 MESES'
 
   observacao?: string
   cpf_morador?: string
