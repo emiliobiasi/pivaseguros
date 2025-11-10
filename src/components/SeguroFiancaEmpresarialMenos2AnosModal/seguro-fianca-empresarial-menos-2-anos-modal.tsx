@@ -1,9 +1,9 @@
-import { SeguroFiancaEmpresarialMenos2Anos } from "@/types/SeguroFiancaEmpresarialMenos2Anos"
-import { XCircle } from "lucide-react"
-import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { formatValor } from "@/utils/regex/regexValor"
-import { formatarData } from "@/utils/dateformater/dateFormater"
+import { SeguroFiancaEmpresarialMenos2Anos } from '@/types/SeguroFiancaEmpresarialMenos2Anos'
+import { XCircle } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Button } from '@/components/ui/button'
+import { formatValor } from '@/utils/regex/regexValor'
+import { formatarData } from '@/utils/dateformater/dateFormater'
 
 type SeguroFiancaEmpresarialMenos2AnosModalProps = {
   seguro: SeguroFiancaEmpresarialMenos2Anos
@@ -69,11 +69,11 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                 <strong>RG:</strong> {seguro.rg}
               </p>
               <p>
-                <strong>Data de Expedição do RG:</strong>{" "}
+                <strong>Data de Expedição do RG:</strong>{' '}
                 {formatarData(seguro.data_expedicao_rg)}
               </p>
               <p>
-                <strong>Data de Nascimento:</strong>{" "}
+                <strong>Data de Nascimento:</strong>{' '}
                 {formatarData(seguro.data_nascimento)}
               </p>
               <p>
@@ -101,7 +101,7 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
             </>
 
             {/* Dados do Cônjuge */}
-            {seguro.estado_civil_locatario === "CASADO" && (
+            {seguro.estado_civil_locatario === 'CASADO' && (
               <>
                 <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
                   Dados do Cônjuge
@@ -116,31 +116,31 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                 )}
                 {seguro.sexo_pretendente_conjuge && (
                   <p>
-                    <strong>Sexo do Cônjuge:</strong>{" "}
+                    <strong>Sexo do Cônjuge:</strong>{' '}
                     {seguro.sexo_pretendente_conjuge}
                   </p>
                 )}
                 {seguro.data_expedicao_rg_conjuge && (
                   <p>
-                    <strong>Data de Expedição do RG do Cônjuge:</strong>{" "}
+                    <strong>Data de Expedição do RG do Cônjuge:</strong>{' '}
                     {formatarData(seguro.data_expedicao_rg_conjuge)}
                   </p>
                 )}
                 {seguro.data_nascimento_conjuge && (
                   <p>
-                    <strong>Data de Nascimento do Cônjuge:</strong>{" "}
+                    <strong>Data de Nascimento do Cônjuge:</strong>{' '}
                     {formatarData(seguro.data_nascimento_conjuge)}
                   </p>
                 )}
                 {seguro.orgao_emissor_conjuge && (
                   <p>
-                    <strong>Órgão Emissor do RG do Cônjuge:</strong>{" "}
+                    <strong>Órgão Emissor do RG do Cônjuge:</strong>{' '}
                     {seguro.orgao_emissor_conjuge}
                   </p>
                 )}
                 {seguro.composicao_renda_conjuge && (
                   <p>
-                    <strong>Composição de Renda com Cônjuge:</strong>{" "}
+                    <strong>Composição de Renda com Cônjuge:</strong>{' '}
                     {seguro.composicao_renda_conjuge}
                   </p>
                 )}
@@ -153,13 +153,13 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                 Dados da Empresa
               </h3>
               <p>
-                <strong>Alocação Pretendida Constituída:</strong>{" "}
+                <strong>Alocação Pretendida Constituída:</strong>{' '}
                 {seguro.alocacao_pretendida_constituida}
               </p>
 
-              {seguro.alocacao_pretendida_constituida === "SIM" && (
+              {seguro.alocacao_pretendida_constituida === 'SIM' && (
                 <p>
-                  <strong>CNPJ:</strong>{" "}
+                  <strong>CNPJ:</strong>{' '}
                   {seguro.cnpj_pessoa_fisica_nao_residencial}
                 </p>
               )}
@@ -173,21 +173,21 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                   <strong>Franquia:</strong> {seguro.franquia}
                 </p>
               )}
-              {seguro.franquia === "SIM" && (
+              {seguro.franquia === 'SIM' && (
                 <p>
-                  <strong>Nome da Franqueadora:</strong>{" "}
+                  <strong>Nome da Franqueadora:</strong>{' '}
                   {seguro.nome_franqueadora}
                 </p>
               )}
               {seguro.principais_produtos_servicos && (
                 <p>
-                  <strong>Principais Produtos/Serviços:</strong>{" "}
+                  <strong>Principais Produtos/Serviços:</strong>{' '}
                   {seguro.principais_produtos_servicos}
                 </p>
               )}
               {seguro.xp_ramo_pretendido && (
                 <p>
-                  <strong>Experiência no Ramo Pretendido:</strong>{" "}
+                  <strong>Experiência no Ramo Pretendido:</strong>{' '}
                   {seguro.xp_ramo_pretendido}
                 </p>
               )}
@@ -300,7 +300,7 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                 Informações Profissionais
               </h3>
               <p>
-                <strong>Vínculo Empregatício:</strong>{" "}
+                <strong>Vínculo Empregatício:</strong>{' '}
                 {seguro.vinculo_empregaticio}
               </p>
               <p>
@@ -308,13 +308,13 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
               </p>
               {seguro.nome_empresa_trabalho && (
                 <p>
-                  <strong>Nome da Empresa:</strong>{" "}
+                  <strong>Nome da Empresa:</strong>{' '}
                   {seguro.nome_empresa_trabalho}
                 </p>
               )}
               {seguro.data_emissao && (
                 <p>
-                  <strong>Data de Emissão:</strong>{" "}
+                  <strong>Data de Emissão:</strong>{' '}
                   {formatarData(seguro.data_emissao)}
                 </p>
               )}
@@ -331,7 +331,7 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
 
               {seguro.salario !== undefined && seguro.salario !== 0 ? (
                 <p>
-                  <strong>Salário / Rendimentos:</strong> R${" "}
+                  <strong>Salário / Rendimentos:</strong> R${' '}
                   {formatValor(seguro.salario.toFixed(2))}
                 </p>
               ) : (
@@ -342,13 +342,13 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
             </>
 
             {/* Informações Profissionais do Cônjuge */}
-            {seguro.composicao_renda_conjuge === "SIM" && (
+            {seguro.composicao_renda_conjuge === 'SIM' && (
               <>
                 <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
                   Informações Profissionais do Cônjuge
                 </h3>
                 <p>
-                  <strong>Vínculo Empregatício:</strong>{" "}
+                  <strong>Vínculo Empregatício:</strong>{' '}
                   {seguro.vinculo_empregaticio_conjuge}
                 </p>
                 <p>
@@ -361,13 +361,13 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                 )}
                 {seguro.nome_empresa_trabalho_conjuge && (
                   <p>
-                    <strong>Nome da Empresa:</strong>{" "}
+                    <strong>Nome da Empresa:</strong>{' '}
                     {seguro.nome_empresa_trabalho_conjuge}
                   </p>
                 )}
                 {seguro.data_emissao_conjuge && (
                   <p>
-                    <strong>Data de Emissão Cônjuge:</strong>{" "}
+                    <strong>Data de Emissão Cônjuge:</strong>{' '}
                     {formatarData(seguro.data_emissao_conjuge)}
                   </p>
                 )}
@@ -384,7 +384,7 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                 {seguro.salario_conjuge !== undefined &&
                 seguro.salario_conjuge !== 0 ? (
                   <p>
-                    <strong>Salário:</strong> R${" "}
+                    <strong>Salário:</strong> R${' '}
                     {formatValor(seguro.salario_conjuge.toFixed(2))}
                   </p>
                 ) : (
@@ -394,13 +394,13 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                 )}
                 {seguro.outros_rendimentos_conjuge !== undefined && (
                   <p>
-                    <strong>Outros Rendimentos:</strong> R${" "}
+                    <strong>Outros Rendimentos:</strong> R${' '}
                     {formatValor(seguro.outros_rendimentos_conjuge.toFixed(2))}
                   </p>
                 )}
                 {seguro.total_rendimentos_mensais_conjuge !== undefined && (
                   <p>
-                    <strong>Total de Rendimentos Mensais:</strong> R${" "}
+                    <strong>Total de Rendimentos Mensais:</strong> R${' '}
                     {formatValor(
                       seguro.total_rendimentos_mensais_conjuge.toFixed(2)
                     )}
@@ -412,122 +412,6 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
 
           {/* Terceira Coluna */}
           <div className="space-y-4 bg-gray-100 p-4 rounded-lg ">
-            {/* Investimento Inicial */}
-            {/* <>
-              <h3 className="text-lg font-semibold text-[#025d37]">
-                Investimento Inicial
-              </h3>
-              <p>
-                <strong>Investimento para Abertura:</strong>{" "}
-                {seguro.investimento_abertura}
-              </p>
-
-              {seguro.investimento_abertura === "SIM" && (
-                <>
-                  {seguro.compra_produto_cap_inicial !== undefined && (
-                    <p>
-                      <strong>Compra de Produto (Capital Inicial):</strong> R${" "}
-                      {formatValor(
-                        seguro.compra_produto_cap_inicial.toFixed(2)
-                      )}
-                    </p>
-                  )}
-                  {seguro.obras_reformas_cap_inicial !== undefined && (
-                    <p>
-                      <strong>Obras e Reformas (Capital Inicial):</strong> R${" "}
-                      {formatValor(
-                        seguro.obras_reformas_cap_inicial.toFixed(2)
-                      )}
-                    </p>
-                  )}
-                  {seguro.maquinas_cap_inicial !== undefined && (
-                    <p>
-                      <strong>Máquinas (Capital Inicial):</strong> R${" "}
-                      {formatValor(seguro.maquinas_cap_inicial.toFixed(2))}
-                    </p>
-                  )}
-                  {seguro.despesas_legais_cap_inicial !== undefined && (
-                    <p>
-                      <strong>Despesas Legais (Capital Inicial):</strong> R${" "}
-                      {formatValor(
-                        seguro.despesas_legais_cap_inicial.toFixed(2)
-                      )}
-                    </p>
-                  )}
-                  {seguro.moveis_cap_inicial !== undefined && (
-                    <p>
-                      <strong>Móveis (Capital Inicial):</strong> R${" "}
-                      {formatValor(seguro.moveis_cap_inicial.toFixed(2))}
-                    </p>
-                  )}
-                  {seguro.cursos_cap_inicial !== undefined && (
-                    <p>
-                      <strong>Cursos (Capital Inicial):</strong> R${" "}
-                      {formatValor(seguro.cursos_cap_inicial.toFixed(2))}
-                    </p>
-                  )}
-                  {seguro.estoques_cap_inicial !== undefined && (
-                    <p>
-                      <strong>Estoques (Capital Inicial):</strong> R${" "}
-                      {formatValor(seguro.estoques_cap_inicial.toFixed(2))}
-                    </p>
-                  )}
-                  {seguro.divulgacao_cap_inicial !== undefined && (
-                    <p>
-                      <strong>Divulgação (Capital Inicial):</strong> R${" "}
-                      {formatValor(seguro.divulgacao_cap_inicial.toFixed(2))}
-                    </p>
-                  )}
-
-                  <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
-                    Capital de Giro
-                  </h3>
-                  {seguro.reposicao_material_cap_giro !== undefined && (
-                    <p>
-                      <strong>Reposição de Material:</strong> R${" "}
-                      {formatValor(
-                        seguro.reposicao_material_cap_giro.toFixed(2)
-                      )}
-                    </p>
-                  )}
-                  {seguro.consumo_cap_giro !== undefined && (
-                    <p>
-                      <strong>Consumo:</strong> R${" "}
-                      {formatValor(seguro.consumo_cap_giro.toFixed(2))}
-                    </p>
-                  )}
-                  {seguro.reposicao_estoque_cap_giro !== undefined && (
-                    <p>
-                      <strong>Reposição de Estoque:</strong> R${" "}
-                      {formatValor(
-                        seguro.reposicao_estoque_cap_giro.toFixed(2)
-                      )}
-                    </p>
-                  )}
-                  {seguro.folha_pagamento_cap_giro !== undefined && (
-                    <p>
-                      <strong>Folha de Pagamento:</strong> R${" "}
-                      {formatValor(seguro.folha_pagamento_cap_giro.toFixed(2))}
-                    </p>
-                  )}
-                  {seguro.financiamento_vendas_cap_giro !== undefined && (
-                    <p>
-                      <strong>Financiamento de Vendas:</strong> R${" "}
-                      {formatValor(
-                        seguro.financiamento_vendas_cap_giro.toFixed(2)
-                      )}
-                    </p>
-                  )}
-                  {seguro.impostos_taxas_cap_giro !== undefined && (
-                    <p>
-                      <strong>Impostos e Taxas:</strong> R${" "}
-                      {formatValor(seguro.impostos_taxas_cap_giro.toFixed(2))}
-                    </p>
-                  )}
-                </>
-              )}
-            </> */}
-
             {/* Endereço do Imóvel Alugado */}
             <>
               <h3 className="text-lg font-semibold text-[#025d37]">
@@ -550,7 +434,7 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
               )}
               {seguro.complemento_imovel_alugado && (
                 <p>
-                  <strong>Complemento:</strong>{" "}
+                  <strong>Complemento:</strong>{' '}
                   {seguro.complemento_imovel_alugado}
                 </p>
               )}
@@ -571,6 +455,33 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
               )}
             </>
 
+            {/* Motivo da Locação */}
+            <>
+              <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+                Motivo da Locação
+              </h3>
+              <p>
+                <strong>Motivo da Locação:</strong> {seguro.motivo_locacao}
+              </p>
+              {seguro.motivo_locacao === 'LOCAÇÃO PARA MORADIA' && (
+                <>
+                  <p>
+                    <strong>CPF do Morador:</strong> {seguro.cpf_morador}
+                  </p>
+                </>
+              )}
+            </>
+
+            {/* PRAZO DO CONTRATO */}
+            <>
+              <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+                Prazo do Contrato
+              </h3>
+              <p>
+                <strong>Prazo do Contrato:</strong> {seguro.prazo_contrato}
+              </p>
+            </>
+
             {/* Despesas do Imóvel Alugado */}
             <>
               <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
@@ -579,14 +490,14 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
               {seguro.aluguel_imovel_alugado != null &&
                 !isNaN(seguro.aluguel_imovel_alugado) && (
                   <p>
-                    <strong>Aluguel:</strong> R${" "}
+                    <strong>Aluguel:</strong> R${' '}
                     {formatValor(seguro.aluguel_imovel_alugado.toFixed(2))}
                   </p>
                 )}
               {seguro.desp_ordinarias_cond_imovel_alugado != null &&
                 !isNaN(seguro.desp_ordinarias_cond_imovel_alugado) && (
                   <p>
-                    <strong>Despesas Ordinárias do Condomínio:</strong> R${" "}
+                    <strong>Despesas Ordinárias do Condomínio:</strong> R${' '}
                     {formatValor(
                       seguro.desp_ordinarias_cond_imovel_alugado.toFixed(2)
                     )}
@@ -595,14 +506,14 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
               {seguro.iptu_imovel_alugado != null &&
                 !isNaN(seguro.iptu_imovel_alugado) && (
                   <p>
-                    <strong>IPTU:</strong> R${" "}
+                    <strong>IPTU:</strong> R${' '}
                     {formatValor(seguro.iptu_imovel_alugado.toFixed(2))}
                   </p>
                 )}
               {seguro.agua_imovel_alugado != null &&
                 !isNaN(seguro.agua_imovel_alugado) && (
                   <p>
-                    <strong>Água:</strong> R${" "}
+                    <strong>Água:</strong> R${' '}
                     {formatValor(seguro.agua_imovel_alugado.toFixed(2))}
                   </p>
                 )}
@@ -610,21 +521,21 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                 !isNaN(seguro.luz_imovel_alugado) &&
                 seguro.luz_imovel_alugado > 0 && (
                   <p>
-                    <strong>Luz:</strong> R${" "}
+                    <strong>Luz:</strong> R${' '}
                     {formatValor(seguro.luz_imovel_alugado.toFixed(2))}
                   </p>
                 )}
               {seguro.energia_imovel_alugado != null &&
                 !isNaN(seguro.energia_imovel_alugado) && (
                   <p>
-                    <strong>Energia:</strong> R${" "}
+                    <strong>Energia:</strong> R${' '}
                     {formatValor(seguro.energia_imovel_alugado.toFixed(2))}
                   </p>
                 )}
               {seguro.gas_canalizado_imovel_alugado != null &&
                 !isNaN(seguro.gas_canalizado_imovel_alugado) && (
                   <p>
-                    <strong>Gás Canalizado:</strong> R${" "}
+                    <strong>Gás Canalizado:</strong> R${' '}
                     {formatValor(
                       seguro.gas_canalizado_imovel_alugado.toFixed(2)
                     )}
@@ -642,23 +553,6 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
               <p>
                 <strong>Pintura Externa:</strong> {seguro.pintura_externa}
               </p>
-            </>
-
-            {/* Motivo da Locação */}
-            <>
-              <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
-                Motivo da Locação
-              </h3>
-              <p>
-                <strong>Motivo da Locação:</strong> {seguro.motivo_locacao}
-              </p>
-              {seguro.motivo_locacao === "LOCAÇÃO PARA MORADIA" && (
-                <>
-                  <p>
-                    <strong>CPF do Morador:</strong> {seguro.cpf_morador}
-                  </p>
-                </>
-              )}
             </>
 
             {seguro.observacao && (
@@ -681,64 +575,6 @@ export function SeguroFiancaEmpresarialMenos2AnosModal({
                 observação.
               </p>
             )}
-
-            {/* Ônus */}
-            {/* <>
-              {seguro.onus && (
-                <>
-                  <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
-                    Ônus (Dívidas)
-                  </h3>
-                  <p>
-                    <strong>Possui Ônus:</strong> {seguro.onus}
-                  </p>
-                </>
-              )}
-
-              {seguro.onus === "SIM" && (
-                <>
-                  {seguro.detalhamento_onus && (
-                    <p>
-                      <strong>Detalhamento dos Ônus:</strong>{" "}
-                      {seguro.detalhamento_onus}
-                    </p>
-                  )}
-
-                  {(seguro.tipo_qtd_parcela_a_1 ||
-                    seguro.valor_parcela_a_1) && (
-                    <>
-                      <h4 className="text-md font-semibold mt-4">
-                        Parcelas Tipo A
-                      </h4>
-                      {seguro.tipo_qtd_parcela_a_1 && (
-                        <p>
-                          <strong>Quantidade de Parcelas Tipo A1:</strong>{" "}
-                          {seguro.tipo_qtd_parcela_a_1}
-                        </p>
-                      )}
-                      {seguro.valor_parcela_a_1 !== undefined && (
-                        <p>
-                          <strong>Valor da Parcela A1:</strong> R${" "}
-                          {formatValor(seguro.valor_parcela_a_1.toFixed(2))}
-                        </p>
-                      )}
-                      {seguro.tipo_qtd_parcela_a_2 && (
-                        <p>
-                          <strong>Quantidade de Parcelas Tipo A2:</strong>{" "}
-                          {seguro.tipo_qtd_parcela_a_2}
-                        </p>
-                      )}
-                      {seguro.valor_parcela_a_2 !== undefined && (
-                        <p>
-                          <strong>Valor da Parcela A2:</strong> R${" "}
-                          {formatValor(seguro.valor_parcela_a_2.toFixed(2))}
-                        </p>
-                      )}
-                    </>
-                  )}
-                </>
-              )}
-            </> */}
           </div>
         </div>
 
