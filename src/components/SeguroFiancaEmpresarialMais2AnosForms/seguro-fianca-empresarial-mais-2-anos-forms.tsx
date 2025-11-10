@@ -1,7 +1,7 @@
-import { SeguroFiancaEmpresarialMais2Anos } from "@/types/SeguroFiancaEmpresarialMais2Anos"
-import { useState, useRef } from "react"
-import { useNavigate } from "react-router-dom"
-import { Button } from "@/components/ui/button"
+import { SeguroFiancaEmpresarialMais2Anos } from '@/types/SeguroFiancaEmpresarialMais2Anos'
+import { useState, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -9,69 +9,69 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Checkbox } from "@/components/ui/checkbox"
-import { ArrowLeft, ArrowRight, CheckCircle, Send, Loader2 } from "lucide-react"
-import { formatCPF } from "@/utils/regex/regexCPF"
-import { formatCNPJ } from "@/utils/regex/regexCNPJ"
-import { formatCEP } from "@/utils/regex/regexCEP"
-import { formatTelefone } from "@/utils/regex/regexTelefone"
-import { createSeguroFiancaEmpresarialMais2Anos } from "@/utils/api/SeguroFiancaEmpresarialMais2AnosService"
+} from '@/components/ui/select'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Checkbox } from '@/components/ui/checkbox'
+import { ArrowLeft, ArrowRight, CheckCircle, Send, Loader2 } from 'lucide-react'
+import { formatCPF } from '@/utils/regex/regexCPF'
+import { formatCNPJ } from '@/utils/regex/regexCNPJ'
+import { formatCEP } from '@/utils/regex/regexCEP'
+import { formatTelefone } from '@/utils/regex/regexTelefone'
+import { createSeguroFiancaEmpresarialMais2Anos } from '@/utils/api/SeguroFiancaEmpresarialMais2AnosService'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { buscaEnderecoPorCEP, EnderecoViaCep } from "@/utils/api/Cep"
+} from '@/components/ui/dialog'
+import { buscaEnderecoPorCEP, EnderecoViaCep } from '@/utils/api/Cep'
 // Importações adicionais que possam estar no seu código original
 
 export function SeguroFiancaEmpresarialMais2AnosForms() {
-  const [currentTab, setCurrentTab] = useState("personal")
+  const [currentTab, setCurrentTab] = useState('personal')
   const [agreedToTerms, setAgreedToTerms] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
-  const [errorMessage, setErrorMessage] = useState("")
+  const [errorMessage, setErrorMessage] = useState('')
 
   const navigate = useNavigate()
   const formRef = useRef<HTMLFormElement>(null)
 
   const [formData, setFormData] = useState<SeguroFiancaEmpresarialMais2Anos>({
-    id: "",
+    id: '',
     id_numero: 0,
-    status: "EM ANÁLISE",
-    acao: "PENDENTE",
-    tipo_empresa: "LTDA",
-    opcao_tributaria: "LUCRO REAL",
-    nome_empresa: "",
-    cnpj: "",
-    telefone_empresa: "",
-    email_empresa: "",
-    atividade_economica: "",
-    cep: "",
-    endereco: "",
-    bairro: "",
+    status: 'EM ANÁLISE',
+    acao: 'PENDENTE',
+    tipo_empresa: 'LTDA',
+    opcao_tributaria: 'LUCRO REAL',
+    nome_empresa: '',
+    cnpj: '',
+    telefone_empresa: '',
+    email_empresa: '',
+    atividade_economica: '',
+    cep: '',
+    endereco: '',
+    bairro: '',
     numero_endereco: 0,
-    cidade: "",
-    estado: "",
-    motivo_locacao: "ABERTURA DE FILIAL",
+    cidade: '',
+    estado: '',
+    motivo_locacao: 'ABERTURA DE FILIAL',
     aluguel: 0,
-    danos_imovel: "SIM",
-    multa_rescisao: "SIM",
-    pintura_interna: "SIM",
-    pintura_externa: "SIM",
-    nome_imobiliaria: "",
+    danos_imovel: 'SIM',
+    multa_rescisao: 'SIM',
+    pintura_interna: 'SIM',
+    pintura_externa: 'SIM',
+    nome_imobiliaria: '',
     created: new Date(),
     updated: new Date(),
   })
@@ -80,50 +80,50 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
     const { name, value } = e.target
     let formattedValue = value
 
-    if (name === "telefone" || name === "telefone_empresa") {
+    if (name === 'telefone' || name === 'telefone_empresa') {
       formattedValue = formatTelefone(value)
-    } else if (name === "cpf_socio_1" || name === "cpf_socio_2") {
+    } else if (name === 'cpf_socio_1' || name === 'cpf_socio_2') {
       formattedValue = formatCPF(value)
-    } else if (name === "cep" || name === "cep_empresa") {
+    } else if (name === 'cep' || name === 'cep_empresa') {
       formattedValue = formatCEP(value)
 
-      const cepNumeros = formattedValue.replace(/\D/g, "")
+      const cepNumeros = formattedValue.replace(/\D/g, '')
 
       if (cepNumeros.length === 8) {
         try {
           setIsLoading(true)
-          setErrorMessage("") // Limpa mensagens de erro anteriores
+          setErrorMessage('') // Limpa mensagens de erro anteriores
 
           // Chama a função importada para buscar o endereço
           const data: EnderecoViaCep = await buscaEnderecoPorCEP(cepNumeros)
 
           // Atualiza os campos de endereço com os dados retornados
-          if (name === "cep") {
+          if (name === 'cep') {
             setFormData((prevState) => ({
               ...prevState,
-              endereco: data.logradouro || "",
-              bairro: data.bairro || "",
-              cidade: data.localidade || "",
-              estado: data.uf || "",
+              endereco: data.logradouro || '',
+              bairro: data.bairro || '',
+              cidade: data.localidade || '',
+              estado: data.uf || '',
               [name]: formattedValue, // Atualiza o campo CEP também
             }))
           }
         } catch (error: unknown) {
-          console.error("Erro ao buscar o CEP:", error)
+          console.error('Erro ao buscar o CEP:', error)
           setErrorMessage(
             error instanceof Error
               ? error.message
-              : "Erro ao buscar o CEP. Tente novamente."
+              : 'Erro ao buscar o CEP. Tente novamente.'
           )
 
           // Limpa os campos de endereço em caso de erro
-          if (name === "cep") {
+          if (name === 'cep') {
             setFormData((prevState) => ({
               ...prevState,
-              endereco: "",
-              bairro: "",
-              cidade: "",
-              estado: "",
+              endereco: '',
+              bairro: '',
+              cidade: '',
+              estado: '',
               [name]: formattedValue,
             }))
           }
@@ -132,35 +132,35 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
         }
       } else {
         // Se o CEP tiver menos de 8 dígitos, limpa os campos de endereço
-        if (name === "cep") {
+        if (name === 'cep') {
           setFormData((prevState) => ({
             ...prevState,
-            endereco: "",
-            bairro: "",
-            cidade: "",
-            estado: "",
+            endereco: '',
+            bairro: '',
+            cidade: '',
+            estado: '',
             [name]: formattedValue,
           }))
-        } else if (name === "cep_empresa") {
+        } else if (name === 'cep_empresa') {
           setFormData((prevState) => ({
             ...prevState,
-            endereco_empresa: "",
-            bairro_empresa: "",
-            cidade_empresa: "",
-            estado_empresa: "",
+            endereco_empresa: '',
+            bairro_empresa: '',
+            cidade_empresa: '',
+            estado_empresa: '',
             [name]: formattedValue,
           }))
         }
       }
-    } else if (name === "cnpj") {
+    } else if (name === 'cnpj') {
       formattedValue = formatCNPJ(value)
       // Aqui você pode adicionar lógica específica para o CNPJ, se necessário
     } else if (
-      ["capital_social", "faturamento_mensal", "valor_aluguel"].includes(name)
+      ['capital_social', 'faturamento_mensal', 'valor_aluguel'].includes(name)
     ) {
       // Se você tiver funções de formatação para valores monetários, pode usá-las aqui
       // formattedValue = formatValor(value);
-    } else if (name === "data_nascimento") {
+    } else if (name === 'data_nascimento') {
       // Manter o valor da data sem formatação adicional
       formattedValue = value
     }
@@ -183,7 +183,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
   }
 
   const handleNext = () => {
-    const tabs = ["personal", "payment", "coberturas"]
+    const tabs = ['personal', 'payment', 'coberturas']
     const currentIndex = tabs.indexOf(currentTab)
     if (currentIndex < tabs.length - 1) {
       setCurrentTab(tabs[currentIndex + 1])
@@ -191,7 +191,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
   }
 
   const handlePrevious = () => {
-    const tabs = ["personal", "payment", "coberturas"]
+    const tabs = ['personal', 'payment', 'coberturas']
     const currentIndex = tabs.indexOf(currentTab)
     if (currentIndex > 0) {
       setCurrentTab(tabs[currentIndex - 1])
@@ -207,21 +207,23 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
     // Função de validação
     const validateForm = () => {
       const errors: string[] = []
-      if (!formData.nome_imobiliaria) errors.push("Nome da Imobiliária")
-      if (!formData.opcao_tributaria) errors.push("Opção Tributária")
-      if (!formData.nome_empresa) errors.push("Nome da Empresa")
-      if (!formData.cnpj) errors.push("CNPJ")
-      if (!formData.telefone_empresa) errors.push("Telefone")
-      if (!formData.email_empresa) errors.push("Email")
-      if (!formData.atividade_economica) errors.push("Atividade Econômica")
-      if (!formData.cep) errors.push("CEP")
-      if (!formData.endereco) errors.push("Endereço")
-      if (!formData.bairro) errors.push("Bairro")
-      if (!formData.numero_endereco) errors.push("Número")
-      if (!formData.cidade) errors.push("Cidade")
-      if (!formData.estado) errors.push("Estado")
-      if (!formData.motivo_locacao) errors.push("Motivo da Locação")
-      if (!formData.aluguel) errors.push("Aluguel")
+      if (!formData.nome_imobiliaria) errors.push('Nome da Imobiliária')
+      if (!formData.opcao_tributaria) errors.push('Opção Tributária')
+      if (!formData.nome_empresa) errors.push('Nome da Empresa')
+      if (!formData.cnpj) errors.push('CNPJ')
+      if (!formData.telefone_empresa) errors.push('Telefone')
+      if (!formData.email_empresa) errors.push('Email')
+      if (!formData.atividade_economica) errors.push('Atividade Econômica')
+      if (!formData.cep) errors.push('CEP')
+      if (!formData.endereco) errors.push('Endereço')
+      if (!formData.bairro) errors.push('Bairro')
+      if (!formData.numero_endereco) errors.push('Número')
+      if (!formData.cidade) errors.push('Cidade')
+      if (!formData.estado) errors.push('Estado')
+      if (!formData.motivo_locacao) errors.push('Motivo da Locação')
+      if (!formData.prazo_contrato) errors.push('Prazo do Contrato')
+
+      if (!formData.aluguel) errors.push('Aluguel')
 
       return errors
     }
@@ -230,7 +232,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
     if (validationErrors.length > 0) {
       setErrorMessage(
         `Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou os campos. Campos obrigatórios que faltam: ${validationErrors.join(
-          ", "
+          ', '
         )}`
       )
       return
@@ -245,9 +247,9 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
       formRef.current?.reset()
       setIsSuccessModalOpen(true)
     } catch (error) {
-      console.error("Erro ao enviar o formulário:", error)
+      console.error('Erro ao enviar o formulário:', error)
       setErrorMessage(
-        "Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou campos de email corretamente. Tente novamente."
+        'Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou campos de email corretamente. Tente novamente.'
       )
     } finally {
       setIsLoading(false)
@@ -269,11 +271,11 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
             seguir:
           </CardDescription>
 
-          <h3 className="" style={{ marginTop: "1.5rem " }}>
-            💡Os campos marcados com{" "}
+          <h3 className="" style={{ marginTop: '1.5rem ' }}>
+            💡Os campos marcados com{' '}
             <strong>
               <RequiredAsterisk />
-            </strong>{" "}
+            </strong>{' '}
             são <strong>obrigatórios.</strong>
           </h3>
         </CardHeader>
@@ -284,43 +286,29 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                 <TabsTrigger
                   value="personal"
                   className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
-                    currentTab === "personal" ? "" : "bg-gray-200"
+                    currentTab === 'personal' ? '' : 'bg-gray-200'
                   }`}
                   style={{
                     backgroundColor:
-                      currentTab === "personal" ? "#16a34a" : undefined,
-                    color: currentTab === "personal" ? "white" : undefined,
+                      currentTab === 'personal' ? '#16a34a' : undefined,
+                    color: currentTab === 'personal' ? 'white' : undefined,
                   }}
                 >
                   Dados do Pretendente
                 </TabsTrigger>
 
-                {/* <TabsTrigger
-                  value="address"
-                  className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
-                    currentTab === "address" ? "" : "bg-gray-200"
-                  }`}
-                  style={{
-                    backgroundColor:
-                      currentTab === "address" ? "#16a34a" : undefined,
-                    color: currentTab === "address" ? "white" : undefined,
-                  }}
-                >
-                  Dados do Pretendente
-                </TabsTrigger> */}
-
                 <TabsTrigger
                   value="payment"
                   className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
-                    currentTab === "payment" ? "" : "bg-gray-200"
+                    currentTab === 'payment' ? '' : 'bg-gray-200'
                   }`}
                   style={{
-                    width: "100%",
+                    width: '100%',
                     // marginLeft: "10%",
                     // marginRight: "10px",
                     backgroundColor:
-                      currentTab === "payment" ? "#16a34a" : undefined,
-                    color: currentTab === "payment" ? "white" : undefined,
+                      currentTab === 'payment' ? '#16a34a' : undefined,
+                    color: currentTab === 'payment' ? 'white' : undefined,
                   }}
                 >
                   Dados da Locação Pretendida
@@ -328,12 +316,12 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                 <TabsTrigger
                   value="coberturas"
                   className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
-                    currentTab === "coberturas" ? "" : "bg-gray-200"
+                    currentTab === 'coberturas' ? '' : 'bg-gray-200'
                   }`}
                   style={{
                     backgroundColor:
-                      currentTab === "coberturas" ? "#16a34a" : undefined,
-                    color: currentTab === "coberturas" ? "white" : undefined,
+                      currentTab === 'coberturas' ? '#16a34a' : undefined,
+                    color: currentTab === 'coberturas' ? 'white' : undefined,
                   }}
                 >
                   Coberturas
@@ -365,7 +353,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                       <Select
                         value={formData.tipo_empresa}
                         onValueChange={(value) =>
-                          handleSelectChange("tipo_empresa", value)
+                          handleSelectChange('tipo_empresa', value)
                         }
                         required
                       >
@@ -400,7 +388,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                       <Select
                         value={formData.opcao_tributaria}
                         onValueChange={(value) =>
-                          handleSelectChange("opcao_tributaria", value)
+                          handleSelectChange('opcao_tributaria', value)
                         }
                         required
                       >
@@ -497,7 +485,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                       <Input
                         id="capital_social"
                         name="capital_social"
-                        value={formData.capital_social || ""}
+                        value={formData.capital_social || ''}
                         onChange={handleInputChange}
                         required
                         type="number"
@@ -512,7 +500,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                       <Input
                         id="faturamento_mensal"
                         name="faturamento_mensal"
-                        value={formData.faturamento_mensal || ""}
+                        value={formData.faturamento_mensal || ''}
                         onChange={handleInputChange}
                         required
                         type="number"
@@ -565,193 +553,6 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                 </div>
               </TabsContent>
 
-              {/* <TabsContent value="address">
-                <div className="grid gap-4 py-4">
-                  <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="cep_empresa">
-                          CEP SDFGSDFDSFS<RequiredAsterisk />
-                        </Label>
-                        <div className="flex items-center">
-                          <Input
-                            id="cep_empresa"
-                            name="cep_empresa"
-                            value={formData.cep_empresa}
-                            onChange={handleInputChange}
-                            required
-                            placeholder="Digite o CEP"
-                          />
-                          {isLoading && (
-                            <Loader2 className="ml-2 h-5 w-5 animate-spin" />
-                          )}
-                        </div>
-                      </div>
-                      <div className="space-y-2 sm:col-span-2">
-                        <Label htmlFor="endereco_empresa">
-                          Endereço <RequiredAsterisk />
-                        </Label>
-                        <Input
-                          id="endereco_empresa"
-                          name="endereco_empresa"
-                          value={formData.endereco_empresa}
-                          onChange={handleInputChange}
-                          required
-                          placeholder="Digite o endereço"
-                          disabled={isLoading}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="numero_endereco_empresa">
-                          Número <RequiredAsterisk />
-                        </Label>
-                        <Input
-                          id="numero_endereco_empresa"
-                          name="numero_endereco_empresa"
-                          type="number"
-                          value={formData.numero_endereco_empresa || ""}
-                          onChange={handleInputChange}
-                          required
-                          placeholder="Digite o número"
-                          disabled={isLoading}
-                        />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="bairro_empresa">
-                          Bairro <RequiredAsterisk />
-                        </Label>
-                        <Input
-                          id="bairro_empresa"
-                          name="bairro_empresa"
-                          value={formData.bairro_empresa}
-                          onChange={handleInputChange}
-                          required
-                          placeholder="Digite o bairro"
-                          disabled={isLoading}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="complemento">Complemento</Label>
-                        <Input
-                          id="complemento_empresa"
-                          name="complemento_empresa"
-                          value={formData.complemento_empresa || ""}
-                          onChange={handleInputChange}
-                          placeholder="Digite o complemento (opcional)"
-                          disabled={isLoading}
-                        />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="cidade_empresa">
-                          Cidade empresa <RequiredAsterisk />
-                        </Label>
-                        <Input
-                          id="cidade_empresa"
-                          name="cidade_empresa"
-                          value={formData.cidade_empresa}
-                          onChange={handleInputChange}
-                          required
-                          placeholder="Digite a cidade"
-                          disabled={isLoading}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="estado_empresa">
-                          Estado <RequiredAsterisk />
-                        </Label>
-                        <Input
-                          id="estado_empresa"
-                          name="estado_empresa"
-                          value={formData.estado_empresa}
-                          onChange={handleInputChange}
-                          required
-                          placeholder="Digite o estado"
-                          disabled={isLoading}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="tipo_imovel">
-                        Tipo do Imóvel <RequiredAsterisk />
-                      </Label>
-                      <Select
-                        value={formData.tipo_imovel}
-                        onValueChange={(value) =>
-                          handleSelectChange("tipo_imovel", value)
-                        }
-                        required
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Tipo do Imóvel" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="PRÓPRIO">PRÓPRIO</SelectItem>
-                          <SelectItem value="ALUGADO">ALUGADO</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                 
-                  {formData.tipo_imovel === "ALUGADO" && (
-                    <>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="valor_aluguel">
-                            Valor do Aluguel excluido(do Imóvel Atual){" "}
-                            <RequiredAsterisk />
-                          </Label>
-                          <Input
-                            id="valor_aluguel"
-                            name="valor_aluguel"
-                            type="number"
-                            value={formData.valor_aluguel || ""}
-                            onChange={handleInputChange}
-                            placeholder="Digite o valor do alguel"
-                            disabled={isLoading}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="nome_locador_imobiliaria">
-                            Nome do Locador ou Imobiliária <RequiredAsterisk />
-                          </Label>
-                          <Input
-                            id="nome_locador_imobiliaria"
-                            name="nome_locador_imobiliaria"
-                            type="text"
-                            value={formData.nome_locador_imobiliaria || ""}
-                            onChange={handleInputChange}
-                            placeholder="Digite o nome do locador ou imobiliária"
-                            disabled={isLoading}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="telefone">
-                            Telefone do Locador ou da Imobiliária{" "}
-                            <RequiredAsterisk />
-                          </Label>
-                          <Input
-                            id="telefone"
-                            name="telefone"
-                            type="tel"
-                            value={formData.telefone}
-                            onChange={handleInputChange}
-                            placeholder="Digite o telefone do locador ou imobiliária"
-                          />
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </TabsContent> */}
-
               <TabsContent value="payment">
                 <div className="grid gap-4 py-4">
                   <div className="space-y-2">
@@ -761,7 +562,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                     <Select
                       value={formData.motivo_locacao}
                       onValueChange={(value) =>
-                        handleSelectChange("motivo_locacao", value)
+                        handleSelectChange('motivo_locacao', value)
                       }
                       required
                     >
@@ -781,6 +582,31 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                         </SelectItem>
                       </SelectContent>
                     </Select>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="prazo_contrato">
+                        Prazo do Contrato <RequiredAsterisk />
+                      </Label>
+                      <Select
+                        value={formData.prazo_contrato}
+                        onValueChange={(value) =>
+                          handleSelectChange('prazo_contrato', value)
+                        }
+                        required
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione o prazo do contrato" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="12 MESES">12 MESES</SelectItem>
+                          <SelectItem value="24 MESES">24 MESES</SelectItem>
+                          <SelectItem value="30 MESES">30 MESES</SelectItem>
+                          <SelectItem value="36 MESES">36 MESES</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
@@ -824,7 +650,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                         id="numero_endereco"
                         name="numero_endereco"
                         type="number"
-                        value={formData.numero_endereco || ""}
+                        value={formData.numero_endereco || ''}
                         onChange={handleInputChange}
                         required
                         placeholder="Digite o número"
@@ -852,7 +678,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                       <Input
                         id="complemento"
                         name="complemento"
-                        value={formData.complemento || ""}
+                        value={formData.complemento || ''}
                         onChange={handleInputChange}
                         placeholder="Digite o complemento (opcional)"
                         disabled={isLoading}
@@ -903,7 +729,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                         id="aluguel"
                         name="aluguel"
                         type="number"
-                        value={formData.aluguel || ""}
+                        value={formData.aluguel || ''}
                         onChange={handleInputChange}
                         required
                         placeholder="Digite o valor do alguel"
@@ -916,7 +742,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                         id="energia"
                         name="energia"
                         type="number"
-                        value={formData.energia || ""}
+                        value={formData.energia || ''}
                         onChange={handleInputChange}
                         placeholder="Digite o valor da conta de energia"
                         disabled={isLoading}
@@ -928,7 +754,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                         id="agua"
                         name="agua"
                         type="number"
-                        value={formData.agua || ""}
+                        value={formData.agua || ''}
                         onChange={handleInputChange}
                         placeholder="Digite o valor da conta de água"
                         disabled={isLoading}
@@ -940,7 +766,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                         id="gas"
                         name="gas"
                         type="number"
-                        value={formData.gas || ""}
+                        value={formData.gas || ''}
                         onChange={handleInputChange}
                         placeholder="Digite o valor da conta de gás"
                         disabled={isLoading}
@@ -952,7 +778,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                         id="condominio"
                         name="condominio"
                         type="number"
-                        value={formData.condominio || ""}
+                        value={formData.condominio || ''}
                         onChange={handleInputChange}
                         placeholder="Digite o valor do condomínio"
                         disabled={isLoading}
@@ -965,7 +791,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                         id="iptu"
                         name="iptu"
                         type="number"
-                        value={formData.iptu || ""}
+                        value={formData.iptu || ''}
                         onChange={handleInputChange}
                         placeholder="Digite o valor do IPTU"
                         disabled={isLoading}
@@ -981,7 +807,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                       <Select
                         value={formData.danos_imovel}
                         onValueChange={(value) =>
-                          handleSelectChange("danos_imovel", value)
+                          handleSelectChange('danos_imovel', value)
                         }
                         required
                       >
@@ -1002,7 +828,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                       <Select
                         value={formData.multa_rescisao}
                         onValueChange={(value) =>
-                          handleSelectChange("multa_rescisao", value)
+                          handleSelectChange('multa_rescisao', value)
                         }
                         required
                       >
@@ -1025,7 +851,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                       <Select
                         value={formData.pintura_interna}
                         onValueChange={(value) =>
-                          handleSelectChange("pintura_interna", value)
+                          handleSelectChange('pintura_interna', value)
                         }
                         required
                       >
@@ -1046,7 +872,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                       <Select
                         value={formData.pintura_externa}
                         onValueChange={(value) =>
-                          handleSelectChange("pintura_externa", value)
+                          handleSelectChange('pintura_externa', value)
                         }
                         required
                       >
@@ -1063,7 +889,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
 
                   <div className="space-y-2 mb-4 mt-1">
                     <h2>
-                      {" "}
+                      {' '}
                       <RequiredAsterisk /> A Pintura somente será indenizada se
                       o Laudo de Vistoria Inicial informar especificamente que o
                       imóvel foi entregue com Pintura NOVA.
@@ -1076,7 +902,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
                       id="observacao"
                       name="observacao"
                       type="text"
-                      value={formData.observacao || ""}
+                      value={formData.observacao || ''}
                       onChange={handleInputChange}
                       placeholder="Digite sua observação"
                       disabled={isLoading}
@@ -1111,12 +937,12 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
           )}
 
           <CardFooter className="flex justify-between">
-            {currentTab !== "personal" && (
+            {currentTab !== 'personal' && (
               <Button type="button" variant="outline" onClick={handlePrevious}>
                 <ArrowLeft className="mr-2 h-4 w-4" /> Anterior
               </Button>
             )}
-            {currentTab !== "coberturas" ? (
+            {currentTab !== 'coberturas' ? (
               <Button
                 type="button"
                 onClick={handleNext}
@@ -1167,7 +993,7 @@ export function SeguroFiancaEmpresarialMais2AnosForms() {
           <Button
             onClick={() => {
               setIsSuccessModalOpen(false)
-              navigate("/imobiliaria/formulario")
+              navigate('/imobiliaria/formulario')
             }}
             className="w-full mt-4 bg-green-700 hover:bg-green-600"
           >

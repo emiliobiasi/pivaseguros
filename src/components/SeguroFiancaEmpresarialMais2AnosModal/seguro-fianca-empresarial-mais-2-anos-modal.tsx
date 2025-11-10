@@ -1,8 +1,8 @@
-import { SeguroFiancaEmpresarialMais2Anos } from "@/types/SeguroFiancaEmpresarialMais2Anos"
-import { XCircle } from "lucide-react"
-import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { formatValor } from "@/utils/regex/regexValor"
+import { SeguroFiancaEmpresarialMais2Anos } from '@/types/SeguroFiancaEmpresarialMais2Anos'
+import { XCircle } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Button } from '@/components/ui/button'
+import { formatValor } from '@/utils/regex/regexValor'
 
 type SeguroFiancaEmpresarialMais2AnosModalProps = {
   seguro: SeguroFiancaEmpresarialMais2Anos
@@ -76,14 +76,14 @@ export function SeguroFiancaEmpresarialMais2AnosModal({
             {seguro.capital_social !== undefined &&
               seguro.capital_social > 0 && (
                 <p>
-                  <strong>Capital Social:</strong> R${" "}
+                  <strong>Capital Social:</strong> R${' '}
                   {formatValor(seguro.capital_social.toFixed(2))}
                 </p>
               )}
             {seguro.faturamento_mensal !== undefined &&
               seguro.faturamento_mensal > 0 && (
                 <p>
-                  <strong>Faturamento Mensal:</strong> R${" "}
+                  <strong>Faturamento Mensal:</strong> R${' '}
                   {formatValor(seguro.faturamento_mensal.toFixed(2))}
                 </p>
               )}
@@ -124,36 +124,6 @@ export function SeguroFiancaEmpresarialMais2AnosModal({
 
           {/* Segunda Coluna */}
           <div className="space-y-4 bg-gray-100 p-4 rounded-lg">
-            {/* Endereço da Sede */}
-            {/* <>
-              <h3 className="text-lg font-semibold text-[#025d37]">
-                Endereço da Sede
-              </h3>
-              <p>
-                <strong>CEP:</strong> {seguro.cep_empresa}
-              </p>
-              <p>
-                <strong>Endereço:</strong> {seguro.endereco_empresa}
-              </p>
-              <p>
-                <strong>Número:</strong> {seguro.numero_endereco_empresa}
-              </p>
-              {seguro.complemento && (
-                <p>
-                  <strong>Complemento:</strong> {seguro.complemento_empresa}
-                </p>
-              )}
-              <p>
-                <strong>Bairro:</strong> {seguro.bairro_empresa}
-              </p>
-              <p>
-                <strong>Cidade:</strong> {seguro.cidade_empresa}
-              </p>
-              <p>
-                <strong>Estado:</strong> {seguro.estado_empresa}
-              </p>
-            </> */}
-
             {/* Endereço da Locação */}
             <>
               <h3 className="text-lg font-semibold text-[#025d37]">
@@ -199,15 +169,15 @@ export function SeguroFiancaEmpresarialMais2AnosModal({
                 </p>
               )}
 
-              {seguro.tipo_imovel === "ALUGADO" && (
+              {seguro.tipo_imovel === 'ALUGADO' && (
                 <>
                   <p>
-                    <strong>Valor do Aluguel (Imóvel Atual):</strong> R${" "}
+                    <strong>Valor do Aluguel (Imóvel Atual):</strong> R${' '}
                     {seguro.valor_aluguel !== undefined &&
                       formatValor(seguro.valor_aluguel.toFixed(2))}
                   </p>
                   <p>
-                    <strong>Nome do Locador/Imobiliária:</strong>{" "}
+                    <strong>Nome do Locador/Imobiliária:</strong>{' '}
                     {seguro.nome_locador_imobiliaria}
                   </p>
                   <p>
@@ -215,6 +185,16 @@ export function SeguroFiancaEmpresarialMais2AnosModal({
                   </p>
                 </>
               )}
+
+              {/* PRAZO DO CONTRATO */}
+              <>
+                <h3 className="text-lg font-semibold mt-6 text-[#025d37]">
+                  Prazo do Contrato
+                </h3>
+                <p>
+                  <strong>Prazo do Contrato:</strong> {seguro.prazo_contrato}
+                </p>
+              </>
             </>
           </div>
 
@@ -226,37 +206,37 @@ export function SeguroFiancaEmpresarialMais2AnosModal({
             </h3>
             {seguro.aluguel !== undefined && (
               <p>
-                <strong>Valor do Aluguel:</strong> R${" "}
+                <strong>Valor do Aluguel:</strong> R${' '}
                 {formatValor(seguro.aluguel.toFixed(2))}
               </p>
             )}
             {seguro.agua !== undefined && seguro.agua > 0 && (
               <p>
-                <strong>Valor da Conta de Água:</strong> R${" "}
+                <strong>Valor da Conta de Água:</strong> R${' '}
                 {formatValor(seguro.agua.toFixed(2))}
               </p>
             )}
             {seguro.energia !== undefined && seguro.energia > 0 && (
               <p>
-                <strong>Valor da Conta de Energia:</strong> R${" "}
+                <strong>Valor da Conta de Energia:</strong> R${' '}
                 {formatValor(seguro.energia.toFixed(2))}
               </p>
             )}
             {seguro.gas !== undefined && seguro.gas > 0 && (
               <p>
-                <strong>Valor da Conta de Gás:</strong> R${" "}
+                <strong>Valor da Conta de Gás:</strong> R${' '}
                 {formatValor(seguro.gas.toFixed(2))}
               </p>
             )}
             {seguro.condominio !== undefined && seguro.condominio > 0 && (
               <p>
-                <strong>Valor do Condomínio:</strong> R${" "}
+                <strong>Valor do Condomínio:</strong> R${' '}
                 {formatValor(seguro.condominio.toFixed(2))}
               </p>
             )}
             {seguro.iptu !== undefined && seguro.iptu > 0 && (
               <p>
-                <strong>Valor do IPTU:</strong> R${" "}
+                <strong>Valor do IPTU:</strong> R${' '}
                 {formatValor(seguro.iptu.toFixed(2))}
               </p>
             )}

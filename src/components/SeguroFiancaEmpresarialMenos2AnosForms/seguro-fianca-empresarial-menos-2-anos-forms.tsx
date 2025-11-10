@@ -1,7 +1,8 @@
-import { SeguroFiancaEmpresarialMenos2Anos } from "@/types/SeguroFiancaEmpresarialMenos2Anos"
-import { useState, useRef } from "react"
-import { useNavigate } from "react-router-dom"
-import { Button } from "@/components/ui/button"
+import { SeguroFiancaEmpresarialMenos2Anos } from '@/types/SeguroFiancaEmpresarialMenos2Anos'
+import { createSeguroFiancaEmpresarialMenos2Anos } from '@/utils/api/SeguroFiancaEmpresarialMenos2AnosService'
+import { useState, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -9,82 +10,81 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Checkbox } from "@/components/ui/checkbox"
-import { ArrowLeft, ArrowRight, CheckCircle, Send, Loader2 } from "lucide-react"
-import { formatCPF } from "@/utils/regex/regexCPF"
-import { formatCNPJ } from "@/utils/regex/regexCNPJ"
-import { formatCEP } from "@/utils/regex/regexCEP"
-import { formatRG } from "@/utils/regex/regexRG"
-import { formatTelefone } from "@/utils/regex/regexTelefone"
-import { createSeguroFiancaEmpresarialMenos2Anos } from "@/utils/api/SeguroFiancaEmpresarialMenos2AnosService"
+} from '@/components/ui/select'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Checkbox } from '@/components/ui/checkbox'
+import { ArrowLeft, ArrowRight, CheckCircle, Send, Loader2 } from 'lucide-react'
+import { formatCPF } from '@/utils/regex/regexCPF'
+import { formatCNPJ } from '@/utils/regex/regexCNPJ'
+import { formatCEP } from '@/utils/regex/regexCEP'
+import { formatRG } from '@/utils/regex/regexRG'
+import { formatTelefone } from '@/utils/regex/regexTelefone'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { buscaEnderecoPorCEP, EnderecoViaCep } from "@/utils/api/Cep"
+} from '@/components/ui/dialog'
+import { buscaEnderecoPorCEP, EnderecoViaCep } from '@/utils/api/Cep'
 
 export function SeguroFiancaEmpresarialMenos2AnosForms() {
-  const [currentTab, setCurrentTab] = useState("dadosPretendente")
+  const [currentTab, setCurrentTab] = useState('dadosPretendente')
   const [agreedToTerms, setAgreedToTerms] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
-  const [errorMessage, setErrorMessage] = useState("")
+  const [errorMessage, setErrorMessage] = useState('')
 
   const navigate = useNavigate()
   const formRef = useRef<HTMLFormElement>(null)
 
   const [formData, setFormData] = useState<SeguroFiancaEmpresarialMenos2Anos>({
-    id: "",
+    id: '',
     id_numero: 0,
-    status: "EM ANÁLISE",
-    acao: "PENDENTE",
-    nome_imobiliaria: "",
-    nome_pretendente: "",
-    sexo_pretendente: "MASCULINO",
-    cpf: "",
-    rg: "",
+    status: 'EM ANÁLISE',
+    acao: 'PENDENTE',
+    nome_imobiliaria: '',
+    nome_pretendente: '',
+    sexo_pretendente: 'MASCULINO',
+    cpf: '',
+    rg: '',
     data_expedicao_rg: new Date(),
     data_nascimento: new Date(),
-    orgao_emissor_rg: "",
-    estado_civil_locatario: "SOLTEIRO",
-    email: "",
-    telefone_pretendente: "",
-    tipo_residencia: "MENOS DE 1 ANO",
-    condicao_imovel: "PRÓPRIO",
-    arca_com_aluguel: "SIM",
-    vinculo_empregaticio: "AUTÔNOMO",
-    profissao: "",
-    alocacao_pretendida_constituida: "SIM",
-    motivo_locacao: "ABERTURA DE FILIAL",
-    cpf_morador: "",
-    vinculo_empregaticio_conjuge: "AUTÔNOMO",
-    profissao_conjuge: "",
-    nome_empresa_trabalho_conjuge: "",
+    orgao_emissor_rg: '',
+    estado_civil_locatario: 'SOLTEIRO',
+    email: '',
+    telefone_pretendente: '',
+    tipo_residencia: 'MENOS DE 1 ANO',
+    condicao_imovel: 'PRÓPRIO',
+    arca_com_aluguel: 'SIM',
+    vinculo_empregaticio: 'AUTÔNOMO',
+    profissao: '',
+    alocacao_pretendida_constituida: 'SIM',
+    motivo_locacao: 'ABERTURA DE FILIAL',
+    cpf_morador: '',
+    vinculo_empregaticio_conjuge: 'AUTÔNOMO',
+    profissao_conjuge: '',
+    nome_empresa_trabalho_conjuge: '',
     data_emissao_conjuge: new Date(),
-    fone_conjuge: "",
-    ramal_conjuge: "",
+    fone_conjuge: '',
+    ramal_conjuge: '',
     salario_conjuge: 0,
     outros_rendimentos_conjuge: 0,
     total_rendimentos_mensais_conjuge: 0,
-    danos_imovel: "SIM",
-    multa_rescisao: "SIM",
-    pintura_interna: "SIM",
-    pintura_externa: "SIM",
-    observacao: "",
+    danos_imovel: 'SIM',
+    multa_rescisao: 'SIM',
+    pintura_interna: 'SIM',
+    pintura_externa: 'SIM',
+    observacao: '',
     created: new Date(),
   })
 
@@ -93,82 +93,82 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
     let formattedValue = value
 
     if (
-      name === "fone_residencial" ||
-      name === "fone" ||
-      name === "fone_conjuge" ||
-      name === "telefone_contato" ||
-      name === "telefone_pretendente"
+      name === 'fone_residencial' ||
+      name === 'fone' ||
+      name === 'fone_conjuge' ||
+      name === 'telefone_contato' ||
+      name === 'telefone_pretendente'
     ) {
       formattedValue = formatTelefone(value)
     } else if (
-      name === "cpf" ||
-      name === "cpf_conjuge" ||
-      name === "cpf_socio_1" ||
-      name === "cpf_socio_2" ||
-      name === "cpf_socio_3" ||
-      name === "cpf_morador"
+      name === 'cpf' ||
+      name === 'cpf_conjuge' ||
+      name === 'cpf_socio_1' ||
+      name === 'cpf_socio_2' ||
+      name === 'cpf_socio_3' ||
+      name === 'cpf_morador'
     ) {
       formattedValue = formatCPF(value)
-    } else if (name === "rg" || name === "rg_conjuge") {
+    } else if (name === 'rg' || name === 'rg_conjuge') {
       formattedValue = formatRG(value)
     } else if (
-      name === "cep_imovel_alugado" ||
-      name === "cep_pessoa_fisica_nao_residencial"
+      name === 'cep_imovel_alugado' ||
+      name === 'cep_pessoa_fisica_nao_residencial'
     ) {
       formattedValue = formatCEP(value)
 
-      const cepNumeros = formattedValue.replace(/\D/g, "")
+      const cepNumeros = formattedValue.replace(/\D/g, '')
 
       if (cepNumeros.length === 8) {
         try {
           setIsLoading(true)
-          setErrorMessage("")
+          setErrorMessage('')
 
           const data: EnderecoViaCep = await buscaEnderecoPorCEP(cepNumeros)
 
-          if (name === "cep_imovel_alugado") {
+          if (name === 'cep_imovel_alugado') {
             setFormData((prevState) => ({
               ...prevState,
-              endereco_imovel_alugado: data.logradouro || "",
-              bairro_imovel_alugado: data.bairro || "",
-              cidade_imovel_alugado: data.localidade || "",
-              estado_imovel_alugado: data.uf || "",
+              endereco_imovel_alugado: data.logradouro || '',
+              bairro_imovel_alugado: data.bairro || '',
+              cidade_imovel_alugado: data.localidade || '',
+              estado_imovel_alugado: data.uf || '',
               [name]: formattedValue,
             }))
-          } else if (name === "cep_pessoa_fisica_nao_residencial") {
+          } else if (name === 'cep_pessoa_fisica_nao_residencial') {
             setFormData((prevState) => ({
               ...prevState,
-              endereco_pessoa_fisica_nao_residencial: data.logradouro || "",
-              bairro_pessoa_fisica_nao_residencial: data.bairro || "",
-              cidade_pessoa_fisica_nao_residencial: data.localidade || "",
-              estado_pessoa_fisica_nao_residencial: data.uf || "",
+              endereco_pessoa_fisica_nao_residencial: data.logradouro || '',
+              bairro_pessoa_fisica_nao_residencial: data.bairro || '',
+              cidade_pessoa_fisica_nao_residencial: data.localidade || '',
+              estado_pessoa_fisica_nao_residencial: data.uf || '',
               [name]: formattedValue,
             }))
           }
         } catch (error: unknown) {
-          console.error("Erro ao buscar o CEP:", error)
+          console.error('Erro ao buscar o CEP:', error)
           setErrorMessage(
             error instanceof Error
               ? error.message
-              : "Erro ao buscar o CEP. Tente novamente."
+              : 'Erro ao buscar o CEP. Tente novamente.'
           )
 
-          if (name === "cep_imovel_alugado") {
+          if (name === 'cep_imovel_alugado') {
             setFormData((prevState) => ({
               ...prevState,
-              endereco_imovel_alugado: "",
-              bairro_imovel_alugado: "",
-              cidade_imovel_alugado: "",
-              estado_imovel_alugado: "",
+              endereco_imovel_alugado: '',
+              bairro_imovel_alugado: '',
+              cidade_imovel_alugado: '',
+              estado_imovel_alugado: '',
               [name]: formattedValue,
             }))
-          } else if (name === "cep_pessoa_fisica_nao_residencial") {
+          } else if (name === 'cep_pessoa_fisica_nao_residencial') {
             setFormData((prevState) => ({
               ...prevState,
-              endereco_pessoa_fisica_nao_residencial: "",
-              bairro_pessoa_fisica_nao_residencial: "",
-              cidade_pessoa_fisica_nao_residencial: "",
-              estado_pessoa_fisica_nao_residencial: "",
+              endereco_pessoa_fisica_nao_residencial: '',
+              bairro_pessoa_fisica_nao_residencial: '',
+              cidade_pessoa_fisica_nao_residencial: '',
+              estado_pessoa_fisica_nao_residencial: '',
               [name]: formattedValue,
             }))
           }
@@ -176,80 +176,80 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
           setIsLoading(false)
         }
       } else {
-        if (name === "cep_imovel_alugado") {
+        if (name === 'cep_imovel_alugado') {
           setFormData((prevState) => ({
             ...prevState,
-            endereco_imovel_alugado: "",
-            bairro_imovel_alugado: "",
-            cidade_imovel_alugado: "",
-            estado_imovel_alugado: "",
+            endereco_imovel_alugado: '',
+            bairro_imovel_alugado: '',
+            cidade_imovel_alugado: '',
+            estado_imovel_alugado: '',
             [name]: formattedValue,
           }))
-        } else if (name === "cep_pessoa_fisica_nao_residencial") {
+        } else if (name === 'cep_pessoa_fisica_nao_residencial') {
           setFormData((prevState) => ({
             ...prevState,
-            endereco_pessoa_fisica_nao_residencial: "",
-            bairro_pessoa_fisica_nao_residencial: "",
-            cidade_pessoa_fisica_nao_residencial: "",
-            estado_pessoa_fisica_nao_residencial: "",
+            endereco_pessoa_fisica_nao_residencial: '',
+            bairro_pessoa_fisica_nao_residencial: '',
+            cidade_pessoa_fisica_nao_residencial: '',
+            estado_pessoa_fisica_nao_residencial: '',
             [name]: formattedValue,
           }))
         }
       }
-    } else if (name === "cnpj_pessoa_fisica_nao_residencial") {
+    } else if (name === 'cnpj_pessoa_fisica_nao_residencial') {
       formattedValue = formatCNPJ(value)
     } else if (
       [
-        "salario",
-        "outros_rendimentos",
-        "total_rendimentos_mensais",
-        "salario_conjuge",
-        "outros_rendimentos_conjuge",
-        "total_rendimentos_mensais_conjuge",
-        "valor_aluguel_atual",
-        "compra_produto_cap_inicial",
-        "obras_reformas_cap_inicial",
-        "maquinas_cap_inicial",
-        "despesas_legais_cap_inicial",
-        "moveis_cap_inicial",
-        "cursos_cap_inicial",
-        "estoques_cap_inicial",
-        "divulgacao_cap_inicial",
-        "reposicao_material_cap_giro",
-        "consumo_cap_giro",
-        "reposicao_estoque_cap_giro",
-        "folha_pagamento_cap_giro",
-        "financiamento_vendas_cap_giro",
-        "impostos_taxas_cap_giro",
-        "aluguel_imovel_alugado",
-        "desp_ordinarias_cond_imovel_alugado",
-        "iptu_imovel_alugado",
-        "agua_imovel_alugado",
-        "luz_imovel_alugado",
-        "gas_canalizado_imovel_alugado",
-        "tipo_qtd_parcela_a_1",
-        "tipo_qtd_parcela_a_2",
-        "tipo_qtd_parcela_a_3",
-        "valor_parcela_a_1",
-        "valor_parcela_a_2",
-        "valor_parcela_a_3",
-        "tipo_qtd_parcela_b_1",
-        "tipo_qtd_parcela_b_2",
-        "tipo_qtd_parcela_b_3",
-        "valor_parcela_b_1",
-        "valor_parcela_b_2",
-        "valor_parcela_b_3",
+        'salario',
+        'outros_rendimentos',
+        'total_rendimentos_mensais',
+        'salario_conjuge',
+        'outros_rendimentos_conjuge',
+        'total_rendimentos_mensais_conjuge',
+        'valor_aluguel_atual',
+        'compra_produto_cap_inicial',
+        'obras_reformas_cap_inicial',
+        'maquinas_cap_inicial',
+        'despesas_legais_cap_inicial',
+        'moveis_cap_inicial',
+        'cursos_cap_inicial',
+        'estoques_cap_inicial',
+        'divulgacao_cap_inicial',
+        'reposicao_material_cap_giro',
+        'consumo_cap_giro',
+        'reposicao_estoque_cap_giro',
+        'folha_pagamento_cap_giro',
+        'financiamento_vendas_cap_giro',
+        'impostos_taxas_cap_giro',
+        'aluguel_imovel_alugado',
+        'desp_ordinarias_cond_imovel_alugado',
+        'iptu_imovel_alugado',
+        'agua_imovel_alugado',
+        'luz_imovel_alugado',
+        'gas_canalizado_imovel_alugado',
+        'tipo_qtd_parcela_a_1',
+        'tipo_qtd_parcela_a_2',
+        'tipo_qtd_parcela_a_3',
+        'valor_parcela_a_1',
+        'valor_parcela_a_2',
+        'valor_parcela_a_3',
+        'tipo_qtd_parcela_b_1',
+        'tipo_qtd_parcela_b_2',
+        'tipo_qtd_parcela_b_3',
+        'valor_parcela_b_1',
+        'valor_parcela_b_2',
+        'valor_parcela_b_3',
       ].includes(name)
     ) {
       // formattedValue = formatCurrency(value);
     } else if (
       [
-        "data_expedicao_rg",
-        "data_nascimento",
-        "data_emissao",
-        "data_expedicao_rg_conjuge",
-        "data_nascimento_conjuge",
-        "data_emissao_conjuge",
+        'data_expedicao_rg',
+        'data_nascimento',
+        'data_emissao',
+        'data_expedicao_rg_conjuge',
+        'data_nascimento_conjuge',
+        'data_emissao_conjuge',
       ].includes(name)
     ) {
       formattedValue = value
@@ -273,11 +273,11 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
 
   const handleNext = () => {
     const tabs = [
-      "dadosPretendente",
-      "dadosConjuge",
-      "dadosProfissionais",
-      "informacoesEmpresa",
-      "dadosImovelAlugado",
+      'dadosPretendente',
+      'dadosConjuge',
+      'dadosProfissionais',
+      'informacoesEmpresa',
+      'dadosImovelAlugado',
     ]
     const currentIndex = tabs.indexOf(currentTab)
     if (currentIndex < tabs.length - 1) {
@@ -287,11 +287,11 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
 
   const handlePrevious = () => {
     const tabs = [
-      "dadosPretendente",
-      "dadosConjuge",
-      "dadosProfissionais",
-      "informacoesEmpresa",
-      "dadosImovelAlugado",
+      'dadosPretendente',
+      'dadosConjuge',
+      'dadosProfissionais',
+      'informacoesEmpresa',
+      'dadosImovelAlugado',
     ]
     const currentIndex = tabs.indexOf(currentTab)
     if (currentIndex > 0) {
@@ -308,55 +308,57 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
     // Função de validação
     const validateForm = () => {
       const errors: string[] = []
-      if (!formData.nome_imobiliaria) errors.push("Nome da Imobiliária")
-      if (!formData.nome_pretendente) errors.push("Nome do Pretendente")
-      if (!formData.sexo_pretendente) errors.push("Sexo do Pretendente")
-      if (!formData.telefone_pretendente) errors.push("Telefone do Pretendente")
-      if (!formData.cpf) errors.push("CPF")
-      if (!formData.rg) errors.push("RG")
-      if (!formData.data_expedicao_rg) errors.push("Data de Expedição do RG")
-      if (!formData.data_nascimento) errors.push("Data de Nascimento")
-      if (!formData.orgao_emissor_rg) errors.push("Órgão Emissor do RG")
+      if (!formData.nome_imobiliaria) errors.push('Nome da Imobiliária')
+      if (!formData.nome_pretendente) errors.push('Nome do Pretendente')
+      if (!formData.sexo_pretendente) errors.push('Sexo do Pretendente')
+      if (!formData.telefone_pretendente) errors.push('Telefone do Pretendente')
+      if (!formData.cpf) errors.push('CPF')
+      if (!formData.rg) errors.push('RG')
+      if (!formData.data_expedicao_rg) errors.push('Data de Expedição do RG')
+      if (!formData.data_nascimento) errors.push('Data de Nascimento')
+      if (!formData.orgao_emissor_rg) errors.push('Órgão Emissor do RG')
 
       if (
-        formData.estado_civil_locatario == "CASADO" &&
+        formData.estado_civil_locatario == 'CASADO' &&
         !formData.nome_conjuge
       ) {
-        errors.push("Nome do Cônjuge")
+        errors.push('Nome do Cônjuge')
       }
 
       if (
-        formData.estado_civil_locatario == "CASADO" &&
+        formData.estado_civil_locatario == 'CASADO' &&
         !formData.cpf_conjuge
       ) {
-        errors.push("CPF do Cônjuge")
+        errors.push('CPF do Cônjuge')
       }
 
-      if (!formData.email) errors.push("Email")
+      if (!formData.email) errors.push('Email')
 
-      if (!formData.vinculo_empregaticio) errors.push("Vínculo Empregatício")
-      if (!formData.profissao) errors.push("Profissão")
-      if (!formData.salario) errors.push("Salário / Rendimentos")
+      if (!formData.vinculo_empregaticio) errors.push('Vínculo Empregatício')
+      if (!formData.profissao) errors.push('Profissão')
+      if (!formData.salario) errors.push('Salário / Rendimentos')
       if (!formData.alocacao_pretendida_constituida)
-        errors.push("Alocação Pretendida Constituída")
+        errors.push('Alocação Pretendida Constituída')
 
       if (
-        formData.alocacao_pretendida_constituida === "SIM" &&
+        formData.alocacao_pretendida_constituida === 'SIM' &&
         !formData.cnpj_pessoa_fisica_nao_residencial
       ) {
-        errors.push("CNPJ da empresa já constituida")
+        errors.push('CNPJ da empresa já constituida')
       }
 
-      if (!formData.motivo_locacao) errors.push("Motivo da Locação")
+      if (!formData.motivo_locacao) errors.push('Motivo da Locação')
+
+      if (!formData.prazo_contrato) errors.push('Prazo do Contrato')
 
       if (
-        formData.motivo_locacao === "LOCAÇÃO PARA MORADIA" &&
+        formData.motivo_locacao === 'LOCAÇÃO PARA MORADIA' &&
         !formData.cpf_morador
       ) {
-        errors.push("CPF do Morador")
+        errors.push('CPF do Morador')
       }
 
-      if (!formData.aluguel_imovel_alugado) errors.push("Valor do Aluguel")
+      if (!formData.aluguel_imovel_alugado) errors.push('Valor do Aluguel')
 
       return errors
     }
@@ -365,7 +367,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
     if (validationErrors.length > 0) {
       setErrorMessage(
         `Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou os campos. Campos obrigatórios que faltam: ${validationErrors.join(
-          ", "
+          ', '
         )}`
       )
       return
@@ -380,9 +382,9 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
       formRef.current?.reset()
       setIsSuccessModalOpen(true)
     } catch (error) {
-      console.error("Erro ao enviar o formulário:", error)
+      console.error('Erro ao enviar o formulário:', error)
       setErrorMessage(
-        "Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou campos de email corretamente. Tente novamente."
+        'Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou campos de email corretamente. Tente novamente.'
       )
     } finally {
       setIsLoading(false)
@@ -403,11 +405,11 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
             (CNPJ Menos de 2 Anos), solicitamos o preenchimento dos dados a
             seguir:
           </CardDescription>
-          <h3 className="" style={{ marginTop: "1.5rem " }}>
-            💡Os campos marcados com{" "}
+          <h3 className="" style={{ marginTop: '1.5rem ' }}>
+            💡Os campos marcados com{' '}
             <strong>
               <RequiredAsterisk />
-            </strong>{" "}
+            </strong>{' '}
             são <strong>obrigatórios.</strong>
           </h3>
         </CardHeader>
@@ -418,13 +420,13 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                 <TabsTrigger
                   value="dadosPretendente"
                   className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
-                    currentTab === "dadosPretendente" ? "" : "bg-gray-200"
+                    currentTab === 'dadosPretendente' ? '' : 'bg-gray-200'
                   }`}
                   style={{
                     backgroundColor:
-                      currentTab === "dadosPretendente" ? "#16a34a" : undefined,
+                      currentTab === 'dadosPretendente' ? '#16a34a' : undefined,
                     color:
-                      currentTab === "dadosPretendente" ? "white" : undefined,
+                      currentTab === 'dadosPretendente' ? 'white' : undefined,
                   }}
                 >
                   Dados do Pretendente
@@ -432,12 +434,12 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                 <TabsTrigger
                   value="dadosConjuge"
                   className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
-                    currentTab === "dadosConjuge" ? "" : "bg-gray-200"
+                    currentTab === 'dadosConjuge' ? '' : 'bg-gray-200'
                   }`}
                   style={{
                     backgroundColor:
-                      currentTab === "dadosConjuge" ? "#16a34a" : undefined,
-                    color: currentTab === "dadosConjuge" ? "white" : undefined,
+                      currentTab === 'dadosConjuge' ? '#16a34a' : undefined,
+                    color: currentTab === 'dadosConjuge' ? 'white' : undefined,
                   }}
                 >
                   Dados do Cônjuge
@@ -446,15 +448,15 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                 <TabsTrigger
                   value="dadosProfissionais"
                   className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
-                    currentTab === "dadosProfissionais" ? "" : "bg-gray-200"
+                    currentTab === 'dadosProfissionais' ? '' : 'bg-gray-200'
                   }`}
                   style={{
                     backgroundColor:
-                      currentTab === "dadosProfissionais"
-                        ? "#16a34a"
+                      currentTab === 'dadosProfissionais'
+                        ? '#16a34a'
                         : undefined,
                     color:
-                      currentTab === "dadosProfissionais" ? "white" : undefined,
+                      currentTab === 'dadosProfissionais' ? 'white' : undefined,
                   }}
                 >
                   Dados Profissionais
@@ -462,15 +464,15 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                 <TabsTrigger
                   value="informacoesEmpresa"
                   className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
-                    currentTab === "informacoesEmpresa" ? "" : "bg-gray-200"
+                    currentTab === 'informacoesEmpresa' ? '' : 'bg-gray-200'
                   }`}
                   style={{
                     backgroundColor:
-                      currentTab === "informacoesEmpresa"
-                        ? "#16a34a"
+                      currentTab === 'informacoesEmpresa'
+                        ? '#16a34a'
                         : undefined,
                     color:
-                      currentTab === "informacoesEmpresa" ? "white" : undefined,
+                      currentTab === 'informacoesEmpresa' ? 'white' : undefined,
                   }}
                 >
                   Informações da Empresa
@@ -479,16 +481,16 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                 <TabsTrigger
                   value="dadosImovelAlugado"
                   className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
-                    currentTab === "dadosImovelAlugado" ? "" : "bg-gray-200"
+                    currentTab === 'dadosImovelAlugado' ? '' : 'bg-gray-200'
                   }`}
                   style={{
-                    width: "120%",
+                    width: '120%',
                     backgroundColor:
-                      currentTab === "dadosImovelAlugado"
-                        ? "#16a34a"
+                      currentTab === 'dadosImovelAlugado'
+                        ? '#16a34a'
                         : undefined,
                     color:
-                      currentTab === "dadosImovelAlugado" ? "white" : undefined,
+                      currentTab === 'dadosImovelAlugado' ? 'white' : undefined,
                   }}
                 >
                   Dados do Imóvel Pretendido
@@ -534,7 +536,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Select
                         value={formData.sexo_pretendente}
                         onValueChange={(value) =>
-                          handleSelectChange("sexo_pretendente", value)
+                          handleSelectChange('sexo_pretendente', value)
                         }
                         required
                       >
@@ -586,7 +588,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                           formData.data_expedicao_rg instanceof Date
                             ? formData.data_expedicao_rg
                                 .toISOString()
-                                .split("T")[0]
+                                .split('T')[0]
                             : formData.data_expedicao_rg
                         }
                         onChange={handleInputChange}
@@ -618,7 +620,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                           formData.data_nascimento instanceof Date
                             ? formData.data_nascimento
                                 .toISOString()
-                                .split("T")[0]
+                                .split('T')[0]
                             : formData.data_nascimento
                         }
                         onChange={handleInputChange}
@@ -662,7 +664,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Select
                         value={formData.estado_civil_locatario}
                         onValueChange={(value) =>
-                          handleSelectChange("estado_civil_locatario", value)
+                          handleSelectChange('estado_civil_locatario', value)
                         }
                         required
                       >
@@ -678,26 +680,26 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       </Select>
                     </div>
 
-                    {formData.estado_civil_locatario === "CASADO" && (
+                    {formData.estado_civil_locatario === 'CASADO' && (
                       <>
                         <div className="space-y-2">
-                          <Label htmlFor="nome_conjuge">Nome do Cônjuge</Label>{" "}
+                          <Label htmlFor="nome_conjuge">Nome do Cônjuge</Label>{' '}
                           <RequiredAsterisk />
                           <Input
                             id="nome_conjuge"
                             name="nome_conjuge"
-                            value={formData.nome_conjuge || ""}
+                            value={formData.nome_conjuge || ''}
                             onChange={handleInputChange}
                             placeholder="Digite o nome do cônjuge"
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="cpf_conjuge">CPF do Cônjuge</Label>{" "}
+                          <Label htmlFor="cpf_conjuge">CPF do Cônjuge</Label>{' '}
                           <RequiredAsterisk />
                           <Input
                             id="cpf_conjuge"
                             name="cpf_conjuge"
-                            value={formData.cpf_conjuge || ""}
+                            value={formData.cpf_conjuge || ''}
                             onChange={handleInputChange}
                             placeholder="Digite o CPF do cônjuge"
                             maxLength={14}
@@ -718,9 +720,9 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         Cônjuge Vai Compor a Renda? <RequiredAsterisk />
                       </Label>
                       <Select
-                        value={formData.composicao_renda_conjuge || ""}
+                        value={formData.composicao_renda_conjuge || ''}
                         onValueChange={(value) =>
-                          handleSelectChange("composicao_renda_conjuge", value)
+                          handleSelectChange('composicao_renda_conjuge', value)
                         }
                       >
                         <SelectTrigger>
@@ -734,17 +736,17 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                     </div>
                   </div>
 
-                  {formData.composicao_renda_conjuge === "SIM" && (
+                  {formData.composicao_renda_conjuge === 'SIM' && (
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="sexo_pretendente_conjuge">
                           Sexo do Cônjuge
                         </Label>
                         <Select
-                          value={formData.sexo_pretendente_conjuge || ""}
+                          value={formData.sexo_pretendente_conjuge || ''}
                           onValueChange={(value) =>
                             handleSelectChange(
-                              "sexo_pretendente_conjuge",
+                              'sexo_pretendente_conjuge',
                               value
                             )
                           }
@@ -770,7 +772,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                             formData.data_expedicao_rg_conjuge instanceof Date
                               ? formData.data_expedicao_rg_conjuge
                                   .toISOString()
-                                  .split("T")[0]
+                                  .split('T')[0]
                               : formData.data_expedicao_rg_conjuge
                           }
                           onChange={handleInputChange}
@@ -788,7 +790,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                             formData.data_nascimento_conjuge instanceof Date
                               ? formData.data_nascimento_conjuge
                                   .toISOString()
-                                  .split("T")[0]
+                                  .split('T')[0]
                               : formData.data_nascimento_conjuge
                           }
                           onChange={handleInputChange}
@@ -801,7 +803,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         <Input
                           id="orgao_emissor_conjuge"
                           name="orgao_emissor_conjuge"
-                          value={formData.orgao_emissor_conjuge || ""}
+                          value={formData.orgao_emissor_conjuge || ''}
                           onChange={handleInputChange}
                           placeholder="Digite o órgão emissor do RG"
                         />
@@ -811,9 +813,9 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                           Quadro Societário
                         </Label>
                         <Select
-                          value={formData.quadro_societario || ""}
+                          value={formData.quadro_societario || ''}
                           onValueChange={(value) =>
-                            handleSelectChange("quadro_societario", value)
+                            handleSelectChange('quadro_societario', value)
                           }
                         >
                           <SelectTrigger>
@@ -830,10 +832,10 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                           Vínculo Empregatício do Cônjuge
                         </Label>
                         <Select
-                          value={formData.vinculo_empregaticio_conjuge || ""}
+                          value={formData.vinculo_empregaticio_conjuge || ''}
                           onValueChange={(value) =>
                             handleSelectChange(
-                              "vinculo_empregaticio_conjuge",
+                              'vinculo_empregaticio_conjuge',
                               value
                             )
                           }
@@ -869,7 +871,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         <Input
                           id="profissao_conjuge"
                           name="profissao_conjuge"
-                          value={formData.profissao_conjuge || ""}
+                          value={formData.profissao_conjuge || ''}
                           onChange={handleInputChange}
                           placeholder="Digite a profissão do cônjuge"
                         />
@@ -881,7 +883,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         <Input
                           id="nome_empresa_trabalho_conjuge"
                           name="nome_empresa_trabalho_conjuge"
-                          value={formData.nome_empresa_trabalho_conjuge || ""}
+                          value={formData.nome_empresa_trabalho_conjuge || ''}
                           onChange={handleInputChange}
                           placeholder="Digite o nome da empresa"
                         />
@@ -898,7 +900,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                             formData.data_emissao_conjuge instanceof Date
                               ? formData.data_emissao_conjuge
                                   .toISOString()
-                                  .split("T")[0]
+                                  .split('T')[0]
                               : formData.data_emissao_conjuge
                           }
                           onChange={handleInputChange}
@@ -911,7 +913,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         <Input
                           id="fone_conjuge"
                           name="fone_conjuge"
-                          value={formData.fone_conjuge || ""}
+                          value={formData.fone_conjuge || ''}
                           onChange={handleInputChange}
                           placeholder="Digite o telefone"
                         />
@@ -921,7 +923,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         <Input
                           id="ramal_conjuge"
                           name="ramal_conjuge"
-                          value={formData.ramal_conjuge || ""}
+                          value={formData.ramal_conjuge || ''}
                           onChange={handleInputChange}
                           placeholder="Digite o ramal"
                         />
@@ -933,7 +935,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         <Input
                           id="salario_conjuge"
                           name="salario_conjuge"
-                          value={formData.salario_conjuge || ""}
+                          value={formData.salario_conjuge || ''}
                           onChange={handleInputChange}
                           placeholder="Digite o salário"
                         />
@@ -945,7 +947,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         <Input
                           id="outros_rendimentos_conjuge"
                           name="outros_rendimentos_conjuge"
-                          value={formData.outros_rendimentos_conjuge || ""}
+                          value={formData.outros_rendimentos_conjuge || ''}
                           onChange={handleInputChange}
                           placeholder="Digite outros rendimentos"
                         />
@@ -958,7 +960,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                           id="total_rendimentos_mensais_conjuge"
                           name="total_rendimentos_mensais_conjuge"
                           value={
-                            formData.total_rendimentos_mensais_conjuge || ""
+                            formData.total_rendimentos_mensais_conjuge || ''
                           }
                           onChange={handleInputChange}
                           placeholder="Digite o total de rendimentos mensais"
@@ -968,261 +970,6 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                   )}
                 </div>
               </TabsContent>
-
-              {/* Endereço */}
-              {/* <TabsContent value="endereco">
-                <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="fone_residencial">Fone Residencial</Label>
-                      <Input
-                        id="fone_residencial"
-                        name="fone_residencial"
-                        value={formData.fone_residencial || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite o telefone residencial"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="fone_celular">Fone Celular</Label>
-                      <Input
-                        id="fone_celular"
-                        name="fone_celular"
-                        value={formData.fone_celular || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite o telefone celular"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="cep">
-                        CEP <RequiredAsterisk />
-                      </Label>
-                      <div className="flex items-center">
-                        <Input
-                          id="cep"
-                          name="cep"
-                          value={formData.cep || ""}
-                          onChange={handleInputChange}
-                          required
-                          placeholder="Digite o CEP"
-                        />
-                        {isLoading && (
-                          <Loader2 className="ml-2 h-5 w-5 animate-spin" />
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="endereco">
-                        Endereço <RequiredAsterisk />
-                      </Label>
-                      <Input
-                        id="endereco"
-                        name="endereco"
-                        value={formData.endereco || ""}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="Digite o endereço"
-                        disabled={isLoading}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="numero">
-                        Número <RequiredAsterisk />
-                      </Label>
-                      <Input
-                        id="numero"
-                        name="numero"
-                        value={formData.numero || ""}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="Digite o número"
-                        disabled={isLoading}
-                      />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="bairro">
-                        Bairro <RequiredAsterisk />
-                      </Label>
-                      <Input
-                        id="bairro"
-                        name="bairro"
-                        value={formData.bairro || ""}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="Digite o bairro"
-                        disabled={isLoading}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="complemento">Complemento</Label>
-                      <Input
-                        id="complemento"
-                        name="complemento"
-                        value={formData.complemento || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite o complemento (opcional)"
-                        disabled={isLoading}
-                      />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="cidade">
-                        Cidade <RequiredAsterisk />
-                      </Label>
-                      <Input
-                        id="cidade"
-                        name="cidade"
-                        value={formData.cidade || ""}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="Digite a cidade"
-                        disabled={isLoading}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="estado">
-                        Estado <RequiredAsterisk />
-                      </Label>
-                      <Input
-                        id="estado"
-                        name="estado"
-                        value={formData.estado || ""}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="Digite o estado"
-                        disabled={isLoading}
-                      />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="tipo_residencia">
-                        Tipo de Residência <RequiredAsterisk />
-                      </Label>
-                      <Select
-                        value={formData.tipo_residencia}
-                        onValueChange={(value) =>
-                          handleSelectChange("tipo_residencia", value)
-                        }
-                        required
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Tipo de Residência" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="MENOS DE 1 ANO">
-                            Menos de 1 ano
-                          </SelectItem>
-                          <SelectItem value="1 A 2 ANOS">1 a 2 anos</SelectItem>
-                          <SelectItem value="3 A 4 ANOS">3 a 4 anos</SelectItem>
-                          <SelectItem value="5 A 6 ANOS">5 a 6 anos</SelectItem>
-                          <SelectItem value="7 A 9 ANOS">7 a 9 anos</SelectItem>
-                          <SelectItem value="ACIMA DE 10 ANOS">
-                            Acima de 10 anos
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="condicao_imovel">
-                        Condição do Imóvel <RequiredAsterisk />
-                      </Label>
-                      <Select
-                        value={formData.condicao_imovel}
-                        onValueChange={(value) =>
-                          handleSelectChange("condicao_imovel", value)
-                        }
-                        required
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Condição do Imóvel" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="ALUGADO (EM NOME DO PRETENDENTE)">
-                            Alugado (em nome do pretendente)
-                          </SelectItem>
-                          <SelectItem value="ALUGADO (NOME DOS OUTROS)">
-                            Alugado (nome dos outros)
-                          </SelectItem>
-                          <SelectItem value="PRÓPRIO">Próprio</SelectItem>
-                          <SelectItem value="FINANCIADO (EM NOME PRÓPRIO)">
-                            Financiado (em nome próprio)
-                          </SelectItem>
-                          <SelectItem value="FINANCIADO (NOME DE OUTROS)">
-                            Financiado (nome de outros)
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="arca_com_aluguel">
-                        Arca com Aluguel? <RequiredAsterisk />
-                      </Label>
-                      <Select
-                        value={formData.arca_com_aluguel}
-                        onValueChange={(value) =>
-                          handleSelectChange("arca_com_aluguel", value)
-                        }
-                        required
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Arca com Aluguel?" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="SIM">Sim</SelectItem>
-                          <SelectItem value="NÃO">Não</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="valor_aluguel_atual">
-                        Valor do Aluguel Atual
-                      </Label>
-                      <Input
-                        id="valor_aluguel_atual"
-                        name="valor_aluguel_atual"
-                        value={formData.valor_aluguel_atual || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite o valor do aluguel atual"
-                        type="number"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="nome_locator_proprietario_imobiliaria">
-                        Nome do Locador/Proprietário/Imobiliária
-                      </Label>
-                      <Input
-                        id="nome_locator_proprietario_imobiliaria"
-                        name="nome_locator_proprietario_imobiliaria"
-                        value={
-                          formData.nome_locator_proprietario_imobiliaria || ""
-                        }
-                        onChange={handleInputChange}
-                        placeholder="Digite o nome"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="telefone_contato">
-                        Telefone de Contato
-                      </Label>
-                      <Input
-                        id="telefone_contato"
-                        name="telefone_contato"
-                        value={formData.telefone_contato || ""}
-                        onChange={handleInputChange}
-                        placeholder="Digite o telefone de contato"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </TabsContent> */}
 
               {/* Dados Profissionais */}
               <TabsContent value="dadosProfissionais">
@@ -1235,7 +982,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Select
                         value={formData.vinculo_empregaticio}
                         onValueChange={(value) =>
-                          handleSelectChange("vinculo_empregaticio", value)
+                          handleSelectChange('vinculo_empregaticio', value)
                         }
                         required
                       >
@@ -1279,7 +1026,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Input
                         id="nome_empresa_trabalho"
                         name="nome_empresa_trabalho"
-                        value={formData.nome_empresa_trabalho || ""}
+                        value={formData.nome_empresa_trabalho || ''}
                         onChange={handleInputChange}
                         placeholder="Digite o nome da empresa"
                       />
@@ -1292,7 +1039,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         type="date"
                         value={
                           formData.data_emissao instanceof Date
-                            ? formData.data_emissao.toISOString().split("T")[0]
+                            ? formData.data_emissao.toISOString().split('T')[0]
                             : formData.data_emissao
                         }
                         onChange={handleInputChange}
@@ -1303,7 +1050,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Input
                         id="fone"
                         name="fone"
-                        value={formData.fone || ""}
+                        value={formData.fone || ''}
                         onChange={handleInputChange}
                         placeholder="Digite o telefone"
                       />
@@ -1313,7 +1060,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Input
                         id="ramal"
                         name="ramal"
-                        value={formData.ramal || ""}
+                        value={formData.ramal || ''}
                         onChange={handleInputChange}
                         placeholder="Digite o ramal"
                       />
@@ -1326,7 +1073,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         id="salario"
                         name="salario"
                         type="number"
-                        value={formData.salario || ""}
+                        value={formData.salario || ''}
                         onChange={handleInputChange}
                         placeholder="Digite o salário"
                         required
@@ -1349,7 +1096,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         value={formData.alocacao_pretendida_constituida}
                         onValueChange={(value) =>
                           handleSelectChange(
-                            "alocacao_pretendida_constituida",
+                            'alocacao_pretendida_constituida',
                             value
                           )
                         }
@@ -1365,7 +1112,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       </Select>
                     </div>
 
-                    {formData.alocacao_pretendida_constituida === "SIM" && (
+                    {formData.alocacao_pretendida_constituida === 'SIM' && (
                       <div className="space-y-2">
                         <Label htmlFor="cnpj_pessoa_fisica_nao_residencial">
                           Informar CNPJ <RequiredAsterisk />
@@ -1374,7 +1121,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                           id="cnpj_pessoa_fisica_nao_residencial"
                           name="cnpj_pessoa_fisica_nao_residencial"
                           value={
-                            formData.cnpj_pessoa_fisica_nao_residencial || ""
+                            formData.cnpj_pessoa_fisica_nao_residencial || ''
                           }
                           onChange={handleInputChange}
                           placeholder="Digite o CNPJ"
@@ -1384,13 +1131,13 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
 
                     <div className="space-y-2">
                       <Label htmlFor="cnae_empresa">
-                        Qual será a atividade da empresa (CNAE)?{" "}
+                        Qual será a atividade da empresa (CNAE)?{' '}
                         <RequiredAsterisk />
                       </Label>
                       <Input
                         id="cnae_empresa"
                         name="cnae_empresa"
-                        value={formData.cnae_empresa || ""}
+                        value={formData.cnae_empresa || ''}
                         onChange={handleInputChange}
                         placeholder="Digite o CNAE"
                       />
@@ -1425,7 +1172,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Input
                         id="principais_produtos_servicos"
                         name="principais_produtos_servicos"
-                        value={formData.principais_produtos_servicos || ""}
+                        value={formData.principais_produtos_servicos || ''}
                         onChange={handleInputChange}
                         placeholder="Digite os principais produtos/serviços"
                         required
@@ -1452,7 +1199,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Input
                         id="cpf_socio_1"
                         name="cpf_socio_1"
-                        value={formData.cpf_socio_1 || ""}
+                        value={formData.cpf_socio_1 || ''}
                         onChange={handleInputChange}
                         placeholder="Digite o CPF do sócio 1"
                         maxLength={14}
@@ -1464,7 +1211,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Input
                         id="cpf_socio_2"
                         name="cpf_socio_2"
-                        value={formData.cpf_socio_2 || ""}
+                        value={formData.cpf_socio_2 || ''}
                         onChange={handleInputChange}
                         placeholder="Digite o CPF do sócio 2"
                         maxLength={14}
@@ -1476,7 +1223,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Input
                         id="cpf_socio_3"
                         name="cpf_socio_3"
-                        value={formData.cpf_socio_3 || ""}
+                        value={formData.cpf_socio_3 || ''}
                         onChange={handleInputChange}
                         placeholder="Digite o CPF do sócio 3"
                         maxLength={14}
@@ -1485,327 +1232,6 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                   </div>
                 </div>
               </TabsContent>
-
-              {/* Informações Financeiras */}
-              {/* <TabsContent value="informacoesFinanceiras">
-                <div className="grid gap-4 py-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="onus">
-                      Possui financiamentos e ou empréstimos?{" "}
-                      <RequiredAsterisk />
-                    </Label>
-                    <Select
-                      value={formData.onus}
-                      onValueChange={(value) =>
-                        handleSelectChange("onus", value)
-                      }
-                      required
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="SIM">Sim</SelectItem>
-                        <SelectItem value="NÃO">Não</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {formData.onus === "SIM" && (
-                    <>
-                      <div className="space-y-2">
-                        <Label htmlFor="detalhamento_onus">
-                          Detalhamento do financiamento/empréstimo
-                        </Label>
-                        <Input
-                          id="detalhamento_onus"
-                          name="detalhamento_onus"
-                          value={formData.detalhamento_onus || ""}
-                          onChange={handleInputChange}
-                          placeholder="Detalhamento do financiamento/empréstimo"
-                        />
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="tipo_qtd_parcela_a_1">
-                            Tipo e Quantidade de Parcelas A1
-                          </Label>
-                          <Input
-                            id="tipo_qtd_parcela_a_1"
-                            name="tipo_qtd_parcela_a_1"
-                            value={formData.tipo_qtd_parcela_a_1 || ""}
-                            onChange={handleInputChange}
-                            placeholder="Detalhamento do financiamento/empréstimo"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="valor_parcela_a_1">
-                            Valor da Parcela A1
-                          </Label>
-                          <Input
-                            id="valor_parcela_a_1"
-                            name="valor_parcela_a_1"
-                            value={formData.valor_parcela_a_1 || ""}
-                            onChange={handleInputChange}
-                            placeholder="Detalhamento do financiamento/empréstimo"
-                            type="number"
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="tipo_qtd_parcela_a_2">
-                            Tipo e Quantidade de Parcelas A2
-                          </Label>
-                          <Input
-                            id="tipo_qtd_parcela_a_2"
-                            name="tipo_qtd_parcela_a_2"
-                            value={formData.tipo_qtd_parcela_a_2 || ""}
-                            onChange={handleInputChange}
-                            placeholder="Detalhamento do financiamento/empréstimo"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="valor_parcela_a_2">
-                            Valor da Parcela A2
-                          </Label>
-                          <Input
-                            id="valor_parcela_a_2"
-                            name="valor_parcela_a_2"
-                            value={formData.valor_parcela_a_2 || ""}
-                            onChange={handleInputChange}
-                            placeholder="Detalhamento do financiamento/empréstimo"
-                            type="number"
-                          />
-                        </div>
-                      </div>
-                    </>
-                  )}
-
-                  <div className="space-y-2">
-                    <Label htmlFor="investimento_abertura">
-                      Investimento para Abertura? <RequiredAsterisk />
-                    </Label>
-                    <Select
-                      value={formData.investimento_abertura}
-                      onValueChange={(value) =>
-                        handleSelectChange("investimento_abertura", value)
-                      }
-                      required
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="SIM">Sim</SelectItem>
-                        <SelectItem value="NÃO">Não</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {formData.investimento_abertura === "SIM" && (
-                    <>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="compra_produto_cap_inicial">
-                            Compra Produto (Capital Inicial)
-                          </Label>
-                          <Input
-                            id="compra_produto_cap_inicial"
-                            name="compra_produto_cap_inicial"
-                            value={formData.compra_produto_cap_inicial || ""}
-                            onChange={handleInputChange}
-                            placeholder="Digite o valor"
-                            type="number"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="obras_reformas_cap_inicial">
-                            Obras/Reformas (Capital Inicial)
-                          </Label>
-                          <Input
-                            id="obras_reformas_cap_inicial"
-                            name="obras_reformas_cap_inicial"
-                            value={formData.obras_reformas_cap_inicial || ""}
-                            onChange={handleInputChange}
-                            placeholder="Digite o valor"
-                            type="number"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="maquinas_cap_inicial">
-                            Máquinas (Capital Inicial)
-                          </Label>
-                          <Input
-                            id="maquinas_cap_inicial"
-                            name="maquinas_cap_inicial"
-                            value={formData.maquinas_cap_inicial || ""}
-                            onChange={handleInputChange}
-                            placeholder="Digite o valor"
-                            type="number"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="despesas_legais_cap_inicial">
-                            Despesas Legais (Capital Inicial)
-                          </Label>
-                          <Input
-                            id="despesas_legais_cap_inicial"
-                            name="despesas_legais_cap_inicial"
-                            value={formData.despesas_legais_cap_inicial || ""}
-                            onChange={handleInputChange}
-                            placeholder="Digite o valor"
-                            type="number"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="moveis_cap_inicial">
-                            Móveis (Capital Inicial)
-                          </Label>
-                          <Input
-                            id="moveis_cap_inicial"
-                            name="moveis_cap_inicial"
-                            value={formData.moveis_cap_inicial || ""}
-                            onChange={handleInputChange}
-                            placeholder="Digite o valor"
-                            type="number"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="cursos_cap_inicial">
-                            Cursos (Capital Inicial)
-                          </Label>
-                          <Input
-                            id="cursos_cap_inicial"
-                            name="cursos_cap_inicial"
-                            value={formData.cursos_cap_inicial || ""}
-                            onChange={handleInputChange}
-                            placeholder="Digite o valor"
-                            type="number"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="estoques_cap_inicial">
-                            Estoques (Capital Inicial)
-                          </Label>
-                          <Input
-                            id="estoques_cap_inicial"
-                            name="estoques_cap_inicial"
-                            value={formData.estoques_cap_inicial || ""}
-                            onChange={handleInputChange}
-                            placeholder="Digite o valor"
-                            type="number"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="divulgacao_cap_inicial">
-                            Divulgação (Capital Inicial)
-                          </Label>
-                          <Input
-                            id="divulgacao_cap_inicial"
-                            name="divulgacao_cap_inicial"
-                            value={formData.divulgacao_cap_inicial || ""}
-                            onChange={handleInputChange}
-                            placeholder="Digite o valor"
-                            type="number"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="mt-4">
-                        <h3 className="text-lg font-medium">Capital de Giro</h3>
-                      </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="reposicao_material_cap_giro">
-                            Reposição Material
-                          </Label>
-                          <Input
-                            id="reposicao_material_cap_giro"
-                            name="reposicao_material_cap_giro"
-                            value={formData.reposicao_material_cap_giro || ""}
-                            onChange={handleInputChange}
-                            placeholder="Digite o valor"
-                            type="number"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="consumo_cap_giro">Consumo</Label>
-                          <Input
-                            id="consumo_cap_giro"
-                            name="consumo_cap_giro"
-                            value={formData.consumo_cap_giro || ""}
-                            onChange={handleInputChange}
-                            placeholder="Digite o valor"
-                            type="number"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="reposicao_estoque_cap_giro">
-                            Reposição Estoque
-                          </Label>
-                          <Input
-                            id="reposicao_estoque_cap_giro"
-                            name="reposicao_estoque_cap_giro"
-                            value={formData.reposicao_estoque_cap_giro || ""}
-                            onChange={handleInputChange}
-                            placeholder="Digite o valor"
-                            type="number"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="folha_pagamento_cap_giro">
-                            Folha de Pagamento
-                          </Label>
-                          <Input
-                            id="folha_pagamento_cap_giro"
-                            name="folha_pagamento_cap_giro"
-                            value={formData.folha_pagamento_cap_giro || ""}
-                            onChange={handleInputChange}
-                            placeholder="Digite o valor"
-                            type="number"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="financiamento_vendas_cap_giro">
-                            Financiamento Vendas
-                          </Label>
-                          <Input
-                            id="financiamento_vendas_cap_giro"
-                            name="financiamento_vendas_cap_giro"
-                            value={formData.financiamento_vendas_cap_giro || ""}
-                            onChange={handleInputChange}
-                            placeholder="Digite o valor"
-                            type="number"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="impostos_taxas_cap_giro">
-                            Impostos/Taxas
-                          </Label>
-                          <Input
-                            id="impostos_taxas_cap_giro"
-                            name="impostos_taxas_cap_giro"
-                            value={formData.impostos_taxas_cap_giro || ""}
-                            onChange={handleInputChange}
-                            placeholder="Digite o valor"
-                            type="number"
-                          />
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </TabsContent> */}
 
               {/* Dados do Imóvel Pretendido */}
               <TabsContent value="dadosImovelAlugado">
@@ -1818,7 +1244,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Select
                         value={formData.motivo_locacao}
                         onValueChange={(value) =>
-                          handleSelectChange("motivo_locacao", value)
+                          handleSelectChange('motivo_locacao', value)
                         }
                         required
                       >
@@ -1845,7 +1271,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       </Select>
                     </div>
 
-                    {formData.motivo_locacao === "LOCAÇÃO PARA MORADIA" && (
+                    {formData.motivo_locacao === 'LOCAÇÃO PARA MORADIA' && (
                       <>
                         <div className="space-y-2">
                           <Label htmlFor="cpf_morador">
@@ -1864,6 +1290,31 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                     )}
                   </div>
 
+                  <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="prazo_contrato">
+                        Prazo do Contrato <RequiredAsterisk />
+                      </Label>
+                      <Select
+                        value={formData.prazo_contrato}
+                        onValueChange={(value) =>
+                          handleSelectChange('prazo_contrato', value)
+                        }
+                        required
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione o prazo do contrato" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="12 MESES">12 MESES</SelectItem>
+                          <SelectItem value="24 MESES">24 MESES</SelectItem>
+                          <SelectItem value="30 MESES">30 MESES</SelectItem>
+                          <SelectItem value="36 MESES">36 MESES</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="cep_imovel_alugado">
@@ -1873,7 +1324,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         <Input
                           id="cep_imovel_alugado"
                           name="cep_imovel_alugado"
-                          value={formData.cep_imovel_alugado || ""}
+                          value={formData.cep_imovel_alugado || ''}
                           onChange={handleInputChange}
                           required
                           placeholder="Digite o CEP"
@@ -1890,7 +1341,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Input
                         id="endereco_imovel_alugado"
                         name="endereco_imovel_alugado"
-                        value={formData.endereco_imovel_alugado || ""}
+                        value={formData.endereco_imovel_alugado || ''}
                         onChange={handleInputChange}
                         required
                         placeholder="Digite o endereço"
@@ -1904,7 +1355,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Input
                         id="numero_imovel_alugado"
                         name="numero_imovel_alugado"
-                        value={formData.numero_imovel_alugado || ""}
+                        value={formData.numero_imovel_alugado || ''}
                         onChange={handleInputChange}
                         required
                         placeholder="Digite o número"
@@ -1918,7 +1369,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Input
                         id="complemento_imovel_alugado"
                         name="complemento_imovel_alugado"
-                        value={formData.complemento_imovel_alugado || ""}
+                        value={formData.complemento_imovel_alugado || ''}
                         onChange={handleInputChange}
                         placeholder="Digite o complemento"
                         disabled={isLoading}
@@ -1934,7 +1385,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Input
                         id="bairro_imovel_alugado"
                         name="bairro_imovel_alugado"
-                        value={formData.bairro_imovel_alugado || ""}
+                        value={formData.bairro_imovel_alugado || ''}
                         onChange={handleInputChange}
                         required
                         placeholder="Digite o bairro"
@@ -1948,7 +1399,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Input
                         id="cidade_imovel_alugado"
                         name="cidade_imovel_alugado"
-                        value={formData.cidade_imovel_alugado || ""}
+                        value={formData.cidade_imovel_alugado || ''}
                         onChange={handleInputChange}
                         required
                         placeholder="Digite a cidade"
@@ -1962,7 +1413,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Input
                         id="estado_imovel_alugado"
                         name="estado_imovel_alugado"
-                        value={formData.estado_imovel_alugado || ""}
+                        value={formData.estado_imovel_alugado || ''}
                         onChange={handleInputChange}
                         required
                         placeholder="Digite o estado"
@@ -1979,7 +1430,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Input
                         id="aluguel_imovel_alugado"
                         name="aluguel_imovel_alugado"
-                        value={formData.aluguel_imovel_alugado || ""}
+                        value={formData.aluguel_imovel_alugado || ''}
                         onChange={handleInputChange}
                         placeholder="Digite o valor do aluguel"
                         required
@@ -1992,7 +1443,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Input
                         id="energia_imovel_alugado"
                         name="energia_imovel_alugado"
-                        value={formData.energia_imovel_alugado || ""}
+                        value={formData.energia_imovel_alugado || ''}
                         onChange={handleInputChange}
                         placeholder="Digite o valor da água"
                         type="number"
@@ -2004,7 +1455,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Input
                         id="agua_imovel_alugado"
                         name="agua_imovel_alugado"
-                        value={formData.agua_imovel_alugado || ""}
+                        value={formData.agua_imovel_alugado || ''}
                         onChange={handleInputChange}
                         placeholder="Digite o valor da água"
                         type="number"
@@ -2016,7 +1467,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Input
                         id="gas_canalizado_imovel_alugado"
                         name="gas_canalizado_imovel_alugado"
-                        value={formData.gas_canalizado_imovel_alugado || ""}
+                        value={formData.gas_canalizado_imovel_alugado || ''}
                         onChange={handleInputChange}
                         placeholder="Digite o valor do gás"
                         type="number"
@@ -2031,7 +1482,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                         id="desp_ordinarias_cond_imovel_alugado"
                         name="desp_ordinarias_cond_imovel_alugado"
                         value={
-                          formData.desp_ordinarias_cond_imovel_alugado || ""
+                          formData.desp_ordinarias_cond_imovel_alugado || ''
                         }
                         onChange={handleInputChange}
                         placeholder="Digite o valor das despesas"
@@ -2044,7 +1495,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Input
                         id="iptu_imovel_alugado"
                         name="iptu_imovel_alugado"
-                        value={formData.iptu_imovel_alugado || ""}
+                        value={formData.iptu_imovel_alugado || ''}
                         onChange={handleInputChange}
                         placeholder="Digite o valor do IPTU"
                         type="number"
@@ -2060,7 +1511,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Select
                         value={formData.danos_imovel}
                         onValueChange={(value) =>
-                          handleSelectChange("danos_imovel", value)
+                          handleSelectChange('danos_imovel', value)
                         }
                         required
                       >
@@ -2081,7 +1532,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Select
                         value={formData.multa_rescisao}
                         onValueChange={(value) =>
-                          handleSelectChange("multa_rescisao", value)
+                          handleSelectChange('multa_rescisao', value)
                         }
                         required
                       >
@@ -2102,7 +1553,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Select
                         value={formData.pintura_interna}
                         onValueChange={(value) =>
-                          handleSelectChange("pintura_interna", value)
+                          handleSelectChange('pintura_interna', value)
                         }
                         required
                       >
@@ -2123,7 +1574,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Select
                         value={formData.pintura_externa}
                         onValueChange={(value) =>
-                          handleSelectChange("pintura_externa", value)
+                          handleSelectChange('pintura_externa', value)
                         }
                         required
                       >
@@ -2139,7 +1590,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                   </div>
                   <div className="space-y-2 mb-4 mt-1">
                     <h2>
-                      {" "}
+                      {' '}
                       <RequiredAsterisk /> A Pintura somente será indenizada se
                       o Laudo de Vistoria Inicial informar especificamente que o
                       imóvel foi entregue com Pintura NOVA.
@@ -2152,7 +1603,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
                       <Input
                         id="observacao"
                         name="observacao"
-                        value={formData.observacao || ""}
+                        value={formData.observacao || ''}
                         onChange={handleInputChange}
                         placeholder="Digite a Observação"
                       />
@@ -2192,12 +1643,12 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
           )}
 
           <CardFooter className="flex justify-between">
-            {currentTab !== "dadosPretendente" && (
+            {currentTab !== 'dadosPretendente' && (
               <Button type="button" variant="outline" onClick={handlePrevious}>
                 <ArrowLeft className="mr-2 h-4 w-4" /> Anterior
               </Button>
             )}
-            {currentTab !== "dadosImovelAlugado" ? (
+            {currentTab !== 'dadosImovelAlugado' ? (
               <Button
                 type="button"
                 onClick={handleNext}
@@ -2248,7 +1699,7 @@ export function SeguroFiancaEmpresarialMenos2AnosForms() {
           <Button
             onClick={() => {
               setIsSuccessModalOpen(false)
-              navigate("/imobiliaria/formulario")
+              navigate('/imobiliaria/formulario')
             }}
             className="w-full mt-4 bg-green-700 hover:bg-green-600"
           >

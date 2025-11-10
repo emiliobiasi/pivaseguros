@@ -9,8 +9,10 @@ export type CancelamentoSeguros = {
 
   nome_inquilino: string
   cpf_inquilino?: string
+  cnpj_inquilino?: string
   nome_proprietario: string
   cpf_proprietario?: string
+  cnpj_proprietario?: string
 
   cep: string
   endereco: string
