@@ -1,20 +1,20 @@
 export type SeguroFiancaEmpresarialMais2Anos = {
   id: string
   id_numero: number
-  status: "EM ANÁLISE" | "APROVADO" | "REPROVADO"
-  acao: "PENDENTE" | "FINALIZADO"
+  status: 'EM ANÁLISE' | 'APROVADO' | 'REPROVADO'
+  acao: 'PENDENTE' | 'FINALIZADO'
 
   nome_imobiliaria: string
 
   tipo_empresa:
-    | "LTDA"
-    | "INDIVIDUAL/ME"
-    | "S.A. CAPITAL ABERTO"
-    | "S.A. CAPITAL FECHADO"
-    | "SEM FINS LUCRATIVOS"
-    | "PÚBLICO"
+    | 'LTDA'
+    | 'INDIVIDUAL/ME'
+    | 'S.A. CAPITAL ABERTO'
+    | 'S.A. CAPITAL FECHADO'
+    | 'SEM FINS LUCRATIVOS'
+    | 'PÚBLICO'
 
-  opcao_tributaria: "LUCRO REAL" | "LUCRO PRESUMIDO" | "SIMPLES NACIONAL"
+  opcao_tributaria: 'LUCRO REAL' | 'LUCRO PRESUMIDO' | 'SIMPLES NACIONAL'
   nome_empresa: string
   cnpj: string
   telefone_empresa: string
@@ -43,26 +43,29 @@ export type SeguroFiancaEmpresarialMais2Anos = {
   cidade_empresa?: string
   estado_empresa?: string
   complemento_empresa?: string
-  tipo_imovel?: "PRÓPRIO" | "ALUGADO"
+  tipo_imovel?: 'PRÓPRIO' | 'ALUGADO'
   valor_aluguel?: number
   nome_locador_imobiliaria?: string
   telefone?: string
 
   motivo_locacao:
-    | "ABERTURA DE FILIAL"
-    | "TROCA DO LOCAL"
-    | "DE SEDE"
-    | "LOCAÇÃO PARA MORADIA"
+    | 'ABERTURA DE FILIAL'
+    | 'TROCA DO LOCAL'
+    | 'DE SEDE'
+    | 'LOCAÇÃO PARA MORADIA'
+
+  prazo_contrato?: '12 MESES' | '24 MESES' | '30 MESES' | '36 MESES'
+
   aluguel: number
   agua?: number
   energia?: number
   gas?: number
   condominio?: number
   iptu?: number
-  danos_imovel: "SIM" | "NÃO"
-  multa_rescisao: "SIM" | "NÃO"
-  pintura_interna: "SIM" | "NÃO"
-  pintura_externa: "SIM" | "NÃO"
+  danos_imovel: 'SIM' | 'NÃO'
+  multa_rescisao: 'SIM' | 'NÃO'
+  pintura_interna: 'SIM' | 'NÃO'
+  pintura_externa: 'SIM' | 'NÃO'
   observacao?: string
   created: Date
   updated: Date
