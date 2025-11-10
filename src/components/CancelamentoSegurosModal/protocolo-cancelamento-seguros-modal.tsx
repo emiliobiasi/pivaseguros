@@ -1,9 +1,9 @@
-import { CancelamentoSeguros } from "@/types/CancelamentoSeguros"
-import { XCircle, FileText, ExternalLink /*, Download*/ } from "lucide-react"
-import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { formatarData } from "@/utils/dateformater/dateFormater"
-import pb from "@/utils/backend/pb-imob"
+import { CancelamentoSeguros } from '@/types/CancelamentoSeguros'
+import { XCircle, FileText, ExternalLink /*, Download*/ } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Button } from '@/components/ui/button'
+import { formatarData } from '@/utils/dateformater/dateFormater'
+import pb from '@/utils/backend/pb-imob'
 
 type CancelamentoSegurosModalProps = {
   titulo: CancelamentoSeguros
@@ -25,11 +25,11 @@ export function CancelamentoSegurosModal({
   }
 
   const friendlyFileName = (fname: string) => {
-    const lastDot = fname.lastIndexOf(".")
+    const lastDot = fname.lastIndexOf('.')
     if (lastDot <= 0) return fname
     const base = fname.slice(0, lastDot)
     const ext = fname.slice(lastDot)
-    const cleanedBase = base.replace(/_[A-Za-z0-9]{10}$/u, "")
+    const cleanedBase = base.replace(/_[A-Za-z0-9]{10}$/u, '')
     return `${cleanedBase}${ext}`
   }
 
@@ -101,6 +101,11 @@ export function CancelamentoSegurosModal({
                 <strong>CPF do Inquilino:</strong> {titulo.cpf_inquilino}
               </p>
             )}
+            {titulo.cnpj_inquilino && (
+              <p>
+                <strong>CNPJ do Inquilino:</strong> {titulo.cnpj_inquilino}
+              </p>
+            )}
 
             <h3 className="text-lg font-semibold mt-6 text-[#025d37] dark:text-emerald-300">
               Proprietário
@@ -111,6 +116,12 @@ export function CancelamentoSegurosModal({
             {titulo.cpf_proprietario && (
               <p>
                 <strong>CPF do Proprietário:</strong> {titulo.cpf_proprietario}
+              </p>
+            )}
+            {titulo.cnpj_proprietario && (
+              <p>
+                <strong>CNPJ do Proprietário:</strong>{' '}
+                {titulo.cnpj_proprietario}
               </p>
             )}
 
