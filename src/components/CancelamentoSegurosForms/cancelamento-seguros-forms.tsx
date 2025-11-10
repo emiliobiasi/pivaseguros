@@ -1,7 +1,7 @@
-import { CancelamentoSeguros } from "@/types/CancelamentoSeguros"
-import { useState, useRef } from "react"
-import { useNavigate } from "react-router-dom"
-import { Button } from "@/components/ui/button"
+import { CancelamentoSeguros } from '@/types/CancelamentoSeguros'
+import { useState, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -9,18 +9,18 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Checkbox } from "@/components/ui/checkbox"
+} from '@/components/ui/select'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
   ArrowLeft,
   ArrowRight,
@@ -32,110 +32,117 @@ import {
   Trash2,
   Ban,
   Lightbulb,
-} from "lucide-react"
-import { formatCPF } from "@/utils/regex/regexCPF"
-import { formatCEP } from "@/utils/regex/regexCEP"
-import { createCancelamentoSeguros } from "@/utils/api/CancelamentoSegurosService"
+} from 'lucide-react'
+import { formatCPF } from '@/utils/regex/regexCPF'
+import { formatCEP } from '@/utils/regex/regexCEP'
+import { createCancelamentoSeguros } from '@/utils/api/CancelamentoSegurosService'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { FileX } from "lucide-react"
-import { useDropzone } from "react-dropzone"
-import { buscaEnderecoPorCEP, EnderecoViaCep } from "@/utils/api/Cep"
+} from '@/components/ui/dialog'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { FileX } from 'lucide-react'
+import { useDropzone } from 'react-dropzone'
+import { buscaEnderecoPorCEP, EnderecoViaCep } from '@/utils/api/Cep'
+import { formatCNPJ } from '@/utils/regex/regexCNPJ'
 
 export function CancelamentoSegurosForms() {
-  const [currentTab, setCurrentTab] = useState("identificacao")
+  const [currentTab, setCurrentTab] = useState('identificacao')
   const [agreedToTerms, setAgreedToTerms] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
   const [isConfirmFilesModalOpen, setIsConfirmFilesModalOpen] = useState(false)
-  const [errorMessage, setErrorMessage] = useState("")
+  const [errorMessage, setErrorMessage] = useState('')
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
-  const [fileError, setFileError] = useState<string>("")
+  const [fileError, setFileError] = useState<string>('')
   const [showProtocolsBanner, setShowProtocolsBanner] = useState(
-    () => !localStorage.getItem("protocolosBannerDismissed")
+    () => !localStorage.getItem('protocolosBannerDismissed')
   )
 
   const navigate = useNavigate()
   const formRef = useRef<HTMLFormElement>(null)
 
   const [formData, setFormData] = useState<CancelamentoSeguros>({
-    id: "",
+    id: '',
     id_numero: 0,
-    acao: "PENDENTE",
-    nome_imobiliaria: "",
-    nome_inquilino: "",
-    cpf_inquilino: "",
-    nome_proprietario: "",
-    cpf_proprietario: "",
+    acao: 'PENDENTE',
+    nome_imobiliaria: '',
+    nome_inquilino: '',
+    cpf_inquilino: '',
+    nome_proprietario: '',
+    cpf_proprietario: '',
 
-    cep: "",
-    endereco: "",
-    bairro: "",
+    cep: '',
+    endereco: '',
+    bairro: '',
     numero_endereco: 0,
-    cidade: "",
-    estado: "",
+    cidade: '',
+    estado: '',
 
-    tipo_seguro: "SEGURO FIANÇA",
+    tipo_seguro: 'SEGURO FIANÇA',
     pdf_field: [],
-    observacao: "",
+    observacao: '',
     created: new Date(),
   })
 
   // PDF é obrigatório somente quando o tipo NÃO é SEGURO INCÊNDIO
-  const requiresPdf = formData.tipo_seguro !== "SEGURO INCÊNDIO"
+  const requiresPdf = formData.tipo_seguro !== 'SEGURO INCÊNDIO'
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     let formattedValue = value
 
-    if (name === "cpf_inquilino" || name === "cpf_proprietario") {
+    if (name === 'cpf_inquilino' || name === 'cpf_proprietario') {
       formattedValue = formatCPF(value)
       setFormData((prevState) => ({
         ...prevState,
         [name]: formattedValue,
       }))
-    } else if (name === "cep") {
+    } else if (name === 'cnpj_inquilino' || name === 'cnpj_proprietario') {
+      formattedValue = formatCNPJ(value)
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: formattedValue,
+      }))
+    } else if (name === 'cep') {
       formattedValue = formatCEP(value)
 
-      const cepNumeros = formattedValue.replace(/\D/g, "")
+      const cepNumeros = formattedValue.replace(/\D/g, '')
 
       if (cepNumeros.length === 8) {
         try {
           setIsLoading(true)
-          setErrorMessage("")
+          setErrorMessage('')
 
           const data: EnderecoViaCep = await buscaEnderecoPorCEP(cepNumeros)
 
           setFormData((prevState) => ({
             ...prevState,
-            endereco: data.logradouro || "",
-            bairro: data.bairro || "",
-            cidade: data.localidade || "",
-            estado: data.uf || "",
-            complemento: data.complemento || "",
+            endereco: data.logradouro || '',
+            bairro: data.bairro || '',
+            cidade: data.localidade || '',
+            estado: data.uf || '',
+            complemento: data.complemento || '',
             [name]: formattedValue,
           }))
         } catch (error: unknown) {
-          console.error("Erro ao buscar o CEP:", error)
+          console.error('Erro ao buscar o CEP:', error)
           setErrorMessage(
             error instanceof Error
               ? error.message
-              : "Erro ao buscar o CEP. Tente novamente."
+              : 'Erro ao buscar o CEP. Tente novamente.'
           )
 
           setFormData((prevState) => ({
             ...prevState,
-            endereco: "",
-            bairro: "",
-            cidade: "",
-            estado: "",
-            complemento: "",
+            endereco: '',
+            bairro: '',
+            cidade: '',
+            estado: '',
+            complemento: '',
             [name]: formattedValue,
           }))
         } finally {
@@ -144,15 +151,15 @@ export function CancelamentoSegurosForms() {
       } else {
         setFormData((prevState) => ({
           ...prevState,
-          endereco: "",
-          bairro: "",
-          cidade: "",
-          estado: "",
-          complemento: "",
+          endereco: '',
+          bairro: '',
+          cidade: '',
+          estado: '',
+          complemento: '',
           [name]: formattedValue,
         }))
       }
-    } else if (["numero_endereco", "id_numero"].includes(name)) {
+    } else if (['numero_endereco', 'id_numero'].includes(name)) {
       const numericValue = Number(value)
       setFormData((prevState) => ({
         ...prevState,
@@ -174,14 +181,14 @@ export function CancelamentoSegurosForms() {
       ...prevState,
       [name]: value,
     }))
-    if (name === "tipo_seguro") {
+    if (name === 'tipo_seguro') {
       // Ao trocar o tipo, limpa erro de arquivos e mantém seleção existente
-      setFileError("")
+      setFileError('')
     }
   }
 
   const handleNext = () => {
-    const tabs = ["identificacao", "locacao", "confirmacao"]
+    const tabs = ['identificacao', 'locacao', 'confirmacao']
     const currentIndex = tabs.indexOf(currentTab)
     if (currentIndex < tabs.length - 1) {
       setCurrentTab(tabs[currentIndex + 1])
@@ -189,7 +196,7 @@ export function CancelamentoSegurosForms() {
   }
 
   const handlePrevious = () => {
-    const tabs = ["identificacao", "locacao", "confirmacao"]
+    const tabs = ['identificacao', 'locacao', 'confirmacao']
     const currentIndex = tabs.indexOf(currentTab)
     if (currentIndex > 0) {
       setCurrentTab(tabs[currentIndex - 1])
@@ -207,18 +214,18 @@ export function CancelamentoSegurosForms() {
       const errors: string[] = []
 
       // Validação baseada no tipo CancelamentoSeguros (excluindo created, acao, id, id_numero)
-      if (!formData.nome_imobiliaria) errors.push("Nome da Imobiliária")
-      if (!formData.nome_inquilino) errors.push("Nome do Inquilino")
-      if (!formData.cpf_inquilino) errors.push("CPF do Inquilino")
-      if (!formData.nome_proprietario) errors.push("Nome do Proprietário")
-      if (!formData.cpf_proprietario) errors.push("CPF do Proprietário")
-      if (!formData.cep) errors.push("CEP")
-      if (!formData.endereco) errors.push("Endereço")
-      if (!formData.bairro) errors.push("Bairro")
-      if (!formData.numero_endereco) errors.push("Número")
-      if (!formData.cidade) errors.push("Cidade")
-      if (!formData.estado) errors.push("Estado")
-      if (!formData.tipo_seguro) errors.push("Tipo de Seguro")
+      if (!formData.nome_imobiliaria) errors.push('Nome da Imobiliária')
+      if (!formData.nome_inquilino) errors.push('Nome do Inquilino')
+      if (!formData.cpf_inquilino) errors.push('CPF do Inquilino')
+      if (!formData.nome_proprietario) errors.push('Nome do Proprietário')
+      if (!formData.cpf_proprietario) errors.push('CPF do Proprietário')
+      if (!formData.cep) errors.push('CEP')
+      if (!formData.endereco) errors.push('Endereço')
+      if (!formData.bairro) errors.push('Bairro')
+      if (!formData.numero_endereco) errors.push('Número')
+      if (!formData.cidade) errors.push('Cidade')
+      if (!formData.estado) errors.push('Estado')
+      if (!formData.tipo_seguro) errors.push('Tipo de Seguro')
 
       return errors
     }
@@ -227,7 +234,7 @@ export function CancelamentoSegurosForms() {
     if (validationErrors.length > 0) {
       setErrorMessage(
         `Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou os campos. Campos obrigatórios que faltam: ${validationErrors.join(
-          ", "
+          ', '
         )}`
       )
       return
@@ -235,8 +242,8 @@ export function CancelamentoSegurosForms() {
 
     // Validação: PDF é obrigatório apenas se não for SEGURO INCÊNDIO
     if (requiresPdf && selectedFiles.length < 1) {
-      setFileError("Anexe pelo menos 1 PDF para enviar.")
-      setCurrentTab("confirmacao")
+      setFileError('Anexe pelo menos 1 PDF para enviar.')
+      setCurrentTab('confirmacao')
       return
     }
 
@@ -260,9 +267,9 @@ export function CancelamentoSegurosForms() {
       setSelectedFiles([])
       setIsSuccessModalOpen(true)
     } catch (error) {
-      console.error("Erro ao enviar o formulário:", error)
+      console.error('Erro ao enviar o formulário:', error)
       setErrorMessage(
-        "Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou campos de email corretamente. Tente novamente."
+        'Ocorreu um erro ao enviar o formulário. Verifique se você preencheu todos os campos obrigatórios e se digitou campos de email corretamente. Tente novamente.'
       )
     } finally {
       setIsLoading(false)
@@ -273,14 +280,14 @@ export function CancelamentoSegurosForms() {
 
   // Dropzone config for up to 3 PDFs with dedup by name+size
   const onDrop = (accepted: File[]) => {
-    setFileError("")
-    const onlyPDF = accepted.filter((f) => f.type === "application/pdf")
+    setFileError('')
+    const onlyPDF = accepted.filter((f) => f.type === 'application/pdf')
     const deduped = onlyPDF.filter(
       (f) => !selectedFiles.some((s) => s.name === f.name && s.size === f.size)
     )
     const combined = [...selectedFiles, ...deduped]
     if (combined.length > 3) {
-      setFileError("Você pode anexar no máximo 3 PDFs.")
+      setFileError('Você pode anexar no máximo 3 PDFs.')
       setSelectedFiles(combined.slice(0, 3))
     } else {
       setSelectedFiles(combined)
@@ -289,7 +296,7 @@ export function CancelamentoSegurosForms() {
 
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDrop,
-    accept: { "application/pdf": [".pdf"] },
+    accept: { 'application/pdf': ['.pdf'] },
     multiple: true,
     noClick: true,
     noKeyboard: true,
@@ -314,17 +321,17 @@ export function CancelamentoSegurosForms() {
                 </AlertTitle>
                 <AlertDescription className="text-green-900/90">
                   Agora você pode visualizar seus Protocolos de Cancelamento de
-                  Seguros no menu lateral. Clique em{" "}
+                  Seguros no menu lateral. Clique em{' '}
                   <span className="font-medium">
                     Protocolos de Cancelamento
-                  </span>{" "}
+                  </span>{' '}
                   para ver a lista.
                   <div className="mt-3">
                     <Button
                       type="button"
                       variant="piva"
                       onClick={() =>
-                        navigate("/imobiliaria/protocolo-cancelamento")
+                        navigate('/imobiliaria/protocolo-cancelamento')
                       }
                     >
                       Ir para Protocolos
@@ -336,7 +343,7 @@ export function CancelamentoSegurosForms() {
                   aria-label="Fechar aviso"
                   className="absolute right-2 top-2 rounded p-1 text-green-900/70 hover:bg-green-100 hover:text-green-900"
                   onClick={() => {
-                    localStorage.setItem("protocolosBannerDismissed", "1")
+                    localStorage.setItem('protocolosBannerDismissed', '1')
                     setShowProtocolsBanner(false)
                   }}
                 >
@@ -345,11 +352,11 @@ export function CancelamentoSegurosForms() {
               </Alert>
             </div>
           )}
-          <h3 className="" style={{ marginTop: "1.5rem " }}>
-            💡Os campos marcados com{" "}
+          <h3 className="" style={{ marginTop: '1.5rem ' }}>
+            💡Os campos marcados com{' '}
             <strong>
               <RequiredAsterisk />
-            </strong>{" "}
+            </strong>{' '}
             são <strong>obrigatórios.</strong>
           </h3>
         </CardHeader>
@@ -360,12 +367,12 @@ export function CancelamentoSegurosForms() {
                 <TabsTrigger
                   value="identificacao"
                   className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
-                    currentTab === "identificacao" ? "" : "bg-gray-200"
+                    currentTab === 'identificacao' ? '' : 'bg-gray-200'
                   }`}
                   style={{
                     backgroundColor:
-                      currentTab === "identificacao" ? "#16a34a" : undefined,
-                    color: currentTab === "identificacao" ? "white" : undefined,
+                      currentTab === 'identificacao' ? '#16a34a' : undefined,
+                    color: currentTab === 'identificacao' ? 'white' : undefined,
                   }}
                 >
                   Identificação
@@ -373,12 +380,12 @@ export function CancelamentoSegurosForms() {
                 <TabsTrigger
                   value="locacao"
                   className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
-                    currentTab === "locacao" ? "" : "bg-gray-200"
+                    currentTab === 'locacao' ? '' : 'bg-gray-200'
                   }`}
                   style={{
                     backgroundColor:
-                      currentTab === "locacao" ? "#16a34a" : undefined,
-                    color: currentTab === "locacao" ? "white" : undefined,
+                      currentTab === 'locacao' ? '#16a34a' : undefined,
+                    color: currentTab === 'locacao' ? 'white' : undefined,
                   }}
                 >
                   Locação
@@ -386,12 +393,12 @@ export function CancelamentoSegurosForms() {
                 <TabsTrigger
                   value="confirmacao"
                   className={`text-xs sm:text-sm p-2 rounded-lg focus:bg-white focus:outline-none ${
-                    currentTab === "confirmacao" ? "" : "bg-gray-200"
+                    currentTab === 'confirmacao' ? '' : 'bg-gray-200'
                   }`}
                   style={{
                     backgroundColor:
-                      currentTab === "confirmacao" ? "#16a34a" : undefined,
-                    color: currentTab === "confirmacao" ? "white" : undefined,
+                      currentTab === 'confirmacao' ? '#16a34a' : undefined,
+                    color: currentTab === 'confirmacao' ? 'white' : undefined,
                   }}
                 >
                   Confirmação
@@ -409,7 +416,7 @@ export function CancelamentoSegurosForms() {
                     <Select
                       value={formData.tipo_seguro}
                       onValueChange={(value) =>
-                        handleSelectChange("tipo_seguro", value)
+                        handleSelectChange('tipo_seguro', value)
                       }
                     >
                       <SelectTrigger>
@@ -441,7 +448,8 @@ export function CancelamentoSegurosForms() {
                       placeholder="Digite o nome da imobiliária"
                     />
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="cpf_inquilino">
                         CPF do Inquilino <RequiredAsterisk />
@@ -449,7 +457,7 @@ export function CancelamentoSegurosForms() {
                       <Input
                         id="cpf_inquilino"
                         name="cpf_inquilino"
-                        value={formData.cpf_inquilino || ""}
+                        value={formData.cpf_inquilino || ''}
                         onChange={handleInputChange}
                         required
                         placeholder="Digite o CPF"
@@ -468,8 +476,19 @@ export function CancelamentoSegurosForms() {
                         placeholder="Digite o nome do inquilino"
                       />
                     </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="cnpj_inquilino">CNPJ do Inquilino</Label>
+                      <Input
+                        id="cnpj_inquilino"
+                        name="cnpj_inquilino"
+                        value={formData.cnpj_inquilino || ''}
+                        onChange={handleInputChange}
+                        placeholder="Digite o CNPJ"
+                      />
+                    </div>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="cpf_proprietario">
                         CPF do Proprietário <RequiredAsterisk />
@@ -477,7 +496,7 @@ export function CancelamentoSegurosForms() {
                       <Input
                         id="cpf_proprietario"
                         name="cpf_proprietario"
-                        value={formData.cpf_proprietario || ""}
+                        value={formData.cpf_proprietario || ''}
                         onChange={handleInputChange}
                         required
                         placeholder="Digite o CPF"
@@ -494,6 +513,18 @@ export function CancelamentoSegurosForms() {
                         onChange={handleInputChange}
                         required
                         placeholder="Digite o nome do proprietário"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="cnpj_proprietario">
+                        CNPJ do Proprietário
+                      </Label>
+                      <Input
+                        id="cnpj_proprietario"
+                        name="cnpj_proprietario"
+                        value={formData.cnpj_proprietario || ''}
+                        onChange={handleInputChange}
+                        placeholder="Digite o CNPJ"
                       />
                     </div>
                   </div>
@@ -545,7 +576,7 @@ export function CancelamentoSegurosForms() {
                         id="numero_endereco"
                         name="numero_endereco"
                         type="number"
-                        value={formData.numero_endereco || ""}
+                        value={formData.numero_endereco || ''}
                         onChange={handleInputChange}
                         required
                         placeholder="Digite o número"
@@ -573,7 +604,7 @@ export function CancelamentoSegurosForms() {
                       <Input
                         id="complemento"
                         name="complemento"
-                        value={formData.complemento || ""}
+                        value={formData.complemento || ''}
                         onChange={handleInputChange}
                         placeholder="Digite o complemento (opcional)"
                         disabled={isLoading}
@@ -623,7 +654,7 @@ export function CancelamentoSegurosForms() {
                     <textarea
                       id="observacao"
                       name="observacao"
-                      value={formData.observacao || ""}
+                      value={formData.observacao || ''}
                       onChange={(e) =>
                         setFormData((prev) => ({
                           ...prev,
@@ -654,7 +685,7 @@ export function CancelamentoSegurosForms() {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <Label>
-                            Anexos PDF{" "}
+                            Anexos PDF{' '}
                             {requiresPdf && (
                               <span className="text-red-500">*</span>
                             )}
@@ -663,12 +694,12 @@ export function CancelamentoSegurosForms() {
                         <span
                           className={`text-xs ${
                             requiresPdf && selectedFiles.length === 0
-                              ? "text-amber-700 font-medium"
-                              : "text-gray-500"
+                              ? 'text-amber-700 font-medium'
+                              : 'text-gray-500'
                           }`}
                           title={
                             requiresPdf && selectedFiles.length === 0
-                              ? "Anexe pelo menos 1 PDF"
+                              ? 'Anexe pelo menos 1 PDF'
                               : undefined
                           }
                         >
@@ -680,8 +711,8 @@ export function CancelamentoSegurosForms() {
                           {...getRootProps()}
                           className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors cursor-pointer ${
                             isDragActive
-                              ? "border-green-600 bg-green-50"
-                              : "border-gray-300"
+                              ? 'border-green-600 bg-green-50'
+                              : 'border-gray-300'
                           }`}
                         >
                           <input {...getInputProps()} />
@@ -689,8 +720,8 @@ export function CancelamentoSegurosForms() {
                             <Upload className="w-8 h-8 text-gray-500" />
                             <p className="text-sm text-gray-700">
                               {isDragActive
-                                ? "Solte os arquivos aqui"
-                                : "Arraste e solte seus PDFs aqui"}
+                                ? 'Solte os arquivos aqui'
+                                : 'Arraste e solte seus PDFs aqui'}
                             </p>
                             <Button
                               type="button"
@@ -702,8 +733,8 @@ export function CancelamentoSegurosForms() {
                             </Button>
                             <p className="text-xs text-gray-500">
                               {requiresPdf
-                                ? "Apenas PDF • Mín. 1 arquivo"
-                                : "Apenas PDF • Opcional"}
+                                ? 'Apenas PDF • Mín. 1 arquivo'
+                                : 'Apenas PDF • Opcional'}
                             </p>
                             {requiresPdf && (
                               <p className="text-xs text-gray-500">
@@ -737,8 +768,8 @@ export function CancelamentoSegurosForms() {
                           </div>
                           <p className="mt-2 text-xs text-amber-700">
                             {requiresPdf
-                              ? "Você já anexou o máximo permitido. Mínimo exigido: 1 PDF."
-                              : "Você já anexou o máximo permitido. Anexos são opcionais para SEGURO INCÊNDIO."}
+                              ? 'Você já anexou o máximo permitido. Mínimo exigido: 1 PDF.'
+                              : 'Você já anexou o máximo permitido. Anexos são opcionais para SEGURO INCÊNDIO.'}
                           </p>
                         </div>
                       )}
@@ -824,12 +855,12 @@ export function CancelamentoSegurosForms() {
           )}
 
           <CardFooter className="flex justify-between">
-            {currentTab !== "locatario" && (
+            {currentTab !== 'locatario' && (
               <Button type="button" variant="outline" onClick={handlePrevious}>
                 <ArrowLeft className="mr-2 h-4 w-4" /> Anterior
               </Button>
             )}
-            {currentTab !== "confirmacao" ? (
+            {currentTab !== 'confirmacao' ? (
               <Button
                 type="button"
                 onClick={handleNext}
@@ -847,7 +878,7 @@ export function CancelamentoSegurosForms() {
                 }
                 title={
                   requiresPdf && selectedFiles.length < 1
-                    ? "Anexe pelo menos 1 PDF para enviar"
+                    ? 'Anexe pelo menos 1 PDF para enviar'
                     : undefined
                 }
                 className="ml-auto bg-green-700 hover:bg-green-600 disabled:opacity-60"
@@ -967,7 +998,7 @@ export function CancelamentoSegurosForms() {
                     className="bg-green-700 hover:bg-green-600 text-white"
                     onClick={() => {
                       setIsSuccessModalOpen(false)
-                      navigate("/imobiliaria/protocolo-cancelamento")
+                      navigate('/imobiliaria/protocolo-cancelamento')
                     }}
                   >
                     Ir para Protocolos
@@ -979,7 +1010,7 @@ export function CancelamentoSegurosForms() {
           <Button
             onClick={() => {
               setIsSuccessModalOpen(false)
-              navigate("/imobiliaria/formulario")
+              navigate('/imobiliaria/formulario')
             }}
             className="w-full mt-4 bg-green-700 hover:bg-green-600"
           >
